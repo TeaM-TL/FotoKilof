@@ -1,0 +1,16 @@
+# $Id: Changelog 19 2019-09-06 11:39:29Z tlu $
+	0.1 wstępne gui
+	0.2 wybór fontu, biblioteka PIL
+	0.3 wszystkie przetwarzania działają
+	0.4 dodano podgląd oryginału i wyniku, przetwarzanie przez imagemagick
+	0.5 działa także pod Windows, za wyjątkiem napisu
+	0.6 raczej poprawnie działa aplikacja kilku operacji na jeden plik
+	0.7 przenośne ścieżki(Windows, Linux), poprawne zapis i wczytywanie danych z i do INI
+	0.8 zamiana convert na mogrify, kopiowanie obrazka i praca w folderze docelowym
+	0.9 uproszczenie i oczyszczenie kodu
+	1.0 mielenie katalogów
+	1.1 częściowa obsługa ścieżek ze spacją, poprawienie zapisu i odczytu pliku INI, więcej opcji skalowania (HD, 2K, 4K), automatyczne wczytywanie podglądu, normalizacja kolorów, ramka
+	1.2 b-w, sepia, kontrast, ustandaryzacja zmiennych widgetów
+	1.3 klikany podgląd i wczytuje współrzędne do wycinka, usunięte menu
+	1.4 histogram oryginału i wyniku
+	1.5 uporządkowanie GUI
