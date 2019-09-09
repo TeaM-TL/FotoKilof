@@ -4,6 +4,7 @@
 import datetime
 import platform
 import os
+import sys
 import shutil
 import re
 import configparser
@@ -20,9 +21,11 @@ from PIL import Image
 ###################
 # Stałe
 PREVIEW = 500  # rozmiar obrazka podglądu
-VERSION = 1.5  # wersja programu
+VERSION = 1.6  # wersja programu
 
 ##########################
+
+
 def no_text_in_windows():
     if(platform.system() == "Windows"):
         l_text_windows.configure(text="Niestety używasz Windows,umieszczanie tekstu może nie działać poprawnie")
@@ -32,7 +35,7 @@ def no_text_in_windows():
         # cb_text_font.configure(state='readonly')
         print("Uff, nie Windows")
 
-###
+
 def pre_imagick(file_in_path):
     """
     file_in_path - oryginał do mielenia, pełna ścieżka
@@ -41,7 +44,7 @@ def pre_imagick(file_in_path):
     global work_dir
     # Zakładanie katalogu na obrazki wynikowe - podkatalog folderu z obrazkiem
     out_dir = os.path.join(os.path.dirname(file_in_path), work_dir)
-    if(os.path.isdir(out_dir) == False):
+    if(os.path.isdir(out_dir) is False):
         try:
             os.mkdir(out_dir)
             print("Out_dir: " + out_dir)
@@ -62,7 +65,7 @@ def pre_imagick(file_in_path):
         exit(1)
     return out_file
 
-###
+
 def imagick(cmd, out_file):
     """
     cmd - polecenie imagemagick
@@ -80,14 +83,14 @@ def imagick(cmd, out_file):
 ################
 # Preview
 
-###
+
 def preview_histogram(file):
     global temp_dir
 
     file_histogram = spacja(os.path.join(temp_dir, os.path.basename(file) + ".png"))
     file = spacja(file)
 
-    command = "convert " + file + " -colorspace Gray -define histogram:unique-colors=false histogram:"+ file_histogram
+    command = "convert " + file + " -colorspace Gray -define histogram:unique-colors=false histogram:" + file_histogram
     print(command)
     try:
         os.system(command)
@@ -95,12 +98,12 @@ def preview_histogram(file):
     except:
         print("Error in convert_histogram: " + command)
 
-###
+
 def preview_orig_bind(event):
     global file_in_path, temp_dir
     preview_orig(file_in_path.get(), temp_dir)
 
-###
+
 def preview_orig(file_in_path, temp_dir):
     # generowanie podglądu oryginału
 
@@ -115,7 +118,8 @@ def preview_orig(file_in_path, temp_dir):
         pi_histogram_orig.configure(file=preview_histogram(file_in_path))
     except:
         print("Error in preview histogram_new")
-###
+
+
 def preview_new(out_file, temp_dir):
     # generowanie podglądu wynikowego
 
@@ -132,7 +136,7 @@ def preview_new(out_file, temp_dir):
     except:
         print("Error in preview histogram_new")
 
-###
+
 def preview_orig_button():
     #    podgląd oryginału
     global file_in_path
@@ -143,7 +147,7 @@ def preview_orig_button():
     except:
         print("Chyba nie ma obrazka")
 
-###
+
 def preview_new_button():
     #    podgląd wynikowego obrazka
     global file_in_path, work_dir
@@ -156,7 +160,7 @@ def preview_new_button():
     except:
         print("Chyba nie ma obrazka")
 
-###
+
 def convert_preview(file, temp_dir):
     """
     generowanie podglądu oryginału
@@ -189,6 +193,7 @@ def convert_preview(file, temp_dir):
     except:
         return "Error in convert_preview: return"
 
+    
 def spacja(sciezka):
     # rozwiązanie problemu spacji w nazwach plików i katalogów
 
@@ -199,7 +204,7 @@ def spacja(sciezka):
         sciezka = re.sub(' ', '\ ', sciezka)
     return sciezka
 
-###
+
 def apply_all_convert(out_file):
     #    zaaplikowanie wszystkich opcji na raz
 
@@ -214,7 +219,7 @@ def apply_all_convert(out_file):
     convert_border(out_file)
     convert_text(out_file)
 
-###
+
 def apply_all():
     #    zaplikowanie wszystkich opcji na raz
     global file_in_path, temp_dir, out_dir, file_dir_selector, progress_files, progress_filename
@@ -240,14 +245,15 @@ def apply_all():
         progress_filename.set(" ")
         preview_new(out_file, temp_dir)
         os.chdir(pwd)
-###
+
+        
 def contrast_selected(event):
     # wywołanie przez bind
     global img_contrast_selected
     print('You selected:', cb_contrast.get())
     img_contrast_selected.set(cb_contrast.get())
 
-###
+
 def convert_contrast_button():
     #
     global file_in_path, temp_dir, out_dir
@@ -255,7 +261,7 @@ def convert_contrast_button():
     convert_contrast(out_file)
     preview_new(out_file, temp_dir)
 
-##
+
 def convert_contrast(out_file):
     #    Normalizacja kolorów
     global img_contrast, img_contrast_selected
@@ -273,10 +279,10 @@ def convert_contrast(out_file):
             return
         imagick(command, out_file)
     elif(img_contrast.get() == 2):
-        command = "-contrast-stretch " + e1_contrast.get() + "x"  + e2_contrast.get()  + "%"
+        command = "-contrast-stretch " + e1_contrast.get() + "x" + e2_contrast.get() + "%"
         imagick(command, out_file)
 
-###
+
 def convert_bw_button():
     #
     global file_in_path, temp_dir, out_dir
@@ -284,7 +290,7 @@ def convert_bw_button():
     convert_bw(out_file)
     preview_new(out_file, temp_dir)
 
-##
+
 def convert_bw(out_file):
     #    Normalizacja kolorów
     global img_normalize
@@ -296,7 +302,7 @@ def convert_bw(out_file):
         command = "-sepia-tone " + str(int(e_bw_sepia.get())) + "%"
         imagick(command, out_file)
 
-###
+
 def convert_normalize_button():
     #
     global file_in_path, temp_dir, out_dir
@@ -304,7 +310,7 @@ def convert_normalize_button():
     convert_normalize(out_file)
     preview_new(out_file, temp_dir)
 
-##
+
 def convert_normalize(out_file):
     #    Normalizacja kolorów
     global img_normalize
@@ -315,7 +321,7 @@ def convert_normalize(out_file):
         command = "-auto-level"
         imagick(command, out_file)
 
-###
+
 def convert_rotate_button():
     #
     global file_in_path, temp_dir, out_dir
@@ -323,7 +329,7 @@ def convert_rotate_button():
     convert_rotate(out_file)
     preview_new(out_file, temp_dir)
 
-##
+
 def convert_rotate(out_file):
     #    Obrót obrazka o 90,180 albo 270stopni
     global img_rotate
@@ -335,7 +341,7 @@ def convert_rotate(out_file):
         command = "-rotate " + str(img_rotate.get())
         imagick(command, out_file)
 
-###
+
 def convert_resize_button():
     #
     global file_in_path, temp_dir, out_dir
@@ -343,7 +349,7 @@ def convert_resize_button():
     convert_resize(out_file)
     preview_new(out_file, temp_dir)
 
-###
+
 def convert_resize(out_file):
     #    Zmiana rozmiaru obrazka
     global img_resize
@@ -365,7 +371,7 @@ def convert_resize(out_file):
     command = "-resize " + image_resize
     imagick(command, out_file)
 
-###
+
 def convert_crop_button():
     #
     global file_in_path, temp_dir, out_dir
@@ -373,7 +379,7 @@ def convert_crop_button():
     convert_crop(out_file)
     preview_new(out_file, temp_dir)
 
-###
+
 def convert_crop(out_file):
     #    Wycięcie obrazka z obrazka
     global file_in_path, temp_dir, out_dir, file_dir_selector, img_crop, img_crop_gravity
@@ -389,7 +395,7 @@ def convert_crop(out_file):
 
         imagick(command, out_file)
 
-###
+
 def convert_text_button():
     #
     global file_in_path, temp_dir, out_dir, file_dir_selector
@@ -417,12 +423,12 @@ def convert_text(out_file):
         command = box + color + size + gravit + font + text
         imagick(command, out_file)
 
-###
+
 def fonts():
     # import nazw fontów dla imagemagicka
     global temp_dir
 
-    if(os.path.isdir(temp_dir) == False):
+    if(os.path.isdir(temp_dir) is False):
         try:
             # print("Zakladam katalog na pliki tymczasowe: " + temp_dir)
             os.mkdir(temp_dir)
@@ -447,7 +453,7 @@ def fonts():
             file = open(file_font, "r")
             fonts_list = []
             for line in file:
-                if(re.search("Font", line) != None):
+                if(re.search("Font", line) is not None):
                     line = re.sub('^[ ]+Font:[ ]*', "", line)
                     line = re.sub('\n', "", line)
                     fonts_list.append(line)
@@ -459,14 +465,14 @@ def fonts():
 
     cb_text_font['values'] = fonts_list
 
-###
+
 def font_selected(event):
     # wywołanie przez bind
     global img_text_font
     print('You selected:', cb_text_font.get())
     img_text_font.set(cb_text_font.get())
 
-###
+
 def crop_read():
     #    Wczytanie rozmiarów z obrazka
     global file_in_path, img_crop_gravity
@@ -499,7 +505,7 @@ def crop_read():
     e4_crop_3.insert(0, y)
     img_crop_gravity.set("C")
 
-###
+
 def gravity(gravity):
     if(gravity == "N"):
         gravity = "North"
@@ -522,45 +528,81 @@ def gravity(gravity):
 
     return gravity
 
-###
+
 def open_file():
     #    otwarcie pliku obrazka do edycji
     global file_in_path, dir_in_path
     file_in_path.set(filedialog.askopenfilename(title="Wybierz plik do mielenia",
+                                                initialdir=dir_in_path.get(),
                                                 filetypes=(("jpeg files", "*.jpg"),
                                                            ("JPEG files", "*.JPG"),
                                                            ("all files", "*.*"))))
-
+    file_select_L.configure(text=os.path.basename(file_in_path.get()))
     preview_orig(file_in_path.get(), temp_dir)
 
     dir_in_path.set(os.path.dirname(file_in_path.get()))
 
-###
+
+def open_file_next():
+    global file_in_path, dir_in_path
+    pwd = os.getcwd()
+    os.chdir(os.path.dirname(file_in_path.get()))
+    list = []
+    for file in glob.glob("*.[j|J][p|P][g|G]"):
+        list.append(file)
+    position = list.index(os.path.basename(file_in_path.get()))
+    print(position, list)
+    if(position <= len(list) - 2):
+        file = list[position + 1]
+        file_select_L.configure(text=file)
+        file_in_path.set(os.path.join(dir_in_path.get(), file))
+        preview_orig(file_in_path.get(), temp_dir)
+    os.chdir(pwd)
+
+
+def open_file_prev():
+    global file_in_path, dir_in_path
+
+    pwd = os.getcwd()
+    os.chdir(os.path.dirname(file_in_path.get()))
+    list = []
+    for file in glob.glob("*.[j|J][p|P][g|G]"):
+        list.append(file)
+    position = list.index(os.path.basename(file_in_path.get()))
+    print(position, list)
+    if(position > 0):
+        file = list[position - 1]
+        file_select_L.configure(text=file)
+        file_in_path.set(os.path.join(dir_in_path.get(), file))
+        preview_orig(file_in_path.get(), temp_dir)
+    os.chdir(pwd)
+
+
 def convert_border_button():
     global file_in_path, temp_dir, out_dir
     out_file = pre_imagick(file_in_path.get())
     convert_border(out_file)
     preview_new(out_file, temp_dir)
 
-###
+
 def convert_border(out_file):
     global img_border_color
     if(int(e_border.get()) > 0):
         command = "-border " + e_border.get() + " -bordercolor \"" + img_border_color.get() + "\""
         imagick(command, out_file)
 
-###
+
 def color_choose_border():
     #    Wybór koloru tła
     global img_border_color
     color = askcolor(img_border_color.get())
-    if(color[1] == None):
+    if(color[1] is None):
         img_border_color.set("#000000")
     else:
         img_border_color.set(color[1])
         l_border.configure(bg=img_border_color.get())
 
-###
+
 def color_choose_box_active():
     global img_text_box
     if(img_text_box.get() == 0):
@@ -568,31 +610,30 @@ def color_choose_box_active():
     else:
         l_text_font_selected.configure(bg=img_text_box_color.get())
 
-###
+
 def color_choose_box():
     #    Wybór koloru tła
     global img_text_box, img_text_box_color
     if(img_text_box.get() != 0):
         color = askcolor(img_text_color.get(), root)
-        if(color[1] == None):
+        if(color[1] is None):
             img_text_box_color.set("#FFFFFF")
         else:
             img_text_box_color.set(color[1])
             l_text_font_selected.configure(bg=img_text_box_color.get())
 
-###
+
 def color_choose():
     #    Wybór koloru
     global img_text_color
     color = askcolor(img_text_color.get(), root)
-    if(color[1] == None):
+    if(color[1] is None):
         img_text_color.set("#FFFFFF")
     else:
         img_text_color.set(color[1])
     l_text_font_selected.configure(fg=img_text_color.get())
 
 
-###
 def ini_read(file_ini):
     # lista wyjściowa
     list_return = {}
@@ -861,7 +902,7 @@ def ini_read(file_ini):
 
     return list_return
 
-###
+
 def ini_read_wraper():
     global file_ini
     ini_entries = ini_read(file_ini)
@@ -882,7 +923,7 @@ def ini_read_wraper():
     img_bw.set(ini_entries['img_bw'])
     img_contrast.set(ini_entries['img_contrast'])
 
-###
+
 def ini_save():
     #     Zapis konfiguracji do pliku INI
     global file_ini, file_in_path, img_text, img_resize, img_text_gravity, img_text_font, img_text_color, img_rotate, img_crop, img_crop_gravity, img_text_box, img_text_box_color
@@ -936,7 +977,6 @@ def ini_save():
     config.set('Contrast', 'contrast_stretch_1', e1_contrast.get())
     config.set('Contrast', 'contrast_stretch_2', e2_contrast.get())
 
-
     # save to a file
     try:
         with open(file_ini, 'w', encoding='utf-8', buffering=1) as configfile:
@@ -944,7 +984,7 @@ def ini_save():
     except:
         print("Error! nie udał się zapis do pliku konfiguracyjnego: " + file_ini)
 
-###
+
 def help_info(event):
     global pwd
     try:
@@ -961,7 +1001,7 @@ def help_info(event):
 
     messagebox.showinfo(title="Licencja", message=message)
 
-###
+
 def help_changelog():
     global pwd
     try:
@@ -978,18 +1018,18 @@ def help_changelog():
 
     messagebox.showinfo(title="Licencja", message=message)
 
-###
+
 def close_window():
     root.quit()
     root.destroy()
     sys.exit()
 
-###
+
 def win_deleted():
     print("closed")
     close_window()
 
-###
+
 def mouse_crop_calculation(x_preview, y_preview):
     # przeliczenie pikseli podglądu  na piksele oryginału
     global file_in_path
@@ -1016,6 +1056,7 @@ def mouse_crop_calculation(x_preview, y_preview):
     print("X,Y", x, y)
     return x, y
 
+
 def mouse_crop_NW(event):
     # lewy górny narożnik
     x_preview = event.x
@@ -1027,7 +1068,7 @@ def mouse_crop_NW(event):
     e2_crop_1.delete(0, "end")
     e2_crop_1.insert(0, xy[1])
 
-###
+
 def mouse_crop_SE(event):
     # prawy dolny narożnik
     x_preview = event.x
@@ -1039,7 +1080,7 @@ def mouse_crop_SE(event):
     e4_crop_1.delete(0, "end")
     e4_crop_1.insert(0, xy[1])
 
-###
+
 def convert_crop_preview(event):
     # rysuje wycinek na rysunku podglądu
     global file_in_path, temp_dir, img_crop, img_text_box_color
@@ -1062,7 +1103,7 @@ def convert_crop_preview(event):
     if(do_nothing == 1):
         preview_orig(file_in_path.get(), temp_dir)
     else:
-        preview = convert_preview(file_in_path.get(), temp_dir) 
+        preview = convert_preview(file_in_path.get(), temp_dir)
         fileppm = preview['filename']
         x_orig = int(preview['width'])
         y_orig = int(preview['height'])
@@ -1079,7 +1120,7 @@ def convert_crop_preview(event):
             x_max = PREVIEW
             y_max = PREVIEW
 
-        #print("x0, y0, x1, y1", x0, y0, x1, y1)
+        # print("x0, y0, x1, y1", x0, y0, x1, y1)
         ratio_X = x_max / int(x_orig)
         ratio_Y = y_max / int(y_orig)
         x0 = int(x0 * ratio_X)
@@ -1087,7 +1128,7 @@ def convert_crop_preview(event):
         x1 = int(x1 * ratio_X)
         y1 = int(y1 * ratio_Y)
 
-        #print("x0, y0, x1, y1", x0, y0, x1, y1)
+        # print("x0, y0, x1, y1", x0, y0, x1, y1)
         color = " -fill \"" + img_text_box_color.get() + "\""
         line = " -draw 'line "
 
@@ -1112,11 +1153,15 @@ def convert_crop_preview(event):
 ###############################################################################
 ###############################################################################
 # okno główne
+
+
 root = Tk()
+
+
 root.title("Tomasz Łuczak : FotoKilof : " + str(VERSION) + " : " + str(datetime.date.today()))
 
 style = ttk.Style()
-#style = ttk.Style(root)
+# style = ttk.Style(root)
 style.theme_use('clam')
 
 style.configure("Blue.TButton", foreground="blue")
@@ -1127,27 +1172,27 @@ style.configure("Blue.TLabelframe.Label", foreground="blue")
 
 work_dir = "FotoKilof"
 file_ini = ".fotokilof.ini"
-file_dir_selector      = IntVar()
-file_in_path           = StringVar()  # plik obrazka do przemielenia
-dir_in_path            = StringVar()
-img_resize             = IntVar()
-img_text               = IntVar()
-img_text_gravity       = StringVar()
-img_rotate             = IntVar()
-img_text_font          = StringVar()
-img_text_font_list     = StringVar()
-img_text_color         = StringVar()
-img_text_box           = IntVar()
-img_text_box_color     = StringVar()
-img_crop               = IntVar()
-img_crop_gravity       = StringVar()
-progress_files         = StringVar()
-progress_filename      = StringVar()
-img_border_color       = StringVar()
-img_normalize          = IntVar()
-img_bw                 = IntVar()
-img_contrast           = IntVar()
-img_contrast_selected  = StringVar()
+file_dir_selector = IntVar()
+file_in_path = StringVar()  # plik obrazka do przemielenia
+dir_in_path = StringVar()
+img_resize = IntVar()
+img_text = IntVar()
+img_text_gravity = StringVar()
+img_rotate = IntVar()
+img_text_font = StringVar()
+img_text_font_list = StringVar()
+img_text_color = StringVar()
+img_text_box = IntVar()
+img_text_box_color = StringVar()
+img_crop = IntVar()
+img_crop_gravity = StringVar()
+progress_files = StringVar()
+progress_filename = StringVar()
+img_border_color = StringVar()
+img_normalize = IntVar()
+img_bw = IntVar()
+img_contrast = IntVar()
+img_contrast_selected = StringVar()
 pwd = os.getcwd()
 temp_dir = os.path.join(pwd, "tmp")
 
@@ -1183,20 +1228,25 @@ frame_input.grid(row=1, column=1, columnspan=2, sticky=(N, W, E, S), padx=5, pad
 # tworzenie widgetów
 file_selector_rb = ttk.Radiobutton(frame_input, text="Plik",
                                    variable=file_dir_selector, value="0")
-file_select_B = ttk.Button(frame_input, text="Wybierz plik", command=open_file,
+b_file_select = ttk.Button(frame_input, text="Wybierz plik", command=open_file,
                            style="Blue.TButton")
-file_select_L = ttk.Label(frame_input, textvariable=file_in_path, width=50)
+file_select_L = ttk.Label(frame_input, width=20)
 dir_selector_rb = ttk.Radiobutton(frame_input, text="Folder",
                                   variable=file_dir_selector, value="1")
 dir_select_L1 = ttk.Label(frame_input, text="Wybrany folder")
 dir_select_L = ttk.Label(frame_input, textvariable=dir_in_path, width=40)
+b_file_select_next = ttk.Button(frame_input, text="Następny", command=open_file_next)
+b_file_select_prev = ttk.Button(frame_input, text="Poprzedni", command=open_file_prev)
 # umieszczenie widgetów
 file_selector_rb.grid(column=1, row=1, padx=5, pady=5, sticky=W)
-file_select_B.grid(column=2, row=1, padx=5, pady=5)
-file_select_L.grid(column=3, row=1, padx=5, pady=5)
+b_file_select.grid(column=2, row=1, padx=5, pady=5, sticky=W)
+b_file_select_prev.grid(column=3, row=1, padx=5, pady=5, sticky=W)
+b_file_select_next.grid(column=4, row=1, padx=5, pady=5, sticky=W)
+file_select_L.grid(column=5, row=1, padx=5, pady=5, sticky=W)
+#
 dir_selector_rb.grid(column=1, row=2, padx=5, pady=5, sticky=W)
 dir_select_L1.grid(column=2, row=2, padx=5, pady=5)
-dir_select_L.grid(column=3, row=2, padx=5, pady=5)
+dir_select_L.grid(column=3, row=2, columnspan=3, padx=5, pady=5)
 
 ###########################
 # Resize
@@ -1266,20 +1316,20 @@ e4_crop_3 = ttk.Entry(frame_crop, width=4)
 frame_crop_gravity = ttk.Frame(frame_crop)
 rbNW_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="NW",
                               variable=img_crop_gravity, value="NW")
-rbN_crop_3  = ttk.Radiobutton(frame_crop_gravity, text="N",
-                              variable=img_crop_gravity, value="N")
+rbN_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="N",
+                             variable=img_crop_gravity, value="N")
 rbNE_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="NE",
                               variable=img_crop_gravity, value="NE")
-rbW_crop_3  = ttk.Radiobutton(frame_crop_gravity, text="W",
-                              variable=img_crop_gravity, value="W")
-rbC_crop_3  = ttk.Radiobutton(frame_crop_gravity, text="Środek",
-                              variable=img_crop_gravity, value="C")
-rbE_crop_3  = ttk.Radiobutton(frame_crop_gravity, text="E",
-                              variable=img_crop_gravity, value="E")
+rbW_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="W",
+                             variable=img_crop_gravity, value="W")
+rbC_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="Środek",
+                             variable=img_crop_gravity, value="C")
+rbE_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="E",
+                             variable=img_crop_gravity, value="E")
 rbSW_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="SW",
                               variable=img_crop_gravity, value="SW")
-rbS_crop_3  = ttk.Radiobutton(frame_crop_gravity, text="S",
-                              variable=img_crop_gravity, value="S")
+rbS_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="S",
+                             variable=img_crop_gravity, value="S")
 rbSE_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="SE",
                               variable=img_crop_gravity, value="SE")
 
@@ -1346,18 +1396,27 @@ e_text_x.grid(row=1, column=2, sticky=W, padx=5)
 e_text_y.grid(row=1, column=3, sticky=W, padx=5)
 ###
 frame_text_gravity = ttk.Frame(frame_text)
-rbNW = ttk.Radiobutton(frame_text_gravity, text="NW", variable=img_text_gravity, value="NW")
-rbN  = ttk.Radiobutton(frame_text_gravity, text="N",  variable=img_text_gravity, value="N")
-rbNE = ttk.Radiobutton(frame_text_gravity, text="NE", variable=img_text_gravity, value="NE")
-rbW  = ttk.Radiobutton(frame_text_gravity, text="W",  variable=img_text_gravity, value="W")
-rbC  = ttk.Radiobutton(frame_text_gravity, text="Środek", variable=img_text_gravity, value="C")
-rbE  = ttk.Radiobutton(frame_text_gravity, text="E",  variable=img_text_gravity, value="E")
-rbSW = ttk.Radiobutton(frame_text_gravity, text="SW", variable=img_text_gravity, value="SW")
-rbS  = ttk.Radiobutton(frame_text_gravity, text="S",  variable=img_text_gravity, value="S")
-rbSE = ttk.Radiobutton(frame_text_gravity, text="SE", variable=img_text_gravity, value="SE")
+rbNW = ttk.Radiobutton(frame_text_gravity, text="NW",
+                       variable=img_text_gravity, value="NW")
+rbN = ttk.Radiobutton(frame_text_gravity, text="N",
+                      variable=img_text_gravity, value="N")
+rbNE = ttk.Radiobutton(frame_text_gravity, text="NE",
+                       variable=img_text_gravity, value="NE")
+rbW = ttk.Radiobutton(frame_text_gravity, text="W",
+                      variable=img_text_gravity, value="W")
+rbC = ttk.Radiobutton(frame_text_gravity, text="Środek",
+                      variable=img_text_gravity, value="C")
+rbE = ttk.Radiobutton(frame_text_gravity, text="E",
+                      variable=img_text_gravity, value="E")
+rbSW = ttk.Radiobutton(frame_text_gravity, text="SW",
+                       variable=img_text_gravity, value="SW")
+rbS = ttk.Radiobutton(frame_text_gravity, text="S",
+                      variable=img_text_gravity, value="S")
+rbSE = ttk.Radiobutton(frame_text_gravity, text="SE",
+                       variable=img_text_gravity, value="SE")
 frame_text_gravity.grid(row=2, column=2, columnspan=3)
 rbNW.grid(row=1, column=1, sticky=W, pady=5)
-rbN.grid(row=1,  column=2,pady=5)
+rbN.grid(row=1,  column=2, pady=5)
 rbNE.grid(row=1, column=3, sticky=W, pady=5)
 rbW.grid(row=2,  column=1, sticky=W, pady=5)
 rbC.grid(row=2,  column=2, pady=5)
@@ -1393,7 +1452,8 @@ l_text_windows.grid(row=5, column=1, columnspan=4, sticky=(W, E))
 ###########################
 # Rotate
 ###########################
-frame_rotate = ttk.Labelframe(frame_first_col, text="Obrót", style="Blue.TLabelframe")
+frame_rotate = ttk.Labelframe(frame_first_col, text="Obrót",
+                              style="Blue.TLabelframe")
 frame_rotate.grid(row=5, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 rb_rotate_0 = ttk.Radiobutton(frame_rotate, text="0",
@@ -1416,12 +1476,13 @@ b_rotate.grid(row=1, column=5, padx=5, pady=5)
 ############################
 # Czarno-białe
 ############################
-frame_bw = ttk.LabelFrame(frame_first_col, text="Czarno-białe", style="Blue.TLabelframe")
+frame_bw = ttk.LabelFrame(frame_first_col, text="Czarno-białe",
+                          style="Blue.TLabelframe")
 frame_bw.grid(row=5, column=2, rowspan=2, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 rb0_bw = ttk.Radiobutton(frame_bw, text="Nic", variable=img_bw, value="0")
 rb1_bw = ttk.Radiobutton(frame_bw, text="Czarno-białe", variable=img_bw, value="1")
-rb2_bw  = ttk.Radiobutton(frame_bw, text="Sepia", variable=img_bw, value="2")
+rb2_bw = ttk.Radiobutton(frame_bw, text="Sepia", variable=img_bw, value="2")
 e_bw_sepia = ttk.Entry(frame_bw, width=3)
 l_bw_sepia = ttk.Label(frame_bw, text="%")
 b_bw = ttk.Button(frame_bw, text="Wykonaj", style="Blue.TButton",
@@ -1437,7 +1498,8 @@ b_bw.grid(row=4, column=1, columnspan=3, padx=5, pady=5, sticky=E)
 ###########################
 # Border
 ###########################
-frame_border = ttk.Labelframe(frame_first_col, text="Ramka", style="Blue.TLabelframe")
+frame_border = ttk.Labelframe(frame_first_col, text="Ramka",
+                              style="Blue.TLabelframe")
 frame_border.grid(row=6, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 l_border = Label(frame_border, text="Piksele")
@@ -1467,11 +1529,9 @@ b_preview_orig = ttk.Button(frame_preview_orig, text="Oryginał",
 l_preview_orig = ttk.Label(frame_preview_orig)
 pi_preview_orig = PhotoImage()
 l_preview_orig_pi = ttk.Label(frame_preview_orig, image=pi_preview_orig)
-# c_preview_orig_pi = Canvas(frame_preview_orig, width=300, height=300)
 b_preview_orig.grid(row=1, column=1, padx=5, pady=5)
 l_preview_orig.grid(row=1, column=2, padx=5, pady=5)
 l_preview_orig_pi.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
-# c_preview_orig_pi.grid(row=3, column=1, columnspan=2, padx=5, pady=5)
 
 ###########################
 # Histogram original
@@ -1497,7 +1557,7 @@ rb1_contrast = ttk.Radiobutton(frame_contrast, text="Kontrast",
                                variable=img_contrast, value="1")
 cb_contrast = ttk.Combobox(frame_contrast, width=2,
                            values=("+2", "+1", "0", "-1", "-2"))
-rb2_contrast = ttk.Radiobutton(frame_contrast, text="Stretch",
+rb2_contrast = ttk.Radiobutton(frame_contrast, text="Rozciąganie",
                                variable=img_contrast, value="2")
 e1_contrast = ttk.Entry(frame_contrast, width=4)
 e2_contrast = ttk.Entry(frame_contrast, width=4)
@@ -1545,7 +1605,8 @@ frame_third_col.grid(row=1, column=3, sticky=(N, W, E, S))
 ##########################
 # Ramka podglądu wyniku
 ###########################
-frame_preview_new = ttk.Labelframe(frame_third_col, text="Wynik", style="Blue.TLabelframe")
+frame_preview_new = ttk.Labelframe(frame_third_col, text="Wynik",
+                                   style="Blue.TLabelframe")
 frame_preview_new.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 b_preview_new = ttk.Button(frame_preview_new, text="Wynik",
@@ -1567,14 +1628,8 @@ frame_histogram_new.grid(row=2, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 pi_histogram_new = PhotoImage()
 l_histogram_new = ttk.Label(frame_histogram_new, image=pi_histogram_new)
-#c_histogram_new = Canvas(frame_histogram_new,  image=pi_histogram_new, width=250, height=250)
 l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 
-###########################
-# Ramka czwarta
-###########################
-#frame_four = ttk.Frame(nb1)
-#frame_four.grid(row=2, column=2, columnspan=3, sticky=(N, W, E, S), padx=5, pady=5)
 
 ###########################
 # Rząd przycisków
