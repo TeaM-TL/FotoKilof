@@ -20,7 +20,10 @@ from PIL import Image
 
 ###################
 # Stałe
-PREVIEW = 500  # rozmiar obrazka podglądu
+if(platform.system() == "Windows"):
+    PREVIEW = 400  # rozmiar obrazka podglądu w Windows
+else:
+    PREVIEW = 450  # rozmiar obrazka podglądu
 VERSION = 1.6  # wersja programu
 
 ##########################
@@ -199,7 +202,9 @@ def spacja(sciezka):
 
     sciezka = os.path.normpath(sciezka)
     if(platform.system() == "Windows"):
-        sciezka = '"' + sciezka + '"'
+        czy_spacja = re.search(" ", sciezka)
+        if(czy_spacja is not None):
+            sciezka = '"' + sciezka + '"'
     else:
         sciezka = re.sub(' ', '\ ', sciezka)
     return sciezka
@@ -1162,7 +1167,8 @@ root.title("Tomasz Łuczak : FotoKilof : " + str(VERSION) + " : " + str(datetime
 
 style = ttk.Style()
 # style = ttk.Style(root)
-style.theme_use('clam')
+if(platform.system() != "Windows"):
+    style.theme_use('clam')
 
 style.configure("Blue.TButton", foreground="blue")
 style.configure("Blue.TLabelframe.Label", foreground="blue")
