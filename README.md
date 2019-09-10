@@ -27,8 +27,8 @@ Graficzny interface do ImageMagick
 python fotokilof.py
 
 ### Binaria
-W katalogi dist znajdują się aktualne binaria dla Windows (8.1 i nowsze)
-i Linuksa (Xubuntu 18.04.3 i nowsze)
+W karcie Releases znajdują się aktualne binaria dla Windows (8.1 i nowsze)
+i Linuksa (Ubuntu 18.04.3 i nowsze)
 
 ## Instrukcja
 1. Wybierz plik
