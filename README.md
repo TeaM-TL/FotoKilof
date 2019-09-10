@@ -18,7 +18,7 @@ Graficzny interface do ImageMagick
 
 ## Wymagania
  - ImageMagick - zainstaluj stąd: https://imagemagick.org/
- - Windows 8.1 +, Linux (Ubuntu 18.04.3 +), MacOS X
+ - Windows, Linux, MacOS X, BSD
  - Ekran FullHD
  - Python3, z modułami: PIL, tkinter, tkcolorpicker - tylko do uruchomienia źródła skryptu
 
