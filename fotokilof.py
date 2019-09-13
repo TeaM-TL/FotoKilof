@@ -1126,6 +1126,7 @@ def preview_orig():
     print("preview: ", preview)
     try:
         pi_preview_orig.configure(file=preview['filename'])
+        l_preview_orig.configure(text=preview['width'] + "x" + preview['height'])
     except:
         print("! Error in preview_orig: Nie można wczytać podglądu")
 
