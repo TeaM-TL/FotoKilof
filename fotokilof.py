@@ -20,11 +20,11 @@ from PIL import Image
 
 ###################
 # Stałe
+VERSION = 1.7  # wersja programu
 if(platform.system() == "Windows"):
     PREVIEW = 400  # rozmiar obrazka podglądu w Windows
 else:
     PREVIEW = 450  # rozmiar obrazka podglądu
-VERSION = 1.6  # wersja programu
 
 ##########################
 
@@ -216,11 +216,11 @@ def apply_all_convert(out_file):
     convert_normalize(out_file)
     convert_contrast(out_file)
     convert_bw(out_file)
-    convert_rotate(out_file)
     if(int(img_resize.get()) > 0):
         convert_resize(out_file)
     else:
         convert_crop(out_file)
+    convert_rotate(out_file)
     convert_border(out_file)
     convert_text(out_file)
 
@@ -1110,9 +1110,9 @@ def convert_crop_preview(event):
     else:
         preview = convert_preview(file_in_path.get(), temp_dir)
         fileppm = preview['filename']
-        x_orig = int(preview['width'])
+        x_orig = int(preview['width']) 
         y_orig = int(preview['height'])
-        # x_max, y_max - wymiary podglądu, znamy max czyli PREVIEW, zwykle 250
+        # x_max, y_max - wymiary podglądu, znamy max czyli PREVIEW
         if(x_orig > y_orig):
             # piksele podglądu, trzeba przeliczyć y_max podglądu
             x_max = PREVIEW
@@ -1125,7 +1125,6 @@ def convert_crop_preview(event):
             x_max = PREVIEW
             y_max = PREVIEW
 
-        # print("x0, y0, x1, y1", x0, y0, x1, y1)
         ratio_X = x_max / int(x_orig)
         ratio_Y = y_max / int(y_orig)
         x0 = int(x0 * ratio_X)
@@ -1133,21 +1132,9 @@ def convert_crop_preview(event):
         x1 = int(x1 * ratio_X)
         y1 = int(y1 * ratio_Y)
 
-        # print("x0, y0, x1, y1", x0, y0, x1, y1)
-        color = " -fill \"" + img_text_box_color.get() + "\""
-        line = " -draw 'line "
-
-        x0y0x1y1 = str(x0) + ", 0 " + str(x0) + ", " + str(PREVIEW)
-        command = color + line + x0y0x1y1 + "'"
-        imagick(command, fileppm)
-        x0y0x1y1 = str(x1) + ", 0 " + str(x1) + ", " + str(PREVIEW)
-        command = color + line + x0y0x1y1 + "'"
-        imagick(command, fileppm)
-        x0y0x1y1 = "0, " + str(y0) + " " + str(PREVIEW) + "," + str(y0)
-        command = color + line + x0y0x1y1 + "'"
-        imagick(command, fileppm)
-        x0y0x1y1 = "0, " + str(y1) + " " + str(PREVIEW) + "," + str(y1)
-        command = color + line + x0y0x1y1 + "'"
+        color = img_text_box_color.get()        
+        x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
+        command = " -fill none  -draw 'stroke \"" + color +  "\" rectangle " + x0y0x1y1 + "'"
         imagick(command, fileppm)
 
         try:
@@ -1686,9 +1673,8 @@ fonts()    # Wczytanie dostępnych fontów
 no_text_in_windows()  # Ostrzeżenie, jesli Windows
 dir_in_path.set(os.path.dirname(file_in_path.get()))  # wczytanie ścieżki
 if(os.path.isfile(file_in_path.get())):
-    preview_orig(file_in_path.get(), temp_dir)  # Wczytanie podglądu oryginału
-    if(img_crop.get() > 0):
-        convert_crop_preview("none")
+    # Wczytanie podglądu oryginału
+    convert_crop_preview("none")
 
 l_border.configure(bg=img_border_color.get())
 

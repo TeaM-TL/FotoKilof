@@ -14,4 +14,5 @@
 	1.3 klikany podgląd i wczytuje współrzędne do wycinka, usunięte menu
 	1.4 histogram oryginału i wyniku
 	1.5 uporządkowanie GUI
-	1.5 przyciski: Następny, Poprzedni
+	1.6 przyciski: Następny, Poprzedni
+	1.7 uproszczenie generowania ramki crop w podglądzie
