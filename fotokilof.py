@@ -52,7 +52,7 @@ def pre_imagick(file_in_path):
             os.mkdir(out_dir)
             print("Out_dir: " + out_dir)
         except:
-            print("Nie można utworzyć katalogu na przemielone rysunki")
+            print("! Error in pre_imagick: Nie można utworzyć katalogu na przemielone rysunki")
             return
 
     # Kopiowanie oryginału do miejsca mielenia
@@ -61,10 +61,10 @@ def pre_imagick(file_in_path):
     try:
         shutil.copyfile(file_in_path, out_file)
     except IOError as e:
-        print("Unable to copy file. %s" % e)
+        print("! Error in pre_imagick: Unable to copy file. %s" % e)
         exit(1)
     except:
-        print("Unexpected error:", sys.exc_info())
+        print("! Error in pre_imagick: Unexpected error:", sys.exc_info())
         exit(1)
     return out_file
 
@@ -81,7 +81,7 @@ def imagick(cmd, out_file):
     try:
         os.system(command)
     except:
-        print("Error in imagick: " + command)
+        print("! Error in imagick: " + command)
 
 ################
 # Preview
@@ -99,45 +99,29 @@ def preview_histogram(file):
         os.system(command)
         return file_histogram
     except:
-        print("Error in convert_histogram: " + command)
+        print("! Error in convert_histogram: " + command)
 
 
 def preview_orig_bind(event):
     global file_in_path, temp_dir
-    preview_orig(file_in_path.get(), temp_dir)
-
-
-def preview_orig(file_in_path, temp_dir):
-    # generowanie podglądu oryginału
-
-    preview = convert_preview(file_in_path, temp_dir)
-    try:
-        pi_preview_orig.configure(file=preview['filename'])
-        l_preview_orig.configure(text=preview['width'] + "x" + preview['height'])
-    except:
-        print("Nie można wczytać podglądu")
-
-    try:
-        pi_histogram_orig.configure(file=preview_histogram(file_in_path))
-    except:
-        print("Error in preview histogram_new")
+    preview_orig()
 
 
 def preview_new(out_file, temp_dir):
     # generowanie podglądu wynikowego
 
-    preview = convert_preview(out_file, temp_dir)
+    preview = convert_preview(out_file, temp_dir, " ")
     try:
         pi_preview_new.configure(file=preview['filename'])
         l_preview_new.configure(text=preview['width'] + "x" + preview['height'])
         os.remove(preview['filename'])
     except:
-        print("Nie można wczytać podglądu")
+        print("! Error in preview_new: Nie można wczytać podglądu")
 
     try:
         pi_histogram_new.configure(file=preview_histogram(out_file))
     except:
-        print("Error in preview histogram_new")
+        print("! Error in preview histogram_new")
 
 
 def preview_orig_button():
@@ -164,37 +148,36 @@ def preview_new_button():
         print("Chyba nie ma obrazka")
 
 
-def convert_preview(file, temp_dir):
+def convert_preview(file, temp_dir, command):
     """
     generowanie podglądu oryginału
     file - nazwa obrazka, pełna ścieżka
     temp_dir - katalog tymczasowy, pełna ścieżka
-
+    dodatkowe polecenie dla imagemagick, np. narysuj ramkę crop albo spacja!
     zwraca: nazwę podglądu obrazka i rozmiar
     """
 
-    # im = Image.open(spacja(file))
     im = Image.open(file)
     width = str(im.size[0])
     height = str(im.size[1])
 
     filename, file_extension = os.path.splitext(file)
     file_preview = os.path.join(temp_dir, os.path.basename(filename) + ".ppm")
-
+    print("x:", file_preview)
     file = spacja(file)
     file_preview = spacja(file_preview)
 
-    command = "convert " + file + " -resize " + str(PREVIEW) + "x" + str(PREVIEW) + " " + file_preview
+    command = "convert " + file + " -resize " + str(PREVIEW) + "x" + str(PREVIEW) + command + file_preview
     print(command)
     try:
         os.system(command)
     except:
-        print("Error in convert_preview: " + command)
+        print("! Error in convert_preview: " + command)
 
     try:
         return {'filename': file_preview, 'width': width, 'height': height}
     except:
-        return "Error in convert_preview: return"
+        return "! Error in convert_preview: return"
 
     
 def spacja(sciezka):
@@ -207,6 +190,9 @@ def spacja(sciezka):
             sciezka = '"' + sciezka + '"'
     else:
         sciezka = re.sub(' ', '\ ', sciezka)
+        sciezka = re.sub('\\\\\\\\ ', '\ ', sciezka)
+
+    print("sciezka: ", sciezka)
     return sciezka
 
 
@@ -451,7 +437,7 @@ def fonts():
         try:
             os.system(command)
         except:
-            print("Error: " + command)
+            print("! Error in fonts: " + command)
             return
 
         try:
@@ -465,7 +451,7 @@ def fonts():
             file.close()
             os.remove(file_font)
         except:
-            print("Error przy wczytywaniu listy fontów")
+            print("! Error in fonts: przy wczytywaniu listy fontów")
             fonts_list = ('Helvetica')
 
     cb_text_font['values'] = fonts_list
@@ -543,7 +529,7 @@ def open_file():
                                                            ("JPEG files", "*.JPG"),
                                                            ("all files", "*.*"))))
     file_select_L.configure(text=os.path.basename(file_in_path.get()))
-    preview_orig(file_in_path.get(), temp_dir)
+    preview_orig()
 
     dir_in_path.set(os.path.dirname(file_in_path.get()))
 
@@ -561,7 +547,7 @@ def open_file_next():
         file = list[position + 1]
         file_select_L.configure(text=file)
         file_in_path.set(os.path.join(dir_in_path.get(), file))
-        preview_orig(file_in_path.get(), temp_dir)
+        preview_orig()
     os.chdir(pwd)
 
 
@@ -579,7 +565,7 @@ def open_file_prev():
         file = list[position - 1]
         file_select_L.configure(text=file)
         file_in_path.set(os.path.join(dir_in_path.get(), file))
-        preview_orig(file_in_path.get(), temp_dir)
+        preview_orig()
     os.chdir(pwd)
 
 
@@ -987,7 +973,7 @@ def ini_save():
         with open(file_ini, 'w', encoding='utf-8', buffering=1) as configfile:
             config.write(configfile)
     except:
-        print("Error! nie udał się zapis do pliku konfiguracyjnego: " + file_ini)
+        print("! Error in ini_save: nie udał się zapis do pliku konfiguracyjnego: " + file_ini)
 
 
 def help_info(event):
@@ -1001,7 +987,7 @@ def help_info(event):
             message = message + i
             file.close
     except:
-        print("Error przy wczytywaniu pliku licencji")
+        print("! Error in help_info: błąd przy wczytywaniu pliku licencji")
         message = "Copyright 2019 Tomasz Łuczak"
 
     messagebox.showinfo(title="Licencja", message=message)
@@ -1018,7 +1004,7 @@ def help_changelog():
             message = message + i
             file.close
     except:
-        print("Error przy wczytywaniu dziennika zmian")
+        print("! Error in help_changelog: błąd przy wczytywaniu dziennika zmian")
         message = "Zmian było duużo..., i jeszcze będą kolejne..."
 
     messagebox.showinfo(title="Licencja", message=message)
@@ -1085,9 +1071,9 @@ def mouse_crop_SE(event):
     e4_crop_1.delete(0, "end")
     e4_crop_1.insert(0, xy[1])
 
-
-def convert_crop_preview(event):
-    # rysuje wycinek na rysunku podglądu
+def preview_orig():
+    # generowanie podglądu oryginału
+    # rysuje wycinek na rysunku podglądu o ile potrzeba
     global file_in_path, temp_dir, img_crop, img_text_box_color
 
     if(img_crop.get() == 1):
@@ -1105,13 +1091,11 @@ def convert_crop_preview(event):
     else:
         do_nothing = 1
 
-    if(do_nothing == 1):
-        preview_orig(file_in_path.get(), temp_dir)
-    else:
-        preview = convert_preview(file_in_path.get(), temp_dir)
-        fileppm = preview['filename']
-        x_orig = int(preview['width']) 
-        y_orig = int(preview['height'])
+    if(do_nothing != 1):
+        im = Image.open(file_in_path.get())
+        x_orig = im.size[0]
+        y_orig = im.size[1]
+        
         # x_max, y_max - wymiary podglądu, znamy max czyli PREVIEW
         if(x_orig > y_orig):
             # piksele podglądu, trzeba przeliczyć y_max podglądu
@@ -1134,13 +1118,21 @@ def convert_crop_preview(event):
 
         color = img_text_box_color.get()        
         x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
-        command = " -fill none  -draw 'stroke \"" + color +  "\" rectangle " + x0y0x1y1 + "'"
-        imagick(command, fileppm)
+        command = " -fill none  -draw 'stroke \"" + color +  "\" rectangle " + x0y0x1y1 + "' "
+    else:
+        command = " "
 
-        try:
-            pi_preview_orig.configure(file=fileppm)
-        except:
-            print("Nie można wczytać podglądu")
+    preview = convert_preview(file_in_path.get(), temp_dir, command)
+    print("preview: ", preview)
+    try:
+        pi_preview_orig.configure(file=preview['filename'])
+    except:
+        print("! Error in preview_orig: Nie można wczytać podglądu")
+
+    try:
+        pi_histogram_orig.configure(file=preview_histogram(file_in_path.get()))
+    except:
+        print("! Error in preview_orig: : Nie można wczytać podglądu histogramu")
 
 ###############################################################################
 ###############################################################################
@@ -1659,8 +1651,8 @@ cb_contrast.bind("<<ComboboxSelected>>", contrast_selected)
 l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
 l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
 rb0_crop.bind("<Button-1>", preview_orig_bind)
-rb1_crop.bind("<ButtonRelease-1>", convert_crop_preview)
-rb2_crop.bind("<ButtonRelease-1>", convert_crop_preview)
+rb1_crop.bind("<ButtonRelease-1>", preview_orig_bind)
+rb2_crop.bind("<ButtonRelease-1>", preview_orig_bind)
 rb3_crop.bind("<Button-1>", preview_orig_bind)
 root.bind("<F1>", help_info)
 root.protocol("WM_DELETE_WINDOW", win_deleted)
@@ -1674,7 +1666,7 @@ no_text_in_windows()  # Ostrzeżenie, jesli Windows
 dir_in_path.set(os.path.dirname(file_in_path.get()))  # wczytanie ścieżki
 if(os.path.isfile(file_in_path.get())):
     # Wczytanie podglądu oryginału
-    convert_crop_preview("none")
+    preview_orig()
 
 l_border.configure(bg=img_border_color.get())
 
