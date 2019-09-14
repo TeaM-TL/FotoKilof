@@ -1,6 +1,8 @@
 # FotoKilof
 Graficzny interface do ImageMagick
 
+![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/fotokilof.png)
+
 ## Funkcje:
  - przetwarzanie pojedynczego pliku jak i całego katalogu,
  - obrót co 90stopni
