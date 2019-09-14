@@ -1,6 +1,8 @@
 # FotoKilof
 Graficzny interface do ImageMagick
 
+![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/fotokilof.png)
+
 ## Funkcje:
  - przetwarzanie pojedynczego pliku jak i całego katalogu,
  - obrót co 90stopni
@@ -43,3 +45,10 @@ wybrany plik albo cały folder z wybranym plikiem.
 Do przetwarzania folderu musimy użyć przycisku Zaaplikuj wszystko.
 5. Wybór Nic, 0 szerokości ramki i odhaczenie Tekst, wyłącza dane 
 polecenie z przetwarzania
+
+## Do Zrobiena
+1. Internalizacja
+2. wersja obiektowa
+3. PIL zamiast ImageMagick, o ile się da lub gdzie się da
+4. Instalator NSIS dla Windows
+5. Instrukcja obsługi, filmik, pl, en
