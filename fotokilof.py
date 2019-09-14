@@ -90,7 +90,7 @@ def imagick(cmd, out_file):
 def preview_histogram(file):
     global temp_dir
 
-    file_histogram = spacja(os.path.join(temp_dir, os.path.basename(file) + ".png"))
+    file_histogram = spacja(os.path.join(temp_dir, "histogram.png"))
     file = spacja(file)
 
     command = "convert " + file + " -colorspace Gray -define histogram:unique-colors=false histogram:" + file_histogram
@@ -162,8 +162,7 @@ def convert_preview(file, temp_dir, command):
     height = str(im.size[1])
 
     filename, file_extension = os.path.splitext(file)
-    file_preview = os.path.join(temp_dir, os.path.basename(filename) + ".ppm")
-    print("x:", file_preview)
+    file_preview = os.path.join(temp_dir,"preview.ppm")
     file = spacja(file)
     file_preview = spacja(file_preview)
 
@@ -192,7 +191,7 @@ def spacja(sciezka):
         sciezka = re.sub(' ', '\ ', sciezka)
         sciezka = re.sub('\\\\\\\\ ', '\ ', sciezka)
 
-    print("sciezka: ", sciezka)
+    # print("sciezka: ", sciezka)
     return sciezka
 
 
@@ -405,7 +404,7 @@ def convert_text(out_file):
         gravit = " -gravity " + gravity(img_text_gravity.get())
         x = e_text_x.get()
         y = e_text_y.get()
-        # text = " -draw \'text " + x + "," + y + " \"" + e_text.get() + "\"\'"
+
         text = " -draw \"text " + x + "," + y + " '" + e_text.get() + "'\""
         if(img_text_box.get() == 0):
             box = ""
@@ -1118,14 +1117,13 @@ def preview_orig():
 
         color = img_text_box_color.get()        
         x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
-        command = " -fill none  -draw 'stroke \"" + color +  "\" rectangle " + x0y0x1y1 + "' "
+        command = " -fill none  -draw \"stroke '" + color +  "' rectangle " + x0y0x1y1 + "\" "
     else:
         command = " "
 
     preview = convert_preview(file_in_path.get(), temp_dir, command)
-    print("preview: ", preview)
     try:
-        pi_preview_orig.configure(file=preview['filename'])
+        pi_preview_orig.configure(file=spacja(preview['filename']))
         l_preview_orig.configure(text=preview['width'] + "x" + preview['height'])
     except:
         print("! Error in preview_orig: Nie można wczytać podglądu")
