@@ -7,6 +7,7 @@ Graficzny interface do ImageMagick
 
 ## Funkcje:
  - przetwarzanie pojedynczego pliku jak i całego katalogu,
+ - wybór wyświetlanych narzędzi
  - obrót co 90stopni
  - wycinanie: własne i predefiniowane wielkości (HD, 2K, 4K),
  - klikany podgląd, wczytuje współrzędne do wycinka, podgląd wybranego wycinka
