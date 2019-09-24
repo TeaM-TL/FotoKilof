@@ -211,7 +211,8 @@ def apply_all_convert(out_file):
 
 def apply_all():
     #    zaplikowanie wszystkich opcji na raz
-    global file_in_path, temp_dir, out_dir, file_dir_selector, progress_files, progress_filename
+    global file_in_path, temp_dir, out_dir, file_dir_selector
+    global progress_files, progress_filename
 
     if(file_dir_selector.get() == 0):
         out_file = pre_imagick(file_in_path.get())
@@ -372,7 +373,8 @@ def convert_crop_button():
 
 def convert_crop(out_file):
     #    Wycięcie obrazka z obrazka
-    global file_in_path, temp_dir, out_dir, file_dir_selector, img_crop, img_crop_gravity
+    global file_in_path, temp_dir, out_dir, file_dir_selector
+    global img_crop, img_crop_gravity
     if(img_crop.get() > 0):
         if(img_crop.get() == 1):
             X = str(abs(int(e3_crop_1.get()) - int(e1_crop_1.get())))
@@ -395,7 +397,8 @@ def convert_text_button():
 
 def convert_text(out_file):
     #     Umieszczenie napisu na obrazku
-    global img_text_gravity, img_text_font, img_text_color, img_text_box, img_text_box_color
+    global img_text_gravity, img_text_font, img_text_color
+    global img_text_box, img_text_box_color
 
     if(img_text.get() == 1):
         size = " -pointsize " + e_text_size.get()
@@ -966,7 +969,10 @@ def ini_read_wraper():
 
 def ini_save():
     #     Zapis konfiguracji do pliku INI
-    global file_ini, file_in_path, img_text, img_resize, img_text_gravity, img_text_font, img_text_color, img_rotate, img_crop, img_crop_gravity, img_text_box, img_text_box_color
+    global file_ini, file_in_path, work_dir
+    global img_text, img_text_font, img_text_color
+    global img_text_gravity, img_text_box, img_text_box_color
+    global img_rotate, img_crop, img_crop_gravity, img_resize
 
     # przygotowanie zawartości
     config = configparser.ConfigParser()
@@ -1166,8 +1172,8 @@ def preview_orig():
         x1 = int(x1 * ratio_X)
         y1 = int(y1 * ratio_Y)
 
-        color = img_text_box_color.get()        
         x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
+        # color = img_text_box_color.get()
         # command = " -fill none  -draw \"stroke '" + color +  "' rectangle " + x0y0x1y1 + "\" "
         command = " -fill none  -draw \"stroke '#FFFF00' rectangle " + x0y0x1y1 + "\" "
     else:
@@ -1187,7 +1193,8 @@ def preview_orig():
 
 
 def tools_set():
-    global img_resize, img_crop, img_text, img_rotate, img_border, img_bw, img_normalize, img_contrast
+    global img_resize, img_crop, img_text, img_rotate, img_border
+    global img_bw, img_normalize, img_contrast
     
     if(img_resize.get() == 0):
         frame_resize.grid_remove()
@@ -1319,24 +1326,26 @@ frame_zero_col.grid(row=1, column=1, rowspan=2, sticky=(N, W, E, S))
 ###########################
 # Wybór poleceń
 ###########################
-frame_zero_set = ttk.Labelframe(frame_zero_col, text="Narzędzia", style="Blue.TLabelframe")
+frame_zero_set = ttk.Labelframe(frame_zero_col, text="Narzędzia",
+                                style="Blue.TLabelframe")
 frame_zero_set.grid(row=1, column=1, padx=5, pady=5, sticky=(W, E))
 
 cb_resize = ttk.Checkbutton(frame_zero_set, text="Skalowanie",
-                              variable=img_resize, offvalue="0", onvalue="1")
-cb_crop = ttk.Checkbutton(frame_zero_set, text="Wycinek", variable=img_crop, offvalue="0", onvalue="1")
+                            variable=img_resize, offvalue="0", onvalue="1")
+cb_crop = ttk.Checkbutton(frame_zero_set, text="Wycinek", variable=img_crop,
+                          offvalue="0", onvalue="1")
 cb_text = ttk.Checkbutton(frame_zero_set, text="Tekst", variable=img_text,
                           onvalue="1", offvalue="0")
 cb_rotate = ttk.Checkbutton(frame_zero_set, text="Obrót",
-                              variable=img_rotate, offvalue="0", onvalue="90")
+                            variable=img_rotate, offvalue="0", onvalue="90")
 cb_border = ttk.Checkbutton(frame_zero_set, text="Ramka",
-                              variable=img_border, offvalue="0", onvalue="1")
+                            variable=img_border, offvalue="0", onvalue="1")
 cb_bw =  ttk.Checkbutton(frame_zero_set, text="Czarno-białe",
-                              variable=img_bw, offvalue="0", onvalue="1")
+                         variable=img_bw, offvalue="0", onvalue="1")
 cb_normalize =  ttk.Checkbutton(frame_zero_set, text="Normalizacja kolorów",
-                              variable=img_normalize, offvalue="0", onvalue="1")
+                                variable=img_normalize, offvalue="0", onvalue="1")
 cb_contrast =  ttk.Checkbutton(frame_zero_set, text="Kontrast",
-                              variable=img_contrast, offvalue="0", onvalue="1")
+                               variable=img_contrast, offvalue="0", onvalue="1")
 
 b_last_set = ttk.Button(frame_zero_set, text="Zastosuj", command=tools_set)
                         
@@ -1419,8 +1428,10 @@ b_file_select_last.grid(column=5, row=2, padx=5, pady=5, sticky=W)
 ###########################
 # Resize
 ###########################
-frame_resize = ttk.Labelframe(frame_first_col, text="Skalowanie", style="Blue.TLabelframe")
-frame_resize.grid(column=1, row=2, columnspan=2, sticky=(N, W, E, S), padx=5, pady=5)
+frame_resize = ttk.Labelframe(frame_first_col, text="Skalowanie",
+                              style="Blue.TLabelframe")
+frame_resize.grid(column=1, row=2, columnspan=2, sticky=(N, W, E, S),
+                  padx=5, pady=5)
 ###
 rb_1_resize = ttk.Radiobutton(frame_resize, text="Piksele",
                               variable=img_resize, value="1")
@@ -1449,8 +1460,10 @@ b_resize.grid(row=2, column=6, sticky=(E), padx=5, pady=5)
 ############################
 # crop
 ############################
-frame_crop = ttk.Labelframe(frame_first_col, text="Wycinek", style="Blue.TLabelframe")
-frame_crop.grid(row=3, column=1, columnspan=2, sticky=(N, W, E, S), padx=5, pady=5)
+frame_crop = ttk.Labelframe(frame_first_col, text="Wycinek",
+                            style="Blue.TLabelframe")
+frame_crop.grid(row=3, column=1, columnspan=2, sticky=(N, W, E, S),
+                padx=5, pady=5)
 ###
 rb0_crop = ttk.Radiobutton(frame_crop, text="Nic", variable=img_crop, value="0")
 rb1_crop = ttk.Radiobutton(frame_crop, variable=img_crop, value="1",
@@ -1539,8 +1552,10 @@ b_crop.grid(row=5, column=1, sticky=W, padx=5, pady=5)
 ###########################
 # Tekst
 ###########################
-frame_text = ttk.Labelframe(frame_first_col, text="Dodaj tekst", style="Blue.TLabelframe")
-frame_text.grid(row=4, column=1, columnspan=2, sticky=(N, W, E, S), padx=5, pady=5)
+frame_text = ttk.Labelframe(frame_first_col, text="Dodaj tekst",
+                            style="Blue.TLabelframe")
+frame_text.grid(row=4, column=1, columnspan=2, sticky=(N, W, E, S),
+                padx=5, pady=5)
 ###
 frame_text_text = ttk.Frame(frame_text)
 
@@ -1682,8 +1697,10 @@ frame_second_col.grid(row=1, column=3, sticky=(N, W, E, S))
 ############################
 # Ramka podglądu oryginału
 ############################
-frame_preview_orig = ttk.Labelframe(frame_second_col, text="Oryginał", style="Blue.TLabelframe")
-frame_preview_orig.grid(row=1, column=1, columnspan=2, sticky=(N, W, E, S), padx=5, pady=5)
+frame_preview_orig = ttk.Labelframe(frame_second_col, text="Oryginał",
+                                    style="Blue.TLabelframe")
+frame_preview_orig.grid(row=1, column=1, columnspan=2, sticky=(N, W, E, S),
+                        padx=5, pady=5)
 ###
 b_preview_orig = ttk.Button(frame_preview_orig, text="Oryginał",
                             command=preview_orig_button)
@@ -1707,7 +1724,8 @@ l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
 ########################
 # Kontrast
 #########################
-frame_contrast = ttk.Labelframe(frame_second_col, text="Kontrast", style="Blue.TLabelframe")
+frame_contrast = ttk.Labelframe(frame_second_col, text="Kontrast",
+                                style="Blue.TLabelframe")
 frame_contrast.grid(row=2, column=2, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 b_contrast = ttk.Button(frame_contrast, text="Kontrast", style="Blue.TButton",
@@ -1738,13 +1756,15 @@ b_contrast.grid(row=5, column=1, padx=5, pady=5, columnspan=3, sticky=E)
 ############################
 frame_normalize = ttk.LabelFrame(frame_second_col, text="Normalizacja kolorów",
                                  style="Blue.TLabelframe")
-frame_normalize.grid(row=3, column=1, columnspan=2, sticky=(N, W, E, S), padx=5, pady=5)
+frame_normalize.grid(row=3, column=1, columnspan=2, sticky=(N, W, E, S),
+                     padx=5, pady=5)
 ###
 rb1_normalize = ttk.Radiobutton(frame_normalize, text="Normalize",
                                 variable=img_normalize, value="1")
 rb2_normalize = ttk.Radiobutton(frame_normalize, text="AutoLevel",
                                 variable=img_normalize, value="2")
-b_normalize = ttk.Button(frame_normalize, text="Normalizuj", style="Blue.TButton",
+b_normalize = ttk.Button(frame_normalize, text="Normalizuj",
+                         style="Blue.TButton",
                          command=convert_normalize_button)
 
 rb1_normalize.grid(row=1, column=1, padx=5, pady=5, sticky=W)
