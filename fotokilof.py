@@ -20,7 +20,7 @@ from PIL import Image
 
 ###################
 # Stałe
-VERSION = 1.9  # wersja programu
+VERSION = "1.9.1"  # wersja programu
 if(platform.system() == "Windows"):
     PREVIEW = 400  # rozmiar obrazka podglądu w Windows
 else:
@@ -533,6 +533,26 @@ def open_file():
     dir_in_path.set(os.path.dirname(file_in_path.get()))
 
 
+def open_file_last():
+    global file_in_path, dir_in_path
+    pwd = os.getcwd()
+    os.chdir(os.path.dirname(file_in_path.get()))
+    list = []
+    for file in glob.glob("*.[j|J][p|P][g|G]"):
+        list.append(file)
+    list.sort()
+    position = list.index(os.path.basename(file_in_path.get()))
+    print(position, list)
+    try:
+        file = list[-1]
+        file_select_L.configure(text=file)
+        file_in_path.set(os.path.join(dir_in_path.get(), file))
+        preview_orig()
+    except:
+        print("Error in open_file_last")
+    os.chdir(pwd)
+
+    
 def open_file_next():
     global file_in_path, dir_in_path
     pwd = os.getcwd()
@@ -540,6 +560,7 @@ def open_file_next():
     list = []
     for file in glob.glob("*.[j|J][p|P][g|G]"):
         list.append(file)
+    list.sort()
     position = list.index(os.path.basename(file_in_path.get()))
     print(position, list)
     if(position <= len(list) - 2):
@@ -547,6 +568,27 @@ def open_file_next():
         file_select_L.configure(text=file)
         file_in_path.set(os.path.join(dir_in_path.get(), file))
         preview_orig()
+    os.chdir(pwd)
+
+
+def open_file_first():
+    global file_in_path, dir_in_path
+
+    pwd = os.getcwd()
+    os.chdir(os.path.dirname(file_in_path.get()))
+    list = []
+    for file in glob.glob("*.[j|J][p|P][g|G]"):
+        list.append(file)
+    list.sort()
+    position = list.index(os.path.basename(file_in_path.get()))
+    print(position, list)
+    try:
+        file = list[0]
+        file_select_L.configure(text=file)
+        file_in_path.set(os.path.join(dir_in_path.get(), file))
+        preview_orig()
+    except:
+        print("Error in open_file_first")
     os.chdir(pwd)
 
 
@@ -558,6 +600,7 @@ def open_file_prev():
     list = []
     for file in glob.glob("*.[j|J][p|P][g|G]"):
         list.append(file)
+    list.sort()
     position = list.index(os.path.basename(file_in_path.get()))
     print(position, list)
     if(position > 0):
@@ -1184,11 +1227,27 @@ def tools_set():
 
 root = Tk()
 
+# hidden file
+# https://code.activestate.com/lists/python-tkinter-discuss/3723/
+try:
+    # call a dummy dialog with an impossible option to initialize the file
+    # dialog without really getting a dialog window; this will throw a
+    # TclError, so we need a try...except :
+    try:
+        root.tk.call('tk_getOpenFile', '-foobarbaz')
+    except TclError:
+        pass
+    # now set the magic variables accordingly
+    root.tk.call('set', '::tk::dialog::file::showHiddenBtn', '1')
+    root.tk.call('set', '::tk::dialog::file::showHiddenVar', '0')
+except:
+    pass
 
-root.title("Tomasz Łuczak : FotoKilof : " + str(VERSION) + " : " + str(datetime.date.today()))
+root.title("Tomasz Łuczak : FotoKilof : " + str(VERSION) + " : " +
+           str(datetime.date.today()))
 
 style = ttk.Style()
-# style = ttk.Style(root)
+
 if(platform.system() != "Windows"):
     style.theme_use('clam')
 
@@ -1285,14 +1344,18 @@ b_last_set.pack(padx=5, pady=5)
 ###########################
 # Przyciski
 ###########################
-frame_zero_cmd = ttk.Labelframe(frame_zero_col, text="Polecenia", style="Blue.TLabelframe")
+frame_zero_cmd = ttk.Labelframe(frame_zero_col, text="Polecenia",
+                                style="Blue.TLabelframe")
 frame_zero_cmd.grid(row=2, column=1, padx=5, pady=5, sticky=(W, E))
 
-b_last_quit = ttk.Button(frame_zero_cmd, text="Koniec", command=close_window)
-b_last_save = ttk.Button(frame_zero_cmd, text="Zapisz ustawienia", command=ini_save)
-b_last_read = ttk.Button(frame_zero_cmd, text="Wczytaj ustawienia", command=ini_read_wraper)
+b_last_quit = ttk.Button(frame_zero_cmd, text="Koniec",
+                         command=close_window)
+b_last_save = ttk.Button(frame_zero_cmd, text="Zapisz ustawienia",
+                         command=ini_save)
+b_last_read = ttk.Button(frame_zero_cmd, text="Wczytaj ustawienia",
+                         command=ini_read_wraper)
 b_last_apply = ttk.Button(frame_zero_cmd, text="Zaaplikuj wszystko",
-                          style="Blue.TButton", command=apply_all)
+                          command=apply_all, style="Blue.TButton")
 
 b_last_apply.pack(padx=5, pady=25, anchor=W)
 b_last_save.pack(padx=5, pady=5, anchor=W)
@@ -1309,30 +1372,40 @@ frame_first_col.grid(row=1, column=2, rowspan=2, sticky=(N, W, E, S))
 ###########################
 # Wybór obrazka
 ###########################
-frame_input = ttk.Labelframe(frame_first_col, text="Obrazek", style="Blue.TLabelframe")
-frame_input.grid(row=1, column=1, columnspan=2, sticky=(N, W, E, S), padx=5, pady=5)
+frame_input = ttk.Labelframe(frame_first_col, text="Obrazek",
+                             style="Blue.TLabelframe")
+frame_input.grid(row=1, column=1, columnspan=2, sticky=(N, W, E, S),
+                 padx=5, pady=5)
 # tworzenie widgetów
-file_selector_rb = ttk.Radiobutton(frame_input, text="Plik",
-                                   variable=file_dir_selector, value="0")
-b_file_select = ttk.Button(frame_input, text="Wybierz plik", command=open_file,
-                           style="Blue.TButton")
-file_select_L = ttk.Label(frame_input, width=20)
-dir_selector_rb = ttk.Radiobutton(frame_input, text="Folder",
+# l_select_what = ttk.Label(frame_input, text="Łomotamy:")
+b_file_select = ttk.Button(frame_input, text="Wybierz plik",
+                           command=open_file, style="Blue.TButton")
+rb_selector_dir = ttk.Radiobutton(frame_input, text="Folder",
                                   variable=file_dir_selector, value="1")
-dir_select_L1 = ttk.Label(frame_input, text="Wybrany folder")
-dir_select_L = ttk.Label(frame_input, textvariable=dir_in_path, width=40)
-b_file_select_next = ttk.Button(frame_input, text="Następny", command=open_file_next)
-b_file_select_prev = ttk.Button(frame_input, text="Poprzedni", command=open_file_prev)
+rb_selector_file = ttk.Radiobutton(frame_input, text="Plik",
+                                   variable=file_dir_selector, value="0")
+file_select_L = ttk.Label(frame_input, width=24)
+
+
+b_file_select_first = ttk.Button(frame_input, text="Pierwszy",
+                                 command=open_file_first)
+b_file_select_prev = ttk.Button(frame_input, text="Poprzedni",
+                                command=open_file_prev)
+b_file_select_next = ttk.Button(frame_input, text="Następny",
+                                command=open_file_next)
+b_file_select_last = ttk.Button(frame_input, text="Ostatni",
+                                command=open_file_last)
 # umieszczenie widgetów
-file_selector_rb.grid(column=1, row=1, padx=5, pady=5, sticky=W)
-b_file_select.grid(column=2, row=1, padx=5, pady=5, sticky=W)
-b_file_select_prev.grid(column=3, row=1, padx=5, pady=5, sticky=W)
-b_file_select_next.grid(column=4, row=1, padx=5, pady=5, sticky=W)
-file_select_L.grid(column=5, row=1, padx=5, pady=5, sticky=W)
+# l_select_what.grid(column=1, row=1, padx=5, pady=5, sticky=W)
+b_file_select.grid(column=1, row=1, padx=5, pady=5, sticky=W)
+rb_selector_dir.grid(column=2, row=1, padx=5, pady=5, sticky=W)
+rb_selector_file.grid(column=3, row=1, padx=5, pady=5, sticky=W)
+file_select_L.grid(column=4, row=1, padx=5, pady=5, sticky=W, columnspan=2)
 #
-dir_selector_rb.grid(column=1, row=2, padx=5, pady=5, sticky=W)
-dir_select_L1.grid(column=2, row=2, padx=5, pady=5)
-dir_select_L.grid(column=3, row=2, columnspan=3, padx=5, pady=5)
+b_file_select_first.grid(column=1, row=2, padx=5, pady=5, sticky=W)
+b_file_select_prev.grid(column=2, row=2, padx=5, pady=5, sticky=W, columnspan=2)
+b_file_select_next.grid(column=4, row=2, padx=5, pady=5, sticky=W)
+b_file_select_last.grid(column=5, row=2, padx=5, pady=5, sticky=W)
 
 ###########################
 # Resize
