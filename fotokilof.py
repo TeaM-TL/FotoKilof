@@ -46,7 +46,7 @@ def pre_imagick(file_in_path):
     """
     global work_dir
     # Zakładanie katalogu na obrazki wynikowe - podkatalog folderu z obrazkiem
-    out_dir = os.path.join(os.path.dirname(file_in_path), work_dir)
+    out_dir = os.path.join(os.path.dirname(file_in_path), work_dir.get())
     if(os.path.isdir(out_dir) is False):
         try:
             os.mkdir(out_dir)
@@ -138,7 +138,7 @@ def preview_new_button():
     global file_in_path, work_dir
 
     file_show = os.path.join(os.path.dirname(file_in_path.get()),
-                             work_dir, os.path.basename(file_in_path.get()))
+                             work_dir.get(), os.path.basename(file_in_path.get()))
     try:
         img = Image.open(file_show)
         img.show()
@@ -682,6 +682,12 @@ def ini_read(file_ini):
     except:
         file_in_path = ""
     list_return['file_in_path'] = file_in_path
+    
+    try:
+        work_dir = config.get('Konfiguracja', 'work_dir')
+    except:
+        work_dir = "FotoKilof"
+    list_return['work_dir'] = work_dir
 
     try:
         file_dir_selector = config.getint('Konfiguracja', 'file_dir')
@@ -941,6 +947,7 @@ def ini_read_wraper():
     ini_entries = ini_read(file_ini)
     file_in_path.set(ini_entries['file_in_path'])
     file_dir_selector.set(ini_entries['file_dir_selector'])
+    work_dir.set(ini_entries['work_dir'])
     img_resize.set(ini_entries['img_resize'])
     img_text.set(ini_entries['img_text'])
     img_text_gravity.set(ini_entries['img_text_gravity'])
@@ -965,6 +972,7 @@ def ini_save():
     config = configparser.ConfigParser()
     config.add_section('Konfiguracja')
     config.set('Konfiguracja', 'path', file_in_path.get())
+    config.set('Konfiguracja', 'work_dir', work_dir.get())
     config.set('Konfiguracja', 'file_dir', str(file_dir_selector.get()))
     config.add_section('Resize')
     config.set('Resize', 'resize', str(img_resize.get()))
@@ -1160,7 +1168,8 @@ def preview_orig():
 
         color = img_text_box_color.get()        
         x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
-        command = " -fill none  -draw \"stroke '" + color +  "' rectangle " + x0y0x1y1 + "\" "
+        # command = " -fill none  -draw \"stroke '" + color +  "' rectangle " + x0y0x1y1 + "\" "
+        command = " -fill none  -draw \"stroke '#FFFF00' rectangle " + x0y0x1y1 + "\" "
     else:
         command = " "
 
@@ -1257,7 +1266,7 @@ style.configure("Blue.TLabelframe.Label", foreground="blue")
 ##########################
 # Zmienne globalne
 
-work_dir = "FotoKilof"
+work_dir = StringVar()  # default: "FotoKilof"
 file_ini = "fotokilof.ini"
 file_dir_selector = IntVar()
 file_in_path = StringVar()  # plik obrazka do przemielenia
@@ -1610,8 +1619,8 @@ frame_rotate = ttk.Labelframe(frame_first_col, text="Obrót",
                               style="Blue.TLabelframe")
 frame_rotate.grid(row=5, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
-# rb_rotate_0 = ttk.Radiobutton(frame_rotate, text="0",
-#                               variable=img_rotate, value="0")
+rb_rotate_0 = ttk.Radiobutton(frame_rotate, text="0",
+                              variable=img_rotate, value="0")
 rb_rotate_90 = ttk.Radiobutton(frame_rotate, text="90",
                                variable=img_rotate, value="90")
 rb_rotate_180 = ttk.Radiobutton(frame_rotate, text="180",
@@ -1621,7 +1630,7 @@ rb_rotate_270 = ttk.Radiobutton(frame_rotate, text="270",
 b_rotate = ttk.Button(frame_rotate, text="Obróć", style="Blue.TButton",
                       command=convert_rotate_button)
 
-# rb_rotate_0.grid(row=1,   column=1, sticky=(N, W, E, S), padx=5, pady=5)
+rb_rotate_0.grid(row=1,   column=1, sticky=(N, W, E, S), padx=5, pady=5)
 rb_rotate_90.grid(row=1,  column=2, sticky=(N, W, E, S), padx=5, pady=5)
 rb_rotate_180.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
 rb_rotate_270.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
