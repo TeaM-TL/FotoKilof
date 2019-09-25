@@ -19,3 +19,5 @@
 	1.8 poprawianie niezawodności
 	1.9 menu wyboru narzędzi, by nie było oczopląsu
 	1.9.1 przewijanie posortowanej liście plików, poprawki gui
+	1.9.2 usunięcie notatnika
+	2.0 przyspieszenie: jedna iteracja imagemagick, zamiast kilku
