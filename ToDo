@@ -1,13 +1,11 @@
 To Do
-1. pełna obsługa ścieżek ze spacją
-2. wyostrzanie
+1. Pełna obsługa ścieżek ze spacją, do sprawdzenia
+2. Wyostrzanie
 4. Pasek postępu
-5. Konfiguracja
-- domyślne foldery
-- ustalanie kolejności dla convert_all
-6. podział na pliki
+5. Ustalanie kolejności dla convert_all
+6. Podział na pliki
 
-11.Użyć PIL.ImageTk do: preview, obrotu, skalowania
+11. Użyć PIL.ImageTk do: preview, obrotu, skalowania
 12. PIL.ImageTk do wycinka - trzeba dodać trochę obliczeń
-13. Wskazywanie punktów do wycinki
-14. Log działań w SQLite i tabelka
+
+21. Zaprogramować obiektowo
