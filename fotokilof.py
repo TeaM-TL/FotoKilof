@@ -20,7 +20,7 @@ from PIL import Image
 
 ###################
 # Stałe
-VERSION = "1.9.2"  # wersja programu
+VERSION = "2.0"  # wersja programu
 if(platform.system() == "Windows"):
     PREVIEW = 400  # rozmiar obrazka podglądu w Windows
 else:
@@ -72,14 +72,16 @@ def imagick(cmd, out_file):
     cmd - polecenie imagemagick
     out_file - obrazek do mielenia, pełna ścieżka
     """
-
-    out_file = spacja(out_file)
-    command = "mogrify " + cmd + " " + out_file
-    print(command)
-    try:
-        os.system(command)
-    except:
-        print("! Error in imagick: " + command)
+    if(cmd != ""):
+        out_file = spacja(out_file)
+        command = "mogrify " + cmd + " " + out_file
+        print(command)
+        try:
+            os.system(command)
+        except:
+            print("! Error in imagick: " + command)
+    else:
+        print("puste polecenie dla imagick")
 
 ################
 # Preview
@@ -196,17 +198,22 @@ def spacja(sciezka):
 
 def apply_all_convert(out_file):
     #    zaaplikowanie wszystkich opcji na raz
-
-    convert_normalize(out_file)
-    convert_contrast(out_file)
-    convert_bw(out_file)
+    cmd = ""
+    cmd = cmd + " " + convert_normalize(out_file)
+    cmd = cmd + " " + convert_contrast(out_file)
+    cmd = cmd + " " + convert_bw(out_file)
     if(int(img_resize.get()) > 0):
-        convert_resize(out_file)
+        cmd = cmd + " " + convert_resize(out_file)
     else:
-        convert_crop(out_file)
-    convert_rotate(out_file)
-    convert_border(out_file)
-    convert_text(out_file)
+        cmd = cmd + " " + convert_crop(out_file)
+    cmd = cmd + " " + convert_rotate(out_file)
+    cmd = cmd + " " + convert_border(out_file)
+    imagick(cmd, out_file)
+
+    # ze wzgledu na grawitację tekstu, która gryzie sie z cropem
+    # musi być drugi przebieg
+    cmd = convert_text(out_file)
+    imagick(cmd, out_file)
 
 
 def apply_all():
@@ -248,7 +255,7 @@ def convert_contrast_button():
     #
     global file_in_path, temp_dir, out_dir
     out_file = pre_imagick(file_in_path.get())
-    convert_contrast(out_file)
+    imagick(convert_contrast(out_file), out_file)
     preview_new(out_file, temp_dir)
 
 
@@ -266,18 +273,19 @@ def convert_contrast(out_file):
         elif(img_contrast_selected.get() == "-2"):
             command = "-contrast -contrast"
         else:
-            return
-        imagick(command, out_file)
+            command = ""
     elif(img_contrast.get() == 2):
         command = "-contrast-stretch " + e1_contrast.get() + "x" + e2_contrast.get() + "%"
-        imagick(command, out_file)
+    else:
+        command = ""
+    return command
 
 
 def convert_bw_button():
     #
     global file_in_path, temp_dir, out_dir
     out_file = pre_imagick(file_in_path.get())
-    convert_bw(out_file)
+    imagick(convert_bw(out_file), out_file)
     preview_new(out_file, temp_dir)
 
 
@@ -286,18 +294,18 @@ def convert_bw(out_file):
     global img_normalize
     if(img_bw.get() == 1):
         command = "-colorspace Gray"
-        # command = "separate"
-        imagick(command, out_file)
     elif(img_bw.get() == 2):
         command = "-sepia-tone " + str(int(e_bw_sepia.get())) + "%"
-        imagick(command, out_file)
+    else:
+        command = ""
+    return command
 
 
 def convert_normalize_button():
     #
     global file_in_path, temp_dir, out_dir
     out_file = pre_imagick(file_in_path.get())
-    convert_normalize(out_file)
+    imagick(convert_normalize(out_file), out_file)
     preview_new(out_file, temp_dir)
 
 
@@ -306,17 +314,18 @@ def convert_normalize(out_file):
     global img_normalize
     if(img_normalize.get() == 1):
         command = "-normalize"
-        imagick(command, out_file)
     elif(img_normalize.get() == 2):
         command = "-auto-level"
-        imagick(command, out_file)
+    else:
+        command = ""
+    return command
 
 
 def convert_rotate_button():
     #
     global file_in_path, temp_dir, out_dir
     out_file = pre_imagick(file_in_path.get())
-    convert_rotate(out_file)
+    imagick(convert_rotate(out_file), out_file)
     preview_new(out_file, temp_dir)
 
 
@@ -329,14 +338,16 @@ def convert_rotate(out_file):
         # im.rotate(img_rotate.get())
         # im.save(out_file)
         command = "-rotate " + str(img_rotate.get())
-        imagick(command, out_file)
+    else:
+        command = ""
+    return command
 
 
 def convert_resize_button():
     #
     global file_in_path, temp_dir, out_dir
     out_file = pre_imagick(file_in_path.get())
-    convert_resize(out_file)
+    imagick(convert_resize(out_file), out_file)
     preview_new(out_file, temp_dir)
 
 
@@ -345,8 +356,8 @@ def convert_resize(out_file):
     global img_resize
     border = 2 * int(e_border.get())
     if(img_resize.get() == 0):
-        # print("Nie wybrano rodzaju skalowania")
-        return
+        command = ""
+        return command
     elif(img_resize.get() == 1):
         image_resize = e1_resize.get() + "x" + e1_resize.get()
     elif(img_resize.get() == 2):
@@ -359,14 +370,14 @@ def convert_resize(out_file):
         image_resize = str(4096 - border) + "x" + str(3112 - border)
 
     command = "-resize " + image_resize
-    imagick(command, out_file)
+    return command
 
 
 def convert_crop_button():
     #
     global file_in_path, temp_dir, out_dir
     out_file = pre_imagick(file_in_path.get())
-    convert_crop(out_file)
+    imagick(convert_crop(out_file), out_file)
     preview_new(out_file, temp_dir)
 
 
@@ -383,15 +394,16 @@ def convert_crop(out_file):
             command = " -crop " + e3_crop_2.get() + "x" + e4_crop_2.get() + "+" + e1_crop_2.get() + "+" + e2_crop_2.get()
         if(img_crop.get() == 3):
             command = " -gravity " + gravity(img_crop_gravity.get()) + " -crop " + e3_crop_3.get() + "x" + e4_crop_3.get() + "+" + e1_crop_3.get() + "+" + e2_crop_3.get()
-
-        imagick(command, out_file)
+    else:
+        command = ""
+    return command
 
 
 def convert_text_button():
     #
     global file_in_path, temp_dir, out_dir, file_dir_selector
     out_file = pre_imagick(file_in_path.get())
-    convert_text(out_file)
+    imagick(convert_text(out_file), out_file)
     preview_new(out_file, temp_dir)
 
 def convert_text(out_file):
@@ -413,7 +425,9 @@ def convert_text(out_file):
         else:
             box = " -box \"" + img_text_box_color.get() + "\""
         command = box + color + size + gravit + font + text
-        imagick(command, out_file)
+    else:
+        command = ""
+    return command
 
 
 def fonts():
@@ -616,7 +630,7 @@ def open_file_prev():
 def convert_border_button():
     global file_in_path, temp_dir, out_dir
     out_file = pre_imagick(file_in_path.get())
-    convert_border(out_file)
+    imagick(convert_border(out_file), out_file)
     preview_new(out_file, temp_dir)
 
 
@@ -624,7 +638,9 @@ def convert_border(out_file):
     global img_border_color
     if(int(e_border.get()) > 0):
         command = "-border " + e_border.get() + " -bordercolor \"" + img_border_color.get() + "\""
-        imagick(command, out_file)
+    else:
+        command = ""
+    return command
 
 
 def color_choose_border():
