@@ -3,6 +3,8 @@ Graficzny interface do ImageMagick
 
 ![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/fotokilof.png)
 
+![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/fotokilof1.png)
+
 ![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/fotokilof2.png)
 
 ## Funkcje:
