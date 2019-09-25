@@ -20,7 +20,7 @@ from PIL import Image
 
 ###################
 # Stałe
-VERSION = "1.9.1"  # wersja programu
+VERSION = "1.9.2"  # wersja programu
 if(platform.system() == "Windows"):
     PREVIEW = 400  # rozmiar obrazka podglądu w Windows
 else:
@@ -241,7 +241,6 @@ def apply_all():
 def contrast_selected(event):
     # wywołanie przez bind
     global img_contrast_selected
-    print('You selected:', cb_contrast.get())
     img_contrast_selected.set(cb_contrast.get())
 
 
@@ -1193,6 +1192,7 @@ def preview_orig():
 
 
 def tools_set():
+    # wybór narzędzi do wyświetlenia
     global img_resize, img_crop, img_text, img_rotate, img_border
     global img_bw, img_normalize, img_contrast
     
@@ -1303,25 +1303,13 @@ temp_dir = os.path.join(pwd, "tmp")
 ######################################################################
 # Karty
 ######################################################################
-nb = ttk.Notebook(root)
-nb.pack()
-# nb.grid(column=0, row=0, sticky=(N, W, E, S))
-
-# Pierwsza karta
-nb1 = ttk.Frame(nb)
-nb.add(nb1, text="Łomotanie obrazka")
-
-# Druga karta
-nb2 = ttk.Frame(nb)
-nb.add(nb2, text="Konfiguracja kilofa")
-
-nb.select(nb1)
-nb.enable_traversal()
+main = ttk.Frame(root)
+main.pack()
 
 ####################################################################
 # Kolumna menu
 ####################################################################
-frame_zero_col = ttk.Frame(nb1)
+frame_zero_col = ttk.Frame(main)
 frame_zero_col.grid(row=1, column=1, rowspan=2, sticky=(N, W, E, S))
 ###########################
 # Wybór poleceń
@@ -1384,7 +1372,7 @@ b_last_quit.pack(padx=5, pady=25, anchor=W)
 #####################################################################
 # Pierwsza kolumna
 #####################################################################
-frame_first_col = ttk.Frame(nb1)
+frame_first_col = ttk.Frame(main)
 frame_first_col.grid(row=1, column=2, rowspan=2, sticky=(N, W, E, S))
 
 ###########################
@@ -1691,7 +1679,7 @@ b_border.grid(row=1, column=4, padx=5, pady=5, sticky=E)
 ########################################################################
 # Druga kolumna
 ########################################################################
-frame_second_col = ttk.Frame(nb1)
+frame_second_col = ttk.Frame(main)
 frame_second_col.grid(row=1, column=3, sticky=(N, W, E, S))
 
 ############################
@@ -1774,7 +1762,7 @@ b_normalize.grid(row=1, column=3, padx=5, pady=5, sticky=E)
 #####################################################
 # Trzecia kolumna
 #####################################################
-frame_third_col = ttk.Frame(nb1)
+frame_third_col = ttk.Frame(main)
 frame_third_col.grid(row=1, column=4, sticky=(N, W, E, S))
 
 ##########################
@@ -1815,6 +1803,7 @@ l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 # l_last_progress_filename.grid(row=1, column=7, padx=5)
 
 ###############################################################################
+# bind
 ###############################################################################
 
 # podpinanie poleceń do widgetów, menu, skrótów
