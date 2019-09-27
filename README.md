@@ -57,3 +57,5 @@ polecenie z przetwarzania
 3. PIL zamiast ImageMagick, o ile się da lub gdzie się da
 4. Instalator NSIS dla Windows
 5. Instrukcja obsługi, filmik, pl, en
+6. paned window bo może wyjść poza ekran
+
