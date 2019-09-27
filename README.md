@@ -1,11 +1,11 @@
 # FotoKilof
 Graficzny interface do ImageMagick
 
-![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/fotokilof.png)
+![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/fotokilof.png)
 
-![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/fotokilof1.png)
+![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/fotokilof1.png)
 
-![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/fotokilof2.png)
+![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/fotokilof2.png)
 
 ## Funkcje:
  - przetwarzanie pojedynczego pliku jak i całego katalogu,
