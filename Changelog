@@ -21,4 +21,4 @@
 	1.9.1 przewijanie posortowanej liście plików, poprawki gui
 	1.9.2 usunięcie notatnika
 	2.0 przyspieszenie: jedna iteracja imagemagick, zamiast kilku
-	2.1 czyszczenie - pylint
+	2.1 czyszczenie - pylint (z 3.87 do 7.03), wyłączanie hostogramu
