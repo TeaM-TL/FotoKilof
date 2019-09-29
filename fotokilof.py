@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=line-too-long, global-statement
+# pylint: disable=line-too-long
+
+#, global-statement
 
 
 # $Id: fotokilof.py 19 2019-09-06 11:39:29Z tlu $
@@ -21,6 +23,8 @@ from tkinter import TclError, Tk, StringVar, IntVar, N, S, W, E, Label, PhotoIma
 from tkcolorpicker import askcolor
 
 from PIL import Image
+
+import convert
 
 ###################
 # Stałe
@@ -49,7 +53,7 @@ def pre_imagick(file_in):
     file_in - oryginał do mielenia, pełna ścieżka
     file_out - plik do mielenia, pełna ścieżka
     """
-    global work_dir
+    # global work_dir
     # Zakładanie katalogu na obrazki wynikowe - podkatalog folderu z obrazkiem
     out_dir = os.path.join(os.path.dirname(file_in), work_dir.get())
     if os.path.isdir(out_dir) is False:
@@ -95,7 +99,7 @@ def imagick(cmd, file_out):
 
 def preview_histogram(file):
     """ generowanie histogramu """
-    global TEMP_DIR
+    # global TEMP_DIR
 
     file_histogram = spacja(os.path.join(TEMP_DIR, "histogram.png"))
     file = spacja(file)
@@ -111,13 +115,13 @@ def preview_histogram(file):
 
 def preview_orig_bind(event):
     """ podgląd oryginału wywoałanie via bind """
-    global file_in_path, TEMP_DIR
+    # global file_in_path, TEMP_DIR
     preview_orig()
 
 
 def preview_new(file_out, dir_temp):
     """ generowanie podglądu wynikowego """
-    global img_histograms
+    # global img_histograms
     preview = convert_preview(file_out, dir_temp, " ")
     try:
         pi_preview_new.configure(file=preview['filename'])
@@ -137,7 +141,7 @@ def preview_new(file_out, dir_temp):
 
 def preview_orig_button():
     """ podgląd oryginału """
-    global file_in_path
+    # global file_in_path
 
     try:
         img = Image.open(file_in_path.get())
@@ -148,7 +152,7 @@ def preview_orig_button():
 
 def preview_new_button():
     """ podgląd wynikowego obrazka """
-    global file_in_path, work_dir
+    # global file_in_path, work_dir
 
     file_show = os.path.join(os.path.dirname(file_in_path.get()),
                              work_dir.get(), os.path.basename(file_in_path.get()))
@@ -209,21 +213,27 @@ def spacja(sciezka):
 
 def apply_all_convert(out_file):
     """ zaaplikowanie wszystkich opcji konwersji na raz """
+    # global img_rotate, img_resize, img_contrast, img_contrast_selected
+    # global img_normalize, img_bw, img_crop, img_crop_gravity
+    # global img_text_gravity, img_text_font, img_text_color
+    # global img_text_box, img_text_box_color
+
     cmd = ""
-    cmd = cmd + " " + convert_normalize()
-    cmd = cmd + " " + convert_contrast()
-    cmd = cmd + " " + convert_bw()
+    cmd = cmd + " " + convert.convert_normalize(img_normalize.get())
+    cmd = cmd + " " + convert.convert_contrast(img_contrast.get(), img_contrast_selected.get(), e1_contrast.get(), e2_contrast.get())
+    cmd = cmd + " " + convert.convert_bw(img_bw.get(), e_bw_sepia.get())
     if int(img_resize.get()) > 0:
-        cmd = cmd + " " + convert_resize()
+        cmd = cmd + " " + convert.convert_resize(img_resize.get(), e1_resize.get(), e2_resize.get(), e_border.get())
     else:
-        cmd = cmd + " " + convert_crop()
-    cmd = cmd + " " + convert_rotate()
+        cmd = cmd + " " + convert.convert_crop(img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+    cmd = cmd + " " + convert.convert_rotate(img_rotate.get())
     cmd = cmd + " " + convert_border()
     imagick(cmd, out_file)
 
     # ze wzgledu na grawitację tekstu, która gryzie sie z cropem
     # musi być drugi przebieg
-    cmd = convert_text()
+
+    cmd = convert.convert_text(convert_text_entries())
     imagick(cmd, out_file)
 
 
@@ -232,8 +242,8 @@ def apply_all():
     zaplikowanie wszystkich opcji na raz
     mieli albo plik albo cały katalog
     """
-    global file_in_path, TEMP_DIR, file_dir_selector
-    global progress_files, progress_filename
+    # global file_in_path, TEMP_DIR, file_dir_selector
+    # global progress_files, progress_filename
 
     if file_dir_selector.get() == 0:
         out_file = pre_imagick(file_in_path.get())
@@ -261,193 +271,102 @@ def apply_all():
 
 def contrast_selected(event):
     """ wyór kontrastu, wywołanie przez bind """
-    global img_contrast_selected
+    # global img_contrast_selected
     img_contrast_selected.set(cb_contrast.get())
 
 
 def convert_contrast_button():
     """ przycisk zmiany kontrastu """
-    global file_in_path, TEMP_DIR
+    # global file_in_path, TEMP_DIR
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert_contrast(), out_file)
+    imagick(convert.convert_contrast(img_contrast.get(), img_contrast_selected.get(), e1_contrast.get(), e2_contrast.get()), out_file)
     preview_new(out_file, TEMP_DIR)
-
-
-def convert_contrast():
-    """ zmiana kontrastu """
-    global img_contrast, img_contrast_selected
-
-    if img_contrast.get() == 1:
-        if img_contrast_selected.get() == "+2":
-            command = "+contrast +contrast"
-        elif img_contrast_selected.get() == "+1":
-            command = "+contrast"
-        elif img_contrast_selected.get() == "-1":
-            command = "-contrast"
-        elif img_contrast_selected.get() == "-2":
-            command = "-contrast -contrast"
-        else:
-            command = ""
-    elif img_contrast.get() == 2:
-        command = "-contrast-stretch " + e1_contrast.get() + "x" + e2_contrast.get() + "%"
-    else:
-        command = ""
-    return command
 
 
 def convert_bw_button():
     """ konwersja do czerni-bieli lub sepii """
-    global file_in_path, TEMP_DIR, out_dir
+    # global file_in_path, TEMP_DIR
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert_bw(), out_file)
+    imagick(convert.convert_bw(img_bw.get(), e_bw_sepia.get()), out_file)
     preview_new(out_file, TEMP_DIR)
-
-
-def convert_bw():
-    """ Normalizacja kolorów """
-    global img_normalize, img_bw
-    if img_bw.get() == 1:
-        command = "-colorspace Gray"
-    elif img_bw.get() == 2:
-        command = "-sepia-tone " + str(int(e_bw_sepia.get())) + "%"
-    else:
-        command = ""
-    return command
 
 
 def convert_normalize_button():
     """ przycisk normalizacji """
-    global file_in_path, TEMP_DIR
+    # global file_in_path, TEMP_DIR, img_normalize
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert_normalize(), out_file)
+    imagick(convert.convert_normalize(img_normalize.get()), out_file)
     preview_new(out_file, TEMP_DIR)
-
-
-def convert_normalize():
-    """ Normalizacja kolorów """
-    global img_normalize
-    if img_normalize.get() == 1:
-        command = "-normalize"
-    elif img_normalize.get() == 2:
-        command = "-auto-level"
-    else:
-        command = ""
-    return command
 
 
 def convert_rotate_button():
     """ przycisk obrotu """
-    global file_in_path, TEMP_DIR
+    # global file_in_path, TEMP_DIR, img_rotate
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert_rotate(), out_file)
+    imagick(convert.convert_rotate(img_rotate.get()), out_file)
     preview_new(out_file, TEMP_DIR)
-
-
-def convert_rotate():
-    """ Obrót obrazka o 90,180 albo 270stopni """
-    global img_rotate
-    if img_rotate.get() > 0:
-        # chciałem ImageTk ale nie działa
-        # im = Image.open(out_file)
-        # im.rotate(img_rotate.get())
-        # im.save(out_file)
-        command = "-rotate " + str(img_rotate.get())
-    else:
-        command = ""
-    return command
 
 
 def convert_resize_button():
     """ przycisk skalowania """
-    global file_in_path, TEMP_DIR
+    # global file_in_path, TEMP_DIR, img_resize, e1_resize, e2_resize, e_border
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert_resize(), out_file)
+    imagick(convert.convert_resize(img_resize.get(), e1_resize.get(), e2_resize.get(), '0'), out_file) # ramka 0, tylko skalowanie
     preview_new(out_file, TEMP_DIR)
-
-
-def convert_resize():
-    """ Zmiana rozmiaru obrazka """
-    global img_resize
-    border = 2 * int(e_border.get())
-    if img_resize.get() == 0:
-        command = ""
-        return command
-    if img_resize.get() == 1:
-        image_resize = e1_resize.get() + "x" + e1_resize.get()
-    elif img_resize.get() == 2:
-        image_resize = e2_resize.get() + "%"
-    elif img_resize.get() == 3:
-        image_resize = str(1920 - border) + "x" + str(1080 - border)
-    elif img_resize.get() == 4:
-        image_resize = str(2048 - border) + "x" + str(1556 - border)
-    elif img_resize.get() == 5:
-        image_resize = str(4096 - border) + "x" + str(3112 - border)
-
-    command = "-resize " + image_resize
-    return command
 
 
 def convert_crop_button():
     """ przycisk wycinka """
-    global file_in_path, TEMP_DIR
+    # global file_in_path, TEMP_DIR, img_crop, img_crop_gravity
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert_crop(), out_file)
+    imagick(convert.convert_crop(img_crop.get(), img_crop_gravity.get(), convert_crop_entries()), out_file)
     preview_new(out_file, TEMP_DIR)
 
+def convert_crop_entries():
+    """ słownik ze zmiennymi dla funkcji convert_crop """
+    dict_return = {}
+    dict_return['one_x1'] = e1_crop_1.get()
+    dict_return['one_y1'] = e2_crop_1.get()
+    dict_return['one_x2'] = e3_crop_1.get()
+    dict_return['one_y2'] = e4_crop_1.get()
+    dict_return['two_x1'] = e1_crop_2.get()
+    dict_return['two_y1'] = e2_crop_2.get()
+    dict_return['two_X'] = e3_crop_2.get()
+    dict_return['two_Y'] = e4_crop_2.get()
+    dict_return['three_dx'] = e1_crop_3.get()
+    dict_return['three_dy'] = e2_crop_3.get()
+    dict_return['three_X'] = e3_crop_3.get()
+    dict_return['three_Y'] = e4_crop_3.get()
+    return dict_return
 
-def convert_crop():
-    """ Wycięcie obrazka z obrazka """
-    global file_in_path, TEMP_DIR, file_dir_selector
-    global img_crop, img_crop_gravity
-    if img_crop.get() > 0:
-        if img_crop.get() == 1:
-            X = str(abs(int(e3_crop_1.get()) - int(e1_crop_1.get())))
-            Y = str(abs(int(e4_crop_1.get()) - int(e2_crop_1.get())))
-            command = " -crop " + X + "x" + Y + "+" + e1_crop_1.get() + "+" + e2_crop_1.get()
-        if img_crop.get() == 2:
-            command = " -crop " + e3_crop_2.get() + "x" + e4_crop_2.get() + "+" + e1_crop_2.get() + "+" + e2_crop_2.get()
-        if img_crop.get() == 3:
-            command = " -gravity " + gravity(img_crop_gravity.get()) + " -crop " + e3_crop_3.get() + "x" + e4_crop_3.get() + "+" + e1_crop_3.get() + "+" + e2_crop_3.get()
-    else:
-        command = ""
-    return command
+
+def convert_text_entries():
+    """ słownik ze zmiennymi dla funkcji convert_text """
+    dict_return = {}
+    dict_return['text_convert'] = img_text.get()
+    dict_return['text'] = e_text.get()
+    dict_return['dx'] = e_text_x.get()
+    dict_return['dy'] = e_text_y.get()
+    dict_return['gravitation'] = img_text_gravity.get()
+    dict_return['font'] = img_text_font.get()
+    dict_return['font_size'] = e_text_size.get()
+    dict_return['text_color'] = img_text_color.get()
+    dict_return['box'] = img_text_box.get()
+    dict_return['box_color'] = img_text_box_color.get()
+    return dict_return
 
 
 def convert_text_button():
     """ przycisk wstawiania tekstu """
-    global file_in_path, TEMP_DIR
+    # global file_in_path, TEMP_DIR
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert_text(), out_file)
+    imagick(convert.convert_text(convert_text_entries()), out_file)
     preview_new(out_file, TEMP_DIR)
-
-
-def convert_text():
-    """ Umieszczenie napisu na obrazku """
-    global img_text_gravity, img_text_font, img_text_color
-    global img_text_box, img_text_box_color
-
-    if img_text.get() == 1:
-        size = " -pointsize " + e_text_size.get()
-        font = " -font '" + img_text_font.get() + "'"
-        color = " -fill \"" + img_text_color.get() + "\""
-        gravit = " -gravity " + gravity(img_text_gravity.get())
-        x = e_text_x.get()
-        y = e_text_y.get()
-
-        text = " -draw \"text " + x + "," + y + " '" + e_text.get() + "'\""
-        if img_text_box.get() == 0:
-            box = ""
-        else:
-            box = " -box \"" + img_text_box_color.get() + "\""
-        command = box + color + size + gravit + font + text
-    else:
-        command = ""
-    return command
 
 
 def fonts():
     """ import nazw fontów dla imagemagicka """
-    global TEMP_DIR
+    # global TEMP_DIR
 
     if os.path.isdir(TEMP_DIR) is False:
         try:
@@ -489,14 +408,14 @@ def fonts():
 
 def font_selected(event):
     """ wywołanie przez bind wyboru fontu """
-    global img_text_font
+    # global img_text_font
     print('You selected:', cb_text_font.get())
     img_text_font.set(cb_text_font.get())
 
 
 def crop_read():
     """ Wczytanie rozmiarów z obrazka do wycinka """
-    global file_in_path, img_crop_gravity
+    # global file_in_path, img_crop_gravity
     img = Image.open(file_in_path.get())
     x = img.size[0]
     y = img.size[1]
@@ -527,33 +446,9 @@ def crop_read():
     img_crop_gravity.set("C")
 
 
-def gravity(gravitation):
-    """ nazwy grawitacji zgodne z Tk """
-    if gravitation == "N":
-        gravitation = "North"
-    if gravitation == "NW":
-        gravitation = "Northwest"
-    if gravitation == "NE":
-        gravitation = "Northeast"
-    if gravitation == "W":
-        gravitation = "West"
-    if gravitation == "C":
-        gravitation = "Center"
-    if gravitation == "E":
-        gravitation = "East"
-    if gravitation == "SW":
-        gravitation = "Southwest"
-    if gravitation == "S":
-        gravitation = "South"
-    if gravitation == "SE":
-        gravitation = "Southeast"
-
-    return gravitation
-
-
 def open_file():
     """ otwarcie pliku obrazka do edycji """
-    global file_in_path, dir_in_path
+    # global file_in_path, dir_in_path
     file_in_path.set(filedialog.askopenfilename(title="Wybierz plik do mielenia",
                                                 initialdir=dir_in_path.get(),
                                                 filetypes=(("jpeg files", "*.jpg"),
@@ -567,7 +462,7 @@ def open_file():
 
 def open_file_last():
     """ otwarcie ostatniego pliku """
-    global file_in_path, dir_in_path
+    # global file_in_path, dir_in_path
     pwd = os.getcwd()
     os.chdir(os.path.dirname(file_in_path.get()))
     file_list = []
@@ -588,7 +483,7 @@ def open_file_last():
 
 def open_file_next():
     """ otwarcie następnego pliku """
-    global file_in_path, dir_in_path
+    # global file_in_path, dir_in_path
     pwd = os.getcwd()
     os.chdir(os.path.dirname(file_in_path.get()))
     file_list = []
@@ -607,7 +502,7 @@ def open_file_next():
 
 def open_file_first():
     """ otwarcie pierwszego pliku """
-    global file_in_path, dir_in_path
+    # global file_in_path, dir_in_path
 
     pwd = os.getcwd()
     os.chdir(os.path.dirname(file_in_path.get()))
@@ -629,7 +524,7 @@ def open_file_first():
 
 def open_file_prev():
     """ otwarcie poprzedniego pliku """
-    global file_in_path, dir_in_path
+    # global file_in_path, dir_in_path
 
     pwd = os.getcwd()
     os.chdir(os.path.dirname(file_in_path.get()))
@@ -649,7 +544,7 @@ def open_file_prev():
 
 def convert_border_button():
     """ przycisk dodania ramki """
-    global file_in_path, TEMP_DIR
+    # global file_in_path, TEMP_DIR
     out_file = pre_imagick(file_in_path.get())
     imagick(convert_border(), out_file)
     preview_new(out_file, TEMP_DIR)
@@ -657,7 +552,7 @@ def convert_border_button():
 
 def convert_border():
     """ dodanie ramki """
-    global img_border_color
+    # global img_border_color
     if int(e_border.get()) > 0:
         command = "-border " + e_border.get() + " -bordercolor \"" + img_border_color.get() + "\""
     else:
@@ -667,7 +562,7 @@ def convert_border():
 
 def color_choose_border():
     """ Wybór koloru tła """
-    global img_border_color
+    # global img_border_color
     color = askcolor(img_border_color.get())
     if color[1] is None:
         img_border_color.set("#000000")
@@ -678,7 +573,7 @@ def color_choose_border():
 
 def color_choose_box_active():
     """ dodanie tła do tekstu """
-    global img_text_box
+    # global img_text_box
     if img_text_box.get() == 0:
         l_text_font_selected.configure(bg="#000000")
     else:
@@ -687,7 +582,7 @@ def color_choose_box_active():
 
 def color_choose_box():
     """ Wybór koloru tła """
-    global img_text_box, img_text_box_color
+    # global img_text_box, img_text_box_color
     if img_text_box.get() != 0:
         color = askcolor(img_text_color.get(), root)
         if color[1] is None:
@@ -699,7 +594,7 @@ def color_choose_box():
 
 def color_choose():
     """ Wybór koloru """
-    global img_text_color
+    # global img_text_color
     color = askcolor(img_text_color.get(), root)
     if color[1] is None:
         img_text_color.set("#FFFFFF")
@@ -711,8 +606,8 @@ def color_choose():
 def ini_read(file_ini):
     """ Obsługa pliku konfiguracyjnego INI """
 
-    # lista wyjściowa
-    list_return = {}
+    # słownik wyjściowy
+    dict_return = {}
 
     config = configparser.ConfigParser()
     config.read(file_ini, encoding="utf8")
@@ -722,31 +617,31 @@ def ini_read(file_ini):
         file_in = config.get('Konfiguracja', 'path')
     except:
         file_in = ""
-    list_return['file_in_path'] = file_in
+    dict_return['file_in_path'] = file_in
 
     try:
-        work_dir = config.get('Konfiguracja', 'work_dir')
+        dir_work = config.get('Konfiguracja', 'work_dir')
     except:
-        work_dir = "FotoKilof"
-    list_return['work_dir'] = work_dir
+        dir_work = "FotoKilof"
+    dict_return['work_dir'] = dir_work
 
     try:
-        file_dir_selector = config.getint('Konfiguracja', 'file_dir')
+        file_dir_select = config.getint('Konfiguracja', 'file_dir')
     except:
-        file_dir_selector = "0"
-    list_return['file_dir_selector'] = file_dir_selector
+        file_dir_select = "0"
+    dict_return['file_dir_selector'] = file_dir_select
 
     try:
         histograms = config.getint('Konfiguracja', 'histograms')
     except:
         histograms = "0"
-    list_return['img_histograms'] = histograms
+    dict_return['img_histograms'] = histograms
 
     try:
         resize = config.getint('Resize', 'resize')
     except:
         resize = "1"
-    list_return['img_resize'] = resize
+    dict_return['img_resize'] = resize
 
     try:
         resize_size_pixel = config.getint('Resize', 'size_pixel')
@@ -766,7 +661,7 @@ def ini_read(file_ini):
         text_on = config.getint('Text', 'on')
     except:
         text_on = "1"
-    list_return['img_text'] = text_on
+    dict_return['img_text'] = text_on
 
     try:
         text = config.get('Text', 'text')
@@ -779,7 +674,7 @@ def ini_read(file_ini):
         text_gravity = config.get('Text', 'gravity')
     except:
         text_gravity = "SE"
-    list_return['img_text_gravity'] = text_gravity
+    dict_return['img_text_gravity'] = text_gravity
 
     try:
         text_font = config.get('Text', 'font')
@@ -788,7 +683,7 @@ def ini_read(file_ini):
             text_font = "Arial"
         else:
             text_font = "Helvetica"
-    list_return['img_text_font'] = text_font
+    dict_return['img_text_font'] = text_font
 
     try:
         text_size = str(config.getint('Text', 'size'))
@@ -815,33 +710,33 @@ def ini_read(file_ini):
         text_color = config.get('Text', 'color')
     except:
         text_color = "#FFFFFF"
-    list_return['img_text_color'] = text_color
+    dict_return['img_text_color'] = text_color
     l_text_font_selected.configure(fg=text_color)
 
     try:
         text_box = config.getint('Text', 'box')
     except:
         text_box = 0
-    list_return['img_text_box'] = text_box
+    dict_return['img_text_box'] = text_box
 
     try:
         text_box_color = config.get('Text', 'box_color')
     except:
         text_box_color = "#000000"
-    list_return['img_text_box_color'] = text_box_color
+    dict_return['img_text_box_color'] = text_box_color
     l_text_font_selected.configure(bg=text_box_color)
 
     try:
         rotate = config.getint('Rotate', 'rotate')
     except:
         rotate = "0"
-    list_return['img_rotate'] = rotate
+    dict_return['img_rotate'] = rotate
 
     try:
         crop = config.getint('Crop', 'crop')
     except:
         crop = "0"
-    list_return['img_crop'] = crop
+    dict_return['img_crop'] = crop
 
     try:
         crop_x1 = config.getint('Crop', 'x1')
@@ -931,14 +826,14 @@ def ini_read(file_ini):
         crop_gravity = config.getint('Crop', 'gravity')
     except:
         crop_gravity = "C"
-    list_return['img_crop_gravity'] = crop_gravity
+    dict_return['img_crop_gravity'] = crop_gravity
 
     try:
         border_color = config.get('Border', 'color')
     except:
         border_color = "#FFFFFF"
     l_border.configure(bg=border_color)
-    list_return['img_border_color'] = border_color
+    dict_return['img_border_color'] = border_color
 
     try:
         border = config.getint('Border', 'size')
@@ -951,13 +846,13 @@ def ini_read(file_ini):
         normalize = config.getint('Color', 'normalize')
     except:
         normalize = 0
-    list_return['img_normalize'] = normalize
+    dict_return['img_normalize'] = normalize
 
     try:
         bw = config.getint('Color', 'bw')
     except:
         bw = 0
-    list_return['img_bw'] = bw
+    dict_return['img_bw'] = bw
 
     try:
         bw_sepia = config.getint('Color', 'sepia')
@@ -970,7 +865,7 @@ def ini_read(file_ini):
         contrast = config.getint('Contrast', 'contrast')
     except:
         contrast = "0"
-    list_return['img_contrast'] = contrast
+    dict_return['img_contrast'] = contrast
 
     try:
         contrast_stretch_1 = config.get('Contrast', 'stretch1')
@@ -986,17 +881,17 @@ def ini_read(file_ini):
     e2_contrast.delete(0, "end")
     e2_contrast.insert(0, contrast_stretch_2)
 
-    return list_return
+    return dict_return
 
 
 def ini_read_wraper():
     """ odczyt pliku ini """
 
-    global FILE_INI, file_in_path, work_dir, img_histograms
-    global img_text, img_text_font, img_text_color, img_text_gravity
-    global img_text_box, img_text_box_color
-    global img_rotate, img_crop, img_crop_gravity, img_resize
-    global img_bw, img_normalize
+    # global FILE_INI, file_in_path, work_dir, img_histograms
+    # global img_text, img_text_font, img_text_color, img_text_gravity
+    # global img_text_box, img_text_box_color
+    # global img_rotate, img_crop, img_crop_gravity, img_resize
+    # global img_bw, img_normalize
 
     ini_entries = ini_read(FILE_INI)
     file_in_path.set(ini_entries['file_in_path'])
@@ -1021,11 +916,11 @@ def ini_read_wraper():
 
 def ini_save():
     """ Zapis konfiguracji do pliku INI """
-    global FILE_INI, file_in_path, work_dir, img_histograms
-    global img_text, img_text_font, img_text_color, img_text_gravity
-    global img_text_box, img_text_box_color
-    global img_rotate, img_crop, img_crop_gravity, img_resize
-    global img_bw, img_normalize
+    # global FILE_INI, file_in_path, work_dir, img_histograms
+    # global img_text, img_text_font, img_text_color, img_text_gravity
+    # global img_text_box, img_text_box_color
+    # global img_rotate, img_crop, img_crop_gravity, img_resize
+    # global img_bw, img_normalize
 
     # przygotowanie zawartości
     config = configparser.ConfigParser()
@@ -1088,7 +983,7 @@ def ini_save():
 
 def help_info(event):
     """ okno info """
-    global PWD
+    # global PWD
     try:
         license_file = os.path.join(PWD, "License")
         file = open(license_file, "r", encoding="utf8")
@@ -1106,7 +1001,7 @@ def help_info(event):
 
 def help_changelog():
     """ okno Changelogu """
-    global PWD
+    # global PWD
     try:
         license_file = os.path.join(PWD, "Changelog")
         file = open(license_file, "r", encoding="utf8")
@@ -1137,7 +1032,7 @@ def win_deleted():
 
 def mouse_crop_calculation(x_preview, y_preview):
     """ przeliczenie pikseli podglądu  na piksele oryginału """
-    global file_in_path
+    # global file_in_path
     img = Image.open(file_in_path.get())
     x_orig = img.size[0]
     y_orig = img.size[1]
@@ -1190,7 +1085,7 @@ def preview_orig():
     generowanie podglądu oryginału
     rysuje wycinek na rysunku podglądu o ile potrzeba
     """
-    global file_in_path, TEMP_DIR, img_crop, img_text_box_color, img_histograms
+    # global file_in_path, TEMP_DIR, img_crop, img_text_box_color, img_histograms
 
     if img_crop.get() == 1:
         x0 = int(e1_crop_1.get())
@@ -1233,8 +1128,6 @@ def preview_orig():
         y1 = int(y1 * ratio_Y)
 
         x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
-        # color = img_text_box_color.get()
-        # command = " -fill none  -draw \"stroke '" + color +  "' rectangle " + x0y0x1y1 + "\" "
         command = " -fill none  -draw \"stroke '#FFFF00' rectangle " + x0y0x1y1 + "\" "
     else:
         command = " "
@@ -1258,8 +1151,6 @@ def preview_orig():
 
 def tools_set():
     """ wybór narzędzi do wyświetlenia """
-    global img_resize, img_crop, img_text, img_rotate, img_border
-    global img_bw, img_normalize, img_contrast, img_histograms
 
     if img_resize.get() == 0:
         frame_resize.grid_remove()
