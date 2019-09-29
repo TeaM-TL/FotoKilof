@@ -3,8 +3,19 @@
 
 """ moduł z konwerterami """
 
+def convert_border(width, color):
+    """ 1. dodanie ramki """
+
+    # global img_border_color
+    if int(width) > 0:
+        command = "-border " + width + " -bordercolor \"" + color + "\""
+    else:
+        command = ""
+    return command
+
+
 def convert_text(entries):
-    """ Umieszczenie napisu na obrazku """
+    """ 2. Umieszczenie napisu na obrazku """
 
     if entries['text_convert'] == 1:
         size = " -pointsize " + entries['font_size']
@@ -24,7 +35,7 @@ def convert_text(entries):
 
 
 def convert_crop(crop, gravitation, entries):
-    """ Wycięcie obrazka z obrazka """
+    """ 3. Wycięcie obrazka z obrazka """
 
     if crop > 0:
         if crop == 1:
@@ -41,7 +52,8 @@ def convert_crop(crop, gravitation, entries):
 
 
 def convert_resize(resize, pixel, percent, border):
-    """ Zmiana rozmiaru obrazka """
+    """ 4. Zmiana rozmiaru obrazka """
+
     border = 2 * int(border)
     if resize == 0:
         command = ""
@@ -62,7 +74,7 @@ def convert_resize(resize, pixel, percent, border):
 
 
 def convert_bw(black_white, sepia):
-    """ Normalizacja kolorów """
+    """ 5. czarno-białe albo sepia """
 
     if black_white == 1:
         command = "-colorspace Gray"
@@ -74,7 +86,7 @@ def convert_bw(black_white, sepia):
 
 
 def convert_contrast(contrast, contrast_selected, entry1, entry2):
-    """ zmiana kontrastu """
+    """ 6. Zmiana kontrastu """
 
     if contrast == 1:
         if contrast_selected == "+2":
@@ -95,7 +107,7 @@ def convert_contrast(contrast, contrast_selected, entry1, entry2):
 
 
 def convert_normalize(normalize):
-    """ Normalizacja kolorów """
+    """ 7. Normalizacja kolorów """
 
     if normalize == 1:
         command = "-normalize"
@@ -107,12 +119,9 @@ def convert_normalize(normalize):
 
 
 def convert_rotate(rotate):
-    """ Obrót obrazka o 90,180 albo 270stopni """
+    """ 8. Obrót obrazka o 90,180 albo 270stopni """
+
     if rotate > 0:
-        # chciałem ImageTk ale nie działa
-        # im = Image.open(out_file)
-        # im.rotate(img_rotate.get())
-        # im.save(out_file)
         command = "-rotate " + str(rotate)
     else:
         command = ""
@@ -121,6 +130,7 @@ def convert_rotate(rotate):
 
 def gravity(gravitation):
     """ nazwy grawitacji zgodne z Tk """
+
     if gravitation == "N":
         gravitation = "North"
     if gravitation == "NW":
@@ -141,3 +151,5 @@ def gravity(gravitation):
         gravitation = "Southeast"
 
     return gravitation
+
+# EOF

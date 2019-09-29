@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=line-too-long
 
-""" moduł z funkcją odczytu awartości pliku konfiguracyjnego ini """
+"""
+moduł z funkcjami odczytu zawartości pliku konfiguracyjnego ini
+każda funkcja odczytuje kawałek ini
+"""
 
 import configparser
 import platform
 
+
 def ini_read(file_ini):
-    """ Obsługa pliku konfiguracyjnego INI """
+    """ Konfiguracja FotoKilofa """
 
     # słownik wyjściowy
     dict_return = {}
@@ -40,6 +44,18 @@ def ini_read(file_ini):
         histograms = "0"
     dict_return['img_histograms'] = histograms
 
+    return dict_return
+
+
+def ini_read_resize(file_ini):
+    """ Skalowanie """
+
+    # słownik wyjściowy
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
+
     try:
         resize = config.getint('Resize', 'resize')
     except:
@@ -56,7 +72,19 @@ def ini_read(file_ini):
         resize_size_percent = config.getint('Resize', 'size_percent')
     except:
         resize_size_percent = "0"
-    dict_return['resize_size_pixel'] = resize_size_percent
+    dict_return['resize_size_percent'] = resize_size_percent
+
+    return dict_return
+
+
+def ini_read_text(file_ini):
+    """ Konfiguracja FotoKilofa """
+
+    # słownik wyjściowy
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
 
     try:
         text_on = config.getint('Text', 'on')
@@ -68,7 +96,7 @@ def ini_read(file_ini):
         text = config.get('Text', 'text')
     except:
         text = ""
-    dict_return['img_text_text'] = text
+    dict_return['text_text'] = text
 
     try:
         text_gravity = config.get('Text', 'gravity')
@@ -83,7 +111,7 @@ def ini_read(file_ini):
             text_font = config.get('Text', 'font')
         except:
             text_font = "Helvetica"
-    dict_return['img_text_font'] = text_font
+    dict_return['text_font'] = text_font
 
     try:
         text_size = str(config.getint('Text', 'size'))
@@ -107,25 +135,49 @@ def ini_read(file_ini):
         text_color = config.get('Text', 'color')
     except:
         text_color = "#FFFFFF"
-    dict_return['img_text_color'] = text_color
+    dict_return['text_color'] = text_color
 
     try:
         text_box = config.getint('Text', 'box')
     except:
         text_box = 0
-    dict_return['img_text_box'] = text_box
+    dict_return['text_box'] = text_box
 
     try:
         text_box_color = config.get('Text', 'box_color')
     except:
         text_box_color = "#000000"
-    dict_return['img_text_box_color'] = text_box_color
+    dict_return['text_box_color'] = text_box_color
+
+    return dict_return
+
+
+def ini_read_rotate(file_ini):
+    """ Konfiguracja FotoKilofa """
+
+    # słownik wyjściowy
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
 
     try:
         rotate = config.getint('Rotate', 'rotate')
     except:
         rotate = "0"
     dict_return['img_rotate'] = rotate
+
+    return dict_return
+
+
+def ini_read_crop(file_ini):
+    """ Konfiguracja FotoKilofa """
+
+    # słownik wyjściowy
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
 
     try:
         crop = config.getint('Crop', 'crop')
@@ -170,16 +222,16 @@ def ini_read(file_ini):
     dict_return['crop_2_y1'] = crop_2_y1
 
     try:
-        crop_2_X = config.getint('Crop', '2_X')
+        crop_2_width = config.getint('Crop', '2_width')
     except:
-        crop_2_X = "0"
-    dict_return['crop_2_X'] = crop_2_X
+        crop_2_width = "0"
+    dict_return['crop_2_width'] = crop_2_width
 
     try:
-        crop_2_Y = config.getint('Crop', '2_Y')
+        crop_2_height = config.getint('Crop', '2_height')
     except:
-        crop_2_Y = "0"
-    dict_return['crop_2_Y'] = crop_2_Y
+        crop_2_height = "0"
+    dict_return['crop_2_height'] = crop_2_height
 
     try:
         crop_3_dx = config.getint('Crop', '3_dx')
@@ -194,22 +246,34 @@ def ini_read(file_ini):
     dict_return['crop_3_dy'] = crop_3_dy
 
     try:
-        crop_3_X = config.getint('Crop', '3_X')
+        crop_3_width = config.getint('Crop', '3_width')
     except:
-        crop_3_X = "0"
-    dict_return['crop_3_X'] = crop_3_X
+        crop_3_width = "0"
+    dict_return['crop_3_width'] = crop_3_width
 
     try:
-        crop_3_Y = config.getint('Crop', '3_Y')
+        crop_3_height = config.getint('Crop', '3_height')
     except:
-        crop_3_Y = "0"
-    dict_return['crop_3_Y'] = crop_3_Y
+        crop_3_height = "0"
+    dict_return['crop_3_height'] = crop_3_height
 
     try:
         crop_gravity = config.getint('Crop', 'gravity')
     except:
         crop_gravity = "C"
     dict_return['img_crop_gravity'] = crop_gravity
+
+    return dict_return
+
+
+def ini_read_border(file_ini):
+    """ Konfiguracja FotoKilofa """
+
+    # słownik wyjściowy
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
 
     try:
         border_color = config.get('Border', 'color')
@@ -223,41 +287,65 @@ def ini_read(file_ini):
         border = "0"
     dict_return['img_border_size'] = border
 
+    return dict_return
+
+
+def ini_read_color(file_ini):
+    """ Konfiguracja FotoKilofa """
+
+    # słownik wyjściowy
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
+
     try:
         normalize = config.getint('Color', 'normalize')
     except:
         normalize = 0
-    dict_return['img_normalize'] = normalize
+    dict_return['normalize'] = normalize
 
     try:
-        black_white = config.getint('Color', 'bw')
+        black_white = config.getint('Color', 'black-white')
     except:
         black_white = 0
-    dict_return['img_bw'] = black_white
+    dict_return['black_white'] = black_white
 
     try:
         bw_sepia = config.getint('Color', 'sepia')
     except:
         bw_sepia = "95"
-    dict_return['img_sepia'] = bw_sepia
+    dict_return['sepia'] = bw_sepia
+
+    return dict_return
+
+
+def ini_read_contrast(file_ini):
+    """ Konfiguracja FotoKilofa """
+
+    # słownik wyjściowy
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
 
     try:
         contrast = config.getint('Contrast', 'contrast')
     except:
         contrast = "0"
-    dict_return['img_contrast'] = contrast
+    dict_return['contrast'] = contrast
 
     try:
         contrast_stretch_1 = config.get('Contrast', 'stretch1')
     except:
         contrast_stretch_1 = "0.15"
-    dict_return['img_contrast_stretch_1'] = contrast_stretch_1
+    dict_return['contrast_stretch_1'] = contrast_stretch_1
 
     try:
         contrast_stretch_2 = config.get('Contrast', 'stretch2')
     except:
         contrast_stretch_2 = "0.05"
-    dict_return['img_contrast_stretch_2'] = contrast_stretch_2
+    dict_return['contrast_stretch_2'] = contrast_stretch_2
 
     return dict_return
 

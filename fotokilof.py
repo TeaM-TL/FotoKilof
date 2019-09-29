@@ -1,34 +1,31 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=line-too-long
 
-#, global-statement
-
-
-# $Id: fotokilof.py 19 2019-09-06 11:39:29Z tlu $
-
 """
 program do konwersji rysunków
 """
 
+import configparser
 import datetime
+import glob
 import platform
 import os
-import sys
-import shutil
 import re
-import configparser
-import glob
+import shutil
+import sys
 
-from tkinter import TclError, Tk, StringVar, IntVar, N, S, W, E, Label, PhotoImage, filedialog, messagebox, ttk
+from tkinter import TclError, Tk, StringVar, IntVar, N, S, W, E
+from tkinter import Label, PhotoImage, filedialog, messagebox, ttk
 from tkcolorpicker import askcolor
-
 from PIL import Image
 
 import convert
+import common
+import ini_read
 
 ###################
 # Stałe
-VERSION = "2.1"  # wersja programu
+VERSION = "2.2"  # wersja programu
 if platform.system() == "Windows":
     PREVIEW = 400  # rozmiar obrazka podglądu w Windows
 else:
@@ -83,7 +80,7 @@ def imagick(cmd, file_out):
     file_out - obrazek do mielenia, pełna ścieżka
     """
     if cmd != "":
-        file_out = spacja(file_out)
+        file_out = common.spacja(file_out)
         command = "mogrify " + cmd + " " + file_out
         print(command)
         try:
@@ -101,8 +98,8 @@ def preview_histogram(file):
     """ generowanie histogramu """
     # global TEMP_DIR
 
-    file_histogram = spacja(os.path.join(TEMP_DIR, "histogram.png"))
-    file = spacja(file)
+    file_histogram = common.spacja(os.path.join(TEMP_DIR, "histogram.png"))
+    file = common.spacja(file)
 
     command = "convert " + file + " -colorspace Gray -define histogram:unique-colors=false histogram:" + file_histogram
     print(command)
@@ -178,8 +175,8 @@ def convert_preview(file, dir_temp, command):
 
     # filename, file_extension = os.path.splitext(file)
     file_preview = os.path.join(dir_temp, "preview.ppm")
-    file = spacja(file)
-    file_preview = spacja(file_preview)
+    file = common.spacja(file)
+    file_preview = common.spacja(file_preview)
 
     command = "convert " + file + " -resize " + str(PREVIEW) + "x" + str(PREVIEW) + command + file_preview
     print(command)
@@ -192,23 +189,6 @@ def convert_preview(file, dir_temp, command):
         return {'filename': file_preview, 'width': width, 'height': height}
     except:
         return "! Error in convert_preview: return"
-
-
-def spacja(sciezka):
-    """ rozwiązanie problemu spacji w nazwach plików i katalogów """
-
-    sciezka = os.path.normpath(sciezka)
-    if platform.system() == "Windows":
-        czy_spacja = re.search(" ", sciezka)
-        if czy_spacja is not None:
-            sciezka = '"' + sciezka + '"'
-    else:
-        sciezka = re.sub(' ', '\ ', sciezka)
-        # usuwanie nadmiaru backslashy
-        sciezka = re.sub('\\\\\\\\ ', '\ ', sciezka)
-
-    # print("sciezka: ", sciezka)
-    return sciezka
 
 
 def apply_all_convert(out_file):
@@ -227,7 +207,7 @@ def apply_all_convert(out_file):
     else:
         cmd = cmd + " " + convert.convert_crop(img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
     cmd = cmd + " " + convert.convert_rotate(img_rotate.get())
-    cmd = cmd + " " + convert_border()
+    cmd = cmd + " " + convert.convert_border(e_border.get(), img_border_color.get())
     imagick(cmd, out_file)
 
     # ze wzgledu na grawitację tekstu, która gryzie sie z cropem
@@ -322,6 +302,7 @@ def convert_crop_button():
     imagick(convert.convert_crop(img_crop.get(), img_crop_gravity.get(), convert_crop_entries()), out_file)
     preview_new(out_file, TEMP_DIR)
 
+
 def convert_crop_entries():
     """ słownik ze zmiennymi dla funkcji convert_crop """
     dict_return = {}
@@ -381,7 +362,7 @@ def fonts():
     else:
         file_font = os.path.join(TEMP_DIR, "fonts_list")
 
-        command = "convert -list font > " + spacja(file_font)
+        command = "convert -list font > " + common.spacja(file_font)
         print(command)
         try:
             os.system(command)
@@ -417,32 +398,32 @@ def crop_read():
     """ Wczytanie rozmiarów z obrazka do wycinka """
     # global file_in_path, img_crop_gravity
     img = Image.open(file_in_path.get())
-    x = img.size[0]
-    y = img.size[1]
+    width = img.size[0]
+    height = img.size[1]
     e1_crop_1.delete(0, "end")
     e1_crop_1.insert(0, "0")
     e2_crop_1.delete(0, "end")
     e2_crop_1.insert(0, "0")
     e3_crop_1.delete(0, "end")
-    e3_crop_1.insert(0, x)
+    e3_crop_1.insert(0, width)
     e4_crop_1.delete(0, "end")
-    e4_crop_1.insert(0, y)
+    e4_crop_1.insert(0, height)
     e1_crop_2.delete(0, "end")
     e1_crop_2.insert(0, "0")
     e2_crop_2.delete(0, "end")
     e2_crop_2.insert(0, "0")
     e3_crop_2.delete(0, "end")
-    e3_crop_2.insert(0, x)
+    e3_crop_2.insert(0, width)
     e4_crop_2.delete(0, "end")
-    e4_crop_2.insert(0, y)
+    e4_crop_2.insert(0, height)
     e1_crop_3.delete(0, "end")
     e1_crop_3.insert(0, "0")
     e2_crop_3.delete(0, "end")
     e2_crop_3.insert(0, "0")
     e3_crop_3.delete(0, "end")
-    e3_crop_3.insert(0, x)
+    e3_crop_3.insert(0, width)
     e4_crop_3.delete(0, "end")
-    e4_crop_3.insert(0, y)
+    e4_crop_3.insert(0, height)
     img_crop_gravity.set("C")
 
 
@@ -546,18 +527,8 @@ def convert_border_button():
     """ przycisk dodania ramki """
     # global file_in_path, TEMP_DIR
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert_border(), out_file)
+    imagick(convert.convert_border(e_border.get(), img_border_color.get()), out_file)
     preview_new(out_file, TEMP_DIR)
-
-
-def convert_border():
-    """ dodanie ramki """
-    # global img_border_color
-    if int(e_border.get()) > 0:
-        command = "-border " + e_border.get() + " -bordercolor \"" + img_border_color.get() + "\""
-    else:
-        command = ""
-    return command
 
 
 def color_choose_border():
@@ -603,324 +574,93 @@ def color_choose():
     l_text_font_selected.configure(fg=img_text_color.get())
 
 
-def ini_read(file_ini):
-    """ Obsługa pliku konfiguracyjnego INI """
-
-    # słownik wyjściowy
-    dict_return = {}
-
-    config = configparser.ConfigParser()
-    config.read(file_ini, encoding="utf8")
-
-    # read values from a section
-    try:
-        file_in = config.get('Konfiguracja', 'path')
-    except:
-        file_in = ""
-    dict_return['file_in_path'] = file_in
-
-    try:
-        dir_work = config.get('Konfiguracja', 'work_dir')
-    except:
-        dir_work = "FotoKilof"
-    dict_return['work_dir'] = dir_work
-
-    try:
-        file_dir_select = config.getint('Konfiguracja', 'file_dir')
-    except:
-        file_dir_select = "0"
-    dict_return['file_dir_selector'] = file_dir_select
-
-    try:
-        histograms = config.getint('Konfiguracja', 'histograms')
-    except:
-        histograms = "0"
-    dict_return['img_histograms'] = histograms
-
-    try:
-        resize = config.getint('Resize', 'resize')
-    except:
-        resize = "1"
-    dict_return['img_resize'] = resize
-
-    try:
-        resize_size_pixel = config.getint('Resize', 'size_pixel')
-    except:
-        resize_size_pixel = "0"
-    e1_resize.delete(0, "end")
-    e1_resize.insert(0, resize_size_pixel)
-
-    try:
-        resize_size_percent = config.getint('Resize', 'size_percent')
-    except:
-        resize_size_percent = "0"
-    e2_resize.delete(0, "end")
-    e2_resize.insert(0, resize_size_percent)
-
-    try:
-        text_on = config.getint('Text', 'on')
-    except:
-        text_on = "1"
-    dict_return['img_text'] = text_on
-
-    try:
-        text = config.get('Text', 'text')
-    except:
-        text = ""
-    e_text.delete(0, "end")
-    e_text.insert(0, text)
-
-    try:
-        text_gravity = config.get('Text', 'gravity')
-    except:
-        text_gravity = "SE"
-    dict_return['img_text_gravity'] = text_gravity
-
-    try:
-        text_font = config.get('Text', 'font')
-    except:
-        if platform.system() == "Windows":
-            text_font = "Arial"
-        else:
-            text_font = "Helvetica"
-    dict_return['img_text_font'] = text_font
-
-    try:
-        text_size = str(config.getint('Text', 'size'))
-    except:
-        text_size = 12
-    e_text_size.delete(0, "end")
-    e_text_size.insert(0, text_size)
-
-    try:
-        text_x = config.getint('Text', 'x')
-    except:
-        text_x = "5"
-    e_text_x.delete(0, "end")
-    e_text_x.insert(0, text_x)
-
-    try:
-        text_y = config.getint('Text', 'y')
-    except:
-        text_y = "5"
-    e_text_y.delete(0, "end")
-    e_text_y.insert(0, text_y)
-
-    try:
-        text_color = config.get('Text', 'color')
-    except:
-        text_color = "#FFFFFF"
-    dict_return['img_text_color'] = text_color
-    l_text_font_selected.configure(fg=text_color)
-
-    try:
-        text_box = config.getint('Text', 'box')
-    except:
-        text_box = 0
-    dict_return['img_text_box'] = text_box
-
-    try:
-        text_box_color = config.get('Text', 'box_color')
-    except:
-        text_box_color = "#000000"
-    dict_return['img_text_box_color'] = text_box_color
-    l_text_font_selected.configure(bg=text_box_color)
-
-    try:
-        rotate = config.getint('Rotate', 'rotate')
-    except:
-        rotate = "0"
-    dict_return['img_rotate'] = rotate
-
-    try:
-        crop = config.getint('Crop', 'crop')
-    except:
-        crop = "0"
-    dict_return['img_crop'] = crop
-
-    try:
-        crop_x1 = config.getint('Crop', 'x1')
-    except:
-        crop_x1 = "0"
-    e1_crop_1.delete(0, "end")
-    e1_crop_1.insert(0, crop_x1)
-
-    try:
-        crop_y1 = config.getint('Crop', 'y1')
-    except:
-        crop_y1 = "0"
-    e2_crop_1.delete(0, "end")
-    e2_crop_1.insert(0, crop_y1)
-
-    try:
-        crop_x2 = config.getint('Crop', 'x2')
-    except:
-        crop_x2 = "0"
-    e3_crop_1.delete(0, "end")
-    e3_crop_1.insert(0, crop_x2)
-
-    try:
-        crop_y2 = config.getint('Crop', 'y2')
-    except:
-        crop_y2 = "0"
-    e4_crop_1.delete(0, "end")
-    e4_crop_1.insert(0, crop_y2)
-
-    try:
-        crop_x3 = config.getint('Crop', 'x3')
-    except:
-        crop_x3 = "0"
-    e1_crop_2.delete(0, "end")
-    e1_crop_2.insert(0, crop_x3)
-
-    try:
-        crop_y3 = config.getint('Crop', 'y3')
-    except:
-        crop_y3 = "0"
-    e2_crop_2.delete(0, "end")
-    e2_crop_2.insert(0, crop_y3)
-
-    try:
-        crop_X1 = config.getint('Crop', 'XX1')
-    except:
-        crop_X1 = "0"
-    e3_crop_2.delete(0, "end")
-    e3_crop_2.insert(0, crop_X1)
-
-    try:
-        crop_Y1 = config.getint('Crop', 'YY1')
-    except:
-        crop_Y1 = "0"
-    e4_crop_2.delete(0, "end")
-    e4_crop_2.insert(0, crop_Y1)
-
-    try:
-        crop_dx = config.getint('Crop', 'dx')
-    except:
-        crop_dx = "0"
-    e1_crop_3.delete(0, "end")
-    e1_crop_3.insert(0, crop_dx)
-
-    try:
-        crop_dy = config.getint('Crop', 'dy')
-    except:
-        crop_dy = "0"
-    e2_crop_3.delete(0, "end")
-    e2_crop_3.insert(0, crop_dy)
-
-    try:
-        crop_X2 = config.getint('Crop', 'XX2')
-    except:
-        crop_X2 = "0"
-    e3_crop_3.delete(0, "end")
-    e3_crop_3.insert(0, crop_X2)
-
-    try:
-        crop_Y2 = config.getint('Crop', 'YY2')
-    except:
-        crop_Y2 = "0"
-    e4_crop_3.delete(0, "end")
-    e4_crop_3.insert(0, crop_Y2)
-
-    try:
-        crop_gravity = config.getint('Crop', 'gravity')
-    except:
-        crop_gravity = "C"
-    dict_return['img_crop_gravity'] = crop_gravity
-
-    try:
-        border_color = config.get('Border', 'color')
-    except:
-        border_color = "#FFFFFF"
-    l_border.configure(bg=border_color)
-    dict_return['img_border_color'] = border_color
-
-    try:
-        border = config.getint('Border', 'size')
-    except:
-        border = "0"
-    e_border.delete(0, "end")
-    e_border.insert(0, border)
-
-    try:
-        normalize = config.getint('Color', 'normalize')
-    except:
-        normalize = 0
-    dict_return['img_normalize'] = normalize
-
-    try:
-        bw = config.getint('Color', 'bw')
-    except:
-        bw = 0
-    dict_return['img_bw'] = bw
-
-    try:
-        bw_sepia = config.getint('Color', 'sepia')
-    except:
-        bw_sepia = "95"
-    e_bw_sepia.delete(0, "end")
-    e_bw_sepia.insert(0, bw_sepia)
-
-    try:
-        contrast = config.getint('Contrast', 'contrast')
-    except:
-        contrast = "0"
-    dict_return['img_contrast'] = contrast
-
-    try:
-        contrast_stretch_1 = config.get('Contrast', 'stretch1')
-    except:
-        contrast_stretch_1 = "0.15"
-    e1_contrast.delete(0, "end")
-    e1_contrast.insert(0, contrast_stretch_1)
-
-    try:
-        contrast_stretch_2 = config.get('Contrast', 'stretch2')
-    except:
-        contrast_stretch_2 = "0.05"
-    e2_contrast.delete(0, "end")
-    e2_contrast.insert(0, contrast_stretch_2)
-
-    return dict_return
-
-
 def ini_read_wraper():
     """ odczyt pliku ini """
 
-    # global FILE_INI, file_in_path, work_dir, img_histograms
-    # global img_text, img_text_font, img_text_color, img_text_gravity
-    # global img_text_box, img_text_box_color
-    # global img_rotate, img_crop, img_crop_gravity, img_resize
-    # global img_bw, img_normalize
-
-    ini_entries = ini_read(FILE_INI)
+    ini_entries = ini_read.ini_read(FILE_INI)
     file_in_path.set(ini_entries['file_in_path'])
     file_dir_selector.set(ini_entries['file_dir_selector'])
     work_dir.set(ini_entries['work_dir'])
+    img_histograms.set(ini_entries['img_histograms'])
+
+    ini_entries = ini_read.ini_read_resize(FILE_INI)
     img_resize.set(ini_entries['img_resize'])
+    e1_resize.delete(0, "end")
+    e1_resize.insert(0, ini_entries['resize_size_pixel'])
+    e2_resize.delete(0, "end")
+    e2_resize.insert(0, ini_entries['resize_size_percent'])
+
+    ini_entries = ini_read.ini_read_text(FILE_INI)
     img_text.set(ini_entries['img_text'])
+    img_text_font.set(ini_entries['text_font'])
+    img_text_color.set(ini_entries['text_color'])
     img_text_gravity.set(ini_entries['img_text_gravity'])
-    img_text_font.set(ini_entries['img_text_font'])
-    img_text_box.set(ini_entries['img_text_box'])
+    img_text_box.set(ini_entries['text_box'])
+    img_text_box_color.set(ini_entries['text_box_color'])
+    e_text.delete(0, "end")
+    e_text.insert(0, ini_entries['text_text'])
+    e_text_size.delete(0, "end")
+    e_text_size.insert(0, ini_entries['text_size'])
+    e_text_x.delete(0, "end")
+    e_text_x.insert(0, ini_entries['text_x'])
+    e_text_y.delete(0, "end")
+    e_text_y.insert(0, ini_entries['text_y'])
+    l_text_font_selected.configure(fg=ini_entries['text_color'])
+    l_text_font_selected.configure(bg=ini_entries['text_box_color'])
+
+    ini_entries = ini_read.ini_read_rotate(FILE_INI)
     img_rotate.set(ini_entries['img_rotate'])
+
+    ini_entries = ini_read.ini_read_crop(FILE_INI)
     img_crop.set(ini_entries['img_crop'])
     img_crop_gravity.set(ini_entries['img_crop_gravity'])
-    img_text_color.set(ini_entries['img_text_color'])
-    img_text_box_color.set(ini_entries['img_text_box_color'])
+    e1_crop_1.delete(0, "end")
+    e1_crop_1.insert(0, ini_entries['crop_1_x1'])
+    e2_crop_1.delete(0, "end")
+    e2_crop_1.insert(0, ini_entries['crop_1_y1'])
+    e3_crop_1.delete(0, "end")
+    e3_crop_1.insert(0, ini_entries['crop_1_x2'])
+    e4_crop_1.delete(0, "end")
+    e4_crop_1.insert(0, ini_entries['crop_1_y2'])
+    e1_crop_2.delete(0, "end")
+    e1_crop_2.insert(0, ini_entries['crop_2_x1'])
+    e2_crop_2.delete(0, "end")
+    e2_crop_2.insert(0, ini_entries['crop_2_y1'])
+    e3_crop_2.delete(0, "end")
+    e3_crop_2.insert(0, ini_entries['crop_2_width'])
+    e4_crop_2.delete(0, "end")
+    e4_crop_2.insert(0, ini_entries['crop_2_height'])
+    e1_crop_3.delete(0, "end")
+    e1_crop_3.insert(0, ini_entries['crop_3_dx'])
+    e2_crop_3.delete(0, "end")
+    e2_crop_3.insert(0, ini_entries['crop_3_dy'])
+    e3_crop_3.delete(0, "end")
+    e3_crop_3.insert(0, ini_entries['crop_3_width'])
+    e4_crop_3.delete(0, "end")
+    e4_crop_3.insert(0, ini_entries['crop_3_height'])
+
+    ini_entries = ini_read.ini_read_border(FILE_INI)
     img_border_color.set(ini_entries['img_border_color'])
-    img_normalize.set(ini_entries['img_normalize'])
-    img_bw.set(ini_entries['img_bw'])
-    img_contrast.set(ini_entries['img_contrast'])
-    img_histograms.set(ini_entries['img_histograms'])
+    l_border.configure(bg=ini_entries['img_border_color'])
+    e_border.delete(0, "end")
+    e_border.insert(0, ini_entries['img_border_size'])
+
+    ini_entries = ini_read.ini_read_color(FILE_INI)
+    img_normalize.set(ini_entries['normalize'])
+    img_bw.set(ini_entries['black_white'])
+    e_bw_sepia.delete(0, "end")
+    e_bw_sepia.insert(0, ini_entries['sepia'])
+
+    ini_entries = ini_read.ini_read_contrast(FILE_INI)
+    img_contrast.set(ini_entries['contrast'])
+    e1_contrast.delete(0, "end")
+    e1_contrast.insert(0, ini_entries['contrast_stretch_1'])
+    e2_contrast.delete(0, "end")
+    e2_contrast.insert(0, ini_entries['contrast_stretch_2'])
 
 
 def ini_save():
     """ Zapis konfiguracji do pliku INI """
-    # global FILE_INI, file_in_path, work_dir, img_histograms
-    # global img_text, img_text_font, img_text_color, img_text_gravity
-    # global img_text_box, img_text_box_color
-    # global img_rotate, img_crop, img_crop_gravity, img_resize
-    # global img_bw, img_normalize
 
     # przygotowanie zawartości
     config = configparser.ConfigParser()
@@ -948,26 +688,26 @@ def ini_save():
     config.set('Rotate', 'rotate', str(img_rotate.get()))
     config.add_section('Crop')
     config.set('Crop', 'crop', str(img_crop.get()))
-    config.set('Crop', 'x1', e1_crop_1.get())
-    config.set('Crop', 'y1', e2_crop_1.get())
-    config.set('Crop', 'x2', e3_crop_1.get())
-    config.set('Crop', 'y2', e4_crop_1.get())
-    config.set('Crop', 'x3', e1_crop_2.get())
-    config.set('Crop', 'y3', e2_crop_2.get())
-    config.set('Crop', 'XX1', e3_crop_2.get())
-    config.set('Crop', 'YY1', e4_crop_2.get())
-    config.set('Crop', 'dx', e1_crop_3.get())
-    config.set('Crop', 'dy', e2_crop_3.get())
-    config.set('Crop', 'XX2', e3_crop_3.get())
-    config.set('Crop', 'YY2', e4_crop_3.get())
+    config.set('Crop', '1_x1', e1_crop_1.get())
+    config.set('Crop', '1_y1', e2_crop_1.get())
+    config.set('Crop', '1_x2', e3_crop_1.get())
+    config.set('Crop', '1_y2', e4_crop_1.get())
+    config.set('Crop', '2_x1', e1_crop_2.get())
+    config.set('Crop', '2_y1', e2_crop_2.get())
+    config.set('Crop', '2_width', e3_crop_2.get())
+    config.set('Crop', '2_height', e4_crop_2.get())
+    config.set('Crop', '3_dx', e1_crop_3.get())
+    config.set('Crop', '3_dy', e2_crop_3.get())
+    config.set('Crop', '3_width', e3_crop_3.get())
+    config.set('Crop', '3_height', e4_crop_3.get())
     config.set('Crop', 'gravity', img_crop_gravity.get())
     config.add_section('Border')
     config.set('Border', 'color', img_border_color.get())
     config.set('Border', 'size', e_border.get())
     config.add_section('Color')
     config.set('Color', 'normalize', str(img_normalize.get()))
-    config.set('Color', 'bw', str(img_bw.get()))
-    config.set('Color', 'bw_sepia', e_bw_sepia.get())
+    config.set('Color', 'black-white', str(img_bw.get()))
+    config.set('Color', 'sepia', e_bw_sepia.get())
     config.add_section('Contrast')
     config.set('Contrast', 'contrast', str(img_contrast.get()))
     config.set('Contrast', 'contrast_stretch_1', e1_contrast.get())
@@ -985,7 +725,7 @@ def help_info(event):
     """ okno info """
     # global PWD
     try:
-        license_file = os.path.join(PWD, "License")
+        license_file = os.path.join(PWD, "LICENSE")
         file = open(license_file, "r", encoding="utf8")
 
         message = ""
@@ -994,25 +734,7 @@ def help_info(event):
         # file.close
     except:
         print("! Error in help_info: błąd przy wczytywaniu pliku licencji")
-        message = "Copyright 2019 Tomasz Łuczak"
-
-    messagebox.showinfo(title="Licencja", message=message)
-
-
-def help_changelog():
-    """ okno Changelogu """
-    # global PWD
-    try:
-        license_file = os.path.join(PWD, "Changelog")
-        file = open(license_file, "r", encoding="utf8")
-
-        message = ""
-        for i in file:
-            message = message + i
-        # file.close
-    except:
-        print("! Error in help_changelog: błąd przy wczytywaniu dziennika zmian")
-        message = "Zmian było duużo..., i jeszcze będą kolejne..."
+        message = "Copyright 2019 Tomasz Łuczak under MIT license"
 
     messagebox.showinfo(title="Licencja", message=message)
 
@@ -1051,10 +773,9 @@ def mouse_crop_calculation(x_preview, y_preview):
         x_max = PREVIEW
         y_max = PREVIEW
 
-    x = int(x_preview*x_orig/x_max)
-    y = int(y_preview*y_orig/y_max)
-    print("X,Y", x, y)
-    return x, y
+    width = int(x_preview*x_orig/x_max)
+    height = int(y_preview*y_orig/y_max)
+    return width, height
 
 
 def mouse_crop_NW(event):
@@ -1134,7 +855,7 @@ def preview_orig():
 
     preview = convert_preview(file_in_path.get(), TEMP_DIR, command)
     try:
-        pi_preview_orig.configure(file=spacja(preview['filename']))
+        pi_preview_orig.configure(file=common.spacja(preview['filename']))
         l_preview_orig.configure(text=preview['width'] + "x" + preview['height'])
     except:
         print("! Error in preview_orig: Nie można wczytać podglądu")
@@ -1200,9 +921,8 @@ def tools_set():
         frame_histogram_new.grid()
 
 ###############################################################################
+# GUI okno główne
 ###############################################################################
-# okno główne
-
 
 root = Tk()
 

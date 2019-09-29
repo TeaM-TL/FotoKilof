@@ -7,6 +7,7 @@ import os
 import platform
 import re
 
+
 def spacja(sciezka):
     """ rozwiązanie problemu spacji w nazwach plików i katalogów """
 
