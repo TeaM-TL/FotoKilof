@@ -1,5 +1,5 @@
 # FotoKilof - GUI for ImageMagick
-GUI for the most use
+GUI for the most used by me imagemagick functionality for processing pictures
 
 ![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/fotokilof.png)
 
@@ -7,7 +7,7 @@ GUI for the most use
 
 ![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/fotokilof2.png)
 
-## Graphics conwversion
+## Graphics conversion
  - rotation (90, 180, 270 degree)
  - frame around picture
  - text annotation
@@ -19,8 +19,8 @@ GUI for the most use
 ## Functionality:
  - processing single file or whole directory,
  - display selection of used tools,
- - preview with crop selection,
- - dodawanie tekstu i koloru tła
+ - preview
+ - crop selection via click on preview or coordinates in three ways
  - text: color, font and size selection (Linux, Mac OSX only)
  - fast file navigation: First, Prev, Next, last
  - histogram of original and result pictures.
