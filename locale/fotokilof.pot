@@ -1,0 +1,268 @@
+# Copyright (C) 2019 Tomasz Łuczak
+# Tomasz Łuczak <tlu@team-tl.pl>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: FotoKilof\n"
+"POT-Creation-Date: 2019-10-02 19:33+0200\n"
+"PO-Revision-Date: 2019-10-02 19:34+0200\n"
+"Last-Translator: Tomasz Łuczak\n"
+"Language-Team: \n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"X-Poedit-Basepath: ../src\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
+"|| n%100>14) ? 1 : 2);\n"
+"X-Poedit-SearchPath-0: common.py\n"
+"X-Poedit-SearchPath-1: convert.py\n"
+"X-Poedit-SearchPath-2: fotokilof.py\n"
+"X-Poedit-SearchPath-3: ini_read.py\n"
+
+
+#: ../src/fotokilof.py:45
+msgid "Unfortunately, you are using Windows, thus not all option will work"
+msgstr ""
+
+#: ../src/fotokilof.py:438
+msgid "Select picture for processing"
+msgstr ""
+
+#: ../src/fotokilof.py:744
+msgid "License"
+msgstr ""
+
+#: ../src/fotokilof.py:1006
+msgid "Tools"
+msgstr ""
+
+#: ../src/fotokilof.py:1010
+msgid "Histograms"
+msgstr ""
+
+#: ../src/fotokilof.py:1013
+msgid "Scaling/Resize"
+msgstr ""
+
+#: ../src/fotokilof.py:1015 ../src/fotokilof.py:1144 ../src/fotokilof.py:1197
+msgid "Crop"
+msgstr ""
+
+#: ../src/fotokilof.py:1017
+msgid "Text"
+msgstr ""
+
+#: ../src/fotokilof.py:1019 ../src/fotokilof.py:1315 ../src/fotokilof.py:1327
+msgid "Rotate"
+msgstr ""
+
+#: ../src/fotokilof.py:1021 ../src/fotokilof.py:1359
+msgid "Frame"
+msgstr ""
+
+#: ../src/fotokilof.py:1023
+msgid "Black&white"
+msgstr ""
+
+#: ../src/fotokilof.py:1025
+msgid "Colors normalize"
+msgstr ""
+
+#: ../src/fotokilof.py:1027 ../src/fotokilof.py:1409 ../src/fotokilof.py:1413
+#: ../src/fotokilof.py:1415
+msgid "Contrast"
+msgstr ""
+
+#: ../src/fotokilof.py:1030
+msgid "Apply"
+msgstr ""
+
+#: ../src/fotokilof.py:1046
+msgid "Commands"
+msgstr ""
+
+#: ../src/fotokilof.py:1050
+msgid "Exit"
+msgstr ""
+
+#: ../src/fotokilof.py:1052
+msgid "Save settings"
+msgstr ""
+
+#: ../src/fotokilof.py:1054
+msgid "Load settings"
+msgstr ""
+
+#: ../src/fotokilof.py:1056
+msgid "Apply all"
+msgstr ""
+
+#: ../src/fotokilof.py:1074
+msgid "Image"
+msgstr ""
+
+#: ../src/fotokilof.py:1080
+msgid "File selection"
+msgstr ""
+
+#: ../src/fotokilof.py:1082
+msgid "Folder"
+msgstr ""
+
+#: ../src/fotokilof.py:1084
+msgid "File"
+msgstr ""
+
+#: ../src/fotokilof.py:1089
+msgid "First"
+msgstr ""
+
+#: ../src/fotokilof.py:1091
+msgid "Previous"
+msgstr ""
+
+#: ../src/fotokilof.py:1093
+msgid "Next"
+msgstr ""
+
+#: ../src/fotokilof.py:1095
+msgid "Last"
+msgstr ""
+
+#: ../src/fotokilof.py:1112
+msgid "Scale/Resize"
+msgstr ""
+
+#: ../src/fotokilof.py:1117 ../src/fotokilof.py:1363
+msgid "Pixels"
+msgstr ""
+
+#: ../src/fotokilof.py:1120
+msgid "Percent"
+msgstr ""
+
+#: ../src/fotokilof.py:1129
+msgid "Resize"
+msgstr ""
+
+#: ../src/fotokilof.py:1149
+msgid "None"
+msgstr ""
+
+#: ../src/fotokilof.py:1151
+msgid "Coordinates (x1, y1) and (x2, y2)"
+msgstr ""
+
+#: ../src/fotokilof.py:1152
+msgid "Left Upper corner"
+msgstr ""
+
+#: ../src/fotokilof.py:1153
+msgid "Click left"
+msgstr ""
+
+#: ../src/fotokilof.py:1156
+msgid "Right lower corner"
+msgstr ""
+
+#: ../src/fotokilof.py:1157
+msgid "Click right"
+msgstr ""
+
+#: ../src/fotokilof.py:1162
+msgid "Origin (x1,y1) and dimensions (X, Y)"
+msgstr ""
+
+#: ../src/fotokilof.py:1169
+msgid ""
+"Offset (dx,dy), dimensions (X, Y)\n"
+"i gravity"
+msgstr ""
+
+#: ../src/fotokilof.py:1195
+msgid "Load coordinates from image"
+msgstr ""
+
+#: ../src/fotokilof.py:1236
+msgid "Add text"
+msgstr ""
+
+#: ../src/fotokilof.py:1248
+msgid ""
+"Offset (dx,dy)\n"
+msgstr ""
+
+#: ../src/fotokilof.py:1291
+msgid "Font color"
+msgstr ""
+
+#: ../src/fotokilof.py:1292
+msgid "Background"
+msgstr ""
+
+#: ../src/fotokilof.py:1295
+msgid "Background color"
+msgstr ""
+
+#: ../src/fotokilof.py:1298
+msgid "Put text"
+msgstr ""
+
+#: ../src/fotokilof.py:1339 ../src/fotokilof.py:1343
+msgid "Black-white"
+msgstr ""
+
+#: ../src/fotokilof.py:1344
+msgid "Sepia"
+msgstr ""
+
+#: ../src/fotokilof.py:1347
+msgid "Execute"
+msgstr ""
+
+#: ../src/fotokilof.py:1365
+msgid "Color"
+msgstr ""
+
+#: ../src/fotokilof.py:1366
+msgid "Add frame"
+msgstr ""
+
+#: ../src/fotokilof.py:1382 ../src/fotokilof.py:1387
+msgid "Original"
+msgstr ""
+
+#: ../src/fotokilof.py:1399 ../src/fotokilof.py:1483
+msgid "Histogram"
+msgstr ""
+
+#: ../src/fotokilof.py:1419
+msgid "Stretch"
+msgstr ""
+
+#: ../src/fotokilof.py:1423
+msgid "Black"
+msgstr ""
+
+#: ../src/fotokilof.py:1424
+msgid "White"
+msgstr ""
+
+#: ../src/fotokilof.py:1439
+msgid "Color normalize"
+msgstr ""
+
+#: ../src/fotokilof.py:1444 ../src/fotokilof.py:1448
+msgid "Normalize"
+msgstr ""
+
+#: ../src/fotokilof.py:1446
+msgid "AutoLevel"
+msgstr ""
+
+#: ../src/fotokilof.py:1465 ../src/fotokilof.py:1469
+msgid "Result"
+msgstr ""
+

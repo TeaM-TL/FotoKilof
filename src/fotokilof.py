@@ -7,6 +7,7 @@ program do konwersji rysunków
 
 import configparser
 import datetime
+import gettext
 import glob
 import platform
 import os
@@ -23,13 +24,18 @@ import convert
 import common
 import ini_read
 
+localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
+gettext.install('fotokilof', localedir)
+translate = gettext.translation('fotokilof', localedir, fallback=True)
+_ = translate.gettext
+print(localedir)
 ###################
-# Stałe
-VERSION = "2.2"  # wersja programu
+# CONSTANTS
+VERSION = "2.3"
 if platform.system() == "Windows":
-    PREVIEW = 400  # rozmiar obrazka podglądu w Windows
+    PREVIEW = 400  # preview size in Windows
 else:
-    PREVIEW = 450  # rozmiar obrazka podglądu
+    PREVIEW = 450  # preview size
 
 ##########################
 
@@ -37,7 +43,7 @@ else:
 def no_text_in_windows():
     """ info dla Windows, że może być problem z dodaniem tekstu """
     if platform.system() == "Windows":
-        l_text_windows.configure(text="Niestety używasz Windows,umieszczanie tekstu może nie działać poprawnie")
+        l_text_windows.configure(text=_("Unfortunately, you are using Windows, thus not all option will work"))
         cb_text_font.configure(state='disabled')
 
     else:
@@ -430,7 +436,7 @@ def crop_read():
 def open_file():
     """ otwarcie pliku obrazka do edycji """
     # global file_in_path, dir_in_path
-    file_in_path.set(filedialog.askopenfilename(title="Wybierz plik do mielenia",
+    file_in_path.set(filedialog.askopenfilename(title=_("Select picture for processing"),
                                                 initialdir=dir_in_path.get(),
                                                 filetypes=(("jpeg files", "*.jpg"),
                                                            ("JPEG files", "*.JPG"),
@@ -736,7 +742,7 @@ def help_info(event):
         print("! Error in help_info: błąd przy wczytywaniu pliku licencji")
         message = "Copyright 2019 Tomasz Łuczak under MIT license"
 
-    messagebox.showinfo(title="Licencja", message=message)
+    messagebox.showinfo(title=_("License"), message=message)
 
 
 def close_window():
@@ -998,31 +1004,31 @@ frame_zero_col.grid(row=1, column=1, rowspan=2, sticky=(N, W, E, S))
 ###########################
 # Wybór poleceń
 ###########################
-frame_zero_set = ttk.Labelframe(frame_zero_col, text="Narzędzia",
+frame_zero_set = ttk.Labelframe(frame_zero_col, text=_("Tools"),
                                 style="Blue.TLabelframe")
 frame_zero_set.grid(row=1, column=1, padx=5, pady=5, sticky=(W, E))
 
-cb_histograms = ttk.Checkbutton(frame_zero_set, text="Histogramy",
+cb_histograms = ttk.Checkbutton(frame_zero_set, text=_("Histograms"),
                                 variable=img_histograms,
                                 offvalue="0", onvalue="1")
-cb_resize = ttk.Checkbutton(frame_zero_set, text="Skalowanie",
+cb_resize = ttk.Checkbutton(frame_zero_set, text=_("Scaling/Resize"),
                             variable=img_resize, offvalue="0", onvalue="1")
-cb_crop = ttk.Checkbutton(frame_zero_set, text="Wycinek", variable=img_crop,
+cb_crop = ttk.Checkbutton(frame_zero_set, text=_("Crop"), variable=img_crop,
                           offvalue="0", onvalue="1")
-cb_text = ttk.Checkbutton(frame_zero_set, text="Tekst", variable=img_text,
+cb_text = ttk.Checkbutton(frame_zero_set, text=_("Text"), variable=img_text,
                           onvalue="1", offvalue="0")
-cb_rotate = ttk.Checkbutton(frame_zero_set, text="Obrót",
+cb_rotate = ttk.Checkbutton(frame_zero_set, text=_("Rotate"),
                             variable=img_rotate, offvalue="0", onvalue="90")
-cb_border = ttk.Checkbutton(frame_zero_set, text="Ramka",
+cb_border = ttk.Checkbutton(frame_zero_set, text=_("Frame"),
                             variable=img_border, offvalue="0", onvalue="1")
-cb_bw = ttk.Checkbutton(frame_zero_set, text="Czarno-białe",
+cb_bw = ttk.Checkbutton(frame_zero_set, text=_("Black&white"),
                         variable=img_bw, offvalue="0", onvalue="1")
-cb_normalize = ttk.Checkbutton(frame_zero_set, text="Normalizacja kolorów",
+cb_normalize = ttk.Checkbutton(frame_zero_set, text=_("Colors normalize"),
                                variable=img_normalize, offvalue="0", onvalue="1")
-cb_contrast = ttk.Checkbutton(frame_zero_set, text="Kontrast",
+cb_contrast = ttk.Checkbutton(frame_zero_set, text=_("Contrast"),
                               variable=img_contrast, offvalue="0", onvalue="1")
 
-b_last_set = ttk.Button(frame_zero_set, text="Zastosuj", command=tools_set)
+b_last_set = ttk.Button(frame_zero_set, text=_("Apply"), command=tools_set)
 
 cb_histograms.pack(padx=5, pady=5, anchor=W)
 cb_resize.pack(padx=5, pady=5, anchor=W)
@@ -1038,17 +1044,17 @@ b_last_set.pack(padx=5, pady=5)
 ###########################
 # Przyciski
 ###########################
-frame_zero_cmd = ttk.Labelframe(frame_zero_col, text="Polecenia",
+frame_zero_cmd = ttk.Labelframe(frame_zero_col, text=_("Commands"),
                                 style="Blue.TLabelframe")
 frame_zero_cmd.grid(row=2, column=1, padx=5, pady=5, sticky=(W, E))
 
-b_last_quit = ttk.Button(frame_zero_cmd, text="Koniec",
+b_last_quit = ttk.Button(frame_zero_cmd, text=_("Exit"),
                          command=close_window)
-b_last_save = ttk.Button(frame_zero_cmd, text="Zapisz ustawienia",
+b_last_save = ttk.Button(frame_zero_cmd, text=_("Save settings"),
                          command=ini_save)
-b_last_read = ttk.Button(frame_zero_cmd, text="Wczytaj ustawienia",
+b_last_read = ttk.Button(frame_zero_cmd, text=_("Load settings"),
                          command=ini_read_wraper)
-b_last_apply = ttk.Button(frame_zero_cmd, text="Zaaplikuj wszystko",
+b_last_apply = ttk.Button(frame_zero_cmd, text=_("Apply all"),
                           command=apply_all, style="Blue.TButton")
 
 b_last_apply.pack(padx=5, pady=25, anchor=W)
@@ -1066,28 +1072,28 @@ frame_first_col.grid(row=1, column=2, rowspan=2, sticky=(N, W, E, S))
 ###########################
 # Wybór obrazka
 ###########################
-frame_input = ttk.Labelframe(frame_first_col, text="Obrazek",
+frame_input = ttk.Labelframe(frame_first_col, text=_("Image"),
                              style="Blue.TLabelframe")
 frame_input.grid(row=1, column=1, columnspan=2, sticky=(N, W, E, S),
                  padx=5, pady=5)
 # tworzenie widgetów
-# l_select_what = ttk.Label(frame_input, text="Łomotamy:")
-b_file_select = ttk.Button(frame_input, text="Wybierz plik",
+# l_select_what = ttk.Label(frame_input, text=_("Processed:")
+b_file_select = ttk.Button(frame_input, text=_("File selection"),
                            command=open_file, style="Blue.TButton")
-rb_selector_dir = ttk.Radiobutton(frame_input, text="Folder",
+rb_selector_dir = ttk.Radiobutton(frame_input, text=_("Folder"),
                                   variable=file_dir_selector, value="1")
-rb_selector_file = ttk.Radiobutton(frame_input, text="Plik",
+rb_selector_file = ttk.Radiobutton(frame_input, text=_("File"),
                                    variable=file_dir_selector, value="0")
 file_select_L = ttk.Label(frame_input, width=24)
 
 
-b_file_select_first = ttk.Button(frame_input, text="Pierwszy",
+b_file_select_first = ttk.Button(frame_input, text=_("First"),
                                  command=open_file_first)
-b_file_select_prev = ttk.Button(frame_input, text="Poprzedni",
+b_file_select_prev = ttk.Button(frame_input, text=_("Previous"),
                                 command=open_file_prev)
-b_file_select_next = ttk.Button(frame_input, text="Następny",
+b_file_select_next = ttk.Button(frame_input, text=_("Next"),
                                 command=open_file_next)
-b_file_select_last = ttk.Button(frame_input, text="Ostatni",
+b_file_select_last = ttk.Button(frame_input, text=_("Last"),
                                 command=open_file_last)
 # umieszczenie widgetów
 # l_select_what.grid(column=1, row=1, padx=5, pady=5, sticky=W)
@@ -1104,15 +1110,15 @@ b_file_select_last.grid(column=5, row=2, padx=5, pady=5, sticky=W)
 ###########################
 # Resize
 ###########################
-frame_resize = ttk.Labelframe(frame_first_col, text="Skalowanie",
+frame_resize = ttk.Labelframe(frame_first_col, text=_("Scale/Resize"),
                               style="Blue.TLabelframe")
 frame_resize.grid(column=1, row=2, columnspan=2, sticky=(N, W, E, S),
                   padx=5, pady=5)
 ###
-rb_1_resize = ttk.Radiobutton(frame_resize, text="Piksele",
+rb_1_resize = ttk.Radiobutton(frame_resize, text=_("Pixels"),
                               variable=img_resize, value="1")
 e1_resize = ttk.Entry(frame_resize, width=7)
-rb_2_resize = ttk.Radiobutton(frame_resize, text="Procenty",
+rb_2_resize = ttk.Radiobutton(frame_resize, text=_("Percent"),
                               variable=img_resize, value="2")
 e2_resize = ttk.Entry(frame_resize, width=7)
 rb_3_resize = ttk.Radiobutton(frame_resize, text="FullHD (1920x1080)",
@@ -1121,7 +1127,7 @@ rb_4_resize = ttk.Radiobutton(frame_resize, text="2K (2048×1556)",
                               variable=img_resize, value="4")
 rb_5_resize = ttk.Radiobutton(frame_resize, text="4K (4096×3112)",
                               variable=img_resize, value="5")
-b_resize = ttk.Button(frame_resize, text="Przeskaluj", style="Blue.TButton",
+b_resize = ttk.Button(frame_resize, text=_("Resize"), style="Blue.TButton",
                       command=convert_resize_button)
 
 rb_3_resize.grid(row=1, column=1, columnspan=2, sticky=W, padx=5, pady=5)
@@ -1136,32 +1142,32 @@ b_resize.grid(row=2, column=6, sticky=(E), padx=5, pady=5)
 ############################
 # crop
 ############################
-frame_crop = ttk.Labelframe(frame_first_col, text="Wycinek",
+frame_crop = ttk.Labelframe(frame_first_col, text=_("Crop"),
                             style="Blue.TLabelframe")
 frame_crop.grid(row=3, column=1, columnspan=2, sticky=(N, W, E, S),
                 padx=5, pady=5)
 ###
-rb0_crop = ttk.Radiobutton(frame_crop, text="Nic", variable=img_crop, value="0")
+rb0_crop = ttk.Radiobutton(frame_crop, text=_("None"), variable=img_crop, value="0")
 rb1_crop = ttk.Radiobutton(frame_crop, variable=img_crop, value="1",
-                           text="Współrzędne (x1, y1) i (x2, y2)")
-f_clickL_crop = ttk.Labelframe(frame_crop, text="Lewy górny róg")
-l_clickL_crop = ttk.Label(f_clickL_crop, text="Kliknij lewym")
+                           text=_("Coordinates (x1, y1) and (x2, y2)"))
+f_clickL_crop = ttk.Labelframe(frame_crop, text=_("Left Upper corner"))
+l_clickL_crop = ttk.Label(f_clickL_crop, text=_("Click left"))
 e1_crop_1 = ttk.Entry(f_clickL_crop, width=4)
 e2_crop_1 = ttk.Entry(f_clickL_crop, width=4)
-f_clickR_crop = ttk.Labelframe(frame_crop, text="Prawy dolny róg")
-l_clickR_crop = ttk.Label(f_clickR_crop, text="Kliknij prawym")
+f_clickR_crop = ttk.Labelframe(frame_crop, text=_("Right lower corner"))
+l_clickR_crop = ttk.Label(f_clickR_crop, text=_("Click right"))
 e3_crop_1 = ttk.Entry(f_clickR_crop, width=4)
 e4_crop_1 = ttk.Entry(f_clickR_crop, width=4)
 
 rb2_crop = ttk.Radiobutton(frame_crop, variable=img_crop, value="2",
-                           text="Współrzędne (x1,y1) i rozmiar (X, Y)")
+                           text=_("Origin (x1,y1) and dimensions (X, Y)"))
 e1_crop_2 = ttk.Entry(frame_crop, width=4)
 e2_crop_2 = ttk.Entry(frame_crop, width=4)
 e3_crop_2 = ttk.Entry(frame_crop, width=4)
 e4_crop_2 = ttk.Entry(frame_crop, width=4)
 
 rb3_crop = ttk.Radiobutton(frame_crop, variable=img_crop, value="3",
-                           text="Przesunięcie (dx,dy), rozmiar (X, Y)\ni grawitacja")
+                           text=_("Offset (dx,dy), dimensions (X, Y)\ni gravity"))
 e1_crop_3 = ttk.Entry(frame_crop, width=4)
 e2_crop_3 = ttk.Entry(frame_crop, width=4)
 e3_crop_3 = ttk.Entry(frame_crop, width=4)
@@ -1187,9 +1193,9 @@ rbS_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="S",
 rbSE_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="SE",
                               variable=img_crop_gravity, value="SE")
 
-b_crop_read = ttk.Button(frame_crop, text="Wczytaj wpółrzędne z obrazka",
+b_crop_read = ttk.Button(frame_crop, text=_("Load coordinates from image"),
                          command=crop_read)
-b_crop = ttk.Button(frame_crop, text="Wytnij", style="Blue.TButton",
+b_crop = ttk.Button(frame_crop, text=_("Crop"), style="Blue.TButton",
                     command=convert_crop_button)
 
 rb0_crop.grid(row=1, column=1, sticky=W, padx=5, pady=5)
@@ -1228,7 +1234,7 @@ b_crop.grid(row=5, column=1, sticky=W, padx=5, pady=5)
 ###########################
 # Tekst
 ###########################
-frame_text = ttk.Labelframe(frame_first_col, text="Dodaj tekst",
+frame_text = ttk.Labelframe(frame_first_col, text=_("Add text"),
                             style="Blue.TLabelframe")
 frame_text.grid(row=4, column=1, columnspan=2, sticky=(N, W, E, S),
                 padx=5, pady=5)
@@ -1240,7 +1246,7 @@ frame_text_text.grid(row=1, column=1, columnspan=5, sticky=(W, E))
 e_text.grid(row=1, column=2, sticky=W, padx=5)
 ###
 frame_text_xy = ttk.Frame(frame_text)
-l_text_xy = ttk.Label(frame_text_xy, text="Przesunięcie (dx,dy)\nwzględem punktu wstawienia")
+l_text_xy = ttk.Label(frame_text_xy, text=_("Offset (dx,dy)\n"))
 e_text_x = ttk.Entry(frame_text_xy, width=3)
 e_text_y = ttk.Entry(frame_text_xy, width=3)
 
@@ -1283,14 +1289,14 @@ rbSE.grid(row=3, column=3, sticky=W, pady=5)
 frame_text_font = ttk.Frame(frame_text)
 cb_text_font = ttk.Combobox(frame_text_font, textvariable=img_text_font)
 e_text_size = ttk.Entry(frame_text_font, width=3)
-b_text_color = ttk.Button(frame_text, text="Kolor fontu", command=color_choose)
-cb_text_box = ttk.Checkbutton(frame_text_font, text="Ramka tła",
+b_text_color = ttk.Button(frame_text, text=_("Font color"), command=color_choose)
+cb_text_box = ttk.Checkbutton(frame_text_font, text=_("Background"),
                               variable=img_text_box, onvalue="1", offvalue="0",
                               command=color_choose_box_active)
-b_text_box_color = ttk.Button(frame_text, text="Kolor ramki",
+b_text_box_color = ttk.Button(frame_text, text=_("Background color"),
                               command=color_choose_box)
 l_text_windows = ttk.Label(frame_text, width=40)
-b_text = ttk.Button(frame_text, text="Umieść tekst", style="Blue.TButton",
+b_text = ttk.Button(frame_text, text=_("Put text"), style="Blue.TButton",
                     command=convert_text_button)
 l_text_font_selected = Label(frame_text, width=20, textvariable=img_text_font)
 
@@ -1307,7 +1313,7 @@ l_text_windows.grid(row=5, column=1, columnspan=4, sticky=(W, E))
 ###########################
 # Rotate
 ###########################
-frame_rotate = ttk.Labelframe(frame_first_col, text="Obrót",
+frame_rotate = ttk.Labelframe(frame_first_col, text=_("Rotate"),
                               style="Blue.TLabelframe")
 frame_rotate.grid(row=5, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
@@ -1319,7 +1325,7 @@ rb_rotate_180 = ttk.Radiobutton(frame_rotate, text="180",
                                 variable=img_rotate, value="180")
 rb_rotate_270 = ttk.Radiobutton(frame_rotate, text="270",
                                 variable=img_rotate, value="270")
-b_rotate = ttk.Button(frame_rotate, text="Obróć", style="Blue.TButton",
+b_rotate = ttk.Button(frame_rotate, text=_("Rotate"), style="Blue.TButton",
                       command=convert_rotate_button)
 
 rb_rotate_0.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
@@ -1331,15 +1337,15 @@ b_rotate.grid(row=1, column=5, padx=5, pady=5)
 ############################
 # Czarno-białe
 ############################
-frame_bw = ttk.LabelFrame(frame_first_col, text="Czarno-białe",
+frame_bw = ttk.LabelFrame(frame_first_col, text=_("Black-white"),
                           style="Blue.TLabelframe")
 frame_bw.grid(row=5, column=2, rowspan=2, sticky=(N, W, E, S), padx=5, pady=5)
 ###
-rb1_bw = ttk.Radiobutton(frame_bw, text="Czarno-białe", variable=img_bw, value="1")
-rb2_bw = ttk.Radiobutton(frame_bw, text="Sepia", variable=img_bw, value="2")
+rb1_bw = ttk.Radiobutton(frame_bw, text=_("Black-white"), variable=img_bw, value="1")
+rb2_bw = ttk.Radiobutton(frame_bw, text=_("Sepia"), variable=img_bw, value="2")
 e_bw_sepia = ttk.Entry(frame_bw, width=3)
 l_bw_sepia = ttk.Label(frame_bw, text="%")
-b_bw = ttk.Button(frame_bw, text="Wykonaj", style="Blue.TButton",
+b_bw = ttk.Button(frame_bw, text=_("Execute"), style="Blue.TButton",
                   command=convert_bw_button)
 
 rb1_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
@@ -1351,14 +1357,14 @@ b_bw.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky=E)
 ###########################
 # Border
 ###########################
-frame_border = ttk.Labelframe(frame_first_col, text="Ramka",
+frame_border = ttk.Labelframe(frame_first_col, text=_("Frame"),
                               style="Blue.TLabelframe")
 frame_border.grid(row=6, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
-l_border = Label(frame_border, text="Piksele")
+l_border = Label(frame_border, text=_("Pixels"))
 e_border = ttk.Entry(frame_border, width=3)
-b1_border = ttk.Button(frame_border, text="Kolor", command=color_choose_border)
-b_border = ttk.Button(frame_border, text="Dodaj ramkę", style="Blue.TButton",
+b1_border = ttk.Button(frame_border, text=_("Color"), command=color_choose_border)
+b_border = ttk.Button(frame_border, text=_("Add frame"), style="Blue.TButton",
                       command=convert_border_button)
 l_border.grid(row=1, column=1, padx=5, pady=5)
 e_border.grid(row=1, column=2, padx=5, pady=5)
@@ -1374,12 +1380,12 @@ frame_second_col.grid(row=1, column=3, sticky=(N, W, E, S))
 ############################
 # Ramka podglądu oryginału
 ############################
-frame_preview_orig = ttk.Labelframe(frame_second_col, text="Oryginał",
+frame_preview_orig = ttk.Labelframe(frame_second_col, text=_("Original"),
                                     style="Blue.TLabelframe")
 frame_preview_orig.grid(row=1, column=1, columnspan=2, sticky=(N, W, E, S),
                         padx=5, pady=5)
 ###
-b_preview_orig = ttk.Button(frame_preview_orig, text="Oryginał",
+b_preview_orig = ttk.Button(frame_preview_orig, text=_("Original"),
                             command=preview_orig_button)
 l_preview_orig = ttk.Label(frame_preview_orig)
 pi_preview_orig = PhotoImage()
@@ -1391,7 +1397,7 @@ l_preview_orig_pi.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
 ###########################
 # Histogram original
 ###########################
-frame_histogram_orig = ttk.LabelFrame(frame_second_col, text="Histogram")
+frame_histogram_orig = ttk.LabelFrame(frame_second_col, text=_("Histogram"))
 frame_histogram_orig.grid(row=2, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 pi_histogram_orig = PhotoImage()
@@ -1401,22 +1407,22 @@ l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
 ########################
 # Kontrast
 #########################
-frame_contrast = ttk.Labelframe(frame_second_col, text="Kontrast",
+frame_contrast = ttk.Labelframe(frame_second_col, text=_("Contrast"),
                                 style="Blue.TLabelframe")
 frame_contrast.grid(row=2, column=2, sticky=(N, W, E, S), padx=5, pady=5)
 ###
-b_contrast = ttk.Button(frame_contrast, text="Kontrast", style="Blue.TButton",
+b_contrast = ttk.Button(frame_contrast, text=_("Contrast"), style="Blue.TButton",
                         command=convert_contrast_button)
-rb1_contrast = ttk.Radiobutton(frame_contrast, text="Kontrast",
+rb1_contrast = ttk.Radiobutton(frame_contrast, text=_("Contrast"),
                                variable=img_contrast, value="1")
 cb_contrast = ttk.Combobox(frame_contrast, width=2,
                            values=("+2", "+1", "0", "-1", "-2"))
-rb2_contrast = ttk.Radiobutton(frame_contrast, text="Rozciąganie",
+rb2_contrast = ttk.Radiobutton(frame_contrast, text=_("Stretch"),
                                variable=img_contrast, value="2")
 e1_contrast = ttk.Entry(frame_contrast, width=4)
 e2_contrast = ttk.Entry(frame_contrast, width=4)
-l1_contrast = ttk.Label(frame_contrast, text="Czerń")
-l2_contrast = ttk.Label(frame_contrast, text="Biel")
+l1_contrast = ttk.Label(frame_contrast, text=_("Black"))
+l2_contrast = ttk.Label(frame_contrast, text=_("White"))
 
 rb1_contrast.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 cb_contrast.grid(row=1, column=2, padx=5, pady=5, sticky=W)
@@ -1431,16 +1437,16 @@ b_contrast.grid(row=5, column=1, padx=5, pady=5, columnspan=3, sticky=E)
 ############################
 # Normalize
 ############################
-frame_normalize = ttk.LabelFrame(frame_second_col, text="Normalizacja kolorów",
+frame_normalize = ttk.LabelFrame(frame_second_col, text=_("Color normalize"),
                                  style="Blue.TLabelframe")
 frame_normalize.grid(row=3, column=1, columnspan=2, sticky=(N, W, E, S),
                      padx=5, pady=5)
 ###
-rb1_normalize = ttk.Radiobutton(frame_normalize, text="Normalize",
+rb1_normalize = ttk.Radiobutton(frame_normalize, text=_("Normalize"),
                                 variable=img_normalize, value="1")
-rb2_normalize = ttk.Radiobutton(frame_normalize, text="AutoLevel",
+rb2_normalize = ttk.Radiobutton(frame_normalize, text=_("AutoLevel"),
                                 variable=img_normalize, value="2")
-b_normalize = ttk.Button(frame_normalize, text="Normalizuj",
+b_normalize = ttk.Button(frame_normalize, text=_("Normalize"),
                          style="Blue.TButton",
                          command=convert_normalize_button)
 
@@ -1457,11 +1463,11 @@ frame_third_col.grid(row=1, column=4, sticky=(N, W, E, S))
 ##########################
 # Ramka podglądu wyniku
 ###########################
-frame_preview_new = ttk.Labelframe(frame_third_col, text="Wynik",
+frame_preview_new = ttk.Labelframe(frame_third_col, text=_("Result"),
                                    style="Blue.TLabelframe")
 frame_preview_new.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
-b_preview_new = ttk.Button(frame_preview_new, text="Wynik",
+b_preview_new = ttk.Button(frame_preview_new, text=_("Result"),
                            command=preview_new_button)
 l_preview_new = ttk.Label(frame_preview_new)
 pi_preview_new = PhotoImage()
@@ -1475,7 +1481,7 @@ l_preview_new_pi.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
 ###########################
 # Histogram new
 ###########################
-frame_histogram_new = ttk.LabelFrame(frame_third_col, text="Histogram")
+frame_histogram_new = ttk.LabelFrame(frame_third_col, text=_("Histogram"))
 frame_histogram_new.grid(row=2, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 pi_histogram_new = PhotoImage()
