@@ -1,0 +1,9 @@
+Translate fotokilof in four steps:
+
+cp fotokilof.pot hu/LC_MESSAGES/fotokilof.po
+cd hu/LC_MESSAGES
+vim fotokilof.po
+msgfmt -o fotokilof.mo fotokilof
+
+cd ../../../
+python3 fotokilof.py
