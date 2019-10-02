@@ -1,8 +1,12 @@
-## Translate fotokilof in four steps:
+## Translate fotokilof in easy way steps:
 ### steps:
-cp fotokilof.pot hu/LC_MESSAGES/fotokilof.po
+NEWLANG=hu/LC_MESSAGES
 
-cd hu/LC_MESSAGES
+mkdir -p $NEWLANG
+
+cp fotokilof.pot $NEWLANG/fotokilof.po
+
+cd $NEWLANG
 
 vim fotokilof.po
 
