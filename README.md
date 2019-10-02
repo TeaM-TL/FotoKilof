@@ -47,15 +47,8 @@ Klikając powtórnie na wyborzy typu wycinka na podglądzie oryginału
 zostaną narysowane linie cięcia, względem wybranych punktów.
 4. W zależności od wyboru Plik albo Folder, przetwarzany będzie albo 
 wybrany plik albo cały folder z wybranym plikiem.
-Do przetwarzania folderu musimy użyć przycisku Zaaplikuj wszystko.
+Do przetwarzania folderu musimy użyć przycisku Zaaplikuj wszystko i zaznaczyć przycisk folder
 5. Wybór Nic, 0 szerokości ramki i odhaczenie Tekst, wyłącza dane 
 polecenie z przetwarzania
 
-## Do Zrobiena
-1. Internalizacja
-2. wersja obiektowa
-3. PIL zamiast ImageMagick, o ile się da lub gdzie się da
-4. Instalator NSIS dla Windows
-5. Instrukcja obsługi, filmik, pl, en
-6. paned window bo może wyjść poza ekran
 
