@@ -1,5 +1,5 @@
-# FotoKilof
-Graficzny interface do ImageMagick
+# FotoKilof - GUI for ImageMagick
+GUI for the most use
 
 ![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/fotokilof.png)
 
@@ -7,37 +7,40 @@ Graficzny interface do ImageMagick
 
 ![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/fotokilof2.png)
 
-## Funkcje:
- - przetwarzanie pojedynczego pliku jak i całego katalogu,
- - wybór wyświetlanych narzędzi
- - obrót co 90stopni
- - wycinanie: własne i predefiniowane wielkości (HD, 2K, 4K),
- - klikany podgląd, wczytuje współrzędne do wycinka, podgląd wybranego wycinka
+## Graphics conwversion
+ - rotation (90, 180, 270 degree)
+ - frame around picture
+ - text annotation
+ - black-white or sepia conversion
+ - contrast or histogram stretching
+ - color normalize/auto-level
+ - crop (three ways selection)
+ - scaling/resize: own size (in pixel or percent) or predefined: HD, 2k, 4k,
+## Functionality:
+ - processing single file or whole directory,
+ - display selection of used tools,
+ - preview with crop selection,
  - dodawanie tekstu i koloru tła
- - wybór fontu (Linux, Mac OSX) i koloru
- - normalizacja kolorów,
- - dodawanie ramki, wybór szerokości i koloru
- - czarno-białe, sepia (regulowana),
- - zmiana kontrastu (4 nastawy) i rozciaganie histogramu,
- - szybka nawigacja po katalogu przyciskami: Następny, Poprzedni
- - podgląd oryginału i wyniku,
- - histogram oryginału i wyniku,
+ - text: color, font and size selection (Linux, Mac OSX only)
+ - fast file navigation: First, Prev, Next, last
+ - histogram of original and result pictures.
 
-## Wymagania
- - ImageMagick - zainstaluj stąd: https://imagemagick.org/
+## Requirements
+ - ImageMagick - home page: https://imagemagick.org/
  - Windows, Linux, MacOS X, BSD
- - Ekran FullHD
- - Python3, z modułami: PIL, tkinter, tkcolorpicker - tylko do uruchomienia źródła skryptu
+ - FullHD screen for comfort work
+ - Python3, with modules: PIL, tkinter, tkcolorpicker - only for script launch
 
-## Uruchomienie
-### Ze źródła
+## Using
+### Source code
 python fotokilof.py
+### binary
+fotokilof
 
-### Binaria
-W karcie Releases znajdują się aktualne binaria dla Windows (8.1 i nowsze)
-i Linuksa (Ubuntu 18.04.3 i nowsze)
+### Binaries
+In Release you can find current binary version for Windows (8.1 and newer) and Linux (Ubuntu 18.04.3 and newer)
 
-## Instrukcja
+## Users Guide
 1. Wybierz plik
 2. Przyciski Poprzedni i Następny otwierają kolejny lub poprzedni obrazek
 3. Klikając lewm przyciskiem myszy na podglądzie oryginału wskazujemy
