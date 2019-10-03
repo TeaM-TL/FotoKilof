@@ -1182,7 +1182,7 @@ rbNE_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="NE",
                               variable=img_crop_gravity, value="NE")
 rbW_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="W",
                              variable=img_crop_gravity, value="W")
-rbC_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="Środek",
+rbC_crop_3 = ttk.Radiobutton(frame_crop_gravity, text=_("Center"),
                              variable=img_crop_gravity, value="C")
 rbE_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="E",
                              variable=img_crop_gravity, value="E")
@@ -1264,7 +1264,7 @@ rbNE = ttk.Radiobutton(frame_text_gravity, text="NE",
                        variable=img_text_gravity, value="NE")
 rbW = ttk.Radiobutton(frame_text_gravity, text="W",
                       variable=img_text_gravity, value="W")
-rbC = ttk.Radiobutton(frame_text_gravity, text="Środek",
+rbC = ttk.Radiobutton(frame_text_gravity, text=_("Center"),
                       variable=img_text_gravity, value="C")
 rbE = ttk.Radiobutton(frame_text_gravity, text="E",
                       variable=img_text_gravity, value="E")
