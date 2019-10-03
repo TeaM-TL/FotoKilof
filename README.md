@@ -1,5 +1,5 @@
 # FotoKilof - GUI for ImageMagick
-GUI for the most used by me imagemagick functionality for processing pictures
+GUI for the most used by me ImageMagick functionality for processing pictures
 
 ![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/fotokilof.png)
 
