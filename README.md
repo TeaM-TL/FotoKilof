@@ -17,13 +17,15 @@ GUI for the most used by me ImageMagick functionality for processing pictures
  - crop (three ways selection)
  - scaling/resize: own size (in pixel or percent) or predefined: HD, 2k, 4k,
 ## Functionality:
+ - processing copy of picture, originals are safe
  - processing single file or whole directory,
- - display selection of used tools,
+ - display selected tools,
+ - tools selection
  - preview
- - crop selection via click on preview or coordinates in three ways
+ - crop selection via click on preview or coordinates, in three ways
  - text: color, font and size selection (Linux, Mac OSX only)
- - fast file navigation: First, Prev, Next, last
- - histogram of original and result pictures.
+ - fast file navigation: First, Prev, Next, Last
+ - histograms of original and result pictures.
 
 ## Requirements
  - ImageMagick - home page: https://imagemagick.org/
