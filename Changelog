@@ -19,7 +19,7 @@
 	1.9 menu for tool selection
 	1.9.1 new buttons: First, Last, order in GUI
 	1.9.2 ttk:notebook deleted
-	2.0 faster multiple conversion: one run of imagemagick, way for plugins
-	2.1 code cleaning - pylint (z 3.87 do 7.03), histogram on/off
+	2.0 faster multiple conversion: one run of imagemagick, way for creating plugins
+	2.1 code cleaning - pylint (jump from 3.87 to 7.03), histogram on/off
 	2.2 split main file into modules, code cleaning (pylint 7.74)
 	2.3 localization via gettext
