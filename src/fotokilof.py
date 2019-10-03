@@ -223,14 +223,19 @@ def apply_all_convert(out_file):
         cmd = cmd + " " + convert.convert_crop(img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
     cmd = cmd + " " + convert.convert_rotate(img_rotate.get())
     cmd = cmd + " " + convert.convert_border(e_border.get(), img_border_color.get(), img_border.get())
-    imagick(cmd, out_file)
+    print("X", cmd)
+    result1 = imagick(cmd, out_file)
 
     # ze wzgledu na grawitację tekstu, która gryzie sie z cropem
     # musi być drugi przebieg
 
     cmd = convert.convert_text(convert_text_entries())
-    imagick(cmd, out_file)
-
+    result2 = imagick(cmd, out_file)
+    if result1 == "OK" or result2 == "OK":
+        result = "OK"
+    else:
+        result = "None"
+    return result
 
 def apply_all():
     """
@@ -243,8 +248,9 @@ def apply_all():
     if file_dir_selector.get() == 0:
         out_file = pre_imagick(file_in_path.get())
         progress_filename.set(out_file)
-        apply_all_convert(out_file)
-        preview_new(out_file, TEMP_DIR)
+        result = apply_all_convert(out_file)
+        if result == "OK":
+            preview_new(out_file, TEMP_DIR)
         progress_filename.set("")
     else:
         pwd = os.getcwd()
@@ -256,11 +262,12 @@ def apply_all():
             progress_files.set(str(i) + " z ")
             out_file = pre_imagick(files)
             progress_filename.set(out_file)
-            apply_all_convert(os.path.realpath(out_file))
+            result = apply_all_convert(os.path.realpath(out_file))
         progress_files.set("")
         progress_filename.set(" ")
         preview_orig()
-        preview_new(out_file, TEMP_DIR)
+        if result == "OK":
+            preview_new(out_file, TEMP_DIR)
         os.chdir(pwd)
 
 
@@ -1416,7 +1423,7 @@ frame_preview_orig = ttk.Labelframe(frame_second_col, text=_("Original"),
 frame_preview_orig.grid(row=1, column=1, columnspan=2, sticky=(N, W, E, S),
                         padx=5, pady=5)
 ###
-b_preview_orig = ttk.Button(frame_preview_orig, text=_("Original"),
+b_preview_orig = ttk.Button(frame_preview_orig, text=_("Preview"),
                             command=preview_orig_button)
 l_preview_orig = ttk.Label(frame_preview_orig)
 pi_preview_orig = PhotoImage()
@@ -1504,7 +1511,7 @@ frame_preview_new = ttk.Labelframe(frame_third_col, text=_("Result"),
                                    style="Blue.TLabelframe")
 frame_preview_new.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
-b_preview_new = ttk.Button(frame_preview_new, text=_("Result"),
+b_preview_new = ttk.Button(frame_preview_new, text=_("Preview"),
                            command=preview_new_button)
 l_preview_new = ttk.Label(frame_preview_new)
 pi_preview_new = PhotoImage()
