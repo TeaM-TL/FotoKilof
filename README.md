@@ -1,11 +1,11 @@
 # FotoKilof - GUI for ImageMagick
 GUI for the most used by me ImageMagick functionality for processing pictures
 
-![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/fotokilof.png)
+![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof.png)
 
-![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/fotokilof1.png)
+![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof1.png)
 
-![Screenshot](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/fotokilof2.png)
+![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof2.png)
 
 ## Graphics conversion
  - rotation (90, 180, 270 degree)
