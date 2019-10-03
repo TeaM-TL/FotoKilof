@@ -38,6 +38,9 @@ GUI for the most used by me ImageMagick functionality for processing pictures
 python fotokilof.py
 ### binary
 fotokilof
+### translations
+mkdir -p pl/LC_MESSAGES
+cp pl.mo pl/LC_MESSAGES/fotokilof.mo
 
 ### Binaries
 In Release you can find current binary version for Windows (8.1 and newer) and Linux (Ubuntu 18.04.3 and newer)
