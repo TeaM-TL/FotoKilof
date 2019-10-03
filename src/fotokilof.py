@@ -2,7 +2,7 @@
 # pylint: disable=line-too-long
 
 """
-program do konwersji rysunków
+nice GUI for ImageMagick
 """
 
 import configparser
@@ -25,13 +25,12 @@ import common
 import ini_read
 
 localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
-gettext.install('fotokilof', localedir)
 translate = gettext.translation('fotokilof', localedir, fallback=True)
 _ = translate.gettext
-print(localedir)
+
 ###################
 # CONSTANTS
-VERSION = "2.3"
+VERSION = "2.4"
 if platform.system() == "Windows":
     PREVIEW = 400  # preview size in Windows
 else:
@@ -93,8 +92,15 @@ def imagick(cmd, file_out):
             os.system(command)
         except:
             print("! Error in imagick: " + command)
+            result = "None"
+        else:
+            result = "OK"
+            
     else:
-        print("puste polecenie dla imagick")
+        print("No command for imagick")
+        result = "None"
+    return result
+
 
 ################
 # Preview
@@ -203,17 +209,20 @@ def apply_all_convert(out_file):
     # global img_normalize, img_bw, img_crop, img_crop_gravity
     # global img_text_gravity, img_text_font, img_text_color
     # global img_text_box, img_text_box_color
-
+    if img_border.get() == 0:
+        border = 0
+    else:
+        border = e_border.get()
     cmd = ""
     cmd = cmd + " " + convert.convert_normalize(img_normalize.get())
     cmd = cmd + " " + convert.convert_contrast(img_contrast.get(), img_contrast_selected.get(), e1_contrast.get(), e2_contrast.get())
     cmd = cmd + " " + convert.convert_bw(img_bw.get(), e_bw_sepia.get())
     if int(img_resize.get()) > 0:
-        cmd = cmd + " " + convert.convert_resize(img_resize.get(), e1_resize.get(), e2_resize.get(), e_border.get())
+        cmd = cmd + " " + convert.convert_resize(img_resize.get(), e1_resize.get(), e2_resize.get(), border)
     else:
         cmd = cmd + " " + convert.convert_crop(img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
     cmd = cmd + " " + convert.convert_rotate(img_rotate.get())
-    cmd = cmd + " " + convert.convert_border(e_border.get(), img_border_color.get())
+    cmd = cmd + " " + convert.convert_border(e_border.get(), img_border_color.get(), img_border.get())
     imagick(cmd, out_file)
 
     # ze wzgledu na grawitację tekstu, która gryzie sie z cropem
@@ -265,48 +274,63 @@ def convert_contrast_button():
     """ przycisk zmiany kontrastu """
     # global file_in_path, TEMP_DIR
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert.convert_contrast(img_contrast.get(), img_contrast_selected.get(), e1_contrast.get(), e2_contrast.get()), out_file)
-    preview_new(out_file, TEMP_DIR)
+    result = imagick(convert.convert_contrast(img_contrast.get(), img_contrast_selected.get(), e1_contrast.get(), e2_contrast.get()), out_file)
+    if result == "OK":
+        preview_new(out_file, TEMP_DIR)
 
 
 def convert_bw_button():
     """ konwersja do czerni-bieli lub sepii """
     # global file_in_path, TEMP_DIR
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert.convert_bw(img_bw.get(), e_bw_sepia.get()), out_file)
-    preview_new(out_file, TEMP_DIR)
+    result = imagick(convert.convert_bw(img_bw.get(), e_bw_sepia.get()), out_file)
+    if result == "OK":
+        preview_new(out_file, TEMP_DIR)
 
 
 def convert_normalize_button():
     """ przycisk normalizacji """
     # global file_in_path, TEMP_DIR, img_normalize
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert.convert_normalize(img_normalize.get()), out_file)
-    preview_new(out_file, TEMP_DIR)
+    result = imagick(convert.convert_normalize(img_normalize.get()), out_file)
+    if result == "OK":
+        preview_new(out_file, TEMP_DIR)
 
 
 def convert_rotate_button():
     """ przycisk obrotu """
     # global file_in_path, TEMP_DIR, img_rotate
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert.convert_rotate(img_rotate.get()), out_file)
-    preview_new(out_file, TEMP_DIR)
+    result = imagick(convert.convert_rotate(img_rotate.get()), out_file)
+    if result == "OK":
+        preview_new(out_file, TEMP_DIR)
 
 
 def convert_resize_button():
     """ przycisk skalowania """
     # global file_in_path, TEMP_DIR, img_resize, e1_resize, e2_resize, e_border
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert.convert_resize(img_resize.get(), e1_resize.get(), e2_resize.get(), '0'), out_file) # ramka 0, tylko skalowanie
-    preview_new(out_file, TEMP_DIR)
+    result = imagick(convert.convert_resize(img_resize.get(), e1_resize.get(), e2_resize.get(), '0'), out_file) # ramka 0, tylko skalowanie
+    if result == "OK":
+        preview_new(out_file, TEMP_DIR)
+
+
+def convert_border_button():
+    """ przycisk dodania ramki """
+    # global file_in_path, TEMP_DIR
+    out_file = pre_imagick(file_in_path.get())
+    result = imagick(convert.convert_border(e_border.get(), img_border_color.get(), img_border.get()), out_file)
+    if result == "OK":
+        preview_new(out_file, TEMP_DIR)
 
 
 def convert_crop_button():
     """ przycisk wycinka """
     # global file_in_path, TEMP_DIR, img_crop, img_crop_gravity
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert.convert_crop(img_crop.get(), img_crop_gravity.get(), convert_crop_entries()), out_file)
-    preview_new(out_file, TEMP_DIR)
+    result = imagick(convert.convert_crop(img_crop.get(), img_crop_gravity.get(), convert_crop_entries()), out_file)
+    if result == "OK":
+        preview_new(out_file, TEMP_DIR)
 
 
 def convert_crop_entries():
@@ -318,12 +342,12 @@ def convert_crop_entries():
     dict_return['one_y2'] = e4_crop_1.get()
     dict_return['two_x1'] = e1_crop_2.get()
     dict_return['two_y1'] = e2_crop_2.get()
-    dict_return['two_X'] = e3_crop_2.get()
-    dict_return['two_Y'] = e4_crop_2.get()
+    dict_return['two_width'] = e3_crop_2.get()
+    dict_return['two_height'] = e4_crop_2.get()
     dict_return['three_dx'] = e1_crop_3.get()
     dict_return['three_dy'] = e2_crop_3.get()
-    dict_return['three_X'] = e3_crop_3.get()
-    dict_return['three_Y'] = e4_crop_3.get()
+    dict_return['three_width'] = e3_crop_3.get()
+    dict_return['three_height'] = e4_crop_3.get()
     return dict_return
 
 
@@ -347,8 +371,9 @@ def convert_text_button():
     """ przycisk wstawiania tekstu """
     # global file_in_path, TEMP_DIR
     out_file = pre_imagick(file_in_path.get())
-    imagick(convert.convert_text(convert_text_entries()), out_file)
-    preview_new(out_file, TEMP_DIR)
+    result = imagick(convert.convert_text(convert_text_entries()), out_file)
+    if result == "OK":
+        preview_new(out_file, TEMP_DIR)
 
 
 def fonts():
@@ -438,8 +463,10 @@ def open_file():
     # global file_in_path, dir_in_path
     file_in_path.set(filedialog.askopenfilename(title=_("Select picture for processing"),
                                                 initialdir=dir_in_path.get(),
-                                                filetypes=(("jpeg files", "*.jpg"),
-                                                           ("JPEG files", "*.JPG"),
+                                                filetypes=((_("jpeg files"), "*.jpg"),
+                                                           (_("JPEG files"), "*.JPG"),
+                                                           (_("png files"), "*.png"),
+                                                           (_("PNG files"), "*.PNG"),
                                                            ("all files", "*.*"))))
     file_select_L.configure(text=os.path.basename(file_in_path.get()))
     preview_orig()
@@ -527,14 +554,6 @@ def open_file_prev():
         file_in_path.set(os.path.join(dir_in_path.get(), file))
         preview_orig()
     os.chdir(pwd)
-
-
-def convert_border_button():
-    """ przycisk dodania ramki """
-    # global file_in_path, TEMP_DIR
-    out_file = pre_imagick(file_in_path.get())
-    imagick(convert.convert_border(e_border.get(), img_border_color.get()), out_file)
-    preview_new(out_file, TEMP_DIR)
 
 
 def color_choose_border():
@@ -1022,7 +1041,7 @@ cb_rotate = ttk.Checkbutton(frame_zero_set, text=_("Rotate"),
 cb_border = ttk.Checkbutton(frame_zero_set, text=_("Frame"),
                             variable=img_border, offvalue="0", onvalue="1")
 cb_bw = ttk.Checkbutton(frame_zero_set, text=_("Black&white"),
-                        variable=img_bw, offvalue="0", onvalue="1")
+                        variable=img_bw, offvalue="0")
 cb_normalize = ttk.Checkbutton(frame_zero_set, text=_("Colors normalize"),
                                variable=img_normalize, offvalue="0", onvalue="1")
 cb_contrast = ttk.Checkbutton(frame_zero_set, text=_("Contrast"),
@@ -1115,6 +1134,8 @@ frame_resize = ttk.Labelframe(frame_first_col, text=_("Scale/Resize"),
 frame_resize.grid(column=1, row=2, columnspan=2, sticky=(N, W, E, S),
                   padx=5, pady=5)
 ###
+rb_resize = ttk.Radiobutton(frame_resize, text=_("None"),
+                            variable=img_resize, value="0")
 rb_1_resize = ttk.Radiobutton(frame_resize, text=_("Pixels"),
                               variable=img_resize, value="1")
 e1_resize = ttk.Entry(frame_resize, width=7)
@@ -1132,12 +1153,13 @@ b_resize = ttk.Button(frame_resize, text=_("Resize"), style="Blue.TButton",
 
 rb_3_resize.grid(row=1, column=1, columnspan=2, sticky=W, padx=5, pady=5)
 rb_4_resize.grid(row=1, column=3, columnspan=2, sticky=W, padx=5, pady=5)
-rb_5_resize.grid(row=1, column=5, columnspan=2, sticky=W, padx=5, pady=5)
+rb_5_resize.grid(row=1, column=5, sticky=W, padx=5, pady=5)
+rb_resize.grid(row=1, column=6, sticky=W, padx=5, pady=5)
 rb_1_resize.grid(row=2, column=1, sticky=W, padx=5, pady=5)
 e1_resize.grid(row=2, column=2, sticky=W, padx=5, pady=5)
 rb_2_resize.grid(row=2, column=3, sticky=W, padx=5, pady=5)
 e2_resize.grid(row=2, column=4, sticky=W, padx=5, pady=5)
-b_resize.grid(row=2, column=6, sticky=(E), padx=5, pady=5)
+b_resize.grid(row=2, column=5, sticky=(E), padx=5, pady=5)
 
 ############################
 # crop
@@ -1242,8 +1264,11 @@ frame_text.grid(row=4, column=1, columnspan=2, sticky=(N, W, E, S),
 frame_text_text = ttk.Frame(frame_text)
 
 e_text = ttk.Entry(frame_text_text, width=65)
+cb_text = ttk.Checkbutton(frame_text_text, text=_("On"), variable=img_text,
+                          onvalue="1", offvalue="0")
 frame_text_text.grid(row=1, column=1, columnspan=5, sticky=(W, E))
 e_text.grid(row=1, column=2, sticky=W, padx=5)
+cb_text.grid(row=1, column=3, sticky=W, padx=5)
 ###
 frame_text_xy = ttk.Frame(frame_text)
 l_text_xy = ttk.Label(frame_text_xy, text=_("Offset (dx,dy)\n"))
@@ -1341,6 +1366,8 @@ frame_bw = ttk.LabelFrame(frame_first_col, text=_("Black-white"),
                           style="Blue.TLabelframe")
 frame_bw.grid(row=5, column=2, rowspan=2, sticky=(N, W, E, S), padx=5, pady=5)
 ###
+rb0_bw = ttk.Radiobutton(frame_bw, text=_("None"),
+                        variable=img_bw, value="0")
 rb1_bw = ttk.Radiobutton(frame_bw, text=_("Black-white"), variable=img_bw, value="1")
 rb2_bw = ttk.Radiobutton(frame_bw, text=_("Sepia"), variable=img_bw, value="2")
 e_bw_sepia = ttk.Entry(frame_bw, width=3)
@@ -1352,7 +1379,8 @@ rb1_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 rb2_bw.grid(row=2, column=1, padx=5, pady=5, sticky=W)
 e_bw_sepia.grid(row=2, column=2, padx=5, pady=5, sticky=E)
 l_bw_sepia.grid(row=2, column=3, padx=5, pady=5, sticky=W)
-b_bw.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky=E)
+rb0_bw.grid(row=3, column=1, padx=5, pady=5, sticky=W)
+b_bw.grid(row=3, column=2, columnspan=2, padx=5, pady=5, sticky=E)
 
 ###########################
 # Border
@@ -1361,15 +1389,18 @@ frame_border = ttk.Labelframe(frame_first_col, text=_("Frame"),
                               style="Blue.TLabelframe")
 frame_border.grid(row=6, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
+cb_border = ttk.Checkbutton(frame_border, text=_("On"),
+                            variable=img_border, offvalue="0", onvalue="1")
 l_border = Label(frame_border, text=_("Pixels"))
 e_border = ttk.Entry(frame_border, width=3)
 b1_border = ttk.Button(frame_border, text=_("Color"), command=color_choose_border)
 b_border = ttk.Button(frame_border, text=_("Add frame"), style="Blue.TButton",
                       command=convert_border_button)
-l_border.grid(row=1, column=1, padx=5, pady=5)
-e_border.grid(row=1, column=2, padx=5, pady=5)
-b1_border.grid(row=1, column=3, padx=5, pady=5)
-b_border.grid(row=1, column=4, padx=5, pady=5, sticky=E)
+cb_border.grid(row=1, column=1, padx=5, pady=5)
+l_border.grid(row=1, column=2, padx=5, pady=5)
+e_border.grid(row=1, column=3, padx=5, pady=5)
+b1_border.grid(row=1, column=4, padx=5, pady=5)
+b_border.grid(row=1, column=5, padx=5, pady=5, sticky=E)
 
 ########################################################################
 # Druga kolumna
@@ -1413,6 +1444,8 @@ frame_contrast.grid(row=2, column=2, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 b_contrast = ttk.Button(frame_contrast, text=_("Contrast"), style="Blue.TButton",
                         command=convert_contrast_button)
+rb0_contrast = ttk.Radiobutton(frame_contrast, text=_("None"),
+                               variable=img_contrast, value="0")
 rb1_contrast = ttk.Radiobutton(frame_contrast, text=_("Contrast"),
                                variable=img_contrast, value="1")
 cb_contrast = ttk.Combobox(frame_contrast, width=2,
@@ -1424,14 +1457,15 @@ e2_contrast = ttk.Entry(frame_contrast, width=4)
 l1_contrast = ttk.Label(frame_contrast, text=_("Black"))
 l2_contrast = ttk.Label(frame_contrast, text=_("White"))
 
-rb1_contrast.grid(row=1, column=1, padx=5, pady=5, sticky=W)
-cb_contrast.grid(row=1, column=2, padx=5, pady=5, sticky=W)
-rb2_contrast.grid(row=2, column=1, padx=5, pady=5, sticky=W)
-e1_contrast.grid(row=3, column=1, padx=5, pady=5, sticky=E)
-e2_contrast.grid(row=3, column=2, padx=5, pady=5, sticky=W)
-l1_contrast.grid(row=4, column=1, padx=5, pady=5, sticky=E)
-l2_contrast.grid(row=4, column=2, padx=5, pady=5, sticky=W)
-b_contrast.grid(row=5, column=1, padx=5, pady=5, columnspan=3, sticky=E)
+rb0_contrast.grid(row=1, column=1, padx=5, pady=5, sticky=W)
+rb1_contrast.grid(row=2, column=1, padx=5, pady=5, sticky=W)
+cb_contrast.grid(row=2, column=2, padx=5, pady=5, sticky=W)
+rb2_contrast.grid(row=3, column=1, padx=5, pady=5, sticky=W)
+e1_contrast.grid(row=4, column=1, padx=5, pady=5, sticky=E)
+e2_contrast.grid(row=4, column=2, padx=5, pady=5, sticky=W)
+l1_contrast.grid(row=5, column=1, padx=5, pady=5, sticky=E)
+l2_contrast.grid(row=5, column=2, padx=5, pady=5, sticky=W)
+b_contrast.grid(row=6, column=1, padx=5, pady=5, columnspan=3, sticky=E)
 
 
 ############################
@@ -1442,6 +1476,8 @@ frame_normalize = ttk.LabelFrame(frame_second_col, text=_("Color normalize"),
 frame_normalize.grid(row=3, column=1, columnspan=2, sticky=(N, W, E, S),
                      padx=5, pady=5)
 ###
+rb0_normalize = ttk.Radiobutton(frame_normalize, text=_("None"),
+                                variable=img_normalize, value="0")
 rb1_normalize = ttk.Radiobutton(frame_normalize, text=_("Normalize"),
                                 variable=img_normalize, value="1")
 rb2_normalize = ttk.Radiobutton(frame_normalize, text=_("AutoLevel"),
@@ -1450,9 +1486,10 @@ b_normalize = ttk.Button(frame_normalize, text=_("Normalize"),
                          style="Blue.TButton",
                          command=convert_normalize_button)
 
-rb1_normalize.grid(row=1, column=1, padx=5, pady=5, sticky=W)
-rb2_normalize.grid(row=1, column=2, padx=5, pady=5, sticky=W)
-b_normalize.grid(row=1, column=3, padx=5, pady=5, sticky=E)
+rb0_normalize.grid(row=1, column=1, padx=5, pady=5, sticky=W)
+rb1_normalize.grid(row=1, column=2, padx=5, pady=5, sticky=W)
+rb2_normalize.grid(row=1, column=3, padx=5, pady=5, sticky=W)
+b_normalize.grid(row=1, column=4, padx=5, pady=5, sticky=E)
 
 #####################################################
 # Trzecia kolumna

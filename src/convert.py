@@ -3,11 +3,10 @@
 
 """ moduł z konwerterami """
 
-def convert_border(width, color):
+def convert_border(width, color, border):
     """ 1. dodanie ramki """
 
-    # global img_border_color
-    if int(width) > 0:
+    if border > 0:
         command = "-border " + width + " -bordercolor \"" + color + "\""
     else:
         command = ""
