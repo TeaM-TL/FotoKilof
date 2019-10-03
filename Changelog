@@ -1,24 +1,25 @@
-	0.1 wstępne gui
-	0.2 wybór fontu, biblioteka PIL
-	0.3 wszystkie przetwarzania działają
-	0.4 dodano podgląd oryginału i wyniku, przetwarzanie przez imagemagick
-	0.5 działa także pod Windows, za wyjątkiem napisu
-	0.6 raczej poprawnie działa aplikacja kilku operacji na jeden plik
-	0.7 przenośne ścieżki(Windows, Linux), poprawne zapis i wczytywanie danych z i do INI
-	0.8 zamiana convert na mogrify, kopiowanie obrazka i praca w folderze docelowym
-	0.9 uproszczenie i oczyszczenie kodu
-	1.0 mielenie katalogów
-	1.1 częściowa obsługa ścieżek ze spacją, poprawienie zapisu i odczytu pliku INI, więcej opcji skalowania (HD, 2K, 4K), automatyczne wczytywanie podglądu, normalizacja kolorów, ramka
-	1.2 b-w, sepia, kontrast, ustandaryzacja zmiennych widgetów
-	1.3 klikany podgląd i wczytuje współrzędne do wycinka, usunięte menu
-	1.4 histogram oryginału i wyniku
-	1.5 uporządkowanie GUI
-	1.6 przyciski: Następny, Poprzedni
-	1.7 uproszczenie generowania podglądu
-	1.8 poprawianie niezawodności
-	1.9 menu wyboru narzędzi, by nie było oczopląsu
-	1.9.1 przewijanie posortowanej liście plików, poprawki gui
-	1.9.2 usunięcie notatnika
-	2.0 przyspieszenie: jedna iteracja imagemagick, zamiast kilku
-	2.1 czyszczenie - pylint (z 3.87 do 7.03), wyłączanie hostogramu
-	2.2 podział na moduły, dalsze czyszczenie (pylint 7.74)
+	0.1 first GUI
+	0.2 font selection, PIL library
+	0.3 all conversions work
+	0.4 added preview, ImageMagick instead PIL
+	0.5 works under Windows, except text
+	0.6 multiple conversions
+	0.7 workaround space in path and filename (works under Windows, Linux), correct read/write INI
+	0.8 mogrify instead convert, first copy picture, later work on picture in destination folder
+	0.9 better and cleaner code
+	1.0 conversion whole directory
+	1.1 again space in paths and read/write INI, more resize option (HD, 2K, 4K), autoload preview, new conversyon: frame, color normalize
+	1.2 b-w, sepia, contrast, widgetname standarization
+	1.3 click in preview for crop coordinates, menubar deleted
+	1.4 histograms for original and result
+	1.5 order in GUI
+	1.6 new buttons: Next, Previous
+	1.7 better preview conversion
+	1.8 better reliability
+	1.9 menu for tool selection
+	1.9.1 new buttons: First, Last, order in GUI
+	1.9.2 ttk:notebook deleted
+	2.0 faster multiple conversion: one run of imagemagick, way for plugins
+	2.1 code cleaning - pylint (z 3.87 do 7.03), histogram on/off
+	2.2 split main file into modules, code cleaning (pylint 7.74)
+	2.3 localization via gettext
