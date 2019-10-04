@@ -3,11 +3,11 @@
 
 """ moduł z konwerterami """
 
-def convert_border(width, color, border):
-    """ 1. dodanie ramki """
+def convert_border(width, color, border_on):
+    """ 1. Add border """
 
-    if border > 0:
-        command = "-border " + width + " -bordercolor \"" + color + "\""
+    if border_on > 0:
+        command = "-border " + str(abs(int(width))) + " -bordercolor \"" + color + "\""
     else:
         command = ""
     return command
@@ -16,7 +16,7 @@ def convert_border(width, color, border):
 def convert_text(entries):
     """ 2. Umieszczenie napisu na obrazku """
 
-    if entries['text_convert'] == 1:
+    if entries['text_on'] == 1:
         size = " -pointsize " + entries['font_size']
         font = " -font '" + entries['font'] + "'"
         color = " -fill \"" + entries['text_color'] + "\""
@@ -34,29 +34,28 @@ def convert_text(entries):
 
 
 def convert_crop(crop, gravitation, entries):
-    """ 3. Wycięcie obrazka z obrazka """
+    """ 3. Crop """
 
-    if crop > 0:
-        if crop == 1:
-            width = str(abs(int(entries['one_x2']) - int(entries['one_x1'])))
-            height = str(abs(int(entries['one_y2']) - int(entries['one_y1'])))
-            command = " -crop " + width + "x" + height + "+" + entries['one_x1'] + "+" + entries['one_y1']
-        if crop == 2:
-            command = " -crop " + entries['two_width'] + "x" + entries['two_height'] + "+" + entries['two_x1'] + "+" + entries['two_y1']
-        if crop == 3:
-            command = " -gravity " + gravity(gravitation) + " -crop " + entries['three_width'] + "x" + entries['three_height'] + "+" + entries['three_dx'] + "+" + entries['three_dy']
-    else:
-        command = ""
+    if crop == 1:
+        width = str(abs(int(entries['one_x2']) - int(entries['one_x1'])))
+        height = str(abs(int(entries['one_y2']) - int(entries['one_y1'])))
+        command = " -crop " + width + "x" + height \
+            + "+" + entries['one_x1'] + "+" + entries['one_y1']
+    if crop == 2:
+        command = " -crop " \
+            + entries['two_width'] + "x" + entries['two_height'] \
+            + "+" + entries['two_x1'] + "+" + entries['two_y1']
+    if crop == 3:
+        command = " -gravity " + gravity(gravitation) + " -crop " \
+            + entries['three_width'] + "x" + entries['three_height'] \
+            + "+" + entries['three_dx'] + "+" + entries['three_dy']
     return command
 
 
 def convert_resize(resize, pixel, percent, border):
-    """ 4. Zmiana rozmiaru obrazka """
+    """ 4. Resize """
 
     border = 2 * int(border)
-    if resize == 0:
-        command = ""
-        return command
     if resize == 1:
         image_resize = pixel + "x" + pixel
     elif resize == 2:
@@ -73,7 +72,7 @@ def convert_resize(resize, pixel, percent, border):
 
 
 def convert_bw(black_white, sepia):
-    """ 5. czarno-białe albo sepia """
+    """ 5. black-white or  sepia """
 
     if black_white == 1:
         command = "-colorspace Gray"
@@ -85,8 +84,8 @@ def convert_bw(black_white, sepia):
 
 
 def convert_contrast(contrast, contrast_selected, entry1, entry2):
-    """ 6. Zmiana kontrastu """
-
+    """ 6. Contrast """
+    
     if contrast == 1:
         if contrast_selected == "+2":
             command = "+contrast +contrast"
@@ -106,7 +105,7 @@ def convert_contrast(contrast, contrast_selected, entry1, entry2):
 
 
 def convert_normalize(normalize):
-    """ 7. Normalizacja kolorów """
+    """ 7. Normalize """
 
     if normalize == 1:
         command = "-normalize"
@@ -118,7 +117,7 @@ def convert_normalize(normalize):
 
 
 def convert_rotate(rotate):
-    """ 8. Obrót obrazka o 90,180 albo 270stopni """
+    """ 8. Rotate 90,180, 270 degree """
 
     if rotate > 0:
         command = "-rotate " + str(rotate)

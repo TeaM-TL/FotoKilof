@@ -57,21 +57,27 @@ def ini_read_resize(file_ini):
     config.read(file_ini, encoding="utf8")
 
     try:
+        resize_on = config.getint('Resize', 'on')
+    except:
+        resize_on = "1"
+    dict_return['img_resize_on'] = resize_on
+
+    try:
         resize = config.getint('Resize', 'resize')
     except:
-        resize = "1"
+        resize = "3"  # FullHD
     dict_return['img_resize'] = resize
 
     try:
         resize_size_pixel = config.getint('Resize', 'size_pixel')
     except:
-        resize_size_pixel = "0"
+        resize_size_pixel = "1024"
     dict_return['resize_size_pixel'] = resize_size_pixel
 
     try:
         resize_size_percent = config.getint('Resize', 'size_percent')
     except:
-        resize_size_percent = "0"
+        resize_size_percent = "25"
     dict_return['resize_size_percent'] = resize_size_percent
 
     return dict_return
@@ -90,7 +96,7 @@ def ini_read_text(file_ini):
         text_on = config.getint('Text', 'on')
     except:
         text_on = "1"
-    dict_return['img_text'] = text_on
+    dict_return['img_text_on'] = text_on
 
     try:
         text = config.get('Text', 'text')
@@ -162,9 +168,15 @@ def ini_read_rotate(file_ini):
     config.read(file_ini, encoding="utf8")
 
     try:
+        rotate_on = config.getint('Rotate', 'on')
+    except:
+        rotate_on = "1"
+    dict_return['img_rotate_on'] = rotate_on
+    
+    try:
         rotate = config.getint('Rotate', 'rotate')
     except:
-        rotate = "0"
+        rotate = "90"
     dict_return['img_rotate'] = rotate
 
     return dict_return
@@ -180,9 +192,15 @@ def ini_read_crop(file_ini):
     config.read(file_ini, encoding="utf8")
 
     try:
+        crop_on = config.getint('Crop', 'on')
+    except:
+        crop_on = "0"
+    dict_return['img_crop_on'] = crop_on
+
+    try:
         crop = config.getint('Crop', 'crop')
     except:
-        crop = "0"
+        crop = "1"
     dict_return['img_crop'] = crop
 
     try:
@@ -276,6 +294,12 @@ def ini_read_border(file_ini):
     config.read(file_ini, encoding="utf8")
 
     try:
+        border_on = config.get('Border', 'on')
+    except:
+        border_on = "1"
+    dict_return['img_border_on'] = border_on
+    
+    try:
         border_color = config.get('Border', 'color')
     except:
         border_color = "#FFFFFF"
@@ -284,7 +308,7 @@ def ini_read_border(file_ini):
     try:
         border = config.getint('Border', 'size')
     except:
-        border = "0"
+        border = "10"
     dict_return['img_border_size'] = border
 
     return dict_return
@@ -300,15 +324,15 @@ def ini_read_color(file_ini):
     config.read(file_ini, encoding="utf8")
 
     try:
-        normalize = config.getint('Color', 'normalize')
+        color_on = config.getint('Color', 'on')
     except:
-        normalize = 0
-    dict_return['normalize'] = normalize
-
+        color_on = "1"
+    dict_return['color_on'] = color_on
+    
     try:
         black_white = config.getint('Color', 'black-white')
     except:
-        black_white = 0
+        black_white = "1"
     dict_return['black_white'] = black_white
 
     try:
@@ -316,6 +340,30 @@ def ini_read_color(file_ini):
     except:
         bw_sepia = "95"
     dict_return['sepia'] = bw_sepia
+
+    return dict_return
+
+
+def ini_read_normalize(file_ini):
+    """ Normalize """
+
+    # słownik wyjściowy
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
+
+    try:
+        normalize_on = config.getint('Normalize', 'on')
+    except:
+        normalize_on = 0
+    dict_return['normalize_on'] = normalize_on
+    
+    try:
+        normalize = config.getint('Normalize', 'normalize')
+    except:
+        normalize = 1
+    dict_return['normalize'] = normalize
 
     return dict_return
 
@@ -330,9 +378,15 @@ def ini_read_contrast(file_ini):
     config.read(file_ini, encoding="utf8")
 
     try:
+        contrast_on = config.getint('Contrast', 'on')
+    except:
+        contrast_on = "0"
+    dict_return['contrast_on'] = contrast_on
+
+    try:
         contrast = config.getint('Contrast', 'contrast')
     except:
-        contrast = "0"
+        contrast = "1"
     dict_return['contrast'] = contrast
 
     try:
