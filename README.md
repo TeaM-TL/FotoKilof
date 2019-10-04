@@ -58,4 +58,5 @@ Do przetwarzania folderu musimy użyć przycisku Zaaplikuj wszystko i zaznaczyć
 5. Wybór Nic, 0 szerokości ramki i odhaczenie Tekst, wyłącza dane 
 polecenie z przetwarzania
 
-
+## Thanks
+Max von Forell - German translation
