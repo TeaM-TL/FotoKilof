@@ -23,3 +23,5 @@
 	2.1 code cleaning - pylint (jump from 3.87 to 7.03), histogram on/off
 	2.2 split main file into modules, code cleaning (pylint 7.74)
 	2.3 localization via gettext
+	2.4 German translation
+	2.5 GUI: cleanup and order

@@ -33,7 +33,7 @@ print(gettext.find("fotokilof", 'locale'))
 
 ###################
 # CONSTANTS
-VERSION = "2.4"
+VERSION = "2.5"
 if platform.system() == "Windows":
     PREVIEW = 400  # preview size in Windows
 else:
