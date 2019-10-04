@@ -61,24 +61,31 @@ def pre_imagick(file_in):
     # global work_dir
     # Zakładanie katalogu na obrazki wynikowe - podkatalog folderu z obrazkiem
     out_dir = os.path.join(os.path.dirname(file_in), work_dir.get())
-    if os.path.isdir(out_dir) is False:
-        try:
-            os.mkdir(out_dir)
-        except:
-            print("! Error in pre_imagick: Nie można utworzyć katalogu na przemielone rysunki")
-            return None
+    if file_in is not None:
+        if os.path.isdir(out_dir) is False:
+            try:
+                os.mkdir(out_dir)
+            except:
+                print("! Error in pre_imagick: Nie można utworzyć katalogu na przemielone rysunki")
+                return None
+    else:
+        return None
 
     # Kopiowanie oryginału do miejsca mielenia
     file_out = os.path.join(out_dir, os.path.basename(file_in))
-    try:
-        shutil.copyfile(file_in, file_out)
-    except IOError as error:
-        print("! Error in pre_imagick: Unable to copy file. %s" % error)
-        exit(1)
-    except:
-        print("! Error in pre_imagick: Unexpected error:", sys.exc_info())
-        exit(1)
-    return file_out
+    if file_out is not None:
+        try:
+            shutil.copyfile(file_in, file_out)
+        except IOError as error:
+            print("! Error in pre_imagick: Unable to copy file. %s" % error)
+            exit(1)
+        except:
+            print("! Error in pre_imagick: Unexpected error:", sys.exc_info())
+            exit(1)
+        return file_out
+    else:
+        print("! pre_imagemagic: No selected file")
+
 
 
 def imagick(cmd, file_out):
@@ -88,18 +95,24 @@ def imagick(cmd, file_out):
     file_out - obrazek do mielenia, pełna ścieżka
     """
     if cmd != "":
-        file_out = common.spacja(file_out)
-        command = "mogrify " + cmd + " " + file_out
-        print(command)
-        try:
-            os.system(command)
-        except:
-            print("! Error in imagick: " + command)
-            result = "None"
+        if file_out is not None:
+            if os.path.isfile(file_out):
+                file_out = common.spacja(file_out)
+                command = "mogrify " + cmd + " " + file_out
+                print(command)
+                try:
+                    os.system(command)
+                except:
+                    print("! Error in imagick: " + command)
+                    result = "None"
+                else:
+                    result = "OK"
+            else:
+                print("No file for processing")
         else:
-            result = "OK"
+            print("No file for imagick")
+            result = "None"
     else:
-        print("No command for imagick")
         result = "None"
     return result
 
@@ -158,7 +171,7 @@ def preview_orig_button():
         img = Image.open(file_in_path.get())
         img.show()
     except:
-        print("Chyba nie ma obrazka")
+        print("No orig picture to preview")
 
 
 def preview_new_button():
@@ -172,16 +185,17 @@ def preview_new_button():
         img = Image.open(file_show)
         img.show()
     except:
-        print("Chyba nie ma obrazka")
+        print("No new picture to preview")
 
 
 def convert_preview(file, dir_temp, command):
     """
     generowanie podglądu oryginału
-    file - nazwa obrazka, pełna ścieżka
-    dir_temp - katalog tymczasowy, pełna ścieżka
-    dodatkowe polecenie dla imagemagick, np. narysuj ramkę crop albo spacja!
-    zwraca: nazwę podglądu obrazka i rozmiar
+    file - fullname image file
+    dir_temp - fullname temporary directory
+    command - additional command for imagemagick or space
+    --
+    return: fullname preview file and size
     """
 
     img = Image.open(file)
@@ -212,34 +226,38 @@ def apply_all_convert(out_file):
     cmd = ""
     if img_normalize_on.get() == 1:
         cmd = cmd + " " + convert.convert_normalize(img_normalize.get())
-        
+
     if img_contrast_on.get() == 1:
         cmd = cmd + " " + convert.convert_contrast(img_contrast.get(),
                                                    img_contrast_selected.get(),
                                                    e1_contrast.get(),
                                                    e2_contrast.get())
-        
+
     if img_bw_on.get() == 1:
         cmd = cmd + " " + convert.convert_bw(img_bw.get(), e_bw_sepia.get())
-        
+
     if int(img_resize_on.get()) == 1:
+        if img_border_on.get() == 0:
+            border = 0
+        else:
+            border = abs(int(e_border.get()))
         cmd = cmd + " " + convert.convert_resize(img_resize.get(),
                                                  e1_resize.get(),
                                                  e2_resize.get(),
-                                                 e_border.get())
+                                                 border)
     elif int(img_crop_on.get()) == 1:
         cmd = cmd + " " + convert.convert_crop(img_crop.get(),
                                                img_crop_gravity.get(),
                                                convert_crop_entries())
-        
+
     if img_rotate.get() > 0:
         cmd = cmd + " " + convert.convert_rotate(img_rotate.get())
-    
+
     if img_border_on.get() == 1:
-        border = int(e_border.get()) # against width =0
+        border = int(e_border.get())
         cmd = cmd + " " + convert.convert_border(e_border.get(),
-                                             img_border_color.get(),
-                                             border)
+                                                 img_border_color.get(),
+                                                 border)
     result1 = imagick(cmd, out_file)
 
     # ze wzgledu na grawitację tekstu, która gryzie sie z cropem
@@ -288,14 +306,12 @@ def apply_all():
 
 
 def contrast_selected(event):
-    """ wyór kontrastu, wywołanie przez bind """
-    # global img_contrast_selected
+    """ Contrast selected, called by bind """
     img_contrast_selected.set(cb_contrast.get())
 
 
 def convert_contrast_button():
     """ przycisk zmiany kontrastu """
-    # global file_in_path, TEMP_DIR
     out_file = pre_imagick(file_in_path.get())
     result = imagick(convert.convert_contrast(img_contrast.get(),
                                               img_contrast_selected.get(),
@@ -508,85 +524,83 @@ def open_file():
 
 
 def open_file_last():
-    """ otwarcie ostatniego pliku """
-    # global file_in_path, dir_in_path
-    pwd = os.getcwd()
-    os.chdir(os.path.dirname(file_in_path.get()))
-    file_list = []
-    for file in glob.glob("*.[j|J][p|P][g|G]"):
-        file_list.append(file)
-    file_list.sort()
-    position = file_list.index(os.path.basename(file_in_path.get()))
-    print(position, file_list)
-    try:
-        file = file_list[-1]
-        file_select_L.configure(text=file)
-        file_in_path.set(os.path.join(dir_in_path.get(), file))
-        preview_orig()
-    except:
-        print("Error in open_file_last")
-    os.chdir(pwd)
+    """ Open last file """
+    if len(file_in_path.get()) > 0:
+        if os.path.isfile(file_in_path.get()):
+            cwd = os.path.dirname(file_in_path.get())
+            file_list = common.list_of_images(cwd)
+            current_file = os.path.basename(file_in_path.get())
+            file = common.file_from_list_of_images(file_list,
+                                                   current_file,
+                                                   "last")
+            if file is not None:
+                try:
+                    file_select_L.configure(text=file)
+                    file_in_path.set(os.path.join(cwd, file))
+                    preview_orig()
+                except:
+                    print("Error in open_file_last")
 
 
 def open_file_next():
-    """ otwarcie następnego pliku """
-    # global file_in_path, dir_in_path
-    pwd = os.getcwd()
-    os.chdir(os.path.dirname(file_in_path.get()))
-    file_list = []
-    for file in glob.glob("*.[j|J][p|P][g|G]"):
-        file_list.append(file)
-    file_list.sort()
-    position = file_list.index(os.path.basename(file_in_path.get()))
-    print(position, file_list)
-    if position <= len(file_list) - 2:
-        file = file_list[position + 1]
-        file_select_L.configure(text=file)
-        file_in_path.set(os.path.join(dir_in_path.get(), file))
-        preview_orig()
-    os.chdir(pwd)
+    """ Open next file """
+    if len(file_in_path.get()) > 0:
+        if os.path.isfile(file_in_path.get()):
+            cwd = os.path.dirname(file_in_path.get())
+            file_list = common.list_of_images(cwd)
+            current_file = os.path.basename(file_in_path.get())
+            file = common.file_from_list_of_images(file_list,
+                                                   current_file,
+                                                   "next")
+            if file is not None:
+                try:
+                    file_select_L.configure(text=file)
+                    file_in_path.set(os.path.join(cwd, file))
+                    preview_orig()
+                except:
+                    print("Error in open_file_next")
 
 
 def open_file_first():
-    """ otwarcie pierwszego pliku """
-    # global file_in_path, dir_in_path
-
-    pwd = os.getcwd()
-    os.chdir(os.path.dirname(file_in_path.get()))
-    file_list = []
-    for file in glob.glob("*.[j|J][p|P][g|G]"):
-        file_list.append(file)
-    file_list.sort()
-    position = file_list.index(os.path.basename(file_in_path.get()))
-    print(position, file_list)
-    try:
-        file = file_list[0]
-        file_select_L.configure(text=file)
-        file_in_path.set(os.path.join(dir_in_path.get(), file))
-        preview_orig()
-    except:
-        print("Error in open_file_first")
-    os.chdir(pwd)
+    """ Open first file """
+    if len(file_in_path.get()) > 0:
+        if os.path.isfile(file_in_path.get()):
+            cwd = os.path.dirname(file_in_path.get())
+            file_list = common.list_of_images(cwd)
+            current_file = os.path.basename(file_in_path.get())
+            file = common.file_from_list_of_images(file_list,
+                                                   current_file,
+                                                   "first")
+            if file is not None:          
+                try:
+                    file_select_L.configure(text=file)
+                    file_in_path.set(os.path.join(cwd, file))
+                    preview_orig()
+                except:
+                    print("Error in open_file_first")
 
 
 def open_file_prev():
-    """ otwarcie poprzedniego pliku """
-    # global file_in_path, dir_in_path
-
-    pwd = os.getcwd()
-    os.chdir(os.path.dirname(file_in_path.get()))
-    file_list = []
-    for file in glob.glob("*.[j|J][p|P][g|G]"):
-        file_list.append(file)
-    file_list.sort()
-    position = file_list.index(os.path.basename(file_in_path.get()))
-    print(position, file_list)
-    if position > 0:
-        file = file_list[position - 1]
-        file_select_L.configure(text=file)
-        file_in_path.set(os.path.join(dir_in_path.get(), file))
-        preview_orig()
-    os.chdir(pwd)
+    """ Open previous file """
+    if len(file_in_path.get()) > 0:
+        if os.path.isfile(file_in_path.get()):
+            cwd = os.path.dirname(file_in_path.get())
+            file_list = common.list_of_images(cwd)
+            current_file = os.path.basename(file_in_path.get())
+            file = common.file_from_list_of_images(file_list,
+                                                   current_file,
+                                                   "previous")
+            if file is not None:          
+                try:
+                    file_select_L.configure(text=file)
+                    file_in_path.set(os.path.join(cwd, file))
+                    preview_orig()
+                except:
+                    print("Error in open_file_first")
+                    
+                file_select_L.configure(text=file)
+                file_in_path.set(os.path.join(dir_in_path.get(), file))
+                preview_orig()
 
 
 def color_choose_border():
@@ -935,7 +949,7 @@ def preview_orig():
         except:
             print("! Error in preview_orig: : Nie można wczytać podglądu histogramu")
     else:
-        print("Bez podglądu histogramu")
+        print("No histogram preview")
 
 
 
@@ -1266,7 +1280,7 @@ rbSE_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="SE",
                               variable=img_crop_gravity, value="SE")
 
 b_crop_read = ttk.Button(frame_crop,
-                         text=_("Load coordinates from image"),
+                         text=_("From image"),
                          command=crop_read)
 b_crop = ttk.Button(frame_crop,
                     text=_("Crop"),
@@ -1293,7 +1307,7 @@ e1_crop_3.grid(row=4, column=2, sticky=W, padx=10, pady=5)
 e2_crop_3.grid(row=4, column=3, sticky=W, padx=5, pady=5)
 e3_crop_3.grid(row=4, column=4, sticky=W, padx=5, pady=5)
 e4_crop_3.grid(row=4, column=5, sticky=W, padx=5, pady=5)
-frame_crop_gravity.grid(row=4, column=6, rowspan=2, columnspan=3)
+frame_crop_gravity.grid(row=5, column=4, columnspan=3)
 rbNW_crop_3.grid(row=1, column=1, sticky=W, pady=5)
 rbN_crop_3.grid(row=1, column=2, pady=5)
 rbNE_crop_3.grid(row=1, column=3, sticky=W, pady=5)
@@ -1303,7 +1317,7 @@ rbE_crop_3.grid(row=2, column=3, sticky=W, pady=5)
 rbSW_crop_3.grid(row=3, column=1, sticky=W, pady=5)
 rbS_crop_3.grid(row=3, column=2, pady=5)
 rbSE_crop_3.grid(row=3, column=3, sticky=W, pady=5)
-b_crop_read.grid(row=5, column=2, columnspan=4, sticky=W, padx=5, pady=5)
+b_crop_read.grid(row=5, column=2, columnspan=2, sticky=W, padx=5, pady=5)
 b_crop.grid(row=5, column=1, sticky=W, padx=5, pady=5)
 
 ###########################
@@ -1553,42 +1567,12 @@ b_normalize.grid(row=2, column=2, padx=5, pady=5, sticky=E)
 frame_second_col = ttk.Frame(main)
 frame_second_col.grid(row=1, column=3, sticky=(N, W, E, S))
 
-############################
-# Ramka podglądu oryginału
-############################
-frame_preview_orig = ttk.Labelframe(frame_second_col,
-                                    text=_("Original"),
-                                    style="Blue.TLabelframe")
-frame_preview_orig.grid(row=1, column=1, columnspan=2,
-                        sticky=(N, W, E, S),
-                        padx=5, pady=5)
-###
-b_preview_orig = ttk.Button(frame_preview_orig,
-                            text=_("Preview"),
-                            command=preview_orig_button)
-l_preview_orig = ttk.Label(frame_preview_orig)
-pi_preview_orig = PhotoImage()
-l_preview_orig_pi = ttk.Label(frame_preview_orig, image=pi_preview_orig)
-b_preview_orig.grid(row=1, column=1, padx=5, pady=5)
-l_preview_orig.grid(row=1, column=2, padx=5, pady=5)
-l_preview_orig_pi.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
-
-###########################
-# Histogram original
-###########################
-frame_histogram_orig = ttk.LabelFrame(frame_second_col, text=_("Histogram"))
-frame_histogram_orig.grid(row=2, column=1, sticky=(N, W, E, S), padx=5, pady=5)
-###
-pi_histogram_orig = PhotoImage()
-l_histogram_orig = ttk.Label(frame_histogram_orig, image=pi_histogram_orig)
-l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
-
 ###########################
 # Wybór obrazka
 ###########################
 frame_input = ttk.Labelframe(frame_second_col, text=_("Image"),
                              style="Blue.TLabelframe")
-frame_input.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+frame_input.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 # tworzenie widgetów
 # l_select_what = ttk.Label(frame_input, text=_("Processed:")
 b_file_select = ttk.Button(frame_input, text=_("File selection"),
@@ -1608,12 +1592,43 @@ b_file_select_last = ttk.Button(frame_input, text=_("Last"),
 # umieszczenie widgetów
 # l_select_what.grid(column=1, row=1, padx=5, pady=5, sticky=W)
 b_file_select.grid(column=1, row=1, padx=5, pady=5, sticky=W)
-file_select_L.grid(column=4, row=1, padx=5, pady=5, sticky=W, columnspan=2)
+file_select_L.grid(column=2, row=1, padx=5, pady=5, sticky=W, columnspan=3)
 #
 b_file_select_first.grid(column=1, row=2, padx=5, pady=5, sticky=W)
-b_file_select_prev.grid(column=2, row=2, padx=5, pady=5, sticky=W, columnspan=2)
-b_file_select_next.grid(column=4, row=2, padx=5, pady=5, sticky=W)
-b_file_select_last.grid(column=5, row=2, padx=5, pady=5, sticky=W)
+b_file_select_prev.grid(column=2, row=2, padx=5, pady=5, sticky=W)
+b_file_select_next.grid(column=3, row=2, padx=5, pady=5, sticky=W)
+b_file_select_last.grid(column=4, row=2, padx=5, pady=5, sticky=W)
+
+
+############################
+# Ramka podglądu oryginału
+############################
+frame_preview_orig = ttk.Labelframe(frame_second_col,
+                                    text=_("Original"),
+                                    style="Blue.TLabelframe")
+frame_preview_orig.grid(row=2, column=1, columnspan=2,
+                        sticky=(N, W, E, S),
+                        padx=5, pady=5)
+###
+b_preview_orig = ttk.Button(frame_preview_orig,
+                            text=_("Preview"),
+                            command=preview_orig_button)
+l_preview_orig = ttk.Label(frame_preview_orig)
+pi_preview_orig = PhotoImage()
+l_preview_orig_pi = ttk.Label(frame_preview_orig, image=pi_preview_orig)
+b_preview_orig.grid(row=1, column=1, padx=5, pady=5)
+l_preview_orig.grid(row=1, column=2, padx=5, pady=5)
+l_preview_orig_pi.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
+
+###########################
+# Histogram original
+###########################
+frame_histogram_orig = ttk.LabelFrame(frame_second_col, text=_("Histogram"))
+frame_histogram_orig.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+###
+pi_histogram_orig = PhotoImage()
+l_histogram_orig = ttk.Label(frame_histogram_orig, image=pi_histogram_orig)
+l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
 
 #####################################################
 # Trzecia kolumna
@@ -1622,12 +1637,35 @@ frame_third_col = ttk.Frame(main)
 frame_third_col.grid(row=1, column=4, sticky=(N, W, E, S))
 
 ##########################
+# Apply all
+##########################
+frame_apply = ttk.LabelFrame(frame_third_col,
+                             text=_("Apply"),
+                             style="Blue.TLabelframe")
+frame_apply.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+
+rb_apply_dir = ttk.Radiobutton(frame_apply, text=_("Folder"),
+                               variable=file_dir_selector,
+                               value="1")
+rb_apply_file = ttk.Radiobutton(frame_apply, text=_("File"),
+                                variable=file_dir_selector,
+                                value="0")
+b_apply = ttk.Button(frame_apply,
+                     text=_("Apply all"),
+                     command=apply_all,
+                     style="Blue.TButton")
+
+rb_apply_dir.grid(column=1, row=1, padx=5, pady=5, sticky=W)
+rb_apply_file.grid(column=1, row=2, padx=5, pady=5, sticky=W)
+b_apply.grid(column=2, row=1, rowspan=2, padx=5, pady=5, sticky=(W, E))
+
+##########################
 # Ramka podglądu wyniku
 ###########################
 frame_preview_new = ttk.Labelframe(frame_third_col,
                                    text=_("Result"),
                                    style="Blue.TLabelframe")
-frame_preview_new.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+frame_preview_new.grid(row=2, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 b_preview_new = ttk.Button(frame_preview_new,
                            text=_("Preview"),
@@ -1645,34 +1683,11 @@ l_preview_new_pi.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
 # Histogram new
 ###########################
 frame_histogram_new = ttk.LabelFrame(frame_third_col, text=_("Histogram"))
-frame_histogram_new.grid(row=2, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+frame_histogram_new.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 pi_histogram_new = PhotoImage()
 l_histogram_new = ttk.Label(frame_histogram_new, image=pi_histogram_new)
 l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
-
-##########################
-# Apply all
-##########################
-frame_apply = ttk.LabelFrame(frame_third_col,
-                             text=_("Apply"),
-                             style="Blue.TLabelframe")
-frame_apply.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
-
-rb_apply_dir = ttk.Radiobutton(frame_apply, text=_("Folder"),
-                               variable=file_dir_selector,
-                               value="1")
-rb_apply_file = ttk.Radiobutton(frame_apply, text=_("File"),
-                                variable=file_dir_selector,
-                                value="0")
-b_apply = ttk.Button(frame_apply,
-                     text=_("Apply all"),
-                     command=apply_all,
-                     style="Blue.TButton")
-
-rb_apply_dir.grid(column=1, row=1, padx=5, pady=5, sticky=W)
-rb_apply_file.grid(column=2, row=1, padx=5, pady=5, sticky=W)
-b_apply.grid(column=3, row=1, padx=5, pady=5, sticky=(W, E))
 
 ##########################
 # Postęp

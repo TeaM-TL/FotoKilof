@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: FotoKilof\n"
-"POT-Creation-Date: 2019-10-03 13:29+0200\n"
-"PO-Revision-Date: 2019-10-03 13:30+0200\n"
+"POT-Creation-Date: 2019-10-04 23:53+0200\n"
+"PO-Revision-Date: 2019-10-04 23:54+0200\n"
 "Last-Translator: Tomasz Łuczak\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -21,177 +21,136 @@ msgstr ""
 "X-Poedit-SearchPath-2: fotokilof.py\n"
 "X-Poedit-SearchPath-3: ini_read.py\n"
 
-#: fotokilof.py:45
+#: fotokilof.py:48
 msgid "Unfortunately, you are using Windows, thus not all option will work"
 msgstr ""
 "Niestety używasz Windows,umieszczanie tekstu może nie działać poprawnie"
 
-#: fotokilof.py:464
+#: fotokilof.py:513
 msgid "Select picture for processing"
 msgstr "Wybierz plik do mielenia"
 
-#: fotokilof.py:466
+#: fotokilof.py:515
 msgid "jpeg files"
 msgstr "Pliki jpg"
 
-#: fotokilof.py:467
+#: fotokilof.py:516
 msgid "JPEG files"
 msgstr "Pliki JPG"
 
-#: fotokilof.py:468
+#: fotokilof.py:517
 msgid "png files"
 msgstr "Pliki png"
 
-#: fotokilof.py:469
+#: fotokilof.py:518
 msgid "PNG files"
 msgstr "Pliki PNG"
 
-#: fotokilof.py:764
+#: fotokilof.py:824
 msgid "License"
 msgstr "Licencja"
 
-#: fotokilof.py:1026
+#: fotokilof.py:1090
 msgid "Tools"
 msgstr "Narzędzia"
 
-#: fotokilof.py:1030
+#: fotokilof.py:1095
 msgid "Histograms"
 msgstr "Histogramy"
 
-#: fotokilof.py:1033
+#: fotokilof.py:1099
 msgid "Scaling/Resize"
 msgstr "Skalowanie"
 
-#: fotokilof.py:1035 fotokilof.py:1167 fotokilof.py:1220
+#: fotokilof.py:1104 fotokilof.py:1225 fotokilof.py:1286
 msgid "Crop"
 msgstr "Wycinek"
 
-#: fotokilof.py:1037
+#: fotokilof.py:1108
 msgid "Text"
 msgstr "Tekst"
 
-#: fotokilof.py:1039 fotokilof.py:1341 fotokilof.py:1353
+#: fotokilof.py:1113 fotokilof.py:1417 fotokilof.py:1437
 msgid "Rotate"
 msgstr "Obrót"
 
-#: fotokilof.py:1041 fotokilof.py:1388
+#: fotokilof.py:1118 fotokilof.py:1480
 msgid "Frame"
 msgstr "Ramka"
 
-#: fotokilof.py:1043
+#: fotokilof.py:1123
 msgid "Black&white"
 msgstr "Czarno-białe"
 
-#: fotokilof.py:1045
+#: fotokilof.py:1127
 msgid "Colors normalize"
 msgstr "Normalizacja kolorów"
 
-#: fotokilof.py:1047 fotokilof.py:1441 fotokilof.py:1445 fotokilof.py:1449
+#: fotokilof.py:1132 fotokilof.py:1504 fotokilof.py:1509 fotokilof.py:1513
 msgid "Contrast"
 msgstr "Kontrast"
 
-#: fotokilof.py:1050
+#: fotokilof.py:1137 fotokilof.py:1643
 msgid "Apply"
 msgstr "Zastosuj"
 
-#: fotokilof.py:1066
+#: fotokilof.py:1153
 msgid "Commands"
 msgstr "Polecenia"
 
-#: fotokilof.py:1070
+#: fotokilof.py:1157
 msgid "Exit"
 msgstr "Koniec"
 
-#: fotokilof.py:1072
+#: fotokilof.py:1159
 msgid "Save settings"
 msgstr "Zapisz ustawienia"
 
-#: fotokilof.py:1074
+#: fotokilof.py:1161
 msgid "Load settings"
 msgstr "Wczytaj ustawienia"
 
-#: fotokilof.py:1076
-msgid "Apply all"
-msgstr "Zastosuj wszystko"
-
-#: fotokilof.py:1094
-msgid "Image"
-msgstr "Obrazek"
-
-#: fotokilof.py:1100
-msgid "File selection"
-msgstr "Wybór pliku"
-
-#: fotokilof.py:1102
-msgid "Folder"
-msgstr "Folder"
-
-#: fotokilof.py:1104
-msgid "File"
-msgstr "Plik"
-
-#: fotokilof.py:1109
-msgid "First"
-msgstr "Pierwszy"
-
-#: fotokilof.py:1111
-msgid "Previous"
-msgstr "Poprzedni"
-
-#: fotokilof.py:1113
-msgid "Next"
-msgstr "Następny"
-
-#: fotokilof.py:1115
-msgid "Last"
-msgstr "Ostatni"
-
-#: fotokilof.py:1132
+#: fotokilof.py:1179
 msgid "Scale/Resize"
 msgstr "Skalowanie"
 
-#: fotokilof.py:1137 fotokilof.py:1172 fotokilof.py:1369 fotokilof.py:1447
-#: fotokilof.py:1479
-msgid "None"
-msgstr "Nic"
-
-#: fotokilof.py:1139 fotokilof.py:1394
+#: fotokilof.py:1186 fotokilof.py:1484
 msgid "Pixels"
 msgstr "Piksele"
 
-#: fotokilof.py:1142
+#: fotokilof.py:1191
 msgid "Percent"
 msgstr "Procenty"
 
-#: fotokilof.py:1151
+#: fotokilof.py:1207
 msgid "Resize"
 msgstr "Skaluj"
 
-#: fotokilof.py:1174
+#: fotokilof.py:1234
 msgid "Coordinates (x1, y1) and (x2, y2)"
 msgstr "Współrzędne (x1, y1) i (x2, y2)"
 
-#: fotokilof.py:1175
+#: fotokilof.py:1235
 msgid "Left Upper corner"
 msgstr "Lewy górny narożnik"
 
-#: fotokilof.py:1176
+#: fotokilof.py:1236
 msgid "Click left"
 msgstr "Kliknij lewym"
 
-#: fotokilof.py:1179
+#: fotokilof.py:1239
 msgid "Right lower corner"
 msgstr "Prawy dolny narożnik"
 
-#: fotokilof.py:1180
+#: fotokilof.py:1240
 msgid "Click right"
 msgstr "Kliknij prawym"
 
-#: fotokilof.py:1185
+#: fotokilof.py:1247
 msgid "Origin (x1,y1) and dimensions (X, Y)"
 msgstr "Współrzędne (x1, y1) i wielkość (X, Y)"
 
-#: fotokilof.py:1192
+#: fotokilof.py:1256
 msgid ""
 "Offset (dx,dy), dimensions (X, Y)\n"
 "i gravity"
@@ -199,94 +158,139 @@ msgstr ""
 "Przesunięcie (dx, dy), wielkość (X, Y)\n"
 "i grawitacja)"
 
-#: fotokilof.py:1207 fotokilof.py:1292
+#: fotokilof.py:1271 fotokilof.py:1359
 msgid "Center"
 msgstr "Środek"
 
-#: fotokilof.py:1218
-msgid "Load coordinates from image"
-msgstr "Wczytaj współrzędne z obrazka"
+#: fotokilof.py:1283
+msgid "From image"
+msgstr "Z obrazka"
 
-#: fotokilof.py:1259
+#: fotokilof.py:1327
 msgid "Add text"
 msgstr "Dodaj tekst"
 
-#: fotokilof.py:1267 fotokilof.py:1392
-msgid "On"
-msgstr "Włącz"
-
-#: fotokilof.py:1274
+#: fotokilof.py:1341
 msgid "Offset (dx,dy)\n"
 msgstr "Przesunięcie (dx, dy)\n"
 
-#: fotokilof.py:1317
+#: fotokilof.py:1385
 msgid "Font color"
 msgstr "Kolor fontu"
 
-#: fotokilof.py:1318
+#: fotokilof.py:1388
 msgid "Background"
 msgstr "Tło"
 
-#: fotokilof.py:1321
+#: fotokilof.py:1394
 msgid "Background color"
 msgstr "Kolor tła"
 
-#: fotokilof.py:1324
+#: fotokilof.py:1398
 msgid "Put text"
 msgstr "Wstaw tekst"
 
-#: fotokilof.py:1365 fotokilof.py:1371
+#: fotokilof.py:1451 fotokilof.py:1456
 msgid "Black-white"
 msgstr "Czarno-białe"
 
-#: fotokilof.py:1372
+#: fotokilof.py:1460
 msgid "Sepia"
 msgstr "Sepia"
 
-#: fotokilof.py:1375
+#: fotokilof.py:1465
 msgid "Execute"
 msgstr "Wykonaj"
 
-#: fotokilof.py:1396
+#: fotokilof.py:1487
 msgid "Color"
 msgstr "Kolor"
 
-#: fotokilof.py:1397
+#: fotokilof.py:1490
 msgid "Add frame"
 msgstr "Dodaj ramkę"
 
-#: fotokilof.py:1414 fotokilof.py:1419
-msgid "Original"
-msgstr "Oryginał"
-
-#: fotokilof.py:1431 fotokilof.py:1521
-msgid "Histogram"
-msgstr "Histogram"
-
-#: fotokilof.py:1453
+#: fotokilof.py:1520
 msgid "Stretch"
 msgstr "Rozciąganie"
 
-#: fotokilof.py:1457
+#: fotokilof.py:1525
 msgid "Black"
 msgstr "Czerń"
 
-#: fotokilof.py:1458
+#: fotokilof.py:1526
 msgid "White"
 msgstr "Biel"
 
-#: fotokilof.py:1474
+#: fotokilof.py:1543
 msgid "Color normalize"
 msgstr "Normalizacja kolorów"
 
-#: fotokilof.py:1481 fotokilof.py:1485
+#: fotokilof.py:1548 fotokilof.py:1556
 msgid "Normalize"
 msgstr "Normalizacja"
 
-#: fotokilof.py:1483
+#: fotokilof.py:1552
 msgid "AutoLevel"
 msgstr "AutoLevel"
 
-#: fotokilof.py:1503 fotokilof.py:1507
+#: fotokilof.py:1573
+msgid "Image"
+msgstr "Obrazek"
+
+#: fotokilof.py:1578
+msgid "File selection"
+msgstr "Wybór pliku"
+
+#: fotokilof.py:1584
+msgid "First"
+msgstr "Pierwszy"
+
+#: fotokilof.py:1586
+msgid "Previous"
+msgstr "Poprzedni"
+
+#: fotokilof.py:1588
+msgid "Next"
+msgstr "Następny"
+
+#: fotokilof.py:1590
+msgid "Last"
+msgstr "Ostatni"
+
+#: fotokilof.py:1607
+msgid "Original"
+msgstr "Oryginał"
+
+#: fotokilof.py:1614 fotokilof.py:1671
+msgid "Preview"
+msgstr "Podgląd"
+
+#: fotokilof.py:1626 fotokilof.py:1685
+msgid "Histogram"
+msgstr "Histogram"
+
+#: fotokilof.py:1647
+msgid "Folder"
+msgstr "Folder"
+
+#: fotokilof.py:1650
+msgid "File"
+msgstr "Plik"
+
+#: fotokilof.py:1654
+msgid "Apply all"
+msgstr "Zastosuj wszystko"
+
+#: fotokilof.py:1666
 msgid "Result"
 msgstr "Wynik"
+
+#~ msgid "None"
+#~ msgstr "Nic"
+
+#~ msgid "Load coordinates from image"
+#~ msgstr "Wczytaj współrzędne z obrazka"
+
+#~ msgid "On"
+#~ msgstr "Włącz"

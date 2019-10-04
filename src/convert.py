@@ -55,7 +55,7 @@ def convert_crop(crop, gravitation, entries):
 def convert_resize(resize, pixel, percent, border):
     """ 4. Resize """
 
-    border = 2 * int(border)
+    border = 2 * abs(int(border))
     if resize == 1:
         image_resize = pixel + "x" + pixel
     elif resize == 2:

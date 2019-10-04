@@ -1,12 +1,11 @@
 # Copyright (C) 2019 Tomasz Łuczak
 # Tomasz Łuczak <tlu@team-tl.pl>, 2019.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: FotoKilof\n"
-"POT-Creation-Date: 2019-10-03 14:44+0200\n"
-"PO-Revision-Date: 2019-10-03 15:00+0200\n"
+"POT-Creation-Date: 2019-10-05 00:00+0200\n"
+"PO-Revision-Date: 2019-10-05 00:01+0200\n"
 "Last-Translator: Max von Forell\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -14,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
-"X-Poedit-Basepath: ..\n"
+"X-Poedit-Basepath: ../../..\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: common.py\n"
@@ -22,270 +21,275 @@ msgstr ""
 "X-Poedit-SearchPath-2: fotokilof.py\n"
 "X-Poedit-SearchPath-3: ini_read.py\n"
 
-#: fotokilof.py:45
+#: fotokilof.py:48
 msgid "Unfortunately, you are using Windows, thus not all option will work"
 msgstr "Leider kann es unter Windows zu kleineren Fehlern kommen"
 
-#: fotokilof.py:464
+#: fotokilof.py:513
 msgid "Select picture for processing"
 msgstr "Bild zum Verarbeiten auswählen"
 
-#: fotokilof.py:466
+#: fotokilof.py:515
 msgid "jpeg files"
 msgstr "jpeg-Dateien"
 
-#: fotokilof.py:467
+#: fotokilof.py:516
 msgid "JPEG files"
 msgstr "JPEG-Dateien"
 
-#: fotokilof.py:468
+#: fotokilof.py:517
 msgid "png files"
 msgstr "png-Dateien"
 
-#: fotokilof.py:469
+#: fotokilof.py:518
 msgid "PNG files"
 msgstr "PNG-Dateien"
 
-#: fotokilof.py:764
+#: fotokilof.py:824
 msgid "License"
 msgstr "Lizenz"
 
-#: fotokilof.py:1026
+#: fotokilof.py:1090
 msgid "Tools"
 msgstr "Werkzeuge"
 
-#: fotokilof.py:1030
+#: fotokilof.py:1095
 msgid "Histograms"
 msgstr "Histogramme"
 
-#: fotokilof.py:1033
+#: fotokilof.py:1099
 msgid "Scaling/Resize"
 msgstr "Skalieren/Größe ändern"
 
-#: fotokilof.py:1035 fotokilof.py:1167 fotokilof.py:1220
+#: fotokilof.py:1104 fotokilof.py:1225 fotokilof.py:1286
 msgid "Crop"
 msgstr "Zuschneiden"
 
-#: fotokilof.py:1037
+#: fotokilof.py:1108
 msgid "Text"
 msgstr "Text"
 
-#: fotokilof.py:1039 fotokilof.py:1341 fotokilof.py:1353
+#: fotokilof.py:1113 fotokilof.py:1417 fotokilof.py:1437
 msgid "Rotate"
 msgstr "Drehen"
 
-#: fotokilof.py:1041 fotokilof.py:1388
+#: fotokilof.py:1118 fotokilof.py:1480
 msgid "Frame"
 msgstr "Rahmen"
 
-#: fotokilof.py:1043
+#: fotokilof.py:1123
 msgid "Black&white"
 msgstr "Schwarz&Weiß"
 
-#: fotokilof.py:1045
+#: fotokilof.py:1127
 msgid "Colors normalize"
 msgstr "Farben normalisieren"
 
-#: fotokilof.py:1047 fotokilof.py:1441 fotokilof.py:1445 fotokilof.py:1449
+#: fotokilof.py:1132 fotokilof.py:1504 fotokilof.py:1509 fotokilof.py:1513
 msgid "Contrast"
 msgstr "Kontrast"
 
-#: fotokilof.py:1050
+#: fotokilof.py:1137 fotokilof.py:1643
 msgid "Apply"
 msgstr "Anwenden"
 
-#: fotokilof.py:1066
+#: fotokilof.py:1153
 msgid "Commands"
 msgstr "Befehle"
 
-#: fotokilof.py:1070
+#: fotokilof.py:1157
 msgid "Exit"
 msgstr "Beenden"
 
-#: fotokilof.py:1072
+#: fotokilof.py:1159
 msgid "Save settings"
 msgstr "Einstellungen speichern"
 
-#: fotokilof.py:1074
+#: fotokilof.py:1161
 msgid "Load settings"
 msgstr "Einstellungen laden"
 
-#: fotokilof.py:1076
-msgid "Apply all"
-msgstr "Alle anwenden"
-
-#: fotokilof.py:1094
-msgid "Image"
-msgstr "Bild"
-
-#: fotokilof.py:1100
-msgid "File selection"
-msgstr "Dateiauswahl"
-
-#: fotokilof.py:1102
-msgid "Folder"
-msgstr "Ordner"
-
-#: fotokilof.py:1104
-msgid "File"
-msgstr "Datei"
-
-#: fotokilof.py:1109
-msgid "First"
-msgstr "Erstes"
-
-#: fotokilof.py:1111
-msgid "Previous"
-msgstr "Vorheriges"
-
-#: fotokilof.py:1113
-msgid "Next"
-msgstr "Nächstes"
-
-#: fotokilof.py:1115
-msgid "Last"
-msgstr "Letztes"
-
-#: fotokilof.py:1132
+#: fotokilof.py:1179
 msgid "Scale/Resize"
 msgstr "Skalieren/Größe ändern"
 
-#: fotokilof.py:1137 fotokilof.py:1172 fotokilof.py:1369 fotokilof.py:1447
-#: fotokilof.py:1479
-msgid "None"
-msgstr "Nichts"
-
-#: fotokilof.py:1139 fotokilof.py:1394
+#: fotokilof.py:1186 fotokilof.py:1484
 msgid "Pixels"
 msgstr "Pixel"
 
-#: fotokilof.py:1142
+#: fotokilof.py:1191
 msgid "Percent"
 msgstr "Prozent"
 
-#: fotokilof.py:1151
+#: fotokilof.py:1207
 msgid "Resize"
 msgstr "Größe ändern"
 
-#: fotokilof.py:1174
+#: fotokilof.py:1234
 msgid "Coordinates (x1, y1) and (x2, y2)"
 msgstr "Koordinaten (x1, y1) und (x2, y2)"
 
-#: fotokilof.py:1175
+#: fotokilof.py:1235
 msgid "Left Upper corner"
 msgstr "Obere linke Ecke"
 
-#: fotokilof.py:1176
+#: fotokilof.py:1236
 msgid "Click left"
 msgstr "Linksklicken"
 
-#: fotokilof.py:1179
+#: fotokilof.py:1239
 msgid "Right lower corner"
 msgstr "Untere rechte Ecke"
 
-#: fotokilof.py:1180
+#: fotokilof.py:1240
 msgid "Click right"
 msgstr "Rechtsklicken"
 
-#: fotokilof.py:1185
+#: fotokilof.py:1247
 msgid "Origin (x1,y1) and dimensions (X, Y)"
 msgstr "Ursprung (x1,y1) und Dimensionen (X, Y)"
 
-#: fotokilof.py:1192
+#: fotokilof.py:1256
 msgid ""
 "Offset (dx,dy), dimensions (X, Y)\n"
 "i gravity"
-msgstr "Verschiebung (dx,dy), Dimensionen (X, Y)\n"
+msgstr ""
+"Verschiebung (dx,dy), Dimensionen (X, Y)\n"
 "i Schwerkraft"
 
-#: fotokilof.py:1207 fotokilof.py:1292
+#: fotokilof.py:1271 fotokilof.py:1359
 msgid "Center"
 msgstr "Zentrum"
 
-#: fotokilof.py:1218
-msgid "Load coordinates from image"
-msgstr "Koordinaten aus Bild laden"
+#: fotokilof.py:1283
+msgid "From image"
+msgstr "Aus Bild"
 
-#: fotokilof.py:1259
+#: fotokilof.py:1327
 msgid "Add text"
 msgstr "Text hinzufügen"
 
-#: fotokilof.py:1267 fotokilof.py:1392
-msgid "On"
-msgstr "An"
-
-#: fotokilof.py:1274
+#: fotokilof.py:1341
 msgid "Offset (dx,dy)\n"
 msgstr "Verschiebung (dx,dy)\n"
 
-#: fotokilof.py:1317
+#: fotokilof.py:1385
 msgid "Font color"
 msgstr "Schriftfarbe"
 
-#: fotokilof.py:1318
+#: fotokilof.py:1388
 msgid "Background"
 msgstr "Hintergrund"
 
-#: fotokilof.py:1321
+#: fotokilof.py:1394
 msgid "Background color"
 msgstr "Hintergrundfarbe"
 
-#: fotokilof.py:1324
+#: fotokilof.py:1398
 msgid "Put text"
 msgstr "Text festsetzen"
 
-#: fotokilof.py:1365 fotokilof.py:1371
+#: fotokilof.py:1451 fotokilof.py:1456
 msgid "Black-white"
 msgstr "Schwarz-Weiß"
 
-#: fotokilof.py:1372
+#: fotokilof.py:1460
 msgid "Sepia"
 msgstr "Sepia"
 
-#: fotokilof.py:1375
+#: fotokilof.py:1465
 msgid "Execute"
 msgstr "Ausführen"
 
-#: fotokilof.py:1396
+#: fotokilof.py:1487
 msgid "Color"
 msgstr "Farbe"
 
-#: fotokilof.py:1397
+#: fotokilof.py:1490
 msgid "Add frame"
 msgstr "Rahmen hinzufügen"
 
-#: fotokilof.py:1414 fotokilof.py:1419
-msgid "Original"
-msgstr "Original"
-
-#: fotokilof.py:1431 fotokilof.py:1521
-msgid "Histogram"
-msgstr "Histogramm"
-
-#: fotokilof.py:1453
+#: fotokilof.py:1520
 msgid "Stretch"
 msgstr "Ziehen"
 
-#: fotokilof.py:1457
+#: fotokilof.py:1525
 msgid "Black"
 msgstr "Schwarz"
 
-#: fotokilof.py:1458
+#: fotokilof.py:1526
 msgid "White"
 msgstr "Weiß"
 
-#: fotokilof.py:1474
+#: fotokilof.py:1543
 msgid "Color normalize"
 msgstr "Farbe normalisieren"
 
-#: fotokilof.py:1481 fotokilof.py:1485
+#: fotokilof.py:1548 fotokilof.py:1556
 msgid "Normalize"
 msgstr "Normalisieren"
 
-#: fotokilof.py:1483
+#: fotokilof.py:1552
 msgid "AutoLevel"
 msgstr "AutoNiveau"
 
-#: fotokilof.py:1503 fotokilof.py:1507
+#: fotokilof.py:1573
+msgid "Image"
+msgstr "Bild"
+
+#: fotokilof.py:1578
+msgid "File selection"
+msgstr "Dateiauswahl"
+
+#: fotokilof.py:1584
+msgid "First"
+msgstr "Erstes"
+
+#: fotokilof.py:1586
+msgid "Previous"
+msgstr "Vorheriges"
+
+#: fotokilof.py:1588
+msgid "Next"
+msgstr "Nächstes"
+
+#: fotokilof.py:1590
+msgid "Last"
+msgstr "Letztes"
+
+#: fotokilof.py:1607
+msgid "Original"
+msgstr "Original"
+
+#: fotokilof.py:1614 fotokilof.py:1671
+msgid "Preview"
+msgstr "Vorschau"
+
+#: fotokilof.py:1626 fotokilof.py:1685
+msgid "Histogram"
+msgstr "Histogramm"
+
+#: fotokilof.py:1647
+msgid "Folder"
+msgstr "Ordner"
+
+#: fotokilof.py:1650
+msgid "File"
+msgstr "Datei"
+
+#: fotokilof.py:1654
+msgid "Apply all"
+msgstr "Alle anwenden"
+
+#: fotokilof.py:1666
 msgid "Result"
 msgstr "Ergebnis"
+
+#~ msgid "None"
+#~ msgstr "Nichts"
+
+#~ msgid "Load coordinates from image"
+#~ msgstr "Koordinaten aus Bild laden"
+
+#~ msgid "On"
+#~ msgstr "An"
