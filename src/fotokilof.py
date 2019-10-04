@@ -25,8 +25,11 @@ import common
 import ini_read
 
 localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
+
 translate = gettext.translation('fotokilof', localedir, fallback=True)
+gettext.install('fotokilof', localedir)
 _ = translate.gettext
+print(gettext.find("fotokilof", 'locale'))
 
 ###################
 # CONSTANTS
