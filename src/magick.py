@@ -48,9 +48,10 @@ def pre_imagick(file_in, destination):
 
 def imagick(cmd, file_out, command):
     """
-    uruchomienie imagemagick
-    cmd - polecenie dla imagemagick
-    file_out - obrazek do mielenia, pełna ścieżka
+    run imagemagick command.
+    cmd - command for imagemagick
+    file_out - fullname picture for processing
+    command: convert, mogrify, composite - imagemagick tools
     """
     if cmd != "":
         if file_out is not None:

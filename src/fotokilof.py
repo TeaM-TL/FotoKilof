@@ -344,6 +344,18 @@ def convert_crop_button():
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
+def convert_logo_button():
+    """ Button insert logo """
+    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    cmd1 = convert.convert_pip(img_logo_gravity.get(),
+                                  e_logo_x.get(),
+                                  e_logo_y.get())
+    cmd2 = common.spacja(file_logo_path.get()) + " " + common.spacja(out_file)
+    cmd = cmd1 + " " + cmd2
+    result = magick.imagick(cmd, out_file, "composite")
+    if result == "OK":
+        preview_new(out_file, TEMP_DIR)
+
 
 def convert_crop_entries():
     """ słownik ze zmiennymi dla funkcji convert_crop """
@@ -1175,21 +1187,17 @@ b_last_set.pack(padx=5, pady=5)
 ###########################
 # Przyciski
 ###########################
-frame_zero_cmd = ttk.Labelframe(frame_zero_col, text=_("Commands"),
+frame_zero_cmd = ttk.Labelframe(frame_zero_col, text=_("Settings"),
                                 style="Blue.TLabelframe")
 frame_zero_cmd.grid(row=2, column=1, padx=5, pady=5, sticky=(W, E))
 
-b_last_quit = ttk.Button(frame_zero_cmd, text=_("Exit"),
-                         command=close_window)
-b_last_save = ttk.Button(frame_zero_cmd, text=_("Save settings"),
+b_last_save = ttk.Button(frame_zero_cmd, text=_("Save"),
                          command=ini_save)
-b_last_read = ttk.Button(frame_zero_cmd, text=_("Load settings"),
+b_last_read = ttk.Button(frame_zero_cmd, text=_("Load"),
                          command=ini_read_wraper)
 
-b_last_save.pack(padx=5, pady=5, anchor=W)
-b_last_read.pack(padx=5, pady=5, anchor=W)
-b_last_quit.pack(padx=5, pady=25, anchor=W)
-
+b_last_save.grid(row=1, column=1, padx=5, pady=5)
+b_last_read.grid(row=1, column=2, padx=5, pady=5)
 
 ###########################
 # Logo
@@ -1200,14 +1208,16 @@ frame_logo = ttk.Labelframe(frame_zero_col,
 frame_logo.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 
 b_logo_select = ttk.Button(frame_logo, text=_("File selection"),
-                           command=open_file_logo, style="Blue.TButton")
-# pi_logo_preview = PhotoImage()
-# l_logo_preview_pi = ttk.Label(frame_logo, image=pi_logo_preview)
+                           command=open_file_logo)
+
+b_logo_run = ttk.Button(frame_logo, text=_("Execute"),
+                        command=convert_logo_button,
+                        style="Blue.TButton")
 l_logo_filename = ttk.Label(frame_logo, width=20)
 
 b_logo_select.grid(row=1, column=1, padx=5, pady=5)
-l_logo_filename.grid(row=2, column=1, padx=5, pady=5)
-# l_logo_preview_pi.grid(row=3, column=1, padx=5, pady=5)
+b_logo_run.grid(row=1, column=2, padx=5, pady=5)
+l_logo_filename.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
 
 ###
 frame_logo_xy = ttk.Frame(frame_logo)
@@ -1215,7 +1225,7 @@ l_logo_xy = ttk.Label(frame_logo_xy, text=_("Offset\n(dx,dy)"))
 e_logo_x = ttk.Entry(frame_logo_xy, width=3)
 e_logo_y = ttk.Entry(frame_logo_xy, width=3)
 
-frame_logo_xy.grid(row=3, column=1)
+frame_logo_xy.grid(row=3, column=1, columnspan=2)
 l_logo_xy.grid(row=1, column=1, sticky=W, padx=5)
 e_logo_x.grid(row=1, column=2, sticky=W, padx=5)
 e_logo_y.grid(row=1, column=3, sticky=W, padx=5)
@@ -1240,7 +1250,7 @@ rb_logo_S = ttk.Radiobutton(frame_logo_gravity, text="S",
                             variable=img_logo_gravity, value="S")
 rb_logo_SE = ttk.Radiobutton(frame_logo_gravity, text="SE",
                              variable=img_logo_gravity, value="SE")
-frame_logo_gravity.grid(row=4, column=1)
+frame_logo_gravity.grid(row=4, column=1, columnspan=2)
 rb_logo_NW.grid(row=1, column=1, sticky=W, pady=5)
 rb_logo_N.grid(row=1, column=2, pady=5)
 rb_logo_NE.grid(row=1, column=3, sticky=W, pady=5)
@@ -1250,6 +1260,11 @@ rb_logo_E.grid(row=2, column=3, sticky=W, pady=5)
 rb_logo_SW.grid(row=3, column=1, sticky=W, pady=5)
 rb_logo_S.grid(row=3, column=2, pady=5)
 rb_logo_SE.grid(row=3, column=3, sticky=W, pady=5)
+
+###
+pi_logo_preview = PhotoImage()
+l_logo_preview_pi = ttk.Label(frame_logo, image=pi_logo_preview)
+l_logo_preview_pi.grid(row=5, column=1, columnspan=2, padx=5, pady=5)
 
 #####################################################################
 # First column
