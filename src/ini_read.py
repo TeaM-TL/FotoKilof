@@ -42,7 +42,7 @@ def ini_read(file_ini):
         histograms = config.getint('Konfiguracja', 'histograms')
     except:
         histograms = "0"
-    dict_return['img_histograms'] = histograms
+    dict_return['img_histograms_on'] = histograms
 
     return dict_return
 
@@ -172,7 +172,7 @@ def ini_read_rotate(file_ini):
     except:
         rotate_on = "1"
     dict_return['img_rotate_on'] = rotate_on
-    
+
     try:
         rotate = config.getint('Rotate', 'rotate')
     except:
@@ -298,7 +298,7 @@ def ini_read_border(file_ini):
     except:
         border_on = "1"
     dict_return['img_border_on'] = border_on
-    
+
     try:
         border_color = config.get('Border', 'color')
     except:
@@ -328,7 +328,7 @@ def ini_read_color(file_ini):
     except:
         color_on = "1"
     dict_return['color_on'] = color_on
-    
+
     try:
         black_white = config.getint('Color', 'black-white')
     except:
@@ -358,7 +358,7 @@ def ini_read_normalize(file_ini):
     except:
         normalize_on = 0
     dict_return['normalize_on'] = normalize_on
-    
+
     try:
         normalize = config.getint('Normalize', 'normalize')
     except:
@@ -400,6 +400,48 @@ def ini_read_contrast(file_ini):
     except:
         contrast_stretch_2 = "0.05"
     dict_return['contrast_stretch_2'] = contrast_stretch_2
+
+    return dict_return
+
+
+def ini_read_logo(file_ini):
+    """ Logo cofiguration """
+
+    # słownik wyjściowy
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
+
+    try:
+        logo_on = config.getint('Logo', 'on')
+    except:
+        logo_on = 0
+    dict_return['img_logo_on'] = logo_on
+
+    try:
+        logo = config.get('Logo', 'logo')
+    except:
+        logo = ""
+    dict_return['logo_logo'] = logo
+
+    try:
+        logo_gravity = config.get('Logo', 'gravity')
+    except:
+        logo_gravity = "SE"
+    dict_return['img_logo_gravity'] = logo_gravity
+
+    try:
+        logo_x = config.getint('Logo', 'x')
+    except:
+        logo_x = "5"
+    dict_return['logo_x'] = logo_x
+
+    try:
+        logo_y = config.getint('Logo', 'y')
+    except:
+        logo_y = "5"
+    dict_return['logo_y'] = logo_y
 
     return dict_return
 

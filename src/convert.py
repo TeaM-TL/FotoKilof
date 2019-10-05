@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=line-too-long
 
-""" moduł z konwerterami """
+""" Converters """
+
 
 def convert_border(width, color, border_on):
     """ 1. Add border """
@@ -85,7 +86,7 @@ def convert_bw(black_white, sepia):
 
 def convert_contrast(contrast, contrast_selected, entry1, entry2):
     """ 6. Contrast """
-    
+
     if contrast == 1:
         if contrast_selected == "+2":
             command = "+contrast +contrast"
@@ -126,8 +127,15 @@ def convert_rotate(rotate):
     return command
 
 
+def convert_pip(gravitation, x, y):
+    """ 9. Picture In Picture, eg. to add logo on image """
+
+    command = "-gravity " + gravity(gravitation) + " -geometry +" + x + "+" + y
+    return command
+
+
 def gravity(gravitation):
-    """ nazwy grawitacji zgodne z Tk """
+    """ translate gavitation name according to Tk specification"""
 
     if gravitation == "N":
         gravitation = "North"
