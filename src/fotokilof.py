@@ -891,18 +891,21 @@ def preview_orig():
     generowanie podglądu oryginału
     rysuje wycinek na rysunku podglądu o ile potrzeba
     """
-    if img_crop.get() == 1:
-        x0 = int(e1_crop_1.get())
-        y0 = int(e2_crop_1.get())
-        x1 = int(e3_crop_1.get())
-        y1 = int(e4_crop_1.get())
-        do_nothing = 0
-    elif img_crop.get() == 2:
-        x0 = int(e1_crop_2.get())
-        y0 = int(e2_crop_2.get())
-        x1 = x0 + int(e3_crop_2.get())
-        y1 = y0 + int(e4_crop_2.get())
-        do_nothing = 0
+    if img_crop_on.get() == 1:
+        if img_crop.get() == 1:
+            x0 = int(e1_crop_1.get())
+            y0 = int(e2_crop_1.get())
+            x1 = int(e3_crop_1.get())
+            y1 = int(e4_crop_1.get())
+            do_nothing = 0
+        elif img_crop.get() == 2:
+            x0 = int(e1_crop_2.get())
+            y0 = int(e2_crop_2.get())
+            x1 = x0 + int(e3_crop_2.get())
+            y1 = y0 + int(e4_crop_2.get())
+            do_nothing = 0
+        else:
+            do_nothing = 1
     else:
         do_nothing = 1
 
