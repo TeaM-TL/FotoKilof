@@ -46,7 +46,7 @@ def no_text_in_windows():
     """ info dla Windows, że może być problem z dodaniem tekstu """
     if platform.system() == "Windows":
         l_text_windows.configure(text=_("Unfortunately, you are using Windows, thus not all option will work"))
-        cb_text_font.configure(state='disabled')
+        # cb_text_font.configure(state='disabled')
 
     else:
         cb_text_font.configure(state='readonly')
@@ -98,8 +98,12 @@ def imagick(cmd, file_out):
         if file_out is not None:
             if os.path.isfile(file_out):
                 file_out = common.spacja(file_out)
-                command = "mogrify " + cmd + " " + file_out
-                print(command)
+                if platform.system() == "Windows":
+                    suffix = ".exe "
+                else:
+                    suffix = " "
+                command = "mogrify" + suffix + cmd + " " + file_out
+                # print(command)
                 try:
                     os.system(command)
                 except:
@@ -128,8 +132,12 @@ def preview_histogram(file):
     file_histogram = common.spacja(os.path.join(TEMP_DIR, "histogram.png"))
     file = common.spacja(file)
 
-    command = "convert " + file + " -colorspace Gray -define histogram:unique-colors=false histogram:" + file_histogram
-    print(command)
+    if platform.system() == "Windows":
+        suffix = ".exe "
+    else:
+        suffix = " "
+    command = "convert" + suffix + file + " -colorspace Gray -define histogram:unique-colors=false histogram:" + file_histogram
+    # print(command)
     try:
         os.system(command)
         return file_histogram
@@ -159,8 +167,6 @@ def preview_new(file_out, dir_temp):
             pi_histogram_new.configure(file=preview_histogram(file_out))
         except:
             print("! Error in preview histogram_new")
-    else:
-        print("Bez histogramu")
 
 
 def preview_orig_button():
@@ -202,13 +208,16 @@ def convert_preview(file, dir_temp, command):
     width = str(img.size[0])
     height = str(img.size[1])
 
-    # filename, file_extension = os.path.splitext(file)
     file_preview = os.path.join(dir_temp, "preview.ppm")
     file = common.spacja(file)
     file_preview = common.spacja(file_preview)
 
-    command = "convert " + file + " -resize " + str(PREVIEW) + "x" + str(PREVIEW) + command + file_preview
-    print(command)
+    if platform.system() == "Windows":
+        suffix = ".exe "
+    else:
+        suffix = " "
+    command = "convert" + suffix + file + " -resize " + str(PREVIEW) + "x" + str(PREVIEW) + command + file_preview
+    # print(command)
     try:
         os.system(command)
     except:
@@ -221,7 +230,7 @@ def convert_preview(file, dir_temp, command):
 
 
 def apply_all_convert(out_file):
-    """ zaaplikowanie wszystkich opcji konwersji na raz """
+    """ apply all option together """
 
     cmd = ""
     if img_normalize_on.get() == 1:
@@ -250,7 +259,7 @@ def apply_all_convert(out_file):
                                                img_crop_gravity.get(),
                                                convert_crop_entries())
 
-    if img_rotate.get() > 0:
+    if img_rotate_on.get() > 0:
         cmd = cmd + " " + convert.convert_rotate(img_rotate.get())
 
     if img_border_on.get() == 1:
@@ -363,7 +372,6 @@ def convert_resize_button():
 
 def convert_border_button():
     """ przycisk dodania ramki """
-    # global file_in_path, TEMP_DIR
     out_file = pre_imagick(file_in_path.get())
     result = imagick(convert.convert_border(e_border.get(),
                                             img_border_color.get(),
@@ -375,7 +383,6 @@ def convert_border_button():
 
 def convert_crop_button():
     """ przycisk wycinka """
-    # global file_in_path, TEMP_DIR, img_crop, img_crop_gravity
     out_file = pre_imagick(file_in_path.get())
     result = imagick(convert.convert_crop(img_crop.get(),
                                           img_crop_gravity.get(),
@@ -429,42 +436,44 @@ def convert_text_button():
 
 def fonts():
     """ import nazw fontów dla imagemagicka """
-    # global TEMP_DIR
 
     if os.path.isdir(TEMP_DIR) is False:
         try:
-            # print("Zakladam katalog na pliki tymczasowe: " + TEMP_DIR)
             os.mkdir(TEMP_DIR)
         except:
             # print("Nie można utworzyć katalogu na pliki tymczasowe")
             return
 
+    # if platform.system() == "Windows":
+    #    fonts_list = ('Arial')
+    # else:
+    file_font = os.path.normpath(os.path.join(TEMP_DIR, "fonts_list"))
+
     if platform.system() == "Windows":
-        fonts_list = ('Arial')
+        suffix = ".exe "
     else:
-        file_font = os.path.join(TEMP_DIR, "fonts_list")
+        suffix = " "
+    command = "convert" + suffix + "-list font > " + common.spacja(file_font)
+    # print(command)
+    try:
+        os.system(command)
+    except:
+        print("! Error in fonts: " + command)
+        return
 
-        command = "convert -list font > " + common.spacja(file_font)
-        print(command)
-        try:
-            os.system(command)
-        except:
-            print("! Error in fonts: " + command)
-            return
-
-        try:
-            file = open(file_font, "r")
-            fonts_list = []
-            for line in file:
-                if re.search("Font", line) is not None:
-                    line = re.sub('^[ ]+Font:[ ]*', "", line)
-                    line = re.sub('\n', "", line)
-                    fonts_list.append(line)
-            file.close()
-            os.remove(file_font)
-        except:
-            print("! Error in fonts: przy wczytywaniu listy fontów")
-            fonts_list = ('Helvetica')
+    try:
+        file = open(file_font, "r")
+        fonts_list = []
+        for line in file:
+            if re.search("Font", line) is not None:
+                line = re.sub('^[ ]+Font:[ ]*', "", line)
+                line = re.sub('\n', "", line)
+                fonts_list.append(line)
+        file.close()
+        os.remove(file_font)
+    except:
+        print("! Error in fonts: przy wczytywaniu listy fontów")
+        fonts_list = ('Helvetica')
 
     cb_text_font['values'] = fonts_list
 
@@ -536,7 +545,7 @@ def open_file_last():
             if file is not None:
                 try:
                     file_select_L.configure(text=file)
-                    file_in_path.set(os.path.join(cwd, file))
+                    file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
                 except:
                     print("Error in open_file_last")
@@ -555,7 +564,7 @@ def open_file_next():
             if file is not None:
                 try:
                     file_select_L.configure(text=file)
-                    file_in_path.set(os.path.join(cwd, file))
+                    file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
                 except:
                     print("Error in open_file_next")
@@ -574,7 +583,7 @@ def open_file_first():
             if file is not None:          
                 try:
                     file_select_L.configure(text=file)
-                    file_in_path.set(os.path.join(cwd, file))
+                    file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
                 except:
                     print("Error in open_file_first")
@@ -593,7 +602,7 @@ def open_file_prev():
             if file is not None:          
                 try:
                     file_select_L.configure(text=file)
-                    file_in_path.set(os.path.join(cwd, file))
+                    file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
                 except:
                     print("Error in open_file_first")
@@ -951,9 +960,6 @@ def preview_orig():
             pi_histogram_orig.configure(file=preview_histogram(file_in_path.get()))
         except:
             print("! Error in preview_orig: : Nie można wczytać podglądu histogramu")
-    else:
-        print("No histogram preview")
-
 
 
 def tools_set():

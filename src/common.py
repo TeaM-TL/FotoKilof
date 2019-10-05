@@ -76,7 +76,6 @@ def file_from_list_of_images(file_list, current_file, request):
 
     if file == current_file:
         file = None
-
     return file
 
 # EOF
