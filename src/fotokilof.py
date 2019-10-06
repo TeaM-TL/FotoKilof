@@ -838,54 +838,34 @@ def win_deleted():
     print("closed")
     close_window()
 
-
-def mouse_crop_calculation(x_preview, y_preview):
-    """ przeliczenie pikseli podglądu  na piksele oryginału """
-    # global file_in_path
-    img = Image.open(file_in_path.get())
-    x_orig = img.size[0]
-    y_orig = img.size[1]
-
-    # x_max, y_max - wymiary podglądu, znamy max czyli PREVIEW
-    if x_orig > y_orig:
-        # piksele podglądu, trzeba przeliczyć y_max podglądu
-        x_max = PREVIEW_ORIG
-        y_max = x_max*y_orig/x_orig
-    elif y_orig > x_orig:
-        # przeliczenie x
-        y_max = PREVIEW_ORIG
-        x_max = y_max*x_orig/y_orig
-    elif y_orig == x_orig:
-        x_max = PREVIEW_ORIG
-        y_max = PREVIEW_ORIG
-
-    width = int(x_preview*x_orig/x_max)
-    height = int(y_preview*y_orig/y_max)
-    return width, height
-
-
 def mouse_crop_NW(event):
     """ lewy górny narożnik """
     x_preview = event.x
     y_preview = event.y
-    print("SE preview:", x_preview, y_preview)
-    xy = mouse_crop_calculation(x_preview, y_preview)
+    print("NW preview:", x_preview, y_preview)
+    
+    xy_max = common.mouse_crop_calculation(file_in_path.get(), PREVIEW_ORIG)
+    width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
+    height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
     e1_crop_1.delete(0, "end")
-    e1_crop_1.insert(0, xy[0])
+    e1_crop_1.insert(0, width)
     e2_crop_1.delete(0, "end")
-    e2_crop_1.insert(0, xy[1])
+    e2_crop_1.insert(0, height)
 
 
 def mouse_crop_SE(event):
     """ prawy dolny narożnik """
     x_preview = event.x
     y_preview = event.y
-    print("NW preview:", x_preview, y_preview)
-    xy = mouse_crop_calculation(x_preview, y_preview)
+    print("SE preview:", x_preview, y_preview)
+    xy_max = common.mouse_crop_calculation(file_in_path.get(), PREVIEW_ORIG)
+    width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
+    height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
     e3_crop_1.delete(0, "end")
-    e3_crop_1.insert(0, xy[0])
+    e3_crop_1.insert(0, width)
     e4_crop_1.delete(0, "end")
-    e4_crop_1.insert(0, xy[1])
+    e4_crop_1.insert(0, height)
+
 
 def preview_orig():
     """
@@ -911,25 +891,9 @@ def preview_orig():
         do_nothing = 1
 
     if do_nothing != 1:
-        im = Image.open(file_in_path.get())
-        x_orig = im.size[0]
-        y_orig = im.size[1]
-
-        # x_max, y_max - wymiary podglądu, znamy max czyli PREVIEW
-        if x_orig > y_orig:
-            # piksele podglądu, trzeba przeliczyć y_max podglądu
-            x_max = PREVIEW_ORIG
-            y_max = x_max*y_orig/x_orig
-        elif y_orig > x_orig:
-            # przeliczenie x
-            y_max = PREVIEW_ORIG
-            x_max = y_max*x_orig/y_orig
-        elif y_orig == x_orig:
-            x_max = PREVIEW_ORIG
-            y_max = PREVIEW_ORIG
-
-        ratio_X = x_max / int(x_orig)
-        ratio_Y = y_max / int(y_orig)
+        xy_max = common.mouse_crop_calculation(file_in_path.get(), PREVIEW_ORIG)
+        ratio_X = xy_max['x_max'] / xy_max['x_orig']
+        ratio_Y = xy_max['y_max'] / xy_max['y_orig']
         x0 = int(x0 * ratio_X)
         y0 = int(y0 * ratio_Y)
         x1 = int(x1 * ratio_X)

@@ -7,6 +7,34 @@ import fnmatch
 import os
 import platform
 import re
+from PIL import Image
+
+def mouse_crop_calculation(file, size):
+    """ przeliczenie pikseli podglądu  na piksele oryginału """
+    # global file_in_path
+    img = Image.open(file)
+    x_orig = img.size[0]
+    y_orig = img.size[1]
+
+    # x_max, y_max - wymiary podglądu, znamy max czyli PREVIEW
+    if x_orig > y_orig:
+        # piksele podglądu, trzeba przeliczyć y_max podglądu
+        x_max = size
+        y_max = x_max*y_orig/x_orig
+    elif y_orig > x_orig:
+        # przeliczenie x
+        y_max = size
+        x_max = y_max*x_orig/y_orig
+    elif y_orig == x_orig:
+        x_max = size
+        y_max = size
+
+    dict_return = {}
+    dict_return['x_max'] = x_max
+    dict_return['y_max'] = y_max
+    dict_return['x_orig'] = x_orig
+    dict_return['y_orig'] = y_orig
+    return dict_return
 
 
 def spacja(sciezka):
