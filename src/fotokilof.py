@@ -12,14 +12,14 @@ import glob
 import platform
 import os
 import re
-import shutil
 import sys
-import touch
 
 from tkinter import TclError, Tk, StringVar, IntVar, N, S, W, E
 from tkinter import Label, PhotoImage, filedialog, messagebox, ttk
 from tkcolorpicker import askcolor
 from PIL import Image
+
+import touch
 
 import convert
 import common
@@ -37,9 +37,13 @@ print(gettext.find("fotokilof", 'locale'))
 # CONSTANTS
 VERSION = "2.6"
 if platform.system() == "Windows":
-    PREVIEW = 400  # preview size in Windows
+    PREVIEW_ORIG = 400  # preview size in Windows
+    PREVIEW_NEW = 400  # preview size in Windows
+    PREVIEW_LOGO = 80  # preview size in Windows
 else:
-    PREVIEW = 450  # preview size
+    PREVIEW_ORIG = 450  # preview size in Windows
+    PREVIEW_NEW = 450  # preview size in Windows
+    PREVIEW_LOGO = 100  # preview size in Windows
 
 ##########################
 
@@ -87,11 +91,10 @@ def preview_orig_bind(event):
 def preview_new(file_out, dir_temp):
     """ generowanie podglądu wynikowego """
     # global img_histograms_on
-    preview = convert_preview(file_out, dir_temp, " ")
+    preview = convert_preview(file_out, dir_temp, " ", PREVIEW_NEW)
     try:
         pi_preview_new.configure(file=preview['filename'])
         l_preview_new.configure(text=preview['width'] + "x" + preview['height'])
-        # os.remove(preview['filename'])
     except:
         print("! Error in preview_new: Nie można wczytać podglądu")
 
@@ -126,7 +129,7 @@ def preview_new_button():
         print("No new picture to preview")
 
 
-def convert_preview(file, dir_temp, command):
+def convert_preview(file, dir_temp, command, size):
     """
     generowanie podglądu oryginału
     file - fullname image file
@@ -148,7 +151,7 @@ def convert_preview(file, dir_temp, command):
         suffix = ".exe "
     else:
         suffix = " "
-    command = "convert" + suffix + file + " -resize " + str(PREVIEW) + "x" + str(PREVIEW) + command + file_preview
+    command = "convert" + suffix + file + " -resize " + str(size) + "x" + str(size) + command + file_preview
     # print(command)
     try:
         os.system(command)
@@ -176,7 +179,7 @@ def apply_all_convert(out_file):
 
     if img_bw_on.get() == 1:
         cmd = cmd + " " + convert.convert_bw(img_bw.get(), e_bw_sepia.get())
-        
+
     if int(img_resize_on.get()) == 1:
         if img_border_on.get() == 0:
             border = 0
@@ -209,14 +212,14 @@ def apply_all_convert(out_file):
 
     if img_logo_on.get() == 1:
         cmd1 = convert.convert_pip(img_logo_gravity.get(),
-                                  e_logo_x.get(),
-                                  e_logo_y.get())
+                                   e_logo_x.get(),
+                                   e_logo_y.get())
         cmd2 = common.spacja(file_logo_path.get()) + " " + common.spacja(out_file)
         cmd = cmd1 + " " + cmd2
         result3 = magick.imagick(cmd, out_file, "composite")
     else:
         result3 = None
-    
+
     if result1 == "OK" or result2 == "OK" or result3 == "OK":
         result = "OK"
     else:
@@ -348,8 +351,8 @@ def convert_logo_button():
     """ Button insert logo """
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
     cmd1 = convert.convert_pip(img_logo_gravity.get(),
-                                  e_logo_x.get(),
-                                  e_logo_y.get())
+                               e_logo_x.get(),
+                               e_logo_y.get())
     cmd2 = common.spacja(file_logo_path.get()) + " " + common.spacja(out_file)
     cmd = cmd1 + " " + cmd2
     result = magick.imagick(cmd, out_file, "composite")
@@ -417,9 +420,9 @@ def fonts():
         suffix = ".exe "
     else:
         suffix = " "
-        
+
     touch.touch(file_font)
-    command = "-list font > " 
+    command = "-list font > "
     magick.imagick(command, common.spacja(file_font), "convert")
 
     try:
@@ -503,8 +506,6 @@ def open_file():
                                                            ("all files", "*.*"))))
     file_select_L.configure(text=os.path.basename(file_in_path.get()))
     preview_orig()
-
-    # dir_in_path.set(os.path.dirname(file_in_path.get()))
 
 
 def open_file_last():
@@ -844,20 +845,19 @@ def mouse_crop_calculation(x_preview, y_preview):
     img = Image.open(file_in_path.get())
     x_orig = img.size[0]
     y_orig = img.size[1]
-    # img.close
 
     # x_max, y_max - wymiary podglądu, znamy max czyli PREVIEW
     if x_orig > y_orig:
         # piksele podglądu, trzeba przeliczyć y_max podglądu
-        x_max = PREVIEW
+        x_max = PREVIEW_ORIG
         y_max = x_max*y_orig/x_orig
     elif y_orig > x_orig:
         # przeliczenie x
-        y_max = PREVIEW
+        y_max = PREVIEW_ORIG
         x_max = y_max*x_orig/y_orig
     elif y_orig == x_orig:
-        x_max = PREVIEW
-        y_max = PREVIEW
+        x_max = PREVIEW_ORIG
+        y_max = PREVIEW_ORIG
 
     width = int(x_preview*x_orig/x_max)
     height = int(y_preview*y_orig/y_max)
@@ -918,15 +918,15 @@ def preview_orig():
         # x_max, y_max - wymiary podglądu, znamy max czyli PREVIEW
         if x_orig > y_orig:
             # piksele podglądu, trzeba przeliczyć y_max podglądu
-            x_max = PREVIEW
+            x_max = PREVIEW_ORIG
             y_max = x_max*y_orig/x_orig
         elif y_orig > x_orig:
             # przeliczenie x
-            y_max = PREVIEW
+            y_max = PREVIEW_ORIG
             x_max = y_max*x_orig/y_orig
         elif y_orig == x_orig:
-            x_max = PREVIEW
-            y_max = PREVIEW
+            x_max = PREVIEW_ORIG
+            y_max = PREVIEW_ORIG
 
         ratio_X = x_max / int(x_orig)
         ratio_Y = y_max / int(y_orig)
@@ -940,7 +940,10 @@ def preview_orig():
     else:
         command = " "
 
-    preview = convert_preview(file_in_path.get(), TEMP_DIR, command)
+    preview = convert_preview(file_in_path.get(),
+                              TEMP_DIR,
+                              command,
+                              PREVIEW_ORIG)
     try:
         pi_preview_orig.configure(file=common.spacja(preview['filename']))
         l_preview_orig.configure(text=preview['width'] + "x" + preview['height'])
@@ -958,20 +961,16 @@ def preview_logo():
     """ generating logo preview """
 
     l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
-    """
-    preview = convert_preview(file_in_path.get(), TEMP_DIR, command)
-    try:
-        pi_preview_orig.configure(file=common.spacja(preview['filename']))
-        l_preview_orig.configure(text=preview['width'] + "x" + preview['height'])
-    except:
-        print("! Error in preview_orig: Nie można wczytać podglądu")
 
-    if img_histograms_on.get() == 1:
-        try:
-            pi_histogram_orig.configure(file=preview_histogram(file_in_path.get()))
-        except:
-            print("! Error in preview_orig: : Nie można wczytać podglądu histogramu")
-    """
+    preview = convert_preview(file_logo_path.get(),
+                              TEMP_DIR,
+                              " ",
+                              PREVIEW_LOGO)
+    try:
+        pi_logo_preview.configure(file=common.spacja(preview['filename']))
+        l_logo_preview.configure(text=preview['width'] + "x" + preview['height'])
+    except:
+        print("! Error in preview_logo: Nie można wczytać podglądu")
 
 
 def tools_set():
@@ -1187,13 +1186,16 @@ b_last_set.pack(padx=5, pady=5)
 ###########################
 # Przyciski
 ###########################
-frame_zero_cmd = ttk.Labelframe(frame_zero_col, text=_("Settings"),
+frame_zero_cmd = ttk.Labelframe(frame_zero_col,
+                                text=_("Settings"),
                                 style="Blue.TLabelframe")
 frame_zero_cmd.grid(row=2, column=1, padx=5, pady=5, sticky=(W, E))
 
-b_last_save = ttk.Button(frame_zero_cmd, text=_("Save"),
+b_last_save = ttk.Button(frame_zero_cmd,
+                         text=_("Save"),
                          command=ini_save)
-b_last_read = ttk.Button(frame_zero_cmd, text=_("Load"),
+b_last_read = ttk.Button(frame_zero_cmd,
+                         text=_("Load"),
                          command=ini_read_wraper)
 
 b_last_save.grid(row=1, column=1, padx=5, pady=5)
@@ -1207,10 +1209,12 @@ frame_logo = ttk.Labelframe(frame_zero_col,
                             style="Blue.TLabelframe")
 frame_logo.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 
-b_logo_select = ttk.Button(frame_logo, text=_("File selection"),
+b_logo_select = ttk.Button(frame_logo,
+                           text=_("File selection"),
                            command=open_file_logo)
 
-b_logo_run = ttk.Button(frame_logo, text=_("Execute"),
+b_logo_run = ttk.Button(frame_logo,
+                        text=_("Execute"),
                         command=convert_logo_button,
                         style="Blue.TButton")
 l_logo_filename = ttk.Label(frame_logo, width=20)
@@ -1311,7 +1315,6 @@ b_resize = ttk.Button(frame_resize, text=_("Resize"),
 rb_3_resize.grid(row=1, column=1, columnspan=2, sticky=W, padx=5, pady=5)
 rb_4_resize.grid(row=1, column=3, columnspan=2, sticky=W, padx=5, pady=5)
 rb_5_resize.grid(row=1, column=5, sticky=W, padx=5, pady=5)
-# cb_resize.grid(row=1, column=6, sticky=W, padx=5, pady=5)
 rb_1_resize.grid(row=2, column=1, sticky=W, padx=5, pady=5)
 e1_resize.grid(row=2, column=2, sticky=W, padx=5, pady=5)
 rb_2_resize.grid(row=2, column=3, sticky=W, padx=5, pady=5)
@@ -1790,13 +1793,15 @@ l_histogram_new = ttk.Label(frame_histogram_new, image=pi_histogram_new)
 l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 
 ##########################
-# Postęp
+# Progress
 ##########################
-# l_last_progress_files = ttk.Label(frame_last, textvariable=progress_files)
-# l_last_progress_filename = ttk.Label(frame_last, textvariable=progress_filename)
+"""
+l_last_progress_files = ttk.Label(frame_last, textvariable=progress_files)
+l_last_progress_filename = ttk.Label(frame_last, textvariable=progress_filename)
 
-# l_last_progress_files.grid(row=1, column=6, padx=5)
-# l_last_progress_filename.grid(row=1, column=7, padx=5)
+l_last_progress_files.grid(row=1, column=6, padx=5)
+l_last_progress_filename.grid(row=1, column=7, padx=5)
+"""
 
 ###############################################################################
 # bind
@@ -1821,7 +1826,6 @@ ini_read_wraper()  # Wczytanie konfiguracji
 fonts()    # Wczytanie dostępnych fontów
 no_text_in_windows()  # Ostrzeżenie, jesli Windows
 tools_set()
-# dir_in_path.set(os.path.dirname(file_in_path.get()))  # wczytanie ścieżki
 if os.path.isfile(file_in_path.get()):
     # Load preview picture
     preview_orig()
