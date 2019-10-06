@@ -489,7 +489,7 @@ def open_file_logo():
                                                              (_("JPEG files"), "*.JPG"),
                                                              (_("png files"), "*.png"),
                                                              (_("PNG files"), "*.PNG"),
-                                                             ("all files", "*.*"))))
+                                                             ("All files", "*.*"))))
 
     preview_logo()
 
@@ -503,7 +503,7 @@ def open_file():
                                                            (_("JPEG files"), "*.JPG"),
                                                            (_("png files"), "*.png"),
                                                            (_("PNG files"), "*.PNG"),
-                                                           ("all files", "*.*"))))
+                                                           (_("All files"), "*.*"))))
     file_select_L.configure(text=os.path.basename(file_in_path.get()))
     preview_orig()
 
@@ -932,7 +932,7 @@ def preview_logo():
                               PREVIEW_LOGO)
     try:
         pi_logo_preview.configure(file=common.spacja(preview['filename']))
-        l_logo_preview.configure(text=preview['width'] + "x" + preview['height'])
+        # l_logo_preview.configure(text=preview['width'] + "x" + preview['height'])
     except:
         print("! Error in preview_logo: Nie można wczytać podglądu")
 
