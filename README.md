@@ -32,7 +32,7 @@ GUI for the most used by me ImageMagick functionality for processing pictures
  - ImageMagick - home page: https://imagemagick.org/
  - Windows, Linux, MacOS X, BSD
  - FullHD screen for comfort work
- - Python3, with modules: PIL, tkinter, tkcolorpicker - only for script launch
+ - Python3, with modules, - only for script launch (PIL, tkinter, tkcolorpicker, touch, re, shutil, os, platform, configparser, datetime, gettext, glob 
 
 ## Using
 ### source code
