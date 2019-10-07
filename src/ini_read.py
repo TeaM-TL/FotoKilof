@@ -432,16 +432,28 @@ def ini_read_logo(file_ini):
     dict_return['img_logo_gravity'] = logo_gravity
 
     try:
-        logo_x = config.getint('Logo', 'x')
+        logo_width = config.getint('Logo', 'width')
     except:
-        logo_x = "5"
-    dict_return['logo_x'] = logo_x
+        logo_width = "100"
+    dict_return['logo_width'] = logo_width
 
     try:
-        logo_y = config.getint('Logo', 'y')
+        logo_height = config.getint('Logo', 'height')
     except:
-        logo_y = "5"
-    dict_return['logo_y'] = logo_y
+        logo_height = "100"
+    dict_return['logo_height'] = logo_height
+
+    try:
+        logo_dx = config.getint('Logo', 'dx')
+    except:
+        logo_dx = "5"
+    dict_return['logo_dx'] = logo_dx
+
+    try:
+        logo_dy = config.getint('Logo', 'dy')
+    except:
+        logo_dy = "5"
+    dict_return['logo_dy'] = logo_dy
 
     return dict_return
 

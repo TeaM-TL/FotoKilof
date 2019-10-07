@@ -9,6 +9,7 @@ import platform
 import re
 from PIL import Image
 
+    
 def mouse_crop_calculation(file, size):
     """ przeliczenie pikseli podglądu  na piksele oryginału """
     # global file_in_path
@@ -38,7 +39,7 @@ def mouse_crop_calculation(file, size):
 
 
 def spacja(sciezka):
-    """ rozwiązanie problemu spacji w nazwach plików i katalogów """
+    """ escaping space and special char in pathname """
 
     sciezka = os.path.normpath(sciezka)
     if platform.system() == "Windows":
@@ -46,13 +47,10 @@ def spacja(sciezka):
         if czy_spacja is not None:
             sciezka = '"' + sciezka + '"'
     else:
-        sciezka = re.sub(' ', '\ ', sciezka)
-        # usuwanie nadmiaru backslashy
-        sciezka = re.sub('\\\\\\\\ ', '\ ', sciezka)
+        path = os.path.splitext(sciezka)
+        sciezka = re.escape(path[0]) + path[1]
 
-    # print("sciezka: ", sciezka)
     return sciezka
-
 
 def list_of_images(cwd):
     """

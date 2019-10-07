@@ -127,10 +127,10 @@ def convert_rotate(rotate):
     return command
 
 
-def convert_pip(gravitation, x, y):
+def convert_pip(gravitation, width, height, dx, dy):
     """ 9. Picture In Picture, eg. to add logo on image """
 
-    command = "-gravity " + gravity(gravitation) + " -geometry +" + x + "+" + y
+    command = "-gravity " + gravity(gravitation) + " -geometry " + width + "x" + height + "+" + dx + "+" + dy
     return command
 
 

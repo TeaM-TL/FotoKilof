@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=line-too-long
 
-"""
-nice GUI for ImageMagick
-"""
+""" nice GUI for  ImageMagick with few common used command """
 
 import configparser
 import datetime
@@ -212,8 +210,10 @@ def apply_all_convert(out_file):
 
     if img_logo_on.get() == 1:
         cmd1 = convert.convert_pip(img_logo_gravity.get(),
-                                   e_logo_x.get(),
-                                   e_logo_y.get())
+                                   e_logo_width.get(),
+                                   e_logo_height.get(),
+                                   e_logo_dx.get(),
+                                   e_logo_dy.get())
         cmd2 = common.spacja(file_logo_path.get()) + " " + common.spacja(out_file)
         cmd = cmd1 + " " + cmd2
         result3 = magick.imagick(cmd, out_file, "composite")
@@ -351,8 +351,10 @@ def convert_logo_button():
     """ Button insert logo """
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
     cmd1 = convert.convert_pip(img_logo_gravity.get(),
-                               e_logo_x.get(),
-                               e_logo_y.get())
+                               e_logo_width.get(),
+                               e_logo_height.get(),
+                               e_logo_dx.get(),
+                               e_logo_dy.get())
     cmd2 = common.spacja(file_logo_path.get()) + " " + common.spacja(out_file)
     cmd = cmd1 + " " + cmd2
     result = magick.imagick(cmd, out_file, "composite")
@@ -415,11 +417,6 @@ def fonts():
             return
 
     file_font = os.path.normpath(os.path.join(TEMP_DIR, "fonts_list"))
-
-    if platform.system() == "Windows":
-        suffix = ".exe "
-    else:
-        suffix = " "
 
     touch.touch(file_font)
     command = "-list font > "
@@ -529,7 +526,7 @@ def open_file_last():
 
 def open_file_next():
     """ Open next file """
-    if len(file_in_path.get()) > 0:
+    if file_in_path.get():
         if os.path.isfile(file_in_path.get()):
             cwd = os.path.dirname(file_in_path.get())
             file_list = common.list_of_images(cwd)
@@ -548,7 +545,7 @@ def open_file_next():
 
 def open_file_first():
     """ Open first file """
-    if len(file_in_path.get()) > 0:
+    if file_in_path.get():
         if os.path.isfile(file_in_path.get()):
             cwd = os.path.dirname(file_in_path.get())
             file_list = common.list_of_images(cwd)
@@ -567,7 +564,7 @@ def open_file_first():
 
 def open_file_prev():
     """ Open previous file """
-    if len(file_in_path.get()) > 0:
+    if file_in_path.get():
         if os.path.isfile(file_in_path.get()):
             cwd = os.path.dirname(file_in_path.get())
             file_list = common.list_of_images(cwd)
@@ -724,12 +721,16 @@ def ini_read_wraper():
 
     ini_entries = ini_read.ini_read_logo(FILE_INI)
     img_logo_on.set(ini_entries['img_logo_on'])
-    img_logo_gravity.set(ini_entries['img_logo_gravity'])
     file_logo_path.set(ini_entries['logo_logo'])
-    e_logo_x.delete(0, "end")
-    e_logo_x.insert(0, ini_entries['logo_x'])
-    e_logo_y.delete(0, "end")
-    e_logo_y.insert(0, ini_entries['logo_y'])
+    img_logo_gravity.set(ini_entries['img_logo_gravity'])
+    e_logo_width.delete(0, "end")
+    e_logo_width.insert(0, ini_entries['logo_width'])
+    e_logo_height.delete(0, "end")
+    e_logo_height.insert(0, ini_entries['logo_height'])
+    e_logo_dx.delete(0, "end")
+    e_logo_dx.insert(0, ini_entries['logo_dx'])
+    e_logo_dy.delete(0, "end")
+    e_logo_dy.insert(0, ini_entries['logo_dy'])
 
 
 def ini_save():
@@ -797,8 +798,10 @@ def ini_save():
     config.set('Logo', 'on', str(img_logo_on.get()))
     config.set('Logo', 'logo', file_logo_path.get())
     config.set('Logo', 'gravity', img_logo_gravity.get())
-    config.set('Logo', 'x', e_logo_x.get())
-    config.set('Logo', 'y', e_logo_y.get())
+    config.set('Logo', 'width', e_logo_width.get())
+    config.set('Logo', 'height', e_logo_height.get())
+    config.set('Logo', 'dx', e_logo_dx.get())
+    config.set('Logo', 'dy', e_logo_dy.get())
 
     # save to a file
     try:
@@ -838,12 +841,13 @@ def win_deleted():
     print("closed")
     close_window()
 
+
 def mouse_crop_NW(event):
     """ lewy górny narożnik """
     x_preview = event.x
     y_preview = event.y
     print("NW preview:", x_preview, y_preview)
-    
+
     xy_max = common.mouse_crop_calculation(file_in_path.get(), PREVIEW_ORIG)
     width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
     height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
@@ -1181,22 +1185,28 @@ b_logo_run = ttk.Button(frame_logo,
                         text=_("Execute"),
                         command=convert_logo_button,
                         style="Blue.TButton")
-l_logo_filename = ttk.Label(frame_logo, width=20)
+l_logo_filename = ttk.Label(frame_logo, width=25)
 
 b_logo_select.grid(row=1, column=1, padx=5, pady=5)
 b_logo_run.grid(row=1, column=2, padx=5, pady=5)
-l_logo_filename.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
+l_logo_filename.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky=W)
 
 ###
 frame_logo_xy = ttk.Frame(frame_logo)
-l_logo_xy = ttk.Label(frame_logo_xy, text=_("Offset\n(dx,dy)"))
-e_logo_x = ttk.Entry(frame_logo_xy, width=3)
-e_logo_y = ttk.Entry(frame_logo_xy, width=3)
+l_logo_XxY = ttk.Label(frame_logo_xy, text=_("Width\nHeight"))
+l_logo_dxdy = ttk.Label(frame_logo_xy, text=_("Offset\n(dx,dy)"))
+e_logo_width = ttk.Entry(frame_logo_xy, width=3)
+e_logo_height = ttk.Entry(frame_logo_xy, width=3)
+e_logo_dx = ttk.Entry(frame_logo_xy, width=3)
+e_logo_dy = ttk.Entry(frame_logo_xy, width=3)
 
 frame_logo_xy.grid(row=3, column=1, columnspan=2)
-l_logo_xy.grid(row=1, column=1, sticky=W, padx=5)
-e_logo_x.grid(row=1, column=2, sticky=W, padx=5)
-e_logo_y.grid(row=1, column=3, sticky=W, padx=5)
+l_logo_XxY.grid(row=2, column=1, sticky=W, padx=5)
+e_logo_width.grid(row=2, column=2, sticky=W, padx=5)
+e_logo_height.grid(row=2, column=3, sticky=W, padx=5)
+l_logo_dxdy.grid(row=3, column=1, sticky=W, padx=5)
+e_logo_dx.grid(row=3, column=2, sticky=W, padx=5)
+e_logo_dy.grid(row=3, column=3, sticky=W, padx=5)
 
 ###
 frame_logo_gravity = ttk.Frame(frame_logo)

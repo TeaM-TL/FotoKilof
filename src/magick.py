@@ -62,7 +62,7 @@ def imagick(cmd, file_out, command):
                 else:
                     suffix = " "
                 command = command + suffix + cmd + " " + file_out
-                #print(command)
+                print(command)
                 try:
                     os.system(command)
                 except:
