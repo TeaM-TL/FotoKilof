@@ -15,7 +15,8 @@ GUI for the most used by me ImageMagick functionality for processing pictures
  - contrast or histogram stretching
  - color normalize/auto-level
  - crop (three ways selection)
- - scaling/resize: own size (in pixel or percent) or predefined: HD, 2k, 4k,
+ - scaling/resize: own size (in pixel or percent) or predefined: HD, 2k, 4k
+ - adding logo image o picture
 ## Functionality:
  - processing copy of picture, originals are safe
  - processing single file or whole directory,
