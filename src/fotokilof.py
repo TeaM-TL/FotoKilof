@@ -50,11 +50,6 @@ def no_text_in_windows():
     """ info dla Windows, że może być problem z dodaniem tekstu """
     if platform.system() == "Windows":
         l_text_windows.configure(text=_("Unfortunately, you are using Windows, thus not all option will work"))
-        # cb_text_font.configure(state='disabled')
-
-    else:
-        cb_text_font.configure(state='readonly')
-        # print("Uff, nie Windows")
 
 ################
 # Preview
@@ -89,7 +84,7 @@ def preview_orig_bind(event):
 def preview_new(file_out, dir_temp):
     """ generowanie podglądu wynikowego """
     # global img_histograms_on
-    preview = convert_preview(file_out, dir_temp, " ", PREVIEW_NEW)
+    preview = convert.convert_preview(file_out, dir_temp, " ", PREVIEW_NEW)
     try:
         pi_preview_new.configure(file=preview['filename'])
         l_preview_new.configure(text=preview['width'] + "x" + preview['height'])
@@ -125,41 +120,6 @@ def preview_new_button():
         img.show()
     except:
         print("No new picture to preview")
-
-
-def convert_preview(file, dir_temp, command, size):
-    """
-    generowanie podglądu oryginału
-    file - fullname image file
-    dir_temp - fullname temporary directory
-    command - additional command for imagemagick or space
-    --
-    return: fullname preview file and size
-    """
-
-    img = Image.open(file)
-    width = str(img.size[0])
-    height = str(img.size[1])
-
-    file_preview = os.path.join(dir_temp, "preview.ppm")
-    file = common.spacja(file)
-    file_preview = common.spacja(file_preview)
-
-    if platform.system() == "Windows":
-        suffix = ".exe "
-    else:
-        suffix = " "
-    command = "convert" + suffix + file + " -resize " + str(size) + "x" + str(size) + command + file_preview
-    # print(command)
-    try:
-        os.system(command)
-    except:
-        print("! Error in convert_preview: " + command)
-
-    try:
-        return {'filename': file_preview, 'width': width, 'height': height}
-    except:
-        return "! Error in convert_preview: return"
 
 
 def apply_all_convert(out_file):
@@ -846,7 +806,7 @@ def mouse_crop_NW(event):
     """ lewy górny narożnik """
     x_preview = event.x
     y_preview = event.y
-    print("NW preview:", x_preview, y_preview)
+    # print("NW preview:", x_preview, y_preview)
 
     xy_max = common.mouse_crop_calculation(file_in_path.get(), PREVIEW_ORIG)
     width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
@@ -861,7 +821,7 @@ def mouse_crop_SE(event):
     """ prawy dolny narożnik """
     x_preview = event.x
     y_preview = event.y
-    print("SE preview:", x_preview, y_preview)
+    # print("SE preview:", x_preview, y_preview)
     xy_max = common.mouse_crop_calculation(file_in_path.get(), PREVIEW_ORIG)
     width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
     height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
@@ -908,15 +868,19 @@ def preview_orig():
     else:
         command = " "
 
-    preview = convert_preview(file_in_path.get(),
-                              TEMP_DIR,
-                              command,
-                              PREVIEW_ORIG)
+    preview = convert.convert_preview(file_in_path.get(),
+                                      TEMP_DIR,
+                                      command,
+                                      PREVIEW_ORIG)
     try:
         pi_preview_orig.configure(file=common.spacja(preview['filename']))
-        l_preview_orig.configure(text=preview['width'] + "x" + preview['height'])
     except:
         print("! Error in preview_orig: Nie można wczytać podglądu")
+        
+    try:
+        l_preview_orig.configure(text=preview['width'] + "x" + preview['height'])
+    except:
+        print("! Error in preview_orig: Nie można wczytać rozmiaru")
 
     if img_histograms_on.get() == 1:
         try:
@@ -930,12 +894,12 @@ def preview_logo():
 
     l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
 
-    preview = convert_preview(file_logo_path.get(),
-                              TEMP_DIR,
-                              " ",
-                              PREVIEW_LOGO)
+    preview = convert.convert_preview(file_logo_path.get(),
+                                      TEMP_DIR,
+                                      " ",
+                                      PREVIEW_LOGO)
     try:
-        pi_logo_preview.configure(file=common.spacja(preview['filename']))
+        pi_logo_preview.configure(file=preview['filename'])
         # l_logo_preview.configure(text=preview['width'] + "x" + preview['height'])
     except:
         print("! Error in preview_logo: Nie można wczytać podglądu")
@@ -1457,6 +1421,7 @@ rbSE.grid(row=3, column=3, sticky=W, pady=5)
 ###
 frame_text_font = ttk.Frame(frame_text)
 cb_text_font = ttk.Combobox(frame_text_font, textvariable=img_text_font)
+cb_text_font.configure(state='readonly')
 e_text_size = ttk.Entry(frame_text_font, width=3)
 b_text_color = ttk.Button(frame_text,
                           text=_("Font color"),

@@ -53,6 +53,7 @@ def imagick(cmd, file_out, command):
     file_out - fullname picture for processing
     command: convert, mogrify, composite - imagemagick tools
     """
+    result = None
     if cmd != "":
         if file_out is not None:
             if os.path.isfile(file_out):
@@ -67,16 +68,16 @@ def imagick(cmd, file_out, command):
                     os.system(command)
                 except:
                     print("! Error in imagick: " + command)
-                    result = "None"
+                    result = None
                 else:
                     result = "OK"
             else:
                 print("No file for processing")
         else:
             print("No file for imagick")
-            result = "None"
+            result = None
     else:
-        result = "None"
+        result = None
     return result
 
 # EOF
