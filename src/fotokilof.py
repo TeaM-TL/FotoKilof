@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=line-too-long
 
-""" nice GUI for  ImageMagick with few common used command """
+""" nice GUI for  ImageMagick with few common used (by me) command """
 
 import configparser
 import datetime
@@ -24,16 +24,23 @@ import common
 import ini_read
 import magick
 
-localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
 
+if sys.platform.startswith('win'):
+    import locale
+    if os.getenv('LANG') is None:
+        lang, enc = locale.getdefaultlocale()
+        os.environ['LANG'] = lang
+
+localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
 translate = gettext.translation('fotokilof', localedir, fallback=True)
 gettext.install('fotokilof', localedir)
 _ = translate.gettext
 print(gettext.find("fotokilof", 'locale'))
 
+
 ###################
 # CONSTANTS
-VERSION = "2.6"
+VERSION = "2.6.1"
 if platform.system() == "Windows":
     PREVIEW_ORIG = 400  # preview size in Windows
     PREVIEW_NEW = 400  # preview size in Windows
