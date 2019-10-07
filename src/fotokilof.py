@@ -35,12 +35,12 @@ localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
 translate = gettext.translation('fotokilof', localedir, fallback=True)
 gettext.install('fotokilof', localedir)
 _ = translate.gettext
-print(gettext.find("fotokilof", 'locale'))
+# print(gettext.find("fotokilof", 'locale'))
 
 
 ###################
 # CONSTANTS
-VERSION = "2.6.1"
+VERSION = "2.7"
 if platform.system() == "Windows":
     PREVIEW_ORIG = 400  # preview size in Windows
     PREVIEW_NEW = 400  # preview size in Windows
@@ -178,7 +178,9 @@ def apply_all_button():
     zaplikowanie wszystkich opcji na raz
     mieli albo plik albo cały katalog
     """
+    progress_files.set(_("Processing"))
     pb.start()
+    root.update_idletasks()
     if file_dir_selector.get() == 0:
         out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
         result = apply_all_convert(out_file)
@@ -189,12 +191,14 @@ def apply_all_button():
         os.chdir(os.path.dirname(file_in_path.get()))
         i = 0
         files_list = glob.glob("*.[j|J][p|P][g|G]")
-        pb['maximum'] = len(files_list)
+        file_list_len = len(files_list)
+        pb['maximum'] = file_list_len
         pb['mode'] = "determinate"
         for files in glob.glob("*.[j|J][p|P][g|G]"):
             out_file = magick.pre_imagick(files, work_dir.get())
             result = apply_all_convert(os.path.realpath(out_file))
             i = i + 1
+            progress_files.set(str(i) + " " + _("of") + " " + str(file_list_len) + " : " + files)
             progress_var.set(i)
             root.update_idletasks()
         preview_orig()
@@ -203,6 +207,7 @@ def apply_all_button():
         os.chdir(pwd)
         
     progress_var.set(0)
+    progress_files.set(_("done"))
     pb.stop()
     root.update_idletasks()
 
@@ -1004,8 +1009,6 @@ img_text_box = IntVar()
 img_text_box_color = StringVar()
 img_crop = IntVar()
 img_crop_gravity = StringVar()
-progress_files = StringVar()
-progress_filename = StringVar()
 img_border_color = StringVar()
 img_normalize = IntVar()
 img_bw = IntVar()
@@ -1022,6 +1025,7 @@ img_normalize_on = IntVar()
 img_bw_on = IntVar()
 img_contrast_on = IntVar()
 progress_var = IntVar()  # progressbar
+progress_files = StringVar()
 ######################################################################
 # Karty
 ######################################################################
@@ -1695,7 +1699,10 @@ pb = ttk.Progressbar(frame_apply, orient="horizontal",
                      mode="determinate",
                      var=progress_var)
 pb['value'] = 0
-pb.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky=(W, E))
+pb.grid(row=2, column=1, columnspan=3, padx=5, sticky=(W, E))
+
+l_pb = ttk.Label(frame_apply, textvariable=progress_files)
+l_pb.grid(row=3, column=1, columnspan=3, padx=5, pady=2, sticky=W)
 
 ##########################
 # Ramka podglądu wyniku
