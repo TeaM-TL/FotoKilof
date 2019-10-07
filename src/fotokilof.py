@@ -23,7 +23,7 @@ import convert
 import common
 import ini_read
 import magick
-
+import preview
 
 if sys.platform.startswith('win'):
     import locale
@@ -62,45 +62,25 @@ def no_text_in_windows():
 # Preview
 
 
-def preview_histogram(file):
-    """ generowanie histogramu """
-    # global TEMP_DIR
-
-    file_histogram = common.spacja(os.path.join(TEMP_DIR, "histogram.png"))
-    file = common.spacja(file)
-
-    if platform.system() == "Windows":
-        suffix = ".exe "
-    else:
-        suffix = " "
-    command = "convert" + suffix + file + " -colorspace Gray -define histogram:unique-colors=false histogram:" + file_histogram
-    # print(command)
-    try:
-        os.system(command)
-        return file_histogram
-    except:
-        print("! Error in convert_histogram: " + command)
-
-
 def preview_orig_bind(event):
-    """ podgląd oryginału wywoałanie via bind """
-    # global file_in_path, TEMP_DIR
+    """ podgląd oryginału wywołanie via bind """
     preview_orig()
 
 
 def preview_new(file_out, dir_temp):
     """ generowanie podglądu wynikowego """
     # global img_histograms_on
-    preview = convert.convert_preview(file_out, dir_temp, " ", PREVIEW_NEW)
+    preview_picture = preview.preview_convert(file_out, dir_temp, " ", PREVIEW_NEW)
     try:
-        pi_preview_new.configure(file=preview['filename'])
-        l_preview_new.configure(text=preview['width'] + "x" + preview['height'])
+        pi_preview_new.configure(file=preview_picture['filename'])
+        l_preview_new.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
     except:
         print("! Error in preview_new: Nie można wczytać podglądu")
 
     if img_histograms_on.get() == 1:
         try:
-            pi_histogram_new.configure(file=preview_histogram(file_out))
+            pi_histogram_new.configure(file=preview.preview_histogram(file_out,
+                                                                      TEMP_DIR))
         except:
             print("! Error in preview histogram_new")
 
@@ -875,23 +855,24 @@ def preview_orig():
     else:
         command = " "
 
-    preview = convert.convert_preview(file_in_path.get(),
-                                      TEMP_DIR,
-                                      command,
-                                      PREVIEW_ORIG)
+    preview_picture = preview.preview_convert(file_in_path.get(),
+                                              TEMP_DIR,
+                                              command,
+                                              PREVIEW_ORIG)
     try:
-        pi_preview_orig.configure(file=common.spacja(preview['filename']))
+        pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
     except:
         print("! Error in preview_orig: Nie można wczytać podglądu")
-        
+
     try:
-        l_preview_orig.configure(text=preview['width'] + "x" + preview['height'])
+        l_preview_orig.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
     except:
         print("! Error in preview_orig: Nie można wczytać rozmiaru")
 
     if img_histograms_on.get() == 1:
         try:
-            pi_histogram_orig.configure(file=preview_histogram(file_in_path.get()))
+            pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(),
+                                                                       TEMP_DIR))
         except:
             print("! Error in preview_orig: : Nie można wczytać podglądu histogramu")
 
@@ -901,12 +882,12 @@ def preview_logo():
 
     l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
 
-    preview = convert.convert_preview(file_logo_path.get(),
-                                      TEMP_DIR,
-                                      " ",
-                                      PREVIEW_LOGO)
+    preview_picture = preview.preview_convert(file_logo_path.get(),
+                                              TEMP_DIR,
+                                              " ",
+                                              PREVIEW_LOGO)
     try:
-        pi_logo_preview.configure(file=preview['filename'])
+        pi_logo_preview.configure(file=preview_picture['filename'])
         # l_logo_preview.configure(text=preview['width'] + "x" + preview['height'])
     except:
         print("! Error in preview_logo: Nie można wczytać podglądu")
@@ -1011,7 +992,6 @@ work_dir = StringVar()  # default: "FotoKilof"
 file_dir_selector = IntVar()
 file_in_path = StringVar()  # plik obrazka do przemielenia
 file_logo_path = StringVar()  # plik logo do wstawienia
-# dir_in_path = StringVar()
 img_logo_gravity = StringVar()
 img_resize = IntVar()
 img_text_gravity = StringVar()
@@ -1137,7 +1117,7 @@ b_last_read = ttk.Button(frame_zero_cmd,
                          text=_("Load"),
                          command=ini_read_wraper)
 
-b_last_save.grid(row=1, column=1, padx=5, pady=5)
+b_last_save.grid(row=1, column=1, pady=5)
 b_last_read.grid(row=1, column=2, padx=5, pady=5)
 
 ###########################
@@ -1158,8 +1138,8 @@ b_logo_run = ttk.Button(frame_logo,
                         style="Blue.TButton")
 l_logo_filename = ttk.Label(frame_logo, width=25)
 
-b_logo_select.grid(row=1, column=1, padx=5, pady=5)
-b_logo_run.grid(row=1, column=2, padx=5, pady=5)
+b_logo_select.grid(row=1, column=1, pady=5)
+b_logo_run.grid(row=1, column=2, pady=5)
 l_logo_filename.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky=W)
 
 ###
@@ -1667,7 +1647,7 @@ pi_preview_orig = PhotoImage()
 l_preview_orig_pi = ttk.Label(frame_preview_orig, image=pi_preview_orig)
 b_preview_orig.grid(row=1, column=1, padx=5, pady=5)
 l_preview_orig.grid(row=1, column=2, padx=5, pady=5)
-l_preview_orig_pi.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
+l_preview_orig_pi.grid(row=2, column=1, columnspan=2)
 
 ###########################
 # Histogram original
@@ -1725,7 +1705,7 @@ l_preview_new_pi = ttk.Label(frame_preview_new, image=pi_preview_new)
 # c_preview_new_pi = Canvas(frame_preview_new, width=300, height=300)
 b_preview_new.grid(row=1, column=1, padx=5, pady=5)
 l_preview_new.grid(row=1, column=2, padx=5, pady=5)
-l_preview_new_pi.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
+l_preview_new_pi.grid(row=2, column=1, columnspan=2)
 # c_preview_new_pi.grid(row=3, column=1, columnspan=2, padx=5, pady=5)
 
 ###########################
@@ -1741,13 +1721,12 @@ l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 ##########################
 # Progress
 ##########################
-"""
-l_last_progress_files = ttk.Label(frame_last, textvariable=progress_files)
-l_last_progress_filename = ttk.Label(frame_last, textvariable=progress_filename)
+# l_last_progress_files = ttk.Label(frame_last, textvariable=progress_files)
+# l_last_progress_filename = ttk.Label(frame_last, textvariable=progress_filename)
 
-l_last_progress_files.grid(row=1, column=6, padx=5)
-l_last_progress_filename.grid(row=1, column=7, padx=5)
-"""
+# l_last_progress_files.grid(row=1, column=6, padx=5)
+# l_last_progress_filename.grid(row=1, column=7, padx=5)
+
 
 ###############################################################################
 # bind

@@ -9,7 +9,7 @@ import platform
 import re
 from PIL import Image
 
-    
+
 def mouse_crop_calculation(file, size):
     """ przeliczenie pikseli podglądu  na piksele oryginału """
     # global file_in_path
