@@ -20,14 +20,12 @@ def preview_histogram(file, dir_temp):
 
     file_histogram = common.spacja(os.path.join(dir_temp, "histogram.png"))
     file = common.spacja(file)
-    print("!", file, file_histogram)
 
     if platform.system() == "Windows":
         suffix = ".exe "
     else:
         suffix = " "
     command = "convert" + suffix + file + " -colorspace Gray -define histogram:unique-colors=false histogram:" + file_histogram
-    print(command)
     try:
         os.system(command)
         return file_histogram

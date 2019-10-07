@@ -173,39 +173,38 @@ def apply_all_convert(out_file):
         result = "None"
     return result
 
-def apply_all():
+def apply_all_button():
     """
     zaplikowanie wszystkich opcji na raz
     mieli albo plik albo cały katalog
     """
-    # global file_in_path, TEMP_DIR, file_dir_selector
-    # global progress_files, progress_filename
-
+    pb.start()
     if file_dir_selector.get() == 0:
         out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
-        progress_filename.set(out_file)
         result = apply_all_convert(out_file)
         if result == "OK":
             preview_new(out_file, TEMP_DIR)
-        progress_filename.set("")
     else:
         pwd = os.getcwd()
         os.chdir(os.path.dirname(file_in_path.get()))
         i = 0
+        files_list = glob.glob("*.[j|J][p|P][g|G]")
+        pb['maximum'] = len(files_list)
+        pb['mode'] = "determinate"
         for files in glob.glob("*.[j|J][p|P][g|G]"):
-            i = i + 1
-            print(i)
-            progress_files.set(str(i) + " z ")
             out_file = magick.pre_imagick(files, work_dir.get())
-            progress_filename.set(out_file)
             result = apply_all_convert(os.path.realpath(out_file))
-        progress_files.set("")
-        progress_filename.set(" ")
+            i = i + 1
+            progress_var.set(i)
+            root.update_idletasks()
         preview_orig()
         if result == "OK":
             preview_new(out_file, TEMP_DIR)
         os.chdir(pwd)
-
+        
+    progress_var.set(0)
+    pb.stop()
+    root.update_idletasks()
 
 def contrast_selected(event):
     """ Contrast selected, called by bind """
@@ -214,6 +213,7 @@ def contrast_selected(event):
 
 def convert_contrast_button():
     """ przycisk zmiany kontrastu """
+    root.update_idletasks()
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
     result = magick.imagick(convert.convert_contrast(img_contrast.get(),
                                                      img_contrast_selected.get(),
@@ -223,11 +223,12 @@ def convert_contrast_button():
                             "mogrify")
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
+    progress_var.set(0)
+    # root.update_idletasks()
 
 
 def convert_bw_button():
     """ konwersja do czerni-bieli lub sepii """
-    # global file_in_path, TEMP_DIR
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
     result = magick.imagick(convert.convert_bw(img_bw.get(),
                                                e_bw_sepia.get()),
@@ -239,7 +240,6 @@ def convert_bw_button():
 
 def convert_normalize_button():
     """ przycisk normalizacji """
-    # global file_in_path, TEMP_DIR, img_normalize
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
     result = magick.imagick(convert.convert_normalize(img_normalize.get()),
                             out_file,
@@ -293,6 +293,7 @@ def convert_crop_button():
                             "mogrify")
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
+
 
 def convert_logo_button():
     """ Button insert logo """
@@ -1020,7 +1021,7 @@ img_border_on = IntVar()
 img_normalize_on = IntVar()
 img_bw_on = IntVar()
 img_contrast_on = IntVar()
-
+progress_var = IntVar()  # progressbar
 ######################################################################
 # Karty
 ######################################################################
@@ -1681,12 +1682,20 @@ rb_apply_file = ttk.Radiobutton(frame_apply, text=_("File"),
                                 value="0")
 b_apply = ttk.Button(frame_apply,
                      text=_("Apply all"),
-                     command=apply_all,
+                     command=apply_all_button,
                      style="Blue.TButton")
 
 rb_apply_dir.grid(column=1, row=1, padx=5, pady=5, sticky=W)
-rb_apply_file.grid(column=1, row=2, padx=5, pady=5, sticky=W)
-b_apply.grid(column=2, row=1, rowspan=2, padx=5, pady=5, sticky=(W, E))
+rb_apply_file.grid(column=2, row=1, padx=5, pady=5, sticky=W)
+b_apply.grid(column=3, row=1, padx=5, pady=5, sticky=(W, E))
+
+##########################
+# ProgressBar
+pb = ttk.Progressbar(frame_apply, orient="horizontal",
+                     mode="determinate",
+                     var=progress_var)
+pb['value'] = 0
+pb.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky=(W, E))
 
 ##########################
 # Ramka podglądu wyniku
@@ -1694,7 +1703,7 @@ b_apply.grid(column=2, row=1, rowspan=2, padx=5, pady=5, sticky=(W, E))
 frame_preview_new = ttk.Labelframe(frame_third_col,
                                    text=_("Result"),
                                    style="Blue.TLabelframe")
-frame_preview_new.grid(row=2, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+frame_preview_new.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 b_preview_new = ttk.Button(frame_preview_new,
                            text=_("Preview"),
@@ -1712,20 +1721,11 @@ l_preview_new_pi.grid(row=2, column=1, columnspan=2)
 # Histogram new
 ###########################
 frame_histogram_new = ttk.LabelFrame(frame_third_col, text=_("Histogram"))
-frame_histogram_new.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+frame_histogram_new.grid(row=4, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 pi_histogram_new = PhotoImage()
 l_histogram_new = ttk.Label(frame_histogram_new, image=pi_histogram_new)
 l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
-
-##########################
-# Progress
-##########################
-# l_last_progress_files = ttk.Label(frame_last, textvariable=progress_files)
-# l_last_progress_filename = ttk.Label(frame_last, textvariable=progress_filename)
-
-# l_last_progress_files.grid(row=1, column=6, padx=5)
-# l_last_progress_filename.grid(row=1, column=7, padx=5)
 
 
 ###############################################################################
