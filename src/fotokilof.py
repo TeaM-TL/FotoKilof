@@ -40,7 +40,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-VERSION = "2.7"
+VERSION = "2.7.1"
 if platform.system() == "Windows":
     PREVIEW_ORIG = 400  # preview size in Windows
     PREVIEW_NEW = 400  # preview size in Windows
