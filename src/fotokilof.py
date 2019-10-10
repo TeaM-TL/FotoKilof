@@ -68,7 +68,7 @@ def print_command(cmd):
     t_custom.insert(END, cmd)
     t_custom.config(state=DISABLED)
 
-        
+
 ################
 # Preview
 
@@ -166,10 +166,10 @@ def apply_all_convert(out_file):
     # force second run of conversion
 
     cmd = convert.convert_text(convert_text_entries())
-    
+
     result2 = magick.imagick(cmd, out_file, "mogrify")
     print_command(cmd)
-    
+
     if img_logo_on.get() == 1:
         cmd1 = convert.convert_pip(img_logo_gravity.get(),
                                    e_logo_width.get(),
@@ -221,7 +221,7 @@ def apply_all_button():
         if result == "OK":
             preview_new(out_file, TEMP_DIR)
         os.chdir(pwd)
-        
+
     progress_var.set(0)
     progress_files.set(_("done"))
     pb.stop()
@@ -463,13 +463,14 @@ def open_file_logo():
 def open_file():
     """ open image for processing """
     directory = os.path.dirname(file_in_path.get())
+    filetypes = ((_("jpeg files"), "*.jpg"),
+                 (_("JPEG files"), "*.JPG"),
+                 (_("png files"), "*.png"),
+                 (_("PNG files"), "*.PNG"),
+                 (_("All files"), "*.*"))
     file_in_path.set(filedialog.askopenfilename(title=_("Select picture for processing"),
                                                 initialdir=directory,
-                                                filetypes=((_("jpeg files"), "*.jpg"),
-                                                           (_("JPEG files"), "*.JPG"),
-                                                           (_("png files"), "*.png"),
-                                                           (_("PNG files"), "*.PNG"),
-                                                           (_("All files"), "*.*"))))
+                                                filetypes=filetypes))
     file_select_L.configure(text=os.path.basename(file_in_path.get()))
     preview_orig()
 
@@ -557,7 +558,7 @@ def open_file_prev():
 
 
 def color_choose_border():
-    """ Background color selection """
+    """ Border color selection """
     color = askcolor(img_border_color.get())
     if color[1] is None:
         img_border_color.set("#000000")
@@ -567,7 +568,7 @@ def color_choose_border():
 
 
 def color_choose_box_active():
-    """ dodanie tła do tekstu """
+    """ Activate background color """
     if img_text_box.get() == 0:
         l_text_font_selected.configure(bg="#000000")
     else:
@@ -575,7 +576,7 @@ def color_choose_box_active():
 
 
 def color_choose_box():
-    """ Wybór koloru tła """
+    """ Background color selection """
     if img_text_box.get() != 0:
         color = askcolor(img_text_color.get(), root)
         if color[1] is None:
@@ -586,7 +587,7 @@ def color_choose_box():
 
 
 def color_choose():
-    """ Wybór koloru """
+    """ Color selection """
     color = askcolor(img_text_color.get(), root)
     if color[1] is None:
         img_text_color.set("#FFFFFF")
@@ -596,7 +597,7 @@ def color_choose():
 
 
 def ini_read_wraper():
-    """ odczyt pliku ini """
+    """ Read config INI file """
 
     ini_entries = ini_read.ini_read(FILE_INI)
     file_in_path.set(ini_entries['file_in_path'])
@@ -707,9 +708,9 @@ def ini_read_wraper():
 
 
 def ini_save():
-    """ Zapis konfiguracji do pliku INI """
+    """ Write variables into config file INI """
 
-    # przygotowanie zawartości
+    # content preparing
     config = configparser.ConfigParser()
     config.add_section('Konfiguracja')
     config.set('Konfiguracja', 'path', file_in_path.get())
@@ -781,7 +782,7 @@ def ini_save():
         with open(FILE_INI, 'w', encoding='utf-8', buffering=1) as configfile:
             config.write(configfile)
     except:
-        print("! Error in ini_save: nie udał się zapis do pliku konfiguracyjnego: " + FILE_INI)
+        print("! Error in ini_save: cannot save config file: " + FILE_INI)
 
 
 def help_info(event):
@@ -796,27 +797,27 @@ def help_info(event):
             message = message + i
         # file.close
     except:
-        print("! Error in help_info: błąd przy wczytywaniu pliku licencji")
+        print("! Error in help_info: error during loading license file")
         message = "Copyright 2019 Tomasz Łuczak under MIT license"
 
     messagebox.showinfo(title=_("License"), message=message)
 
 
 def close_window():
-    """ zamknięcie programu """
+    """ close program """
     root.quit()
     root.destroy()
     sys.exit()
 
 
 def win_deleted():
-    """ zamknięcie okna programu """
+    """ close program window """
     print("closed")
     close_window()
 
 
 def mouse_crop_NW(event):
-    """ lewy górny narożnik """
+    """ Left-Upper corner """
     x_preview = event.x
     y_preview = event.y
     # print("NW preview:", x_preview, y_preview)
@@ -831,7 +832,7 @@ def mouse_crop_NW(event):
 
 
 def mouse_crop_SE(event):
-    """ prawy dolny narożnik """
+    """ Right-Lower corner """
     x_preview = event.x
     y_preview = event.y
     # print("SE preview:", x_preview, y_preview)
@@ -846,8 +847,8 @@ def mouse_crop_SE(event):
 
 def preview_orig():
     """
-    generowanie podglądu oryginału
-    rysuje wycinek na rysunku podglądu o ile potrzeba
+    generation preview of originalpicture
+    and add crop rectangle
     """
     if img_crop_on.get() == 1:
         if img_crop.get() == 1:
@@ -888,19 +889,19 @@ def preview_orig():
     try:
         pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
     except:
-        print("! Error in preview_orig: Nie można wczytać podglądu")
+        print("! Error in preview_orig: Cannot load preview")
 
     try:
         l_preview_orig.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
     except:
-        print("! Error in preview_orig: Nie można wczytać rozmiaru")
+        print("! Error in preview_orig: Cannot load image size")
 
     if img_histograms_on.get() == 1:
         try:
             pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(),
                                                                        TEMP_DIR))
         except:
-            print("! Error in preview_orig: : Nie można wczytać podglądu histogramu")
+            print("! Error in preview_orig: : Cannot load histogram preview")
 
 
 def preview_logo():
@@ -916,7 +917,7 @@ def preview_logo():
         pi_logo_preview.configure(file=preview_picture['filename'])
         # l_logo_preview.configure(text=preview['width'] + "x" + preview['height'])
     except:
-        print("! Error in preview_logo: Nie można wczytać podglądu")
+        print("! Error in preview_logo: Cannot load preview")
 
 
 def tools_set():
@@ -935,7 +936,7 @@ def tools_set():
 #        img_logo_on.set(0)
     else:
         frame_custom.grid_remove()
-        
+
     if img_histograms_on.get() == 0:
         frame_histogram_orig.grid_remove()
         frame_histogram_new.grid_remove()
@@ -1032,8 +1033,8 @@ PWD = os.getcwd()
 TEMP_DIR = os.path.join(PWD, "tmp")
 work_dir = StringVar()  # default: "FotoKilof"
 file_dir_selector = IntVar()
-file_in_path = StringVar()  # plik obrazka do przemielenia
-file_logo_path = StringVar()  # plik logo do wstawienia
+file_in_path = StringVar()  # fullpath original picture
+file_logo_path = StringVar()  # fullpath logo file
 img_logo_gravity = StringVar()
 img_resize = IntVar()
 img_text_gravity = StringVar()
@@ -1129,10 +1130,10 @@ cb_logo = ttk.Checkbutton(frame_zero_set,
                           offvalue="0",
                           onvalue="1")
 cb_custom = ttk.Checkbutton(frame_zero_set,
-                          text=_("Custom"),
-                          variable=img_custom_on,
-                          offvalue="0",
-                          onvalue="1")
+                            text=_("Custom"),
+                            variable=img_custom_on,
+                            offvalue="0",
+                            onvalue="1")
 b_last_set = ttk.Button(frame_zero_set, text=_("Apply"), command=tools_set)
 
 cb_histograms.pack(padx=5, pady=5, anchor=W)
@@ -1361,7 +1362,6 @@ b_crop = ttk.Button(frame_crop,
                     style="Blue.TButton",
                     command=convert_crop_button)
 
-# rb0_crop.grid(row=1, column=1, sticky=W, padx=5, pady=5)
 f_clickL_crop.grid(row=1, column=2, rowspan=2, columnspan=2, padx=5)
 f_clickR_crop.grid(row=1, column=4, rowspan=2, columnspan=2)
 l_clickL_crop.grid(row=1, column=1, columnspan=2, sticky=(W, E))
@@ -1520,7 +1520,7 @@ rb_rotate_270.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
 b_rotate.grid(row=1, column=5, padx=5, pady=5)
 
 ############################
-# Czarno-białe
+# Black-white
 ############################
 frame_bw = ttk.LabelFrame(frame_first_col,
                           text=_("Black-white"),
@@ -1573,7 +1573,7 @@ b_border.grid(row=1, column=4, padx=5, pady=5, sticky=E)
 
 
 ########################
-# Kontrast
+# Contrast
 #########################
 frame_contrast = ttk.Labelframe(frame_first_col,
                                 text=_("Contrast"),
@@ -1640,23 +1640,23 @@ b_normalize.grid(row=2, column=1, columnspan=2, padx=5, pady=5, sticky=E)
 # Custom command
 ############################
 frame_custom = ttk.LabelFrame(frame_first_col,
-                                 text=_("Custom command"),
-                                 style="Blue.TLabelframe")
+                              text=_("Custom command"),
+                              style="Blue.TLabelframe")
 frame_custom.grid(row=10, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 l_custom_command = ttk.Label(frame_custom, text=_("Command"))
 cb_custom_command = ttk.Combobox(frame_custom,
-                           width=9,
-                           values=("animate",
-                                   "compare",
-                                   "composite",
-                                   "conjure",
-                                   "convert",
-                                   "identify",
-                                   "import",
-                                   "mogrify",
-                                   "montage",
-                                   "stream"))
+                                 width=9,
+                                 values=("animate",
+                                         "compare",
+                                         "composite",
+                                         "conjure",
+                                         "convert",
+                                         "identify",
+                                         "import",
+                                         "mogrify",
+                                         "montage",
+                                         "stream"))
 cb_custom_command.current(7)
 
 b_custom = ttk.Button(frame_custom,
@@ -1690,7 +1690,6 @@ frame_input = ttk.Labelframe(frame_second_col, text=_("Image"),
                              style="Blue.TLabelframe")
 frame_input.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 
-# l_select_what = ttk.Label(frame_input, text=_("Processed:")
 b_file_select = ttk.Button(frame_input, text=_("File selection"),
                            command=open_file, style="Blue.TButton")
 
@@ -1705,8 +1704,7 @@ b_file_select_next = ttk.Button(frame_input, text=_("Next"),
                                 command=open_file_next)
 b_file_select_last = ttk.Button(frame_input, text=_("Last"),
                                 command=open_file_last)
-# umieszczenie widgetów
-# l_select_what.grid(column=1, row=1, padx=5, pady=5, sticky=W)
+
 b_file_select.grid(column=1, row=1, padx=5, pady=5, sticky=W)
 file_select_L.grid(column=2, row=1, padx=5, pady=5, sticky=W, columnspan=3)
 #
@@ -1714,7 +1712,6 @@ b_file_select_first.grid(column=1, row=2, padx=5, pady=5, sticky=W)
 b_file_select_prev.grid(column=2, row=2, padx=5, pady=5, sticky=W)
 b_file_select_next.grid(column=3, row=2, padx=5, pady=5, sticky=W)
 b_file_select_last.grid(column=4, row=2, padx=5, pady=5, sticky=W)
-
 
 ############################
 # Original preview
@@ -1777,6 +1774,7 @@ b_apply.grid(column=3, row=1, padx=5, pady=5, sticky=(W, E))
 
 ##########################
 # ProgressBar
+#########################
 pb = ttk.Progressbar(frame_apply, orient="horizontal",
                      mode="determinate",
                      var=progress_var)
@@ -1787,7 +1785,7 @@ l_pb = ttk.Label(frame_apply, textvariable=progress_files)
 l_pb.grid(row=3, column=1, columnspan=3, padx=5, pady=2, sticky=W)
 
 ##########################
-# Ramka podglądu wyniku
+# Result preview
 ###########################
 frame_preview_new = ttk.Labelframe(frame_third_col,
                                    text=_("Result"),
@@ -1821,7 +1819,7 @@ l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 # bind
 ###############################################################################
 
-# podpinanie poleceń do widgetów, menu, skrótów
+# binding commands to widgets
 cb_text_font.bind("<<ComboboxSelected>>", font_selected)
 cb_contrast.bind("<<ComboboxSelected>>", contrast_selected)
 l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
@@ -1833,12 +1831,12 @@ rb3_crop.bind("<Button-1>", preview_orig_bind)
 root.bind("<F1>", help_info)
 root.protocol("WM_DELETE_WINDOW", win_deleted)
 
-###############
-# Uruchomienie funkcji
+##########################################
+# Run functions
 #
-ini_read_wraper()  # Wczytanie konfiguracji
-fonts()    # Wczytanie dostępnych fontów
-no_text_in_windows()  # Ostrzeżenie, jesli Windows
+ini_read_wraper()  # Loading from config file
+fonts()    # Reading available fonts
+no_text_in_windows()  # Warning if Windows
 tools_set()
 if os.path.isfile(file_in_path.get()):
     # Load preview picture
