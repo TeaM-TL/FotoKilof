@@ -12,8 +12,10 @@ import os
 import re
 import sys
 
-from tkinter import TclError, Tk, StringVar, IntVar, N, S, W, E
-from tkinter import Label, PhotoImage, filedialog, messagebox, ttk
+from tkinter import Tk, ttk, StringVar, IntVar
+from tkinter import TclError, N, S, W, E, END, NORMAL, DISABLED
+from tkinter import Label, PhotoImage, Text
+from tkinter import filedialog, messagebox
 from tkcolorpicker import askcolor
 from PIL import Image
 
@@ -58,6 +60,15 @@ def no_text_in_windows():
     if platform.system() == "Windows":
         l_text_windows.configure(text=_("Unfortunately, you are using Windows, thus not all option will work"))
 
+
+def print_command(cmd):
+    """ print command in custom window """
+    t_custom.config(state=NORMAL)
+    t_custom.delete(1.0, END)
+    t_custom.insert(END, cmd)
+    t_custom.config(state=DISABLED)
+
+        
 ################
 # Preview
 
@@ -147,14 +158,18 @@ def apply_all_convert(out_file):
         cmd = cmd + " " + convert.convert_border(e_border.get(),
                                                  img_border_color.get(),
                                                  border)
+
+    print_command(cmd)
     result1 = magick.imagick(cmd, out_file, "mogrify")
 
     # thus text gravity which makes problem with crop gravity
     # force second run of conversion
 
     cmd = convert.convert_text(convert_text_entries())
+    
     result2 = magick.imagick(cmd, out_file, "mogrify")
-
+    print_command(cmd)
+    
     if img_logo_on.get() == 1:
         cmd1 = convert.convert_pip(img_logo_gravity.get(),
                                    e_logo_width.get(),
@@ -163,6 +178,7 @@ def apply_all_convert(out_file):
                                    e_logo_dy.get())
         cmd2 = common.spacja(file_logo_path.get()) + " " + common.spacja(out_file)
         cmd = cmd1 + " " + cmd2
+        print_command(cmd)
         result3 = magick.imagick(cmd, out_file, "composite")
     else:
         result3 = None
@@ -220,12 +236,12 @@ def convert_contrast_button():
     """ przycisk zmiany kontrastu """
     root.update_idletasks()
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
-    result = magick.imagick(convert.convert_contrast(img_contrast.get(),
-                                                     img_contrast_selected.get(),
-                                                     e1_contrast.get(),
-                                                     e2_contrast.get()),
-                            out_file,
-                            "mogrify")
+    cmd = convert.convert_contrast(img_contrast.get(),
+                                   img_contrast_selected.get(),
+                                   e1_contrast.get(),
+                                   e2_contrast.get())
+    print_command(cmd)
+    result = magick.imagick(cmd, out_file, "mogrify")
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
     progress_var.set(0)
@@ -235,10 +251,9 @@ def convert_contrast_button():
 def convert_bw_button():
     """ konwersja do czerni-bieli lub sepii """
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
-    result = magick.imagick(convert.convert_bw(img_bw.get(),
-                                               e_bw_sepia.get()),
-                            out_file,
-                            "mogrify")
+    cmd = convert.convert_bw(img_bw.get(), e_bw_sepia.get())
+    print_command(cmd)
+    result = magick.imagick(cmd, out_file, "mogrify")
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
@@ -246,9 +261,9 @@ def convert_bw_button():
 def convert_normalize_button():
     """ przycisk normalizacji """
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
-    result = magick.imagick(convert.convert_normalize(img_normalize.get()),
-                            out_file,
-                            "mogrify")
+    cmd = convert.convert_normalize(img_normalize.get())
+    print_command(cmd)
+    result = magick.imagick(cmd, out_file, "mogrify")
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
@@ -256,9 +271,9 @@ def convert_normalize_button():
 def convert_rotate_button():
     """ rotate button """
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
-    result = magick.imagick(convert.convert_rotate(img_rotate.get()),
-                            out_file,
-                            "mogrify")
+    cmd = convert.convert_rotate(img_rotate.get())
+    print_command(cmd)
+    result = magick.imagick(cmd, out_file, "mogrify")
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
@@ -266,12 +281,12 @@ def convert_rotate_button():
 def convert_resize_button():
     """ resize button """
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
-    result = magick.imagick(convert.convert_resize(img_resize.get(),
-                                                   e1_resize.get(),
-                                                   e2_resize.get(),
-                                                   '0'),
-                            out_file,
-                            "mogrify")
+    cmd = convert.convert_resize(img_resize.get(),
+                                 e1_resize.get(),
+                                 e2_resize.get(),
+                                 '0')
+    print_command(cmd)
+    result = magick.imagick(cmd, out_file, "mogrify")
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
@@ -279,11 +294,11 @@ def convert_resize_button():
 def convert_border_button():
     """ przycisk dodania ramki """
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
-    result = magick.imagick(convert.convert_border(e_border.get(),
-                                                   img_border_color.get(),
-                                                   img_border_on.get()),
-                            out_file,
-                            "mogrify")
+    cmd = convert.convert_border(e_border.get(),
+                                 img_border_color.get(),
+                                 img_border_on.get())
+    print_command(cmd)
+    result = magick.imagick(cmd, out_file, "mogrify")
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
@@ -291,11 +306,11 @@ def convert_border_button():
 def convert_crop_button():
     """ przycisk wycinka """
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
-    result = magick.imagick(convert.convert_crop(img_crop.get(),
-                                                 img_crop_gravity.get(),
-                                                 convert_crop_entries()),
-                            out_file,
-                            "mogrify")
+    cmd = convert.convert_crop(img_crop.get(),
+                               img_crop_gravity.get(),
+                               convert_crop_entries())
+    print_command(cmd)
+    result = magick.imagick(cmd, out_file, "mogrify")
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
@@ -310,6 +325,7 @@ def convert_logo_button():
                                e_logo_dy.get())
     cmd2 = common.spacja(file_logo_path.get()) + " " + common.spacja(out_file)
     cmd = cmd1 + " " + cmd2
+    print_command(cmd)
     result = magick.imagick(cmd, out_file, "composite")
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
@@ -352,9 +368,9 @@ def convert_text_entries():
 def convert_text_button():
     """ przycisk wstawiania tekstu """
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
-    result = magick.imagick(convert.convert_text(convert_text_entries()),
-                            out_file,
-                            "mogrify")
+    cmd = convert.convert_text(convert_text_entries())
+    print_command(cmd)
+    result = magick.imagick(cmd, out_file, "mogrify")
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
@@ -667,6 +683,7 @@ def ini_read_wraper():
     ini_entries = ini_read.ini_read_contrast(FILE_INI)
     img_contrast_on.set(ini_entries['contrast_on'])
     img_contrast.set(ini_entries['contrast'])
+    cb_contrast.current(str(img_contrast.get()))
     e1_contrast.delete(0, "end")
     e1_contrast.insert(0, ini_entries['contrast_stretch_1'])
     e2_contrast.delete(0, "end")
@@ -907,15 +924,15 @@ def tools_set():
 
     if img_custom_on.get() == 1:
         frame_custom.grid()
-        img_resize_on.set(0)
-        img_crop_on.set(0)
-        img_text_on.set(0)
-        img_rotate_on.set(0)
-        img_border_on.set(0)
-        img_bw_on.set(0)
-        img_contrast_on.set(0)
-        img_normalize_on.set(0)
-        img_logo_on.set(0)
+#        img_resize_on.set(0)
+#        img_crop_on.set(0)
+#        img_text_on.set(0)
+#        img_rotate_on.set(0)
+#        img_border_on.set(0)
+#        img_bw_on.set(0)
+#        img_contrast_on.set(0)
+#        img_normalize_on.set(0)
+#        img_logo_on.set(0)
     else:
         frame_custom.grid_remove()
         
@@ -1389,7 +1406,7 @@ frame_text.grid(row=4, column=1, columnspan=2,
 ###
 frame_text_text = ttk.Frame(frame_text)
 
-e_text = ttk.Entry(frame_text_text, width=65)
+e_text = ttk.Entry(frame_text_text, width=60)
 frame_text_text.grid(row=1, column=1, columnspan=5, sticky=(W, E))
 e_text.grid(row=1, column=2, sticky=W, padx=5)
 # cb_text_on.grid(row=1, column=3, sticky=W, padx=5)
@@ -1625,7 +1642,7 @@ b_normalize.grid(row=2, column=1, columnspan=2, padx=5, pady=5, sticky=E)
 frame_custom = ttk.LabelFrame(frame_first_col,
                                  text=_("Custom command"),
                                  style="Blue.TLabelframe")
-frame_custom.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+frame_custom.grid(row=10, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 l_custom_command = ttk.Label(frame_custom, text=_("Command"))
 cb_custom_command = ttk.Combobox(frame_custom,
@@ -1640,15 +1657,25 @@ cb_custom_command = ttk.Combobox(frame_custom,
                                    "mogrify",
                                    "montage",
                                    "stream"))
+cb_custom_command.current(7)
 
 b_custom = ttk.Button(frame_custom,
                       text=_("Execute"),
                       style="Blue.TButton",
                       command=convert_normalize_button)
+b_custom.config(state=DISABLED)
+
+t_custom = Text(frame_custom,
+                state='normal',
+                height=5, width=70,
+                wrap='word', undo=True)
+t_custom.insert(END, 'Sorry, not ready yet')
+t_custom.config(state=DISABLED)
 
 l_custom_command.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 cb_custom_command.grid(row=1, column=2, padx=5, pady=5, sticky=W)
-b_custom.grid(row=6, column=1, padx=5, pady=5, sticky=W)
+b_custom.grid(row=1, column=3, padx=5, pady=5, sticky=W)
+t_custom.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky=W)
 
 ########################################################################
 # Second column
