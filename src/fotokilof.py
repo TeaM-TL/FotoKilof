@@ -672,6 +672,9 @@ def ini_read_wraper():
     e2_contrast.delete(0, "end")
     e2_contrast.insert(0, ini_entries['contrast_stretch_2'])
 
+    ini_entries = ini_read.ini_read_custom(FILE_INI)
+    img_custom_on.set(ini_entries['custom_on'])
+
     ini_entries = ini_read.ini_read_logo(FILE_INI)
     img_logo_on.set(ini_entries['img_logo_on'])
     file_logo_path.set(ini_entries['logo_logo'])
@@ -902,6 +905,20 @@ def preview_logo():
 def tools_set():
     """ wybór narzędzi do wyświetlenia """
 
+    if img_custom_on.get() == 1:
+        frame_custom.grid()
+        img_resize_on.set(0)
+        img_crop_on.set(0)
+        img_text_on.set(0)
+        img_rotate_on.set(0)
+        img_border_on.set(0)
+        img_bw_on.set(0)
+        img_contrast_on.set(0)
+        img_normalize_on.set(0)
+        img_logo_on.set(0)
+    else:
+        frame_custom.grid_remove()
+        
     if img_histograms_on.get() == 0:
         frame_histogram_orig.grid_remove()
         frame_histogram_new.grid_remove()
@@ -953,6 +970,8 @@ def tools_set():
         frame_logo.grid_remove()
     else:
         frame_logo.grid()
+
+
 
 
 ###############################################################################
@@ -1024,6 +1043,7 @@ img_border_on = IntVar()
 img_normalize_on = IntVar()
 img_bw_on = IntVar()
 img_contrast_on = IntVar()
+img_custom_on = IntVar()
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
 ######################################################################
@@ -1091,8 +1111,11 @@ cb_logo = ttk.Checkbutton(frame_zero_set,
                           variable=img_logo_on,
                           offvalue="0",
                           onvalue="1")
-
-
+cb_custom = ttk.Checkbutton(frame_zero_set,
+                          text=_("Custom"),
+                          variable=img_custom_on,
+                          offvalue="0",
+                          onvalue="1")
 b_last_set = ttk.Button(frame_zero_set, text=_("Apply"), command=tools_set)
 
 cb_histograms.pack(padx=5, pady=5, anchor=W)
@@ -1105,6 +1128,7 @@ cb_bw.pack(padx=5, pady=5, anchor=W)
 cb_contrast.pack(padx=5, pady=5, anchor=W)
 cb_normalize.pack(padx=5, pady=5, anchor=W)
 cb_logo.pack(padx=5, pady=5, anchor=W)
+cb_custom.pack(padx=5, pady=10, anchor=W)
 
 b_last_set.pack(padx=5, pady=5)
 ###########################
@@ -1569,7 +1593,6 @@ rb1_contrast.grid(row=3, column=1, padx=5, pady=5, sticky=W)
 cb_contrast.grid(row=3, column=2, padx=5, pady=5, sticky=W)
 b_contrast.grid(row=3, column=3, padx=5, pady=5, columnspan=3, sticky=E)
 
-
 ############################
 # Normalize
 ############################
@@ -1595,6 +1618,38 @@ rb1_normalize.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 rb2_normalize.grid(row=1, column=2, padx=5, pady=5, sticky=W)
 b_normalize.grid(row=2, column=1, columnspan=2, padx=5, pady=5, sticky=E)
 
+
+############################
+# Custom command
+############################
+frame_custom = ttk.LabelFrame(frame_first_col,
+                                 text=_("Custom command"),
+                                 style="Blue.TLabelframe")
+frame_custom.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+###
+l_custom_command = ttk.Label(frame_custom, text=_("Command"))
+cb_custom_command = ttk.Combobox(frame_custom,
+                           width=9,
+                           values=("animate",
+                                   "compare",
+                                   "composite",
+                                   "conjure",
+                                   "convert",
+                                   "identify",
+                                   "import",
+                                   "mogrify",
+                                   "montage",
+                                   "stream"))
+
+b_custom = ttk.Button(frame_custom,
+                      text=_("Execute"),
+                      style="Blue.TButton",
+                      command=convert_normalize_button)
+
+l_custom_command.grid(row=1, column=1, padx=5, pady=5, sticky=W)
+cb_custom_command.grid(row=1, column=2, padx=5, pady=5, sticky=W)
+b_custom.grid(row=6, column=1, padx=5, pady=5, sticky=W)
+
 ########################################################################
 # Second column
 ########################################################################
@@ -1602,12 +1657,12 @@ frame_second_col = ttk.Frame(main)
 frame_second_col.grid(row=1, column=3, sticky=(N, W, E, S))
 
 ###########################
-# Wybór obrazka
+# Picture selection
 ###########################
 frame_input = ttk.Labelframe(frame_second_col, text=_("Image"),
                              style="Blue.TLabelframe")
 frame_input.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
-# tworzenie widgetów
+
 # l_select_what = ttk.Label(frame_input, text=_("Processed:")
 b_file_select = ttk.Button(frame_input, text=_("File selection"),
                            command=open_file, style="Blue.TButton")
@@ -1635,7 +1690,7 @@ b_file_select_last.grid(column=4, row=2, padx=5, pady=5, sticky=W)
 
 
 ############################
-# Ramka podglądu oryginału
+# Original preview
 ############################
 frame_preview_orig = ttk.Labelframe(frame_second_col,
                                     text=_("Original"),
@@ -1665,7 +1720,7 @@ l_histogram_orig = ttk.Label(frame_histogram_orig, image=pi_histogram_orig)
 l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
 
 #####################################################
-# Trzecia kolumna
+# Third column
 #####################################################
 frame_third_col = ttk.Frame(main)
 frame_third_col.grid(row=1, column=4, sticky=(N, W, E, S))

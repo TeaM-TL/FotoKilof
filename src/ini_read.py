@@ -457,4 +457,22 @@ def ini_read_logo(file_ini):
 
     return dict_return
 
+
+def ini_read_custom(file_ini):
+    """ Custom """
+
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
+
+    try:
+        custom_on = config.getint('Custom', 'on')
+    except:
+        custom_on = 0
+    dict_return['custom_on'] = custom_on
+
+    return dict_return
+
+
 # EOF
