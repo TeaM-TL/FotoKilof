@@ -13,6 +13,7 @@ import re
 import sys
 
 from tkinter import Tk, ttk, Label, PhotoImage, Text
+from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog, messagebox
 from tkinter import TclError, StringVar, IntVar
 from tkinter import N, S, W, E, END, NORMAL, DISABLED
@@ -38,20 +39,18 @@ localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
 translate = gettext.translation('fotokilof', localedir, fallback=True)
 gettext.install('fotokilof', localedir)
 _ = translate.gettext
-# print(gettext.find("fotokilof", 'locale'))
-
 
 ###################
 # CONSTANTS
-VERSION = "2.7.1"
+VERSION = "2.8"
 if platform.system() == "Windows":
-    PREVIEW_ORIG = 400  # preview size in Windows
-    PREVIEW_NEW = 400  # preview size in Windows
-    PREVIEW_LOGO = 80  # preview size in Windows
+    PREVIEW_ORIG = 400  # preview original
+    PREVIEW_NEW = 400  # preview result
+    PREVIEW_LOGO = 80  # preview logo
 else:
-    PREVIEW_ORIG = 450  # preview size in Windows
-    PREVIEW_NEW = 450  # preview size in Windows
-    PREVIEW_LOGO = 100  # preview size in Windows
+    PREVIEW_ORIG = 450
+    PREVIEW_NEW = 450
+    PREVIEW_LOGO = 100
 
 ##########################
 
@@ -64,10 +63,8 @@ def no_text_in_windows():
 
 def print_command(cmd, cmd_imagick):
     """ print command in custom window """
-    t_custom.config(state=NORMAL)
-    t_custom.delete(1.0, END)
-    t_custom.insert(END, cmd)
-    t_custom.config(state=DISABLED)
+#    t_custom.delete(1.0, END)  # delete whole text in widget
+    t_custom.insert(END, cmd + " ")
 
     cb_custom_command.current(imagick_commands.index(cmd_imagick))
 
@@ -76,7 +73,7 @@ def print_command(cmd, cmd_imagick):
 
 
 def preview_orig_bind(event):
-    """ podgląd oryginału wywołanie via bind """
+    """ preview orginal picture via bind """
     preview_orig()
 
 
@@ -169,13 +166,13 @@ def apply_all_convert(out_file):
     cmd_imagick = "mogrify"
     if text_separate == 0:
         cmd = cmd + " " + cmd_text
-        print_command(cmd, cmd_imagick)
+        print_command(cmd + out_file, cmd_imagick)
         result1 = magick.imagick(cmd, out_file, cmd_imagick)
         result2 = None
     else:
         # thus text gravity which makes problem with crop gravity
         # foce second run of conversion
-        print_command(cmd, cmd_imagick)
+        print_command(cmd +  out_file, cmd_imagick)
         result1 = magick.imagick(cmd, out_file, cmd_imagick)
         result2 = magick.imagick(cmd_text, out_file, cmd_imagick)
 
@@ -200,6 +197,7 @@ def apply_all_convert(out_file):
         result = "None"
     return result
 
+    
 def apply_all_button():
     """
     zaplikowanie wszystkich opcji na raz
@@ -238,6 +236,17 @@ def apply_all_button():
     progress_files.set(_("done"))
     pb.stop()
     root.update_idletasks()
+
+
+def convert_custom_button():
+    """ execute custom command """
+    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    cmd = t_custom.get('1.0', 'end-1c')
+    cmd_imagick = cb_custom_command.get()
+    result = magick.imagick(cmd, out_file, cmd_imagick)
+    if result == "OK":
+        preview_new(out_file, TEMP_DIR)
+
 
 def contrast_selected(event):
     """ Contrast selected, called by bind """
@@ -798,6 +807,8 @@ def ini_save():
     config.set('Logo', 'height', e_logo_height.get())
     config.set('Logo', 'dx', e_logo_dx.get())
     config.set('Logo', 'dy', e_logo_dy.get())
+    config.add_section('Custom')
+    config.set('Custom', 'on', str(img_custom_on.get()))
 
     # save to a file
     try:
@@ -1686,15 +1697,22 @@ cb_custom_command.current(7)
 b_custom = ttk.Button(frame_custom,
                       text=_("Execute"),
                       style="Blue.TButton",
-                      command=convert_normalize_button)
-b_custom.config(state=DISABLED)
+                      command=convert_custom_button)
 
-t_custom = Text(frame_custom,
-                state='normal',
-                height=5, width=70,
-                wrap='word', undo=True)
-t_custom.insert(END, 'Sorry, not ready yet')
-t_custom.config(state=DISABLED)
+t_custom = ScrolledText(frame_custom,
+                        state='normal',
+                        height=5, width=70,
+                        wrap='word', undo=True)
+
+# configuring a tag with a certain style (font color)
+# t_custom.tag_configure("blue", foreground="blue")
+
+# apply the tag
+#t_custom.highlight_pattern("-resize", "blue")
+#t_custom.highlight_pattern("-crop", "blue")
+#t_custom.highlight_pattern("-gravity", "blue")
+#t_custom.highlight_pattern("-draw", "blue")
+#t_custom.highlight_pattern("-border", "blue")
 
 l_custom_command.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 cb_custom_command.grid(row=1, column=2, padx=5, pady=5, sticky=W)
