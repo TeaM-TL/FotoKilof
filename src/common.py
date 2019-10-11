@@ -7,7 +7,23 @@ import fnmatch
 import os
 import platform
 import re
+import urllib
 from PIL import Image
+
+
+def imagemagick_zip_find():
+    """ searching zip file to download from ImageMagick website """
+    url = 'https://imagemagick.org/script/download.php'
+    req = urllib.request.Request(url)
+    resp = urllib.request.urlopen(req)
+    respData = resp.read()
+    match = re.search(r'ftp://ftp.imagemagick.org/pub/ImageMagick/binaries/ImageMagick-[0-9]+.[0-9]+.[0-9]+-[0-9]+portable-Q16-x64.zip', respData)
+    if match:
+        print(match.group())
+        result = match.group()
+    else:
+        result = None
+    return result
 
 
 def mouse_crop_calculation(file, size):
