@@ -14,10 +14,10 @@ from PIL import Image
 def imagemagick_zip_find():
     """ searching zip file to download from ImageMagick website """
     url = 'https://imagemagick.org/script/download.php'
-    req = urllib.request.Request(url)
-    resp = urllib.request.urlopen(req)
-    respData = resp.read()
-    match = re.search(r'ftp://ftp.imagemagick.org/pub/ImageMagick/binaries/ImageMagick-[0-9]+.[0-9]+.[0-9]+-[0-9]+portable-Q16-x64.zip', respData)
+    request = urllib.request.Request(url)
+    response = urllib.request.urlopen(request)
+    response_data = response.read()
+    match = re.search(r'ftp://ftp.imagemagick.org/pub/ImageMagick/binaries/ImageMagick-[0-9]+.[0-9]+.[0-9]+-[0-9]+portable-Q16-x64.zip', response_data)
     if match:
         print(match.group())
         result = match.group()

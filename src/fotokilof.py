@@ -12,10 +12,11 @@ import os
 import re
 import sys
 
-from tkinter import Tk, ttk, StringVar, IntVar
-from tkinter import TclError, N, S, W, E, END, NORMAL, DISABLED
-from tkinter import Label, PhotoImage, Text
+from tkinter import Tk, ttk, Label, PhotoImage, Text
 from tkinter import filedialog, messagebox
+from tkinter import TclError, StringVar, IntVar
+from tkinter import N, S, W, E, END, NORMAL, DISABLED
+
 from tkcolorpicker import askcolor
 from PIL import Image
 
@@ -69,7 +70,6 @@ def print_command(cmd, cmd_imagick):
     t_custom.config(state=DISABLED)
 
     cb_custom_command.current(imagick_commands.index(cmd_imagick))
-    
 
 ################
 # Preview
@@ -86,7 +86,8 @@ def preview_new(file_out, dir_temp):
     preview_picture = preview.preview_convert(file_out, dir_temp, " ", PREVIEW_NEW)
     try:
         pi_preview_new.configure(file=preview_picture['filename'])
-        l_preview_new.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
+        l_preview_new.configure(text=preview_picture['width'] + "x" \
+                                + preview_picture['height'])
     except:
         print("! Error in preview_new: Nie można wczytać podglądu")
 
@@ -126,7 +127,7 @@ def apply_all_convert(out_file):
     """ apply all option together """
     text_separate = 0  # all conversion in one run
     cmd = ""
-    
+
     if img_normalize_on.get() == 1:
         cmd = cmd + " " + convert.convert_normalize(img_normalize.get())
 
@@ -177,15 +178,16 @@ def apply_all_convert(out_file):
         print_command(cmd, cmd_imagick)
         result1 = magick.imagick(cmd, out_file, cmd_imagick)
         result2 = magick.imagick(cmd_text, out_file, cmd_imagick)
-    
+
     if img_logo_on.get() == 1:
         cmd1 = convert.convert_pip(img_logo_gravity.get(),
                                    e_logo_width.get(),
                                    e_logo_height.get(),
                                    e_logo_dx.get(),
                                    e_logo_dy.get())
-        cmd2 = common.spacja(file_logo_path.get()) + " " + common.spacja(out_file)
-        cmd = cmd1 + " " + cmd2
+        cmd2 = " " + common.spacja(file_logo_path.get()) + " " \
+            + common.spacja(out_file)
+        cmd = cmd1 + cmd2
         cmd_imagick = "composite"
         print_command(cmd, cmd_imagick)
         result3 = magick.imagick(cmd, out_file, cmd_imagick)
@@ -223,7 +225,8 @@ def apply_all_button():
             out_file = magick.pre_imagick(files, work_dir.get())
             result = apply_all_convert(os.path.realpath(out_file))
             i = i + 1
-            progress_files.set(str(i) + " " + _("of") + " " + str(file_list_len) + " : " + files)
+            progress_files.set(str(i) + " " + _("of") + " " \
+                               + str(file_list_len) + " : " + files)
             progress_var.set(i)
             root.update_idletasks()
         preview_orig()
@@ -897,7 +900,8 @@ def preview_orig():
         y1 = int(y1 * ratio_Y)
 
         x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
-        command = " -fill none  -draw \"stroke '#FFFF00' rectangle " + x0y0x1y1 + "\" "
+        command = " -fill none  -draw \"stroke '#FFFF00' rectangle " \
+            + x0y0x1y1 + "\" "
     else:
         command = " "
 
@@ -911,7 +915,8 @@ def preview_orig():
         print("! Error in preview_orig: Cannot load preview")
 
     try:
-        l_preview_orig.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
+        l_preview_orig.configure(text=preview_picture['width'] + "x"\
+                                 + preview_picture['height'])
     except:
         print("! Error in preview_orig: Cannot load image size")
 
@@ -1007,9 +1012,6 @@ def tools_set():
         frame_logo.grid_remove()
     else:
         frame_logo.grid()
-
-
-
 
 ###############################################################################
 # GUI okno główne
@@ -1671,7 +1673,9 @@ b_normalize.grid(row=2, column=1, columnspan=2, padx=5, pady=5, sticky=E)
 frame_custom = ttk.LabelFrame(frame_first_col,
                               text=_("Custom command"),
                               style="Blue.TLabelframe")
-frame_custom.grid(row=10, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+frame_custom.grid(row=10, column=1, columnspan=2,
+                  sticky=(N, W, E, S),
+                  padx=5, pady=5)
 ###
 l_custom_command = ttk.Label(frame_custom, text=_("Command"))
 cb_custom_command = ttk.Combobox(frame_custom,

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=line-too-long
 
 """ moduł z funkcjami ogólnego przeznaczenia """
 
@@ -25,7 +24,9 @@ def preview_histogram(file, dir_temp):
         suffix = ".exe "
     else:
         suffix = " "
-    command = "convert" + suffix + file + " -colorspace Gray -define histogram:unique-colors=false histogram:" + file_histogram
+    command = "convert" + suffix + file \
+        + " -colorspace Gray -define histogram:unique-colors=false histogram:" \
+        + file_histogram
     try:
         os.system(command)
         return file_histogram
@@ -55,8 +56,10 @@ def preview_convert(file, dir_temp, command, size):
         suffix = ".exe "
     else:
         suffix = " "
-    command = "convert" + suffix + file + " -resize " + str(size) + "x" + str(size) + command + file_preview
-    print(command)
+    command = "convert" + suffix + file + \
+        " -resize " + str(size) + "x" + str(size) \
+        + command + file_preview
+    # print(command)
     try:
         os.system(command)
     except:

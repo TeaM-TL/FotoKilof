@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=line-too-long
 """ Converters """
 
 
@@ -7,7 +6,8 @@ def convert_border(width, color, border_on):
     """ 1. Add border """
 
     if border_on > 0:
-        command = "-border " + str(abs(int(width))) + " -bordercolor \"" + color + "\""
+        command = "-border " + str(abs(int(width))) + \
+            " -bordercolor \"" + color + "\""
     else:
         command = ""
     return command
@@ -22,7 +22,8 @@ def convert_text(entries):
         color = " -fill \"" + entries['text_color'] + "\""
         gravit = " -gravity " + gravity(entries['gravitation'])
 
-        text = " -draw \"text " + entries['dx'] + "," + entries['dy'] + " '" + entries['text'] + "'\""
+        text = " -draw \"text " + entries['dx'] + "," + entries['dy'] \
+            + " '" + entries['text'] + "'\""
         if entries['box'] == 0:
             box = ""
         else:
@@ -129,7 +130,9 @@ def convert_rotate(rotate):
 def convert_pip(gravitation, width, height, offset_dx, offset_dy):
     """ 9. Picture In Picture, eg. to add logo on image """
 
-    command = "-gravity " + gravity(gravitation) + " -geometry " + width + "x" + height + "+" + offset_dx + "+" + offset_dy
+    command = "-gravity " + gravity(gravitation) \
+        + " -geometry " + width + "x" + height \
+        + "+" + offset_dx + "+" + offset_dy
     return command
 
 
