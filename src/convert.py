@@ -88,7 +88,9 @@ def convert_contrast(contrast, contrast_selected, entry1, entry2):
     """ 6. Contrast """
 
     if contrast == 1:
-        if contrast_selected == "+2":
+        if contrast_selected == "+3":
+            command = "+contrast +contrast +contrast"
+        elif contrast_selected == "+2":
             command = "+contrast +contrast"
         elif contrast_selected == "+1":
             command = "+contrast"
@@ -96,6 +98,8 @@ def convert_contrast(contrast, contrast_selected, entry1, entry2):
             command = "-contrast"
         elif contrast_selected == "-2":
             command = "-contrast -contrast"
+        elif contrast_selected == "-3":
+            command = "-contrast -contrast -contrast"
         else:
             command = ""
     elif contrast == 2:

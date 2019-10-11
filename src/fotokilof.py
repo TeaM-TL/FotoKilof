@@ -197,7 +197,7 @@ def apply_all_convert(out_file):
         result = "None"
     return result
 
-    
+
 def apply_all_button():
     """
     zaplikowanie wszystkich opcji na raz
@@ -267,11 +267,10 @@ def convert_contrast_button():
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
     progress_var.set(0)
-    # root.update_idletasks()
 
 
 def convert_bw_button():
-    """ konwersja do czerni-bieli lub sepii """
+    """ black-white or sepia button """
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
     cmd = convert.convert_bw(img_bw.get(), e_bw_sepia.get())
     cmd_imagick = "mogrify"
@@ -282,7 +281,7 @@ def convert_bw_button():
 
 
 def convert_normalize_button():
-    """ przycisk normalizacji """
+    """ normalize button """
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
     cmd = convert.convert_normalize(img_normalize.get())
     cmd_imagick = "mogrify"
@@ -1632,7 +1631,7 @@ rb1_contrast = ttk.Radiobutton(frame_contrast,
                                value="1")
 cb_contrast = ttk.Combobox(frame_contrast,
                            width=2,
-                           values=("+2", "+1", "0", "-1", "-2"))
+                           values=("+3", "+2", "+1", "0", "-1", "-2", "-3"))
 rb2_contrast = ttk.Radiobutton(frame_contrast,
                                text=_("Stretch"),
                                variable=img_contrast,
