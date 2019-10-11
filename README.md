@@ -26,7 +26,8 @@ GUI for the most used by me ImageMagick functionality for processing pictures
  - crop selection via click on preview or coordinates, in three ways
  - text: color, font and size selection (Linux, Mac OSX only)
  - fast file navigation: First, Prev, Next, Last
- - histograms of original and result pictures.
+ - histograms of original and result pictures
+ - own command editor, additionaly command can be composed from started commands
 
 ## Requirements
  - ImageMagick - home page: https://imagemagick.org/
@@ -61,3 +62,5 @@ polecenie z przetwarzania
 
 ## Thanks
 Max von Forell - German translation
+Bozhidar Kirev - Bulgarian translation
+
