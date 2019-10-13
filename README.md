@@ -61,6 +61,6 @@ Do przetwarzania folderu musimy użyć przycisku Zaaplikuj wszystko i zaznaczyć
 polecenie z przetwarzania
 
 ## Thanks
-Max von Forell - German translation
-Bozhidar Kirev - Bulgarian translation
+ - Max von Forell - German translation
+ - Bozhidar Kirev - Bulgarian translation
 
