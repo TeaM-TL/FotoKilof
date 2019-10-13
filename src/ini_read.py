@@ -44,6 +44,15 @@ def ini_read(file_ini):
         histograms = "0"
     dict_return['img_histograms_on'] = histograms
 
+    try:
+        theme = config.get('Konfiguracja', 'theme')
+    except:
+        if platform.system() == "Windows":
+            theme = "default"
+        else:
+            theme = "clam"
+    dict_return['theme'] = theme
+
     return dict_return
 
 
@@ -388,6 +397,12 @@ def ini_read_contrast(file_ini):
     except:
         contrast = "1"
     dict_return['contrast'] = contrast
+
+    try:
+        contrast_selection = config.get('Contrast', 'selection')
+    except:
+        contrast_selection = "0"
+    dict_return['contrast_selection'] = contrast_selection
 
     try:
         contrast_stretch_1 = config.get('Contrast', 'stretch1')

@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: FotoKilof\n"
-"POT-Creation-Date: 2019-10-11 15:09+0200\n"
-"PO-Revision-Date: 2019-10-11 15:09+0200\n"
+"POT-Creation-Date: 2019-10-13 12:29+0200\n"
+"PO-Revision-Date: 2019-10-13 12:30+0200\n"
 "Last-Translator: Max von Forell\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -25,123 +25,123 @@ msgstr ""
 msgid "Unfortunately, you are using Windows, thus not all option will work"
 msgstr "Leider kann es unter Windows zu kleineren Fehlern kommen"
 
-#: fotokilof.py:206
+#: fotokilof.py:207
 msgid "Processing"
 msgstr "Behandlung"
 
-#: fotokilof.py:226
+#: fotokilof.py:227
 msgid "of"
 msgstr "von"
 
-#: fotokilof.py:236
+#: fotokilof.py:237
 msgid "done"
 msgstr "Abgemacht"
 
-#: fotokilof.py:482 fotokilof.py:497
+#: fotokilof.py:477 fotokilof.py:492
 msgid "jpeg files"
 msgstr "jpeg-Dateien"
 
-#: fotokilof.py:483 fotokilof.py:498
+#: fotokilof.py:478 fotokilof.py:493
 msgid "JPEG files"
 msgstr "JPEG-Dateien"
 
-#: fotokilof.py:484 fotokilof.py:499
+#: fotokilof.py:479 fotokilof.py:494
 msgid "png files"
 msgstr "png-Dateien"
 
-#: fotokilof.py:485 fotokilof.py:500
+#: fotokilof.py:480 fotokilof.py:495
 msgid "PNG files"
 msgstr "PNG-Dateien"
 
-#: fotokilof.py:486 fotokilof.py:501
+#: fotokilof.py:481 fotokilof.py:496
 msgid "All files"
 msgstr "Alles Dateien"
 
-#: fotokilof.py:487
+#: fotokilof.py:482
 msgid "Select logo picture for inserting"
 msgstr "Logo zum Verarbeiten auswählen"
 
-#: fotokilof.py:502
+#: fotokilof.py:497
 msgid "Select picture for processing"
 msgstr "Bild zum Verarbeiten auswählen"
 
-#: fotokilof.py:836
+#: fotokilof.py:832
 msgid "License"
 msgstr "Lizenz"
 
-#: fotokilof.py:1123
+#: fotokilof.py:1124
 msgid "Tools"
 msgstr "Werkzeuge"
 
-#: fotokilof.py:1128
+#: fotokilof.py:1129
 msgid "Histograms"
 msgstr "Histogramme"
 
-#: fotokilof.py:1132
+#: fotokilof.py:1133
 msgid "Scaling/Resize"
 msgstr "Skalieren/Größe ändern"
 
-#: fotokilof.py:1137 fotokilof.py:1342 fotokilof.py:1403
+#: fotokilof.py:1138 fotokilof.py:1348 fotokilof.py:1409
 msgid "Crop"
 msgstr "Zuschneiden"
 
-#: fotokilof.py:1141
+#: fotokilof.py:1142
 msgid "Text"
 msgstr "Text"
 
-#: fotokilof.py:1146 fotokilof.py:1534 fotokilof.py:1554
+#: fotokilof.py:1147 fotokilof.py:1540 fotokilof.py:1560
 msgid "Rotate"
 msgstr "Drehen"
 
-#: fotokilof.py:1151 fotokilof.py:1597
+#: fotokilof.py:1152 fotokilof.py:1603
 msgid "Frame"
 msgstr "Rahmen"
 
-#: fotokilof.py:1156
+#: fotokilof.py:1157
 msgid "Black&white"
 msgstr "Schwarz&Weiß"
 
-#: fotokilof.py:1160
+#: fotokilof.py:1161
 msgid "Colors normalize"
 msgstr "Farben normalisieren"
 
-#: fotokilof.py:1165 fotokilof.py:1621 fotokilof.py:1626 fotokilof.py:1630
+#: fotokilof.py:1166 fotokilof.py:1627 fotokilof.py:1632 fotokilof.py:1636
 msgid "Contrast"
 msgstr "Kontrast"
 
-#: fotokilof.py:1170 fotokilof.py:1216
+#: fotokilof.py:1171 fotokilof.py:1222
 msgid "Logo"
 msgstr "Logo"
 
-#: fotokilof.py:1175
+#: fotokilof.py:1176
 msgid "Custom"
 msgstr ""
 
-#: fotokilof.py:1179 fotokilof.py:1798
+#: fotokilof.py:1185 fotokilof.py:1803
 msgid "Apply"
 msgstr "Anwenden"
 
-#: fotokilof.py:1198
+#: fotokilof.py:1204
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: fotokilof.py:1203
+#: fotokilof.py:1209
 msgid "Save"
 msgstr "Speichern"
 
-#: fotokilof.py:1206
+#: fotokilof.py:1212
 msgid "Load"
 msgstr "Laden"
 
-#: fotokilof.py:1221 fotokilof.py:1735
+#: fotokilof.py:1227 fotokilof.py:1740
 msgid "File selection"
 msgstr "Dateiauswahl"
 
-#: fotokilof.py:1225 fotokilof.py:1582 fotokilof.py:1698
+#: fotokilof.py:1231 fotokilof.py:1588 fotokilof.py:1703
 msgid "Execute"
 msgstr "Ausführen"
 
-#: fotokilof.py:1236
+#: fotokilof.py:1242
 msgid ""
 "Width\n"
 "Height"
@@ -149,7 +149,7 @@ msgstr ""
 "Breite\n"
 "Höhe"
 
-#: fotokilof.py:1237
+#: fotokilof.py:1243
 msgid ""
 "Offset\n"
 "(dx,dy)"
@@ -157,183 +157,181 @@ msgstr ""
 "Verschiebung\n"
 "(dx,dy)"
 
-#: fotokilof.py:1261 fotokilof.py:1388 fotokilof.py:1475
+#: fotokilof.py:1267 fotokilof.py:1394 fotokilof.py:1481
 msgid "Center"
 msgstr "Zentrum"
 
-#: fotokilof.py:1297
+#: fotokilof.py:1303
 msgid "Scale/Resize"
 msgstr "Skalieren/Größe ändern"
 
-#: fotokilof.py:1304 fotokilof.py:1601
+#: fotokilof.py:1310 fotokilof.py:1607
 msgid "Pixels"
 msgstr "Pixel"
 
-#: fotokilof.py:1309
+#: fotokilof.py:1315
 msgid "Percent"
 msgstr "Prozent"
 
-#: fotokilof.py:1325
+#: fotokilof.py:1331
 msgid "Resize"
 msgstr "Größe ändern"
 
-#: fotokilof.py:1351
+#: fotokilof.py:1357
 msgid "Coordinates (x1, y1) and (x2, y2)"
 msgstr "Koordinaten (x1, y1) und (x2, y2)"
 
-#: fotokilof.py:1352
+#: fotokilof.py:1358
 msgid "Left Upper corner"
 msgstr "Obere linke Ecke"
 
-#: fotokilof.py:1353
+#: fotokilof.py:1359
 msgid "Click left"
 msgstr "Linksklicken"
 
-#: fotokilof.py:1356
+#: fotokilof.py:1362
 msgid "Right lower corner"
 msgstr "Untere rechte Ecke"
 
-#: fotokilof.py:1357
+#: fotokilof.py:1363
 msgid "Click right"
 msgstr "Rechtsklicken"
 
-#: fotokilof.py:1364
+#: fotokilof.py:1370
 msgid "Origin (x1,y1) and dimensions (X, Y)"
 msgstr "Ursprung (x1,y1) und Dimensionen (X, Y)"
 
-#: fotokilof.py:1373
+#: fotokilof.py:1379
 msgid ""
 "Offset (dx,dy), dimensions (X, Y)\n"
-"i gravity"
+"and gravity"
 msgstr ""
 "Verschiebung (dx,dy), Dimensionen (X, Y)\n"
-"i Schwerkraft"
+"und Schwerkraft"
 
-#: fotokilof.py:1400
+#: fotokilof.py:1406
 msgid "From image"
 msgstr "Aus Bild"
 
-#: fotokilof.py:1443
+#: fotokilof.py:1449
 msgid "Add text"
 msgstr "Text hinzufügen"
 
-#: fotokilof.py:1457
+#: fotokilof.py:1463
 msgid "Offset (dx,dy)\n"
 msgstr "Verschiebung (dx,dy)\n"
 
-#: fotokilof.py:1502
+#: fotokilof.py:1508
 msgid "Font color"
 msgstr "Schriftfarbe"
 
-#: fotokilof.py:1505
+#: fotokilof.py:1511
 msgid "Background"
 msgstr "Hintergrund"
 
-#: fotokilof.py:1511
+#: fotokilof.py:1517
 msgid "Background color"
 msgstr "Hintergrundfarbe"
 
-#: fotokilof.py:1515
+#: fotokilof.py:1521
 msgid "Put text"
 msgstr "Text festsetzen"
 
-#: fotokilof.py:1568 fotokilof.py:1573
+#: fotokilof.py:1574 fotokilof.py:1579
 msgid "Black-white"
 msgstr "Schwarz-Weiß"
 
-#: fotokilof.py:1577
+#: fotokilof.py:1583
 msgid "Sepia"
 msgstr "Sepia"
 
-#: fotokilof.py:1604
+#: fotokilof.py:1610
 msgid "Color"
 msgstr "Farbe"
 
-#: fotokilof.py:1607
+#: fotokilof.py:1613
 msgid "Add frame"
 msgstr "Rahmen hinzufügen"
 
-#: fotokilof.py:1637
+#: fotokilof.py:1641
 msgid "Stretch"
 msgstr "Ziehen"
 
-#: fotokilof.py:1642
+#: fotokilof.py:1646
 msgid "Black"
 msgstr "Schwarz"
 
-#: fotokilof.py:1643
+#: fotokilof.py:1647
 msgid "White"
 msgstr "Weiß"
 
-#: fotokilof.py:1659
+#: fotokilof.py:1663
 msgid "Color normalize"
 msgstr "Farbe normalisieren"
 
-#: fotokilof.py:1664 fotokilof.py:1672
+#: fotokilof.py:1668 fotokilof.py:1676
 msgid "Normalize"
 msgstr "Normalisieren"
 
-#: fotokilof.py:1668
+#: fotokilof.py:1672
 msgid "AutoLevel"
 msgstr "AutoNiveau"
 
-#: fotokilof.py:1685
+#: fotokilof.py:1689
 #, fuzzy
 #| msgid "Commands"
 msgid "Custom command"
 msgstr "Befehle"
 
-#: fotokilof.py:1691
-#, fuzzy
-#| msgid "Commands"
-msgid "Command"
-msgstr "Befehle"
+#: fotokilof.py:1695
+msgid "Command:"
+msgstr "Befehle:"
 
-#: fotokilof.py:1731
+#: fotokilof.py:1736
 msgid "Image"
 msgstr "Bild"
 
-#: fotokilof.py:1741
+#: fotokilof.py:1746
 msgid "First"
 msgstr "Erstes"
 
-#: fotokilof.py:1743
+#: fotokilof.py:1748
 msgid "Previous"
 msgstr "Vorheriges"
 
-#: fotokilof.py:1745
+#: fotokilof.py:1750
 msgid "Next"
 msgstr "Nächstes"
 
-#: fotokilof.py:1747
+#: fotokilof.py:1752
 msgid "Last"
 msgstr "Letztes"
 
-#: fotokilof.py:1762
+#: fotokilof.py:1767
 msgid "Original"
 msgstr "Original"
 
-#: fotokilof.py:1769 fotokilof.py:1838
+#: fotokilof.py:1774 fotokilof.py:1843
 msgid "Preview"
 msgstr "Vorschau"
 
-#: fotokilof.py:1781 fotokilof.py:1852
+#: fotokilof.py:1786 fotokilof.py:1857
 msgid "Histogram"
 msgstr "Histogramm"
 
-#: fotokilof.py:1802
+#: fotokilof.py:1807
 msgid "Folder"
 msgstr "Ordner"
 
-#: fotokilof.py:1805
+#: fotokilof.py:1810
 msgid "File"
 msgstr "Datei"
 
-#: fotokilof.py:1809
+#: fotokilof.py:1814
 msgid "Apply all"
 msgstr "Alle anwenden"
 
-#: fotokilof.py:1833
+#: fotokilof.py:1838
 msgid "Result"
 msgstr "Ergebnis"
 

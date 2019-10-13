@@ -63,7 +63,7 @@ def no_text_in_windows():
 
 def print_command(cmd, cmd_imagick):
     """ print command in custom window """
-    t_custom.insert(END, cmd + " ")
+    t_custom.insert(END, cmd + " \\\n")
     cb_custom_command.current(imagick_commands.index(cmd_imagick))
 
 ################
@@ -123,15 +123,16 @@ def preview_new_button():
 
 def apply_all_convert(out_file):
     """ apply all option together """
-    text_separate = 0  # all conversion in one run
+
     cmd = ""
+    text_separate = 0  # all conversion in one run
 
     if img_normalize_on.get() == 1:
         cmd = cmd + " " + convert.convert_normalize(img_normalize.get())
 
     if img_contrast_on.get() == 1:
         cmd = cmd + " " + convert.convert_contrast(img_contrast.get(),
-                                                   img_contrast_selected.get(),
+                                                   cb_contrast_selection.get(),
                                                    e1_contrast.get(),
                                                    e2_contrast.get())
 
@@ -147,9 +148,10 @@ def apply_all_convert(out_file):
                                                  e1_resize.get(),
                                                  e2_resize.get(),
                                                  border)
-    elif int(img_crop_on.get()) == 1:
-        # if crop with mogrify, convert text in second run
-        text_separate = 1
+    else:
+        if int(img_crop_on.get()) == 1:
+            # if crop with mogrify, convert text in second run
+            text_separate = 1
         cmd = cmd + " " + convert.convert_crop(img_crop.get(),
                                                img_crop_gravity.get(),
                                                convert_crop_entries())
@@ -162,18 +164,19 @@ def apply_all_convert(out_file):
         cmd = cmd + " " + convert.convert_border(e_border.get(),
                                                  img_border_color.get(),
                                                  border)
-    cmd_text = convert.convert_text(convert_text_entries())
 
     cmd_imagick = "mogrify"
+    print_command(cmd, cmd_imagick)
+    cmd_text = convert.convert_text(convert_text_entries())
+
     if text_separate == 0:
         cmd = cmd + " " + cmd_text
-        print_command(cmd + out_file, cmd_imagick)
         result1 = magick.imagick(cmd, out_file, cmd_imagick)
         result2 = None
     else:
-        # thus text gravity which makes problem with crop gravity
-        # foce second run of conversion
-        print_command(cmd +  out_file, cmd_imagick)
+        # because text gravity which makes problem with crop gravity
+        # we have to force second run of conversion
+        print_command(cmd, cmd_imagick)
         result1 = magick.imagick(cmd, out_file, cmd_imagick)
         result2 = magick.imagick(cmd_text, out_file, cmd_imagick)
 
@@ -246,17 +249,12 @@ def convert_custom_button():
         preview_new(out_file, TEMP_DIR)
 
 
-def contrast_selected(event):
-    """ Contrast selected, called by bind """
-    img_contrast_selected.set(cb_contrast.get())
-
-
 def convert_contrast_button():
     """ przycisk zmiany kontrastu """
     root.update_idletasks()
     out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
-    cmd = convert.convert_contrast(img_contrast.get(),
-                                   img_contrast_selected.get(),
+    cmd = convert.convert_contrast(int(img_contrast.get()),
+                                   cb_contrast_selection.get(),
                                    e1_contrast.get(),
                                    e2_contrast.get())
     cmd_imagick = "mogrify"
@@ -632,6 +630,8 @@ def ini_read_wraper():
     file_dir_selector.set(ini_entries['file_dir_selector'])
     work_dir.set(ini_entries['work_dir'])
     img_histograms_on.set(ini_entries['img_histograms_on'])
+    
+    cb_theme_selector.current(theme_list.index(ini_entries['theme']))
 
     ini_entries = ini_read.ini_read_resize(FILE_INI)
     img_resize_on.set(ini_entries['img_resize_on'])
@@ -712,7 +712,7 @@ def ini_read_wraper():
     ini_entries = ini_read.ini_read_contrast(FILE_INI)
     img_contrast_on.set(ini_entries['contrast_on'])
     img_contrast.set(ini_entries['contrast'])
-    cb_contrast.current(str(img_contrast.get()))
+    cb_contrast_selection.current(contrast_selection.index(ini_entries['contrast_selection']))
     e1_contrast.delete(0, "end")
     e1_contrast.insert(0, ini_entries['contrast_stretch_1'])
     e2_contrast.delete(0, "end")
@@ -745,6 +745,7 @@ def ini_save():
     config.set('Konfiguracja', 'work_dir', work_dir.get())
     config.set('Konfiguracja', 'file_dir', str(file_dir_selector.get()))
     config.set('Konfiguracja', 'histograms', str(img_histograms_on.get()))
+    config.set('Konfiguracja', 'theme', cb_theme_selector.get())
     config.add_section('Resize')
     config.set('Resize', 'on', str(img_resize_on.get()))
     config.set('Resize', 'resize', str(img_resize.get()))
@@ -794,6 +795,7 @@ def ini_save():
     config.add_section('Contrast')
     config.set('Contrast', 'on', str(img_contrast_on.get()))
     config.set('Contrast', 'contrast', str(img_contrast.get()))
+    config.set('Contrast', 'selection', cb_contrast_selection.get())
     config.set('Contrast', 'contrast_stretch_1', e1_contrast.get())
     config.set('Contrast', 'contrast_stretch_2', e2_contrast.get())
     config.add_section('Logo')
@@ -1023,7 +1025,7 @@ def tools_set():
 
     style.theme_use(cb_theme_selector.get())
 
-        
+
 ###############################################################################
 # GUI okno główne
 ###############################################################################
@@ -1050,9 +1052,6 @@ root.title("Tomasz Łuczak : FotoKilof : " + str(VERSION) + " : " +
            str(datetime.date.today()))
 
 style = ttk.Style()
-
-if platform.system() != "Windows":
-    style.theme_use('clam')
 
 style.configure("Blue.TButton", foreground="blue")
 style.configure("Blue.TLabelframe.Label", foreground="blue")
@@ -1082,7 +1081,6 @@ img_border_color = StringVar()
 img_normalize = IntVar()
 img_bw = IntVar()
 img_contrast = IntVar()
-img_contrast_selected = StringVar()
 img_histograms_on = IntVar()
 img_logo_on = IntVar()
 img_resize_on = IntVar()
@@ -1096,6 +1094,7 @@ img_contrast_on = IntVar()
 img_custom_on = IntVar()
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
+# full command list"
 imagick_commands = ("animate",
                     "compare",
                     "composite",
@@ -1106,6 +1105,13 @@ imagick_commands = ("animate",
                     "mogrify",
                     "montage",
                     "stream")
+# lite command list:
+imagick_commands = ("composite",
+                    "convert",
+                    "mogrify")
+contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
+theme_list = ("default", "clam", "alt", "classic")
+
 ######################################################################
 # Karty
 ######################################################################
@@ -1178,9 +1184,8 @@ cb_custom = ttk.Checkbutton(frame_zero_set,
                             onvalue="1")
 cb_theme_selector = ttk.Combobox(frame_zero_set,
                                  width=10,
-                                 values=("default", "clam", "alt", "classic"))
+                                 values=theme_list)
 cb_theme_selector.configure(state='readonly')
-cb_theme_selector.current(0)
 
 b_last_set = ttk.Button(frame_zero_set, text=_("Apply"), command=tools_set)
 
@@ -1636,9 +1641,7 @@ rb1_contrast = ttk.Radiobutton(frame_contrast,
                                text=_("Contrast"),
                                variable=img_contrast,
                                value="1")
-cb_contrast = ttk.Combobox(frame_contrast,
-                           width=2,
-                           values=("+3", "+2", "+1", "0", "-1", "-2", "-3"))
+cb_contrast_selection = ttk.Combobox(frame_contrast, width=2, values=contrast_selection)
 rb2_contrast = ttk.Radiobutton(frame_contrast,
                                text=_("Stretch"),
                                variable=img_contrast,
@@ -1655,7 +1658,7 @@ e1_contrast.grid(row=2, column=3, padx=5, pady=5, sticky=E)
 l2_contrast.grid(row=2, column=4, padx=5, pady=5, sticky=W)
 e2_contrast.grid(row=2, column=5, padx=5, pady=5, sticky=W)
 rb1_contrast.grid(row=3, column=1, padx=5, pady=5, sticky=W)
-cb_contrast.grid(row=3, column=2, padx=5, pady=5, sticky=W)
+cb_contrast_selection.grid(row=3, column=2, padx=5, pady=5, sticky=W)
 b_contrast.grid(row=3, column=3, padx=5, pady=5, columnspan=3, sticky=E)
 
 ############################
@@ -1698,7 +1701,7 @@ l_custom_command = ttk.Label(frame_custom, text=_("Command:"))
 cb_custom_command = ttk.Combobox(frame_custom,
                                  width=9,
                                  values=imagick_commands)
-cb_custom_command.current(7)
+cb_custom_command.current(2)
 cb_custom_command.configure(state='readonly')
 
 b_custom = ttk.Button(frame_custom,
@@ -1870,10 +1873,8 @@ l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 
 # binding commands to widgets
 cb_text_font.bind("<<ComboboxSelected>>", font_selected)
-cb_contrast.bind("<<ComboboxSelected>>", contrast_selected)
 l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
 l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
-# rb0_crop.bind("<Button-1>", preview_orig_bind)
 rb1_crop.bind("<ButtonRelease-1>", preview_orig_bind)
 rb2_crop.bind("<ButtonRelease-1>", preview_orig_bind)
 rb3_crop.bind("<Button-1>", preview_orig_bind)
@@ -1886,6 +1887,10 @@ root.protocol("WM_DELETE_WINDOW", win_deleted)
 ini_read_wraper()  # Loading from config file
 fonts()    # Reading available fonts
 no_text_in_windows()  # Warning if Windows
+
+# application theme
+
+
 tools_set()
 if os.path.isfile(file_in_path.get()):
     # Load preview picture
