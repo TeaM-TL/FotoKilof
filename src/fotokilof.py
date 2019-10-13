@@ -63,9 +63,7 @@ def no_text_in_windows():
 
 def print_command(cmd, cmd_imagick):
     """ print command in custom window """
-#    t_custom.delete(1.0, END)  # delete whole text in widget
     t_custom.insert(END, cmd + " ")
-
     cb_custom_command.current(imagick_commands.index(cmd_imagick))
 
 ################
@@ -80,7 +78,10 @@ def preview_orig_bind(event):
 def preview_new(file_out, dir_temp):
     """ generowanie podglądu wynikowego """
     # global img_histograms_on
-    preview_picture = preview.preview_convert(file_out, dir_temp, " ", PREVIEW_NEW)
+    preview_picture = preview.preview_convert(file_out,
+                                              dir_temp,
+                                              " ",
+                                              PREVIEW_NEW)
     try:
         pi_preview_new.configure(file=preview_picture['filename'])
         l_preview_new.configure(text=preview_picture['width'] + "x" \
@@ -199,10 +200,7 @@ def apply_all_convert(out_file):
 
 
 def apply_all_button():
-    """
-    zaplikowanie wszystkich opcji na raz
-    mieli albo plik albo cały katalog
-    """
+    """ all option together, processing one file or whole directory """
     progress_files.set(_("Processing"))
     pb.start()
     root.update_idletasks()
@@ -949,7 +947,7 @@ def preview_logo():
                                               PREVIEW_LOGO)
     try:
         pi_logo_preview.configure(file=preview_picture['filename'])
-        # l_logo_preview.configure(text=preview['width'] + "x" + preview['height'])
+ #      l_logo_preview.configure(text=preview['width'] + "x" + preview['height'])
     except:
         print("! Error in preview_logo: Cannot load preview")
 
@@ -1023,6 +1021,9 @@ def tools_set():
     else:
         frame_logo.grid()
 
+    style.theme_use(cb_theme_selector.get())
+
+        
 ###############################################################################
 # GUI okno główne
 ###############################################################################
@@ -1175,6 +1176,12 @@ cb_custom = ttk.Checkbutton(frame_zero_set,
                             variable=img_custom_on,
                             offvalue="0",
                             onvalue="1")
+cb_theme_selector = ttk.Combobox(frame_zero_set,
+                                 width=10,
+                                 values=("default", "clam", "alt", "classic"))
+cb_theme_selector.configure(state='readonly')
+cb_theme_selector.current(0)
+
 b_last_set = ttk.Button(frame_zero_set, text=_("Apply"), command=tools_set)
 
 cb_histograms.pack(padx=5, pady=5, anchor=W)
@@ -1188,7 +1195,7 @@ cb_contrast.pack(padx=5, pady=5, anchor=W)
 cb_normalize.pack(padx=5, pady=5, anchor=W)
 cb_logo.pack(padx=5, pady=5, anchor=W)
 cb_custom.pack(padx=5, pady=10, anchor=W)
-
+cb_theme_selector.pack(padx=5, pady=10, anchor=W)
 b_last_set.pack(padx=5, pady=5)
 ###########################
 # Przyciski
@@ -1369,7 +1376,7 @@ e4_crop_2 = ttk.Entry(frame_crop, width=4)
 rb3_crop = ttk.Radiobutton(frame_crop,
                            variable=img_crop,
                            value="3",
-                           text=_("Offset (dx,dy), dimensions (X, Y)\ni gravity"))
+                           text=_("Offset (dx,dy), dimensions (X, Y)\nand gravity"))
 e1_crop_3 = ttk.Entry(frame_crop, width=4)
 e2_crop_3 = ttk.Entry(frame_crop, width=4)
 e3_crop_3 = ttk.Entry(frame_crop, width=4)
@@ -1687,11 +1694,12 @@ frame_custom.grid(row=10, column=1, columnspan=2,
                   sticky=(N, W, E, S),
                   padx=5, pady=5)
 ###
-l_custom_command = ttk.Label(frame_custom, text=_("Command"))
+l_custom_command = ttk.Label(frame_custom, text=_("Command:"))
 cb_custom_command = ttk.Combobox(frame_custom,
                                  width=9,
                                  values=imagick_commands)
 cb_custom_command.current(7)
+cb_custom_command.configure(state='readonly')
 
 b_custom = ttk.Button(frame_custom,
                       text=_("Execute"),
@@ -1700,7 +1708,7 @@ b_custom = ttk.Button(frame_custom,
 
 t_custom = ScrolledText(frame_custom,
                         state='normal',
-                        height=5, width=70,
+                        height=5, width=0,
                         wrap='word', undo=True)
 
 # configuring a tag with a certain style (font color)
@@ -1713,10 +1721,10 @@ t_custom = ScrolledText(frame_custom,
 #t_custom.highlight_pattern("-draw", "blue")
 #t_custom.highlight_pattern("-border", "blue")
 
-l_custom_command.grid(row=1, column=1, padx=5, pady=5, sticky=W)
-cb_custom_command.grid(row=1, column=2, padx=5, pady=5, sticky=W)
-b_custom.grid(row=1, column=3, padx=5, pady=5, sticky=W)
-t_custom.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky=W)
+t_custom.grid(row=1, column=1, columnspan=4, padx=5, pady=5, sticky=(W, E))
+l_custom_command.grid(row=2, column=1, padx=15, pady=5, sticky=E)
+cb_custom_command.grid(row=2, column=2, padx=15, pady=5, sticky=W)
+b_custom.grid(row=2, column=3, padx=30, pady=5, sticky=E)
 
 ########################################################################
 # Second column
