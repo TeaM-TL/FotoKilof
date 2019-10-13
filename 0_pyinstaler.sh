@@ -3,4 +3,5 @@
 rm -rf __pycache__ build
 #pyinstaller --onefile --windowed fotokilof.py
 pyinstaller --onefile src/fotokilof.py
+rm -rf build
 

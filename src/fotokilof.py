@@ -63,7 +63,7 @@ def no_text_in_windows():
 
 def print_command(cmd, cmd_imagick):
     """ print command in custom window """
-    t_custom.insert(END, cmd + " \\\n")
+    t_custom.insert(END, cmd + " ")
     cb_custom_command.current(imagick_commands.index(cmd_imagick))
 
 ################
