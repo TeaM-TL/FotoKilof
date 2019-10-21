@@ -1,25 +1,28 @@
 ## Localization
 
-### Preparing
-NEWLANG=hu/LC_MESSAGES
+If there are not *fotokilof* in your language, you are able to do it. Example steps for Hungarian:
+`cd src/locale`
+`NEWLANG=hu/LC_MESSAGES`
+`mkdir -p $NEWLANG`
+`cp fotokilof.pot $NEWLANG/fotokilof.po`
+`cd $NEWLANG`
+`[vim|poedit] fotokilof.po`
+`msgfmt -o fotokilof.mo fotokilof`
 
-mkdir -p $NEWLANG
+### Advices
 
-cp fotokilof.pot $NEWLANG/fotokilof.po
+- add your name into *Last-Translator:* field
 
-cd $NEWLANG
+- to check changes from sources, change entry like this:
 
-### Translation
-[vim|emacs|poedit] fotokilof.po
-
-Is good idea to yoyr name into LastTranslator field
-
-msgfmt -o fotokilof.mo fotokilof
+`"X-Poedit-Basepath: ../../\n"`
 
 ### Test
-cd ../../../
 
-python3 fotokilof.py
+`cd ../../../`
+`python3 fotokilof.py`
+
+---
 
 ## Widgets naming:
  *An_B_Cn*
@@ -35,6 +38,7 @@ python3 fotokilof.py
  - t - text
  - pb - progressbar
  - pi - PhotoImage
+ - f, frame - frame or labelframe
 
 ### n - number
 numbering widgets with the same fuction
@@ -44,11 +48,8 @@ numbering widgets with the same fuction
 
 ### C - function
  function of widget, eg. run, show, etc.
- 
+
 ### n - number
 
 numbering widgets with the same fuction or 
 numbering function
-
-### I know
-I have to implement this standard in my code :-)

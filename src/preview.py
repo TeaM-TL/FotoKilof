@@ -23,7 +23,6 @@ def preview_histogram(file, dir_temp, gm_or_im):
     command = magick.magick_command(gm_or_im + "convert") + file \
         + " -colorspace Gray -define histogram:unique-colors=false histogram:" \
         + file_histogram
-    print(command)
     try:
         os.system(command)
         return file_histogram
