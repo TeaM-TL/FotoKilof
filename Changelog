@@ -33,4 +33,5 @@
 	2.6 Added: insert logo on picture
 	2.7 Added: progressbar
 	2.8 Added: custom command to execute, theme selection, bugfix
-
+	2.9 Added: GraphicsMagick support, code clean
+	

@@ -7,22 +7,63 @@ import fnmatch
 import os
 import platform
 import re
-import urllib
+import shutil
 from PIL import Image
 
 
-def imagemagick_zip_find():
-    """ searching zip file to download from ImageMagick website """
-    url = 'https://imagemagick.org/script/download.php'
-    request = urllib.request.Request(url)
-    response = urllib.request.urlopen(request)
-    response_data = response.read()
-    match = re.search(r'ftp://ftp.imagemagick.org/pub/ImageMagick/binaries/ImageMagick-[0-9]+.[0-9]+.[0-9]+-[0-9]+portable-Q16-x64.zip', response_data)
-    if match:
-        print(match.group())
-        result = match.group()
+def check_command():
+    """
+    What is available: ImageMagick, Graphick Magick or none
+    """
+    if platform.system() == "Windows":
+        suffix = ".exe"
+    else:
+        suffix = ""
+    if check_imagemagick(suffix) is not None:
+        print("ImageMagick")
+        result = ""
+    elif check_graphicsmagick(suffix) is not None:
+        print("GraphicsMagick")
+        result = "gm "
     else:
         result = None
+
+    print(result)
+    return result
+
+
+def check_imagemagick(suffix):
+    """ Check if ImageMmagick is avaialble"""
+    if shutil.which('convert' + suffix):
+        result1 = "OK"
+    else:
+        result1 = None
+
+    if shutil.which('mogrify' + suffix):
+        result2 = "OK"
+    else:
+        result2 = None
+
+    if shutil.which('convert' + suffix):
+        result3 = "OK"
+    else:
+        result3 = None
+
+    if result1 is not None and result2 is not None and result3 is not None:
+        result = "OK"
+    else:
+        result = None
+
+    return result
+
+
+def check_graphicsmagick(suffix):
+    """ Check if GraphicsMagick is avaialble"""
+    if shutil.which('gm' + suffix):
+        result = "OK"
+    else:
+        result = None
+
     return result
 
 

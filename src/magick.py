@@ -10,7 +10,7 @@ import sys
 
 import common
 
-def pre_imagick(file_in, destination):
+def pre_magick(file_in, destination):
     """
     file_in - original file for processing
     destination - processing directory
@@ -46,24 +46,24 @@ def pre_imagick(file_in, destination):
     return file_out
 
 
-def imagick(cmd, file_out, command):
+def magick(cmd, file_out, command):
     """
     run imagemagick command.
     cmd - command for imagemagick
     file_out - fullname picture for processing
-    command: convert, mogrify, composite - imagemagick tools
+    command: it depends:
+      convert, mogrify, composite - ImageMagick
+      gm convert, gm mogrify, gm composite - GraphicsMagick
     """
     result = None
     if cmd != "":
         if file_out is not None:
+            print(file_out)
             if os.path.isfile(file_out):
                 file_out = common.spacja(file_out)
-                if platform.system() == "Windows":
-                    suffix = ".exe "
-                else:
-                    suffix = " "
-                command = command + suffix + cmd + " " + file_out
-                # print(command)
+                command = magick_command(command)
+                command = command + cmd + " " + file_out
+                # print("Excute: ", command)
                 try:
                     os.system(command)
                 except:
@@ -72,12 +72,31 @@ def imagick(cmd, file_out, command):
                 else:
                     result = "OK"
             else:
-                print("No file for processing")
+                print("imagick: No file for processing")
         else:
-            print("No file for imagick")
+            print("imagick: No file for imagick")
             result = None
     else:
         result = None
+    return result
+
+
+def magick_command(command):
+    """
+    make [Graphics|Image]Magick independent
+    command: it depends:
+      convert, mogrify, composite - ImageMagick
+      gm convert, gm mogrify, gm composite - GraphicsMagick
+    """
+    if platform.system() == "Windows":
+        suffix = ".exe "
+    else:
+        suffix = " "
+    tool = command.split()
+    tool.insert(1, suffix)
+    tool.extend(' ')
+    result = "".join(tool)
+    print("!!", result)
     return result
 
 # EOF

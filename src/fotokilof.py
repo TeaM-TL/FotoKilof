@@ -7,16 +7,17 @@ import configparser
 import datetime
 import gettext
 import glob
-import platform
 import os
+import platform
 import re
 import sys
 
-from tkinter import Tk, ttk, Label, PhotoImage, Text
+from tkinter import Tk, ttk, Label, PhotoImage
+# from tkinter.scrolledtext import  Text
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog, messagebox
 from tkinter import TclError, StringVar, IntVar
-from tkinter import N, S, W, E, END, NORMAL, DISABLED
+from tkinter import N, S, W, E, END, DISABLED  # , NORMAL
 
 from tkcolorpicker import askcolor
 from PIL import Image
@@ -42,7 +43,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-VERSION = "2.8"
+VERSION = "2.9"
 if platform.system() == "Windows":
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -61,10 +62,10 @@ def no_text_in_windows():
         l_text_windows.configure(text=_("Unfortunately, you are using Windows, thus not all option will work"))
 
 
-def print_command(cmd, cmd_imagick):
+def print_command(cmd, cmd_magick):
     """ print command in custom window """
     t_custom.insert(END, cmd + " ")
-    cb_custom_command.current(imagick_commands.index(cmd_imagick))
+    # co_custom_command.current(magick_commands.index(cmd_magick))
 
 ################
 # Preview
@@ -81,7 +82,8 @@ def preview_new(file_out, dir_temp):
     preview_picture = preview.preview_convert(file_out,
                                               dir_temp,
                                               " ",
-                                              PREVIEW_NEW)
+                                              PREVIEW_NEW,
+                                              GM_or_IM)
     try:
         pi_preview_new.configure(file=preview_picture['filename'])
         l_preview_new.configure(text=preview_picture['width'] + "x" \
@@ -92,7 +94,8 @@ def preview_new(file_out, dir_temp):
     if img_histograms_on.get() == 1:
         try:
             pi_histogram_new.configure(file=preview.preview_histogram(file_out,
-                                                                      TEMP_DIR))
+                                                                      TEMP_DIR,
+                                                                      GM_or_IM))
         except:
             print("! Error in preview histogram_new")
 
@@ -121,8 +124,10 @@ def preview_new_button():
         print("No new picture to preview")
 
 
-def apply_all_convert(out_file):
-    """ apply all option together """
+def apply_all_convert(out_file, write_command):
+    """ apply all option together
+    write_command = 0 - nothing, 1 - write command into custom widget
+    """
 
     cmd = ""
     text_separate = 0  # all conversion in one run
@@ -132,7 +137,7 @@ def apply_all_convert(out_file):
 
     if img_contrast_on.get() == 1:
         cmd = cmd + " " + convert.convert_contrast(img_contrast.get(),
-                                                   cb_contrast_selection.get(),
+                                                   co_contrast_selection.get(),
                                                    e1_contrast.get(),
                                                    e2_contrast.get())
 
@@ -165,20 +170,22 @@ def apply_all_convert(out_file):
                                                  img_border_color.get(),
                                                  border)
 
-    cmd_imagick = "mogrify"
-    print_command(cmd, cmd_imagick)
+    cmd_magick = GM_or_IM + "mogrify"
+    if write_command == 1:
+        print_command(cmd, cmd_magick)
     cmd_text = convert.convert_text(convert_text_entries())
 
     if text_separate == 0:
         cmd = cmd + " " + cmd_text
-        result1 = magick.imagick(cmd, out_file, cmd_imagick)
+        result1 = magick.magick(cmd, out_file, cmd_magick)
         result2 = None
     else:
         # because text gravity which makes problem with crop gravity
         # we have to force second run of conversion
-        print_command(cmd, cmd_imagick)
-        result1 = magick.imagick(cmd, out_file, cmd_imagick)
-        result2 = magick.imagick(cmd_text, out_file, cmd_imagick)
+        if write_command == 1:
+            print_command(cmd, cmd_magick)
+        result1 = magick.magick(cmd, out_file, cmd_magick)
+        result2 = magick.magick(cmd_text, out_file, cmd_magick)
 
     if img_logo_on.get() == 1:
         cmd1 = convert.convert_pip(img_logo_gravity.get(),
@@ -189,9 +196,10 @@ def apply_all_convert(out_file):
         cmd2 = " " + common.spacja(file_logo_path.get()) + " " \
             + common.spacja(out_file)
         cmd = cmd1 + cmd2
-        cmd_imagick = "composite"
-        print_command(cmd, cmd_imagick)
-        result3 = magick.imagick(cmd, out_file, cmd_imagick)
+        cmd_magick = GM_or_IM + "composite"
+        if write_command == 1:
+            print_command(cmd, cmd_magick)
+        result3 = magick.magick(cmd, out_file, cmd_magick)
     else:
         result3 = None
 
@@ -208,8 +216,8 @@ def apply_all_button():
     pb.start()
     root.update_idletasks()
     if file_dir_selector.get() == 0:
-        out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
-        result = apply_all_convert(out_file)
+        out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
+        result = apply_all_convert(out_file, 1)
         if result == "OK":
             preview_new(out_file, TEMP_DIR)
     else:
@@ -221,8 +229,8 @@ def apply_all_button():
         pb['maximum'] = file_list_len
         pb['mode'] = "determinate"
         for files in glob.glob("*.[j|J][p|P][g|G]"):
-            out_file = magick.pre_imagick(files, work_dir.get())
-            result = apply_all_convert(os.path.realpath(out_file))
+            out_file = magick.pre_magick(files, work_dir.get())
+            result = apply_all_convert(os.path.realpath(out_file), 0)
             i = i + 1
             progress_files.set(str(i) + " " + _("of") + " " \
                                + str(file_list_len) + " : " + files)
@@ -241,10 +249,10 @@ def apply_all_button():
 
 def convert_custom_button():
     """ execute custom command """
-    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
     cmd = t_custom.get('1.0', 'end-1c')
-    cmd_imagick = cb_custom_command.get()
-    result = magick.imagick(cmd, out_file, cmd_imagick)
+    cmd_magick = GM_or_IM + co_custom_command.get()
+    result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
@@ -252,14 +260,14 @@ def convert_custom_button():
 def convert_contrast_button():
     """ przycisk zmiany kontrastu """
     root.update_idletasks()
-    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
     cmd = convert.convert_contrast(int(img_contrast.get()),
-                                   cb_contrast_selection.get(),
+                                   co_contrast_selection.get(),
                                    e1_contrast.get(),
                                    e2_contrast.get())
-    cmd_imagick = "mogrify"
-    print_command(cmd, cmd_imagick)
-    result = magick.imagick(cmd, out_file, cmd_imagick)
+    cmd_magick = GM_or_IM + "mogrify"
+    print_command(cmd, cmd_magick)
+    result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
     progress_var.set(0)
@@ -267,80 +275,80 @@ def convert_contrast_button():
 
 def convert_bw_button():
     """ black-white or sepia button """
-    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
     cmd = convert.convert_bw(img_bw.get(), e_bw_sepia.get())
-    cmd_imagick = "mogrify"
-    print_command(cmd, cmd_imagick)
-    result = magick.imagick(cmd, out_file, cmd_imagick)
+    cmd_magick = GM_or_IM + "mogrify"
+    print_command(cmd, cmd_magick)
+    result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
 
 def convert_normalize_button():
     """ normalize button """
-    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
     cmd = convert.convert_normalize(img_normalize.get())
-    cmd_imagick = "mogrify"
-    print_command(cmd, cmd_imagick)
-    result = magick.imagick(cmd, out_file, cmd_imagick)
+    cmd_magick = GM_or_IM + "mogrify"
+    print_command(cmd, cmd_magick)
+    result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
 
 def convert_rotate_button():
     """ rotate button """
-    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
     cmd = convert.convert_rotate(img_rotate.get())
-    cmd_imagick = "mogrify"
-    print_command(cmd, cmd_imagick)
-    result = magick.imagick(cmd, out_file, cmd_imagick)
+    cmd_magick = GM_or_IM + "mogrify"
+    print_command(cmd, cmd_magick)
+    result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
 
 def convert_resize_button():
     """ resize button """
-    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
     cmd = convert.convert_resize(img_resize.get(),
                                  e1_resize.get(),
                                  e2_resize.get(),
                                  '0')
-    cmd_imagick = "mogrify"
-    print_command(cmd, cmd_imagick)
-    result = magick.imagick(cmd, out_file, cmd_imagick)
+    cmd_magick = GM_or_IM + "mogrify"
+    print_command(cmd, cmd_magick)
+    result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
 
 def convert_border_button():
     """ przycisk dodania ramki """
-    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
     cmd = convert.convert_border(e_border.get(),
                                  img_border_color.get(),
                                  img_border_on.get())
-    cmd_imagick = "mogrify"
-    print_command(cmd, cmd_imagick)
-    result = magick.imagick(cmd, out_file, cmd_imagick)
+    cmd_magick = GM_or_IM + "mogrify"
+    print_command(cmd, cmd_magick)
+    result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
 
 def convert_crop_button():
     """ przycisk wycinka """
-    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
     cmd = convert.convert_crop(img_crop.get(),
                                img_crop_gravity.get(),
                                convert_crop_entries())
-    cmd_imagick = "mogrify"
-    print_command(cmd, cmd_imagick)
-    result = magick.imagick(cmd, out_file, cmd_imagick)
+    cmd_magick = GM_or_IM + "mogrify"
+    print_command(cmd, cmd_magick)
+    result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
 
 def convert_logo_button():
     """ Button insert logo """
-    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
     cmd1 = convert.convert_pip(img_logo_gravity.get(),
                                e_logo_width.get(),
                                e_logo_height.get(),
@@ -348,9 +356,9 @@ def convert_logo_button():
                                e_logo_dy.get())
     cmd2 = common.spacja(file_logo_path.get()) + " " + common.spacja(out_file)
     cmd = cmd1 + " " + cmd2
-    cmd_imagick = "composite"
-    print_command(cmd, cmd_imagick)
-    result = magick.imagick(cmd, out_file, cmd_imagick)
+    cmd_magick = GM_or_IM + "composite"
+    print_command(cmd, cmd_magick)
+    result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
@@ -391,11 +399,11 @@ def convert_text_entries():
 
 def convert_text_button():
     """ przycisk wstawiania tekstu """
-    out_file = magick.pre_imagick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
     cmd = convert.convert_text(convert_text_entries())
-    cmd_imagick = "mogrify"
-    print_command(cmd, cmd_imagick)
-    result = magick.imagick(cmd, out_file, cmd_imagick)
+    cmd_magick = GM_or_IM + "mogrify"
+    print_command(cmd, cmd_magick)
+    result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file, TEMP_DIR)
 
@@ -414,29 +422,37 @@ def fonts():
 
     touch.touch(file_font)
     command = "-list font > "
-    magick.imagick(command, common.spacja(file_font), "convert")
+    magick.magick(command, common.spacja(file_font), GM_or_IM + "convert")
 
-    try:
-        file = open(file_font, "r")
-        fonts_list = []
+    #try:
+    file = open(file_font, "r")
+    fonts_list = []
+    if GM_or_IM == "":
+        # ImageMagick format
         for line in file:
             if re.search("Font", line) is not None:
                 line = re.sub('^[ ]+Font:[ ]*', "", line)
                 line = re.sub('\n', "", line)
                 fonts_list.append(line)
-        file.close()
-        os.remove(file_font)
-    except:
-        print("! Error in fonts: przy wczytywaniu listy fontów")
-        fonts_list = ('Helvetica')
+    else:
+        # GraphicsMagick format
+        for line in file:
+            if re.search("\d$", line) is not None:
+                line = re.findall('^[-a-zA-Z]+', line)
+                fonts_list.append(line)
+    file.close()
+    os.remove(file_font)
+    #except:
+    #    print("! Error in fonts: przy wczytywaniu listy fontów")
+    #    fonts_list = ('Helvetica')
 
-    cb_text_font['values'] = fonts_list
+    co_text_font['values'] = fonts_list
 
 
 def font_selected(event):
     """ wywołanie przez bind wyboru fontu """
     # print('You selected:', cb_text_font.get())
-    img_text_font.set(cb_text_font.get())
+    img_text_font.set(co_text_font.get())
 
 
 def crop_read():
@@ -630,8 +646,8 @@ def ini_read_wraper():
     file_dir_selector.set(ini_entries['file_dir_selector'])
     work_dir.set(ini_entries['work_dir'])
     img_histograms_on.set(ini_entries['img_histograms_on'])
-    
-    cb_theme_selector.current(theme_list.index(ini_entries['theme']))
+
+    co_theme_selector.current(theme_list.index(ini_entries['theme']))
 
     ini_entries = ini_read.ini_read_resize(FILE_INI)
     img_resize_on.set(ini_entries['img_resize_on'])
@@ -712,7 +728,7 @@ def ini_read_wraper():
     ini_entries = ini_read.ini_read_contrast(FILE_INI)
     img_contrast_on.set(ini_entries['contrast_on'])
     img_contrast.set(ini_entries['contrast'])
-    cb_contrast_selection.current(contrast_selection.index(ini_entries['contrast_selection']))
+    co_contrast_selection.current(contrast_selection.index(ini_entries['contrast_selection']))
     e1_contrast.delete(0, "end")
     e1_contrast.insert(0, ini_entries['contrast_stretch_1'])
     e2_contrast.delete(0, "end")
@@ -745,7 +761,7 @@ def ini_save():
     config.set('Konfiguracja', 'work_dir', work_dir.get())
     config.set('Konfiguracja', 'file_dir', str(file_dir_selector.get()))
     config.set('Konfiguracja', 'histograms', str(img_histograms_on.get()))
-    config.set('Konfiguracja', 'theme', cb_theme_selector.get())
+    config.set('Konfiguracja', 'theme', co_theme_selector.get())
     config.add_section('Resize')
     config.set('Resize', 'on', str(img_resize_on.get()))
     config.set('Resize', 'resize', str(img_resize.get()))
@@ -795,7 +811,7 @@ def ini_save():
     config.add_section('Contrast')
     config.set('Contrast', 'on', str(img_contrast_on.get()))
     config.set('Contrast', 'contrast', str(img_contrast.get()))
-    config.set('Contrast', 'selection', cb_contrast_selection.get())
+    config.set('Contrast', 'selection', co_contrast_selection.get())
     config.set('Contrast', 'contrast_stretch_1', e1_contrast.get())
     config.set('Contrast', 'contrast_stretch_2', e2_contrast.get())
     config.add_section('Logo')
@@ -918,7 +934,8 @@ def preview_orig():
     preview_picture = preview.preview_convert(file_in_path.get(),
                                               TEMP_DIR,
                                               command,
-                                              PREVIEW_ORIG)
+                                              PREVIEW_ORIG,
+                                              GM_or_IM)
     try:
         pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
     except:
@@ -933,7 +950,8 @@ def preview_orig():
     if img_histograms_on.get() == 1:
         try:
             pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(),
-                                                                       TEMP_DIR))
+                                                                       TEMP_DIR,
+                                                                       GM_or_IM))
         except:
             print("! Error in preview_orig: : Cannot load histogram preview")
 
@@ -946,7 +964,8 @@ def preview_logo():
     preview_picture = preview.preview_convert(file_logo_path.get(),
                                               TEMP_DIR,
                                               " ",
-                                              PREVIEW_LOGO)
+                                              PREVIEW_LOGO,
+                                              GM_or_IM)
     try:
         pi_logo_preview.configure(file=preview_picture['filename'])
  #      l_logo_preview.configure(text=preview['width'] + "x" + preview['height'])
@@ -959,15 +978,6 @@ def tools_set():
 
     if img_custom_on.get() == 1:
         frame_custom.grid()
-#        img_resize_on.set(0)
-#        img_crop_on.set(0)
-#        img_text_on.set(0)
-#        img_rotate_on.set(0)
-#        img_border_on.set(0)
-#        img_bw_on.set(0)
-#        img_contrast_on.set(0)
-#        img_normalize_on.set(0)
-#        img_logo_on.set(0)
     else:
         frame_custom.grid_remove()
 
@@ -1023,7 +1033,7 @@ def tools_set():
     else:
         frame_logo.grid()
 
-    style.theme_use(cb_theme_selector.get())
+    style.theme_use(co_theme_selector.get())
 
 
 ###############################################################################
@@ -1095,20 +1105,20 @@ img_custom_on = IntVar()
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
 # full command list"
-imagick_commands = ("animate",
-                    "compare",
-                    "composite",
-                    "conjure",
-                    "convert",
-                    "identify",
-                    "import",
-                    "mogrify",
-                    "montage",
-                    "stream")
+magick_commands = ("animate",
+                   "compare",
+                   "composite",
+                   "conjure",
+                   "convert",
+                   "identify",
+                   "import",
+                   "mogrify",
+                   "montage",
+                   "stream")
 # lite command list:
-imagick_commands = ("composite",
-                    "convert",
-                    "mogrify")
+magick_commands = ("composite",
+                   "convert",
+                   "mogrify")
 contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
 theme_list = ("default", "clam", "alt", "classic")
 
@@ -1182,10 +1192,10 @@ cb_custom = ttk.Checkbutton(frame_zero_set,
                             variable=img_custom_on,
                             offvalue="0",
                             onvalue="1")
-cb_theme_selector = ttk.Combobox(frame_zero_set,
+co_theme_selector = ttk.Combobox(frame_zero_set,
                                  width=10,
                                  values=theme_list)
-cb_theme_selector.configure(state='readonly')
+co_theme_selector.configure(state='readonly')
 
 b_last_set = ttk.Button(frame_zero_set, text=_("Apply"), command=tools_set)
 
@@ -1200,7 +1210,7 @@ cb_contrast.pack(padx=5, pady=5, anchor=W)
 cb_normalize.pack(padx=5, pady=5, anchor=W)
 cb_logo.pack(padx=5, pady=5, anchor=W)
 cb_custom.pack(padx=5, pady=10, anchor=W)
-cb_theme_selector.pack(padx=5, pady=10, anchor=W)
+co_theme_selector.pack(padx=5, pady=10, anchor=W)
 b_last_set.pack(padx=5, pady=5)
 ###########################
 # Przyciski
@@ -1333,9 +1343,9 @@ rb_5_resize = ttk.Radiobutton(frame_resize,
                               text="4K (4096×3112)",
                               variable=img_resize,
                               value="5")
-b_resize = ttk.Button(frame_resize, text=_("Resize"),
-                      style="Blue.TButton",
-                      command=convert_resize_button)
+b_resize_run = ttk.Button(frame_resize, text=_("Resize"),
+                          style="Blue.TButton",
+                          command=convert_resize_button)
 
 rb_3_resize.grid(row=1, column=1, columnspan=2, sticky=W, padx=5, pady=5)
 rb_4_resize.grid(row=1, column=3, columnspan=2, sticky=W, padx=5, pady=5)
@@ -1344,7 +1354,7 @@ rb_1_resize.grid(row=2, column=1, sticky=W, padx=5, pady=5)
 e1_resize.grid(row=2, column=2, sticky=W, padx=5, pady=5)
 rb_2_resize.grid(row=2, column=3, sticky=W, padx=5, pady=5)
 e2_resize.grid(row=2, column=4, sticky=W, padx=5, pady=5)
-b_resize.grid(row=2, column=5, sticky=(E), padx=5, pady=5)
+b_resize_run.grid(row=2, column=5, sticky=(E), padx=5, pady=5)
 
 ############################
 # crop
@@ -1410,10 +1420,10 @@ rbSE_crop_3 = ttk.Radiobutton(frame_crop_gravity, text="SE",
 b_crop_read = ttk.Button(frame_crop,
                          text=_("From image"),
                          command=crop_read)
-b_crop = ttk.Button(frame_crop,
-                    text=_("Crop"),
-                    style="Blue.TButton",
-                    command=convert_crop_button)
+b_crop_run = ttk.Button(frame_crop,
+                        text=_("Crop"),
+                        style="Blue.TButton",
+                        command=convert_crop_button)
 
 f_clickL_crop.grid(row=1, column=2, rowspan=2, columnspan=2, padx=5)
 f_clickR_crop.grid(row=1, column=4, rowspan=2, columnspan=2)
@@ -1445,7 +1455,7 @@ rbSW_crop_3.grid(row=3, column=1, sticky=W, pady=5)
 rbS_crop_3.grid(row=3, column=2, pady=5)
 rbSE_crop_3.grid(row=3, column=3, sticky=W, pady=5)
 b_crop_read.grid(row=5, column=2, columnspan=2, sticky=W, padx=5, pady=5)
-b_crop.grid(row=5, column=1, sticky=W, padx=5, pady=5)
+b_crop_run.grid(row=5, column=1, sticky=W, padx=5, pady=5)
 
 ###########################
 # Tekst
@@ -1506,8 +1516,8 @@ rbSE.grid(row=3, column=3, sticky=W, pady=5)
 
 ###
 frame_text_font = ttk.Frame(frame_text)
-cb_text_font = ttk.Combobox(frame_text_font, textvariable=img_text_font)
-cb_text_font.configure(state='readonly')
+co_text_font = ttk.Combobox(frame_text_font, textvariable=img_text_font)
+co_text_font.configure(state='readonly')
 e_text_size = ttk.Entry(frame_text_font, width=3)
 b_text_color = ttk.Button(frame_text,
                           text=_("Font color"),
@@ -1522,20 +1532,20 @@ b_text_box_color = ttk.Button(frame_text,
                               text=_("Background color"),
                               command=color_choose_box)
 l_text_windows = ttk.Label(frame_text, width=40)
-b_text = ttk.Button(frame_text,
-                    text=_("Put text"),
-                    style="Blue.TButton",
-                    command=convert_text_button)
+b_text_run = ttk.Button(frame_text,
+                        text=_("Put text"),
+                        style="Blue.TButton",
+                        command=convert_text_button)
 l_text_font_selected = Label(frame_text, width=20, textvariable=img_text_font)
 
 l_text_font_selected.grid(row=3, column=1, sticky=(W, E), padx=5)
 b_text_color.grid(row=3, column=3, sticky=(W, E), padx=5, pady=5)
 b_text_box_color.grid(row=3, column=4, sticky=(W, E), padx=5, pady=5)
 frame_text_font.grid(row=4, column=1, columnspan=4, sticky=(W, E))
-cb_text_font.grid(row=1, column=1, sticky=(W, E), padx=5)
+co_text_font.grid(row=1, column=1, sticky=(W, E), padx=5)
 e_text_size.grid(row=1, column=2, sticky=W, padx=5)
 cb_text_box.grid(row=1, column=3, sticky=W, padx=5)
-b_text.grid(row=4, column=4, sticky=(W, E), padx=5, pady=5)
+b_text_run.grid(row=4, column=4, sticky=(W, E), padx=5, pady=5)
 l_text_windows.grid(row=5, column=1, columnspan=4, sticky=(W, E))
 
 ###########################
@@ -1562,15 +1572,15 @@ rb_rotate_270 = ttk.Radiobutton(frame_rotate,
                                 text="270",
                                 variable=img_rotate,
                                 value="270")
-b_rotate = ttk.Button(frame_rotate, text=_("Rotate"),
-                      style="Blue.TButton",
-                      command=convert_rotate_button)
+b_rotate_run = ttk.Button(frame_rotate, text=_("Rotate"),
+                          style="Blue.TButton",
+                          command=convert_rotate_button)
 
 rb_rotate_0.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 rb_rotate_90.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
 rb_rotate_180.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
 rb_rotate_270.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
-b_rotate.grid(row=1, column=5, padx=5, pady=5)
+b_rotate_run.grid(row=1, column=5, padx=5, pady=5)
 
 ############################
 # Black-white
@@ -1590,16 +1600,15 @@ rb2_bw = ttk.Radiobutton(frame_bw,
                          value="2")
 e_bw_sepia = ttk.Entry(frame_bw, width=3)
 l_bw_sepia = ttk.Label(frame_bw, text="%")
-b_bw = ttk.Button(frame_bw, text=_("Execute"),
-                  style="Blue.TButton",
-                  command=convert_bw_button)
-
+b_bw_run = ttk.Button(frame_bw, text=_("Execute"),
+                      style="Blue.TButton",
+                      command=convert_bw_button)
 
 rb2_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 e_bw_sepia.grid(row=1, column=2, padx=5, pady=5, sticky=E)
 l_bw_sepia.grid(row=1, column=3, padx=5, pady=5, sticky=W)
 rb1_bw.grid(row=2, column=1, padx=5, pady=5, sticky=W)
-b_bw.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky=E)
+b_bw_run.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky=E)
 
 ###########################
 # Border
@@ -1611,18 +1620,18 @@ frame_border.grid(row=6, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 l_border = Label(frame_border, text=_("Pixels"))
 e_border = ttk.Entry(frame_border, width=3)
-b1_border = ttk.Button(frame_border,
-                       text=_("Color"),
-                       command=color_choose_border)
-b_border = ttk.Button(frame_border,
-                      text=_("Add frame"),
-                      style="Blue.TButton",
-                      command=convert_border_button)
+b_border_color = ttk.Button(frame_border,
+                            text=_("Color"),
+                            command=color_choose_border)
+b_border_run = ttk.Button(frame_border,
+                          text=_("Add frame"),
+                          style="Blue.TButton",
+                          command=convert_border_button)
 
 l_border.grid(row=1, column=1, padx=5, pady=5)
 e_border.grid(row=1, column=2, padx=5, pady=5)
-b1_border.grid(row=1, column=3, padx=5, pady=5)
-b_border.grid(row=1, column=4, padx=5, pady=5, sticky=E)
+b_border_color.grid(row=1, column=3, padx=5, pady=5)
+b_border_run.grid(row=1, column=4, padx=5, pady=5, sticky=E)
 
 
 ########################
@@ -1633,15 +1642,15 @@ frame_contrast = ttk.Labelframe(frame_first_col,
                                 style="Blue.TLabelframe")
 frame_contrast.grid(row=7, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
-b_contrast = ttk.Button(frame_contrast,
-                        text=_("Contrast"),
-                        style="Blue.TButton",
-                        command=convert_contrast_button)
+b_contrast_run = ttk.Button(frame_contrast,
+                            text=_("Contrast"),
+                            style="Blue.TButton",
+                            command=convert_contrast_button)
 rb1_contrast = ttk.Radiobutton(frame_contrast,
                                text=_("Contrast"),
                                variable=img_contrast,
                                value="1")
-cb_contrast_selection = ttk.Combobox(frame_contrast, width=2, values=contrast_selection)
+co_contrast_selection = ttk.Combobox(frame_contrast, width=2, values=contrast_selection)
 rb2_contrast = ttk.Radiobutton(frame_contrast,
                                text=_("Stretch"),
                                variable=img_contrast,
@@ -1658,8 +1667,8 @@ e1_contrast.grid(row=2, column=3, padx=5, pady=5, sticky=E)
 l2_contrast.grid(row=2, column=4, padx=5, pady=5, sticky=W)
 e2_contrast.grid(row=2, column=5, padx=5, pady=5, sticky=W)
 rb1_contrast.grid(row=3, column=1, padx=5, pady=5, sticky=W)
-cb_contrast_selection.grid(row=3, column=2, padx=5, pady=5, sticky=W)
-b_contrast.grid(row=3, column=3, padx=5, pady=5, columnspan=3, sticky=E)
+co_contrast_selection.grid(row=3, column=2, padx=5, pady=5, sticky=W)
+b_contrast_run.grid(row=3, column=3, padx=5, pady=5, columnspan=3, sticky=E)
 
 ############################
 # Normalize
@@ -1677,14 +1686,14 @@ rb2_normalize = ttk.Radiobutton(frame_normalize,
                                 text=_("AutoLevel"),
                                 variable=img_normalize,
                                 value="2")
-b_normalize = ttk.Button(frame_normalize,
-                         text=_("Normalize"),
-                         style="Blue.TButton",
-                         command=convert_normalize_button)
+b_normalize_run = ttk.Button(frame_normalize,
+                             text=_("Normalize"),
+                             style="Blue.TButton",
+                             command=convert_normalize_button)
 
 rb1_normalize.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 rb2_normalize.grid(row=1, column=2, padx=5, pady=5, sticky=W)
-b_normalize.grid(row=2, column=1, columnspan=2, padx=5, pady=5, sticky=E)
+b_normalize_run.grid(row=2, column=1, columnspan=2, padx=5, pady=5, sticky=E)
 
 
 ############################
@@ -1698,16 +1707,16 @@ frame_custom.grid(row=10, column=1, columnspan=2,
                   padx=5, pady=5)
 ###
 l_custom_command = ttk.Label(frame_custom, text=_("Command:"))
-cb_custom_command = ttk.Combobox(frame_custom,
+co_custom_command = ttk.Combobox(frame_custom,
                                  width=9,
-                                 values=imagick_commands)
-cb_custom_command.current(2)
-cb_custom_command.configure(state='readonly')
+                                 values=magick_commands)
+co_custom_command.current(2)
+co_custom_command.configure(state='readonly')
 
-b_custom = ttk.Button(frame_custom,
-                      text=_("Execute"),
-                      style="Blue.TButton",
-                      command=convert_custom_button)
+b_custom_run = ttk.Button(frame_custom,
+                          text=_("Execute"),
+                          style="Blue.TButton",
+                          command=convert_custom_button)
 
 t_custom = ScrolledText(frame_custom,
                         state='normal',
@@ -1726,8 +1735,8 @@ t_custom = ScrolledText(frame_custom,
 
 t_custom.grid(row=1, column=1, columnspan=4, padx=5, pady=5, sticky=(W, E))
 l_custom_command.grid(row=2, column=1, padx=15, pady=5, sticky=E)
-cb_custom_command.grid(row=2, column=2, padx=15, pady=5, sticky=W)
-b_custom.grid(row=2, column=3, padx=30, pady=5, sticky=E)
+co_custom_command.grid(row=2, column=2, padx=15, pady=5, sticky=W)
+b_custom_run.grid(row=2, column=3, padx=30, pady=5, sticky=E)
 
 ########################################################################
 # Second column
@@ -1775,13 +1784,13 @@ frame_preview_orig.grid(row=2, column=1, columnspan=2,
                         sticky=(N, W, E, S),
                         padx=5, pady=5)
 ###
-b_preview_orig = ttk.Button(frame_preview_orig,
-                            text=_("Preview"),
-                            command=preview_orig_button)
+b_preview_orig_run = ttk.Button(frame_preview_orig,
+                                text=_("Preview"),
+                                command=preview_orig_button)
 l_preview_orig = ttk.Label(frame_preview_orig)
 pi_preview_orig = PhotoImage()
 l_preview_orig_pi = ttk.Label(frame_preview_orig, image=pi_preview_orig)
-b_preview_orig.grid(row=1, column=1, padx=5, pady=5)
+b_preview_orig_run.grid(row=1, column=1, padx=5, pady=5)
 l_preview_orig.grid(row=1, column=2, padx=5, pady=5)
 l_preview_orig_pi.grid(row=2, column=1, columnspan=2)
 
@@ -1815,14 +1824,14 @@ rb_apply_dir = ttk.Radiobutton(frame_apply, text=_("Folder"),
 rb_apply_file = ttk.Radiobutton(frame_apply, text=_("File"),
                                 variable=file_dir_selector,
                                 value="0")
-b_apply = ttk.Button(frame_apply,
-                     text=_("Apply all"),
-                     command=apply_all_button,
-                     style="Blue.TButton")
+b_apply_run = ttk.Button(frame_apply,
+                         text=_("Apply all"),
+                         command=apply_all_button,
+                         style="Blue.TButton")
 
 rb_apply_dir.grid(column=1, row=1, padx=5, pady=5, sticky=W)
 rb_apply_file.grid(column=2, row=1, padx=5, pady=5, sticky=W)
-b_apply.grid(column=3, row=1, padx=5, pady=5, sticky=(W, E))
+b_apply_run.grid(column=3, row=1, padx=5, pady=5, sticky=(W, E))
 
 ##########################
 # ProgressBar
@@ -1844,14 +1853,14 @@ frame_preview_new = ttk.Labelframe(frame_third_col,
                                    style="Blue.TLabelframe")
 frame_preview_new.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
-b_preview_new = ttk.Button(frame_preview_new,
-                           text=_("Preview"),
-                           command=preview_new_button)
+b_preview_new_run = ttk.Button(frame_preview_new,
+                               text=_("Preview"),
+                               command=preview_new_button)
 l_preview_new = ttk.Label(frame_preview_new)
 pi_preview_new = PhotoImage()
 l_preview_new_pi = ttk.Label(frame_preview_new, image=pi_preview_new)
 # c_preview_new_pi = Canvas(frame_preview_new, width=300, height=300)
-b_preview_new.grid(row=1, column=1, padx=5, pady=5)
+b_preview_new_run.grid(row=1, column=1, padx=5, pady=5)
 l_preview_new.grid(row=1, column=2, padx=5, pady=5)
 l_preview_new_pi.grid(row=2, column=1, columnspan=2)
 # c_preview_new_pi.grid(row=3, column=1, columnspan=2, padx=5, pady=5)
@@ -1872,7 +1881,7 @@ l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 ###############################################################################
 
 # binding commands to widgets
-cb_text_font.bind("<<ComboboxSelected>>", font_selected)
+co_text_font.bind("<<ComboboxSelected>>", font_selected)
 l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
 l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
 rb1_crop.bind("<ButtonRelease-1>", preview_orig_bind)
@@ -1885,21 +1894,47 @@ root.protocol("WM_DELETE_WINDOW", win_deleted)
 # Run functions
 #
 ini_read_wraper()  # Loading from config file
-fonts()    # Reading available fonts
+
 no_text_in_windows()  # Warning if Windows
-
-# application theme
-
+l_border.configure(bg=img_border_color.get())
 
 tools_set()
-if os.path.isfile(file_in_path.get()):
-    # Load preview picture
-    preview_orig()
-if os.path.isfile(file_logo_path.get()):
-    # Load preview logo
-    preview_logo()
 
-l_border.configure(bg=img_border_color.get())
+# check if [Image|Graphics]Magick is available
+GM_or_IM = common.check_command()
+if GM_or_IM is not None:
+    fonts()    # Reading available fonts
+    if os.path.isfile(file_in_path.get()):
+        # Load preview picture
+        preview_orig()
+    if os.path.isfile(file_logo_path.get()):
+        # Load preview logo
+        preview_logo()
+else:
+    root.withdraw()
+    messagebox.showerror(title=_("Error"),
+                         message=_("ImageMagick nor GraphicsMagick are not installed in you system. Is impossile to process any graphics."))
+    # disable processing buttons
+    b_logo_run.configure(state=DISABLED)
+    b_resize_run.configure(state=DISABLED)
+    b_crop_read.configure(state=DISABLED)
+    b_crop_run.configure(state=DISABLED)
+    b_text_run.configure(state=DISABLED)
+    b_rotate_run.configure(state=DISABLED)
+    b_bw_run.configure(state=DISABLED)
+    b_border_run.configure(state=DISABLED)
+    b_contrast_run.configure(state=DISABLED)
+    b_normalize_run.configure(state=DISABLED)
+    b_custom_run.configure(state=DISABLED)
+    b_apply_run.configure(state=DISABLED)
+    b_preview_orig_run.configure(state=DISABLED)
+    b_preview_new_run.configure(state=DISABLED)
+    b_file_select_first.configure(state=DISABLED)
+    b_file_select_prev.configure(state=DISABLED)
+    b_file_select_next.configure(state=DISABLED)
+    b_file_select_last.configure(state=DISABLED)
+    b_file_select.configure(state=DISABLED)
+    root.deiconify()
 
 root.mainloop()
 
