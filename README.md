@@ -29,38 +29,22 @@ GUI for the most used by me ImageMagick functionality for processing pictures
  - histograms of original and result pictures
  - own command editor, additionaly command can be composed from started commands
 
+## User manual
+[RTFM](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.md)
+
+## Translations
+Available: English, Polish, German, Bulgarian and Indonesian.
+
+### Binaries
+In Release you can find current binary version for Windows (8.1 and newer) and Linux (Ubuntu 18.04.3 and newer)
+
 ## Requirements
  - ImageMagick - home page: https://imagemagick.org/
  - Windows, Linux, MacOS X, BSD
  - FullHD screen for comfort work
  - Python3, with modules, - only for script launch (PIL, tkinter, tkcolorpicker, touch, re, shutil, os, platform, configparser, datetime, gettext, glob 
 
-## Using
-### source code
-python fotokilof.py
-### binary
-fotokilof
-### translations
-mkdir -p pl/LC_MESSAGES; cp pl.mo pl/LC_MESSAGES/fotokilof.mo
-
-### Binaries
-In Release you can find current binary version for Windows (8.1 and newer) and Linux (Ubuntu 18.04.3 and newer)
-
-## Users Guide
-1. Wybierz plik
-2. Przyciski Poprzedni i Następny otwierają kolejny lub poprzedni obrazek
-3. Klikając lewm przyciskiem myszy na podglądzie oryginału wskazujemy
-lewy górny narożnik prostokąta do wycięcia, a prawym klawiszem myszy
-wskazujemy prawy dolny narożnik, ważne by zaznaczyć Współrzędne (x1,y1)(x2,y2).
-Klikając powtórnie na wyborzy typu wycinka na podglądzie oryginału 
-zostaną narysowane linie cięcia, względem wybranych punktów.
-4. W zależności od wyboru Plik albo Folder, przetwarzany będzie albo 
-wybrany plik albo cały folder z wybranym plikiem.
-Do przetwarzania folderu musimy użyć przycisku Zaaplikuj wszystko i zaznaczyć przycisk folder
-5. Wybór Nic, 0 szerokości ramki i odhaczenie Tekst, wyłącza dane 
-polecenie z przetwarzania
-
 ## Thanks
  - Max von Forell - German translation
  - Bozhidar Kirev - Bulgarian translation
-
+ - Afif Hendrawan - Indonesian translation

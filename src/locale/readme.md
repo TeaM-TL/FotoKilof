@@ -1,18 +1,22 @@
-## Translate fotokilof in easy way steps:
-### steps:
-NEWLANG=hu/LC_MESSAGES
+## Translations
 
-mkdir -p $NEWLANG
+If there are not *fotokilof* in your language, you are able to do it. Example steps for Hungarian:
+`NEWLANG=hu/LC_MESSAGES`
+`mkdir -p $NEWLANG`
+`cp fotokilof.pot $NEWLANG/fotokilof.po`
+`cd $NEWLANG`
+`vim fotokilof.po`
+`msgfmt -o fotokilof.mo fotokilof`
 
-cp fotokilof.pot $NEWLANG/fotokilof.po
+### Advices
 
-cd $NEWLANG
+- add your name into *Last-Translator:* field
 
-vim fotokilof.po
+- to check changes from sources, change entry like this:
 
-msgfmt -o fotokilof.mo fotokilof
+`"X-Poedit-Basepath: ../../\n"`
 
-### test it:
-cd ../../../
+## Test
 
-python3 fotokilof.py
+`cd ../../../`
+`python3 fotokilof.py`
