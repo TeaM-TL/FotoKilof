@@ -1067,19 +1067,9 @@ img_contrast_on = IntVar()
 img_custom_on = IntVar()
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
-#magick_commands = ("animate",
-#                   "compare",
-#                   "composite",
-#                   "conjure",
-#                   "convert",
-#                   "identify",
-#                   "import",
-#                   "mogrify",
-#                   "montage",
-#                   "stream")
-magick_commands = ("composite",
-                   "convert",
-                   "mogrify")
+#magick_commands = ("animate", "compare", "composite", "conjure", "convert",
+#                   "identify", "import", "mogrify", "montage", "stream")
+magick_commands = ("composite", "convert", "mogrify")
 contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
 theme_list = ("default", "clam", "alt", "classic")
 
