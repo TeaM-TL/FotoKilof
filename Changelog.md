@@ -22,26 +22,49 @@
 
 ## Very old
 
-0.1 first GUI
-0.2 Added: font selection, PIL library
-0.3 all conversions work
-0.4 Added preview, ImageMagick instead PIL
-0.5 works under Windows, except text
-0.6 Added: multiple conversions
+2.0 faster multiple conversion: one run of imagemagick, way for creating plugins
+
+1.9.2 Deleted: ttk:notebook
+
+1.9.1 Added: new buttons: First, Last, order in GUI
+
+1.9 Added: menu for tool selection
+
+1.8 better reliability
+
+1.7 better preview conversion
+
+1.6 Added: new buttons: Next, Previous, project on GitHub!
+
+1.5 order in GUI
+
+1.4 Added: histograms for original and result
+
+1.3 Added: click in preview for crop coordinates, menubar deleted
+
+1.2 b-w, sepia, contrast, widgetname standarization
+
+1.1 Added: resize option (HD, 2K, 4K), autoload preview, new conversion: frame, color normalize. Again workaround space in paths and read/write INI
+
+1.0 Added: conversion whole directory
+
+0.9 better and cleaner code
+
+0.8 mogrify instead convert, first copy picture, later work on picture in destination folder
+
 0.7 workaround space in path and filename
 (works under Windows, Linux), correct read/write INI
-0.8 mogrify instead convert, first copy picture, later work on picture in destination folder
-0.9 better and cleaner code
-1.0 Added: conversion whole directory
-1.1 Added: resize option (HD, 2K, 4K), autoload preview, new conversion: frame, color normalize. Again workaround space in paths and read/write INI
-1.2 b-w, sepia, contrast, widgetname standarization
-1.3 Added: click in preview for crop coordinates, menubar deleted
-1.4 Added: histograms for original and result
-1.5 order in GUI
-1.6 Added: new buttons: Next, Previous, project on GitHub!
-1.7 better preview conversion
-1.8 better reliability
-1.9 Added: menu for tool selection
-1.9.1 Added: new buttons: First, Last, order in GUI
-1.9.2 Deleted: ttk:notebook
-2.0 faster multiple conversion: one run of imagemagick, way for creating plugins
+
+0.6 Added: multiple conversions
+
+0.5 works under Windows, except text
+
+0.4 Added preview, ImageMagick instead PIL
+
+0.3 all conversions work
+
+0.2 Added: font selection, PIL library
+
+0.1 first GUI
+
+0 - start in 2019 August
