@@ -30,7 +30,7 @@ GUI for the most used by me ImageMagick functionality for processing pictures
  - own command editor, additionaly command can be composed from started commands
 
 ## User manual
-[RTFM](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.md)
+[RTFM](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.pdf)
 
 ## Translations
 Available: English, Polish, German, Bulgarian and Indonesian.
