@@ -95,8 +95,6 @@ def magick_command(command):
     tool = command.split()
     tool.insert(1, suffix)
     tool.extend(' ')
-    result = "".join(tool)
-    print("!!", result)
-    return result
+    return "".join(tool)
 
 # EOF

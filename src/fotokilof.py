@@ -424,27 +424,27 @@ def fonts():
     command = "-list font > "
     magick.magick(command, common.spacja(file_font), GM_or_IM + "convert")
 
-    #try:
-    file = open(file_font, "r")
-    fonts_list = []
-    if GM_or_IM == "":
-        # ImageMagick format
-        for line in file:
-            if re.search("Font", line) is not None:
-                line = re.sub('^[ ]+Font:[ ]*', "", line)
-                line = re.sub('\n', "", line)
-                fonts_list.append(line)
-    else:
-        # GraphicsMagick format
-        for line in file:
-            if re.search("\d$", line) is not None:
-                line = re.findall('^[-a-zA-Z]+', line)
-                fonts_list.append(line)
-    file.close()
-    os.remove(file_font)
-    #except:
-    #    print("! Error in fonts: przy wczytywaniu listy fontów")
-    #    fonts_list = ('Helvetica')
+    try:
+        file = open(file_font, "r")
+        fonts_list = []
+        if GM_or_IM == "":
+            # ImageMagick format
+            for line in file:
+                if re.search("Font", line) is not None:
+                    line = re.sub('^[ ]+Font:[ ]*', "", line)
+                    line = re.sub('\n', "", line)
+                    fonts_list.append(line)
+        else:
+            # GraphicsMagick format
+            for line in file:
+                if re.search("\d$", line) is not None:
+                    line = re.findall('^[-a-zA-Z]+', line)
+                    fonts_list.append(line)
+        file.close()
+        os.remove(file_font)
+    except:
+        print("! Error in fonts: przy wczytywaniu listy fontów")
+        fonts_list = ('Helvetica')
 
     co_text_font['values'] = fonts_list
 

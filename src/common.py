@@ -28,7 +28,6 @@ def check_command():
     else:
         result = None
 
-    print(result)
     return result
 
 
