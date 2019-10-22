@@ -7,7 +7,7 @@ każda funkcja odczytuje kawałek ini
 """
 
 import configparser
-import platform
+import mswindows
 
 
 def ini_read(file_ini):
@@ -47,10 +47,7 @@ def ini_read(file_ini):
     try:
         theme = config.get('Konfiguracja', 'theme')
     except:
-        if platform.system() == "Windows":
-            theme = "default"
-        else:
-            theme = "clam"
+        theme = "clam"
     dict_return['theme'] = theme
 
     return dict_return
@@ -119,7 +116,7 @@ def ini_read_text(file_ini):
         text_gravity = "SE"
     dict_return['img_text_gravity'] = text_gravity
 
-    if platform.system() == "Windows":
+    if mswindows.windows() == 1:
         text_font = "Arial"
     else:
         try:

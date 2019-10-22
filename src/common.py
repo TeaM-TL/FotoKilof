@@ -5,23 +5,27 @@
 
 import fnmatch
 import os
-import platform
 import re
 import shutil
 from PIL import Image
+
+import mswindows
 
 
 def check_command():
     """
     What is available: ImageMagick, Graphick Magick or none
     """
-    if platform.system() == "Windows":
+    if mswindows.windows() == 1:
         suffix = ".exe"
     else:
         suffix = ""
     if check_imagemagick(suffix) is not None:
         print("ImageMagick")
-        result = ""
+        if mswindows.windows() == 1:
+            result = "magick "
+        else:
+            result = ""
     elif check_graphicsmagick(suffix) is not None:
         print("GraphicsMagick")
         result = "gm "
@@ -98,7 +102,7 @@ def spacja(sciezka):
     """ escaping space and special char in pathname """
 
     sciezka = os.path.normpath(sciezka)
-    if platform.system() == "Windows":
+    if mswindows.windows() == 1:
         czy_spacja = re.search(" ", sciezka)
         if czy_spacja is not None:
             sciezka = '"' + sciezka + '"'

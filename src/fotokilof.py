@@ -8,7 +8,6 @@ import datetime
 import gettext
 import glob
 import os
-import platform
 import sys
 
 from tkinter import Tk, ttk, Label, PhotoImage
@@ -21,14 +20,16 @@ from tkinter import N, S, W, E, END, DISABLED, NORMAL
 from tkcolorpicker import askcolor
 from PIL import Image
 
-
+# my modules
 import convert
 import common
 import ini_read
 import magick
+import mswindows
 import preview
 
-if sys.platform.startswith('win'):
+# set locale for Windows
+if mswindows.windows() == 1:
     import locale
     if os.getenv('LANG') is None:
         lang, enc = locale.getdefaultlocale()
@@ -42,7 +43,7 @@ _ = translate.gettext
 ###################
 # CONSTANTS
 VERSION = "2.9"
-if platform.system() == "Windows":
+if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
     PREVIEW_LOGO = 80  # preview logo
@@ -56,7 +57,7 @@ else:
 
 def no_text_in_windows():
     """ info dla Windows, że może być problem z dodaniem tekstu """
-    if platform.system() == "Windows":
+    if mswindows.windows() == 1:
         l_text_windows.configure(text=_("Unfortunately, you are using Windows, thus not all option will work"))
 
 

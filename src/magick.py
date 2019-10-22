@@ -4,13 +4,13 @@
 """ call ImageMagick command """
 
 import os
-import platform
 import re
 import shutil
 import sys
 import touch
 
 import common
+import mswindows
 
 def pre_magick(file_in, destination):
     """
@@ -89,7 +89,7 @@ def magick_command(command):
       convert, mogrify, composite - ImageMagick
       gm convert, gm mogrify, gm composite - GraphicsMagick
     """
-    if platform.system() == "Windows":
+    if mswindows.windows() == 1:
         suffix = ".exe "
     else:
         suffix = " "
