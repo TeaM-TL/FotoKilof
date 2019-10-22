@@ -101,40 +101,43 @@ def magick_command(command):
 
 def fonts_list_get(temp_dir, gm_or_im):
     """ import nazw fontów z systemu dla imagemagicka """
+    result = "start"
     if os.path.isdir(temp_dir) is False:
         try:
             os.mkdir(temp_dir)
         except:
             # print("Nie można utworzyć katalogu na pliki tymczasowe")
-            return
-
-    file_font = os.path.normpath(os.path.join(temp_dir, "fonts_list"))
-
-    touch.touch(file_font)
-    command = "-list font > "
-    magick(command, common.spacja(file_font), gm_or_im + "convert")
+            result = "stop"
 
     fonts_list = []
-    try:
-        file = open(file_font, "r")
-        if gm_or_im == "":
-            # ImageMagick format
-            for line in file:
-                if re.search("Font", line) is not None:
-                    line = re.sub('^[ ]+Font:[ ]*', "", line)
-                    line = re.sub('\n', "", line)
-                    fonts_list.append(line)
-        else:
-            # GraphicsMagick format
-            for line in file:
-                if re.search("\d$", line) is not None:
-                    line = re.findall('^[-a-zA-Z]+', line)
-                    fonts_list.append(line)
-        file.close()
-        os.remove(file_font)
-    except:
-        print("! Error in fonts: przy wczytywaniu listy fontów")
-        fonts_list = ('Helvetica')
+    if result != "stop":
+        file_font = os.path.normpath(os.path.join(temp_dir, "fonts_list"))
+
+        touch.touch(file_font)
+        command = "-list font > "
+        magick(command, common.spacja(file_font), gm_or_im + "convert")
+
+        try:
+            file = open(file_font, "r")
+            if gm_or_im == "":
+                # ImageMagick format
+                for line in file:
+                    if re.search("Font", line) is not None:
+                        line = re.sub('^[ ]+Font:[ ]*', "", line)
+                        line = re.sub('\n', "", line)
+                        fonts_list.append(line)
+            else:
+                # GraphicsMagick format
+                for line in file:
+                    if re.search("\d$", line) is not None:
+                        line = re.findall('^[-a-zA-Z]+', line)
+                        fonts_list.append(line)
+            file.close()
+            os.remove(file_font)
+        except:
+            print("! Error in fonts: przy wczytywaniu listy fontów")
+            fonts_list = ('Helvetica')
+
     return fonts_list
 
 # EOF

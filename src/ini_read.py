@@ -47,7 +47,7 @@ def ini_read(file_ini):
     try:
         theme = config.get('Konfiguracja', 'theme')
     except:
-        theme = "clam"
+        theme = "default"
     dict_return['theme'] = theme
 
     return dict_return
