@@ -23,6 +23,7 @@ from PIL import Image
 # my modules
 import convert
 import common
+import entries
 import ini_read
 import magick
 import mswindows
@@ -410,12 +411,12 @@ def convert_text_button():
 def fonts():
     """ preparing font names for ImageMagick """
 
-    co_text_font['values'] = magick.fonts_list_get(TEMP_DIR, GM_or_IM)
-
+    result = magick.fonts_list_get(TEMP_DIR, GM_or_IM)
+    co_text_font['values'] = result
+    return result
 
 def font_selected(event):
     """ wywołanie przez bind wyboru fontu """
-    # print('You selected:', co_text_font.get())
     img_text_font.set(co_text_font.get())
 
 
@@ -605,16 +606,12 @@ def color_choose():
 def ini_read_wraper():
     """ Read config INI file """
 
-    ini_entries = ini_read.ini_read(FILE_INI)
+    ini_entries = ini_read.ini_read(FILE_INI, theme_list)
     file_in_path.set(ini_entries['file_in_path'])
     file_dir_selector.set(ini_entries['file_dir_selector'])
     work_dir.set(ini_entries['work_dir'])
     img_histograms_on.set(ini_entries['img_histograms_on'])
-
-    try:
-        co_theme_selector.current(theme_list.index(ini_entries['theme']))
-    except:
-        co_theme_selector.current(theme_list.index("default"))
+    co_theme_selector.current(theme_list.index(ini_entries['theme']))
 
     ini_entries = ini_read.ini_read_resize(FILE_INI)
     img_resize_on.set(ini_entries['img_resize_on'])
@@ -624,7 +621,7 @@ def ini_read_wraper():
     e2_resize.delete(0, "end")
     e2_resize.insert(0, ini_entries['resize_size_percent'])
 
-    ini_entries = ini_read.ini_read_text(FILE_INI)
+    ini_entries = ini_read.ini_read_text(FILE_INI, img_text_font_list)
     img_text_on.set(ini_entries['img_text_on'])
     img_text_font.set(ini_entries['text_font'])
     img_text_color.set(ini_entries['text_color'])
@@ -1050,7 +1047,7 @@ img_resize = IntVar()
 img_text_gravity = StringVar()
 img_rotate = IntVar()
 img_text_font = StringVar()
-img_text_font_list = StringVar()
+img_text_font_list = []  # list available fonts, from fonts()
 img_text_color = StringVar()
 img_text_box = IntVar()
 img_text_box_color = StringVar()
@@ -1741,17 +1738,15 @@ root.protocol("WM_DELETE_WINDOW", win_deleted)
 ##########################################
 # Run functions
 #
-ini_read_wraper()  # Loading from config file
-
 no_text_in_windows()  # Warning if Windows
-l_border.configure(bg=img_border_color.get())
-
-tools_set()
 
 # check if [Image|Graphics]Magick is available
 GM_or_IM = common.check_command()
 if GM_or_IM is not None:
-    fonts()    # Reading available fonts
+    img_text_font_list = fonts()    # Reading available fonts
+    ini_read_wraper()  # Loading from config file
+    tools_set()
+    l_border.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
         # Load preview picture
         preview_orig()

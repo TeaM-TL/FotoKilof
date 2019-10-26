@@ -7,10 +7,12 @@ każda funkcja odczytuje kawałek ini
 """
 
 import configparser
+
+import entries
 import mswindows
 
 
-def ini_read(file_ini):
+def ini_read(file_ini, theme_list):
     """ Konfiguracja FotoKilofa """
 
     # słownik wyjściowy
@@ -36,19 +38,19 @@ def ini_read(file_ini):
         file_dir_select = config.getint('Konfiguracja', 'file_dir')
     except:
         file_dir_select = "0"
-    dict_return['file_dir_selector'] = file_dir_select
+    dict_return['file_dir_selector'] = entries.parse_list(file_dir_select,(0,1),0)
 
     try:
         histograms = config.getint('Konfiguracja', 'histograms')
     except:
         histograms = "0"
-    dict_return['img_histograms_on'] = histograms
+    dict_return['img_histograms_on'] = entries.parse_list(histograms,(0,1),0)
 
     try:
         theme = config.get('Konfiguracja', 'theme')
     except:
         theme = "default"
-    dict_return['theme'] = theme
+    dict_return['theme'] = entries.parse_list(theme, theme_list, "default")
 
     return dict_return
 
@@ -66,13 +68,13 @@ def ini_read_resize(file_ini):
         resize_on = config.getint('Resize', 'on')
     except:
         resize_on = "1"
-    dict_return['img_resize_on'] = resize_on
+    dict_return['img_resize_on'] = entries.parse_list(resize_on, (0, 1), 1)
 
     try:
         resize = config.getint('Resize', 'resize')
     except:
         resize = "3"  # FullHD
-    dict_return['img_resize'] = resize
+    dict_return['img_resize'] = entries.parse_list(resize, (1, 2, 3, 4, 5), 3)
 
     try:
         resize_size_pixel = config.getint('Resize', 'size_pixel')
@@ -89,7 +91,7 @@ def ini_read_resize(file_ini):
     return dict_return
 
 
-def ini_read_text(file_ini):
+def ini_read_text(file_ini, fonts_list):
     """ Konfiguracja FotoKilofa """
 
     # słownik wyjściowy
@@ -102,7 +104,7 @@ def ini_read_text(file_ini):
         text_on = config.getint('Text', 'on')
     except:
         text_on = "1"
-    dict_return['img_text_on'] = text_on
+    dict_return['img_text_on'] = entries.parse_list(text_on, (0, 1), 1)
 
     try:
         text = config.get('Text', 'text')
@@ -114,16 +116,13 @@ def ini_read_text(file_ini):
         text_gravity = config.get('Text', 'gravity')
     except:
         text_gravity = "SE"
-    dict_return['img_text_gravity'] = text_gravity
+    dict_return['img_text_gravity'] = entries.parse_list(text_gravity, ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
 
-    if mswindows.windows() == 1:
-        text_font = "Arial"
-    else:
-        try:
-            text_font = config.get('Text', 'font')
-        except:
-            text_font = "Helvetica"
-    dict_return['text_font'] = text_font
+    try:
+        text_font = config.get('Text', 'font')
+    except:
+        text_font = "Helvetica"
+    dict_return['text_font'] = entries.parse_list(text_font, fonts_list, "Helvetica")
 
     try:
         text_size = str(config.getint('Text', 'size'))
@@ -153,7 +152,7 @@ def ini_read_text(file_ini):
         text_box = config.getint('Text', 'box')
     except:
         text_box = 0
-    dict_return['text_box'] = text_box
+    dict_return['text_box'] = entries.parse_list(text_box, (0, 1), 0)
 
     try:
         text_box_color = config.get('Text', 'box_color')
@@ -177,13 +176,13 @@ def ini_read_rotate(file_ini):
         rotate_on = config.getint('Rotate', 'on')
     except:
         rotate_on = "1"
-    dict_return['img_rotate_on'] = rotate_on
+    dict_return['img_rotate_on'] = entries.parse_list(rotate_on, (0, 1), 1)
 
     try:
         rotate = config.getint('Rotate', 'rotate')
     except:
         rotate = "90"
-    dict_return['img_rotate'] = rotate
+    dict_return['img_rotate'] = entries.parse_list(rotate, (0, 90, 180, 270), 0)
 
     return dict_return
 
@@ -201,13 +200,13 @@ def ini_read_crop(file_ini):
         crop_on = config.getint('Crop', 'on')
     except:
         crop_on = "0"
-    dict_return['img_crop_on'] = crop_on
+    dict_return['img_crop_on'] = entries.parse_list(crop_on, (0, 1), 0)
 
     try:
         crop = config.getint('Crop', 'crop')
     except:
         crop = "1"
-    dict_return['img_crop'] = crop
+    dict_return['img_crop'] = entries.parse_list(crop, (1, 2, 3), 1)
 
     try:
         crop_1_x1 = config.getint('Crop', '1_x1')
@@ -285,7 +284,7 @@ def ini_read_crop(file_ini):
         crop_gravity = config.getint('Crop', 'gravity')
     except:
         crop_gravity = "C"
-    dict_return['img_crop_gravity'] = crop_gravity
+    dict_return['img_crop_gravity'] = entries.parse_list(crop_gravity, ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
 
     return dict_return
 
@@ -303,7 +302,7 @@ def ini_read_border(file_ini):
         border_on = config.get('Border', 'on')
     except:
         border_on = "1"
-    dict_return['img_border_on'] = border_on
+    dict_return['img_border_on'] = entries.parse_list(border_on, (0, 1), 0)
 
     try:
         border_color = config.get('Border', 'color')
@@ -333,13 +332,13 @@ def ini_read_color(file_ini):
         color_on = config.getint('Color', 'on')
     except:
         color_on = "1"
-    dict_return['color_on'] = color_on
+    dict_return['color_on'] = entries.parse_list(color_on, (0, 1), 1)
 
     try:
         black_white = config.getint('Color', 'black-white')
     except:
         black_white = "1"
-    dict_return['black_white'] = black_white
+    dict_return['black_white'] = entries.parse_list(black_white, (1, 2), 1)
 
     try:
         bw_sepia = config.getint('Color', 'sepia')
@@ -363,13 +362,13 @@ def ini_read_normalize(file_ini):
         normalize_on = config.getint('Normalize', 'on')
     except:
         normalize_on = 0
-    dict_return['normalize_on'] = normalize_on
+    dict_return['normalize_on'] = entries.parse_list(normalize_on, (0, 1), 0)
 
     try:
         normalize = config.getint('Normalize', 'normalize')
     except:
         normalize = 1
-    dict_return['normalize'] = normalize
+    dict_return['normalize'] = entries.parse_list(normalize, (0, 1), 1)
 
     return dict_return
 
@@ -387,28 +386,28 @@ def ini_read_contrast(file_ini):
         contrast_on = config.getint('Contrast', 'on')
     except:
         contrast_on = "0"
-    dict_return['contrast_on'] = contrast_on
+    dict_return['contrast_on'] = entries.parse_list(contrast_on, (0, 1), 0)
 
     try:
         contrast = config.getint('Contrast', 'contrast')
     except:
         contrast = "1"
-    dict_return['contrast'] = contrast
+    dict_return['contrast'] = entries.parse_list(contrast, (0, 1), 1)
 
     try:
         contrast_selection = config.get('Contrast', 'selection')
     except:
         contrast_selection = "0"
-    dict_return['contrast_selection'] = contrast_selection
+    dict_return['contrast_selection'] = entries.parse_list(contrast_selection, ("-3", "-2", "-1", "0", "+1", "+2", "+3"), "0")
 
     try:
-        contrast_stretch_1 = config.get('Contrast', 'stretch1')
+        contrast_stretch_1 = float(config.get('Contrast', 'stretch1'))
     except:
         contrast_stretch_1 = "0.15"
     dict_return['contrast_stretch_1'] = contrast_stretch_1
 
     try:
-        contrast_stretch_2 = config.get('Contrast', 'stretch2')
+        contrast_stretch_2 = float(config.get('Contrast', 'stretch2'))
     except:
         contrast_stretch_2 = "0.05"
     dict_return['contrast_stretch_2'] = contrast_stretch_2
@@ -429,7 +428,7 @@ def ini_read_logo(file_ini):
         logo_on = config.getint('Logo', 'on')
     except:
         logo_on = 0
-    dict_return['img_logo_on'] = logo_on
+    dict_return['img_logo_on'] = entries.parse_list(logo_on, (0, 1), 0)
 
     try:
         logo = config.get('Logo', 'logo')
@@ -441,7 +440,7 @@ def ini_read_logo(file_ini):
         logo_gravity = config.get('Logo', 'gravity')
     except:
         logo_gravity = "SE"
-    dict_return['img_logo_gravity'] = logo_gravity
+    dict_return['img_logo_gravity'] =  entries.parse_list(logo_gravity, ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
 
     try:
         logo_width = config.getint('Logo', 'width')
@@ -482,7 +481,7 @@ def ini_read_custom(file_ini):
         custom_on = config.getint('Custom', 'on')
     except:
         custom_on = 0
-    dict_return['custom_on'] = custom_on
+    dict_return['custom_on'] =  entries.parse_list(custom_on, (0, 1), 0)
 
     return dict_return
 
