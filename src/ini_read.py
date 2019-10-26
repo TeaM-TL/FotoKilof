@@ -9,7 +9,6 @@ każda funkcja odczytuje kawałek ini
 import configparser
 
 import entries
-import mswindows
 
 
 def ini_read(file_ini, theme_list):
@@ -38,13 +37,13 @@ def ini_read(file_ini, theme_list):
         file_dir_select = config.getint('Konfiguracja', 'file_dir')
     except:
         file_dir_select = "0"
-    dict_return['file_dir_selector'] = entries.parse_list(file_dir_select,(0,1),0)
+    dict_return['file_dir_selector'] = entries.parse_list(file_dir_select, (0, 1), 0)
 
     try:
         histograms = config.getint('Konfiguracja', 'histograms')
     except:
         histograms = "0"
-    dict_return['img_histograms_on'] = entries.parse_list(histograms,(0,1),0)
+    dict_return['img_histograms_on'] = entries.parse_list(histograms, (0, 1), 0)
 
     try:
         theme = config.get('Konfiguracja', 'theme')
@@ -146,7 +145,7 @@ def ini_read_text(file_ini, fonts_list):
         text_color = config.get('Text', 'color')
     except:
         text_color = "#FFFFFF"
-    dict_return['text_color'] = text_color
+    dict_return['text_color'] = entries.parse_color(text_color, '#FFFFFF')
 
     try:
         text_box = config.getint('Text', 'box')
@@ -158,7 +157,7 @@ def ini_read_text(file_ini, fonts_list):
         text_box_color = config.get('Text', 'box_color')
     except:
         text_box_color = "#000000"
-    dict_return['text_box_color'] = text_box_color
+    dict_return['text_box_color'] = entries.parse_color(text_box_color, '#000000')
 
     return dict_return
 
@@ -308,7 +307,7 @@ def ini_read_border(file_ini):
         border_color = config.get('Border', 'color')
     except:
         border_color = "#FFFFFF"
-    dict_return['img_border_color'] = border_color
+    dict_return['img_border_color'] = entries.parse_color(border_color, '#FFFFFF')
 
     try:
         border = config.getint('Border', 'size')
@@ -440,7 +439,7 @@ def ini_read_logo(file_ini):
         logo_gravity = config.get('Logo', 'gravity')
     except:
         logo_gravity = "SE"
-    dict_return['img_logo_gravity'] =  entries.parse_list(logo_gravity, ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
+    dict_return['img_logo_gravity'] = entries.parse_list(logo_gravity, ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
 
     try:
         logo_width = config.getint('Logo', 'width')
@@ -481,7 +480,7 @@ def ini_read_custom(file_ini):
         custom_on = config.getint('Custom', 'on')
     except:
         custom_on = 0
-    dict_return['custom_on'] =  entries.parse_list(custom_on, (0, 1), 0)
+    dict_return['custom_on'] = entries.parse_list(custom_on, (0, 1), 0)
 
     return dict_return
 

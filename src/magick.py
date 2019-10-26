@@ -136,7 +136,7 @@ def fonts_list_get(temp_dir, gm_or_im):
                         if re.search("Font", line) is not None:
                             line = re.sub('^[ ]+Font:[ ]*', "", line)
                             line = re.sub('\n', "", line)
-                            fonts_list.append(line)        
+                            fonts_list.append(line)
                 file.close()
                 try:
                     os.remove(file_font)
