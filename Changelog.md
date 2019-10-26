@@ -1,6 +1,7 @@
 # Changelog
 
 ## Current
+2.9.1 Hardening: parsing INI entries against data out of range
 
 2.9 Added: GraphicsMagick support, Indonesian translation, code clean
 

@@ -57,6 +57,13 @@ else:
 ##########################
 
 
+def only_numbers(char):
+    """  Validation entry widgets: only digits """
+    return char.isdigit()
+
+###
+
+
 def no_text_in_windows():
     """ info dla Windows, że może być problem z dodaniem tekstu """
     if mswindows.windows() == 1:
@@ -471,8 +478,8 @@ def open_file_logo():
                  (_("JPEG files"), "*.JPG"),
                  (_("png files"), "*.png"),
                  (_("PNG files"), "*.PNG"),
-                 (_("tif files"), "*.tif"),
-                 (_("tif files"), "*.TIFF"),
+                 (_("tiff files"), "*.tif"),
+                 (_("TIFF files"), "*.TIF"),
                  (_("All files"), "*.*"))
     file_logo_path.set(filedialog.askopenfilename(initialdir=directory,
                                                   filetypes=filetypes,
@@ -488,8 +495,8 @@ def open_file():
                  (_("JPEG files"), "*.JPG"),
                  (_("png files"), "*.png"),
                  (_("PNG files"), "*.PNG"),
-                 (_("tif files"), "*.tif"),
-                 (_("tif files"), "*.TIFF"),
+                 (_("tiff files"), "*.tif"),
+                 (_("TIFF files"), "*.TIFF"),
                  (_("All files"), "*.*"))
     file_in_path.set(filedialog.askopenfilename(initialdir=directory,
                                                 filetypes=filetypes,
@@ -1092,7 +1099,7 @@ img_contrast_on = IntVar()
 img_custom_on = IntVar()
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
-file_extension = ("JPG", "PNG", "TIFF")
+file_extension = ("JPG", "PNG", "TIF")
 #magick_commands = ("animate", "compare", "composite", "conjure", "convert",
 #                   "identify", "import", "mogrify", "montage", "stream")
 magick_commands = ("composite", "convert", "mogrify")
@@ -1104,6 +1111,7 @@ contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
 main = ttk.Frame(root)
 main.pack()
 
+validation = main.register(only_numbers)  # Entry validation
 ####################################################################
 # Kolumna menu
 ####################################################################
@@ -1205,10 +1213,14 @@ l_logo_filename.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky=W)
 frame_logo_xy = ttk.Frame(frame_logo)
 l_logo_XxY = ttk.Label(frame_logo_xy, text=_("Width\nHeight"))
 l_logo_dxdy = ttk.Label(frame_logo_xy, text=_("Offset\n(dx,dy)"))
-e_logo_width = ttk.Entry(frame_logo_xy, width=3)
-e_logo_height = ttk.Entry(frame_logo_xy, width=3)
-e_logo_dx = ttk.Entry(frame_logo_xy, width=3)
-e_logo_dy = ttk.Entry(frame_logo_xy, width=3)
+e_logo_width = ttk.Entry(frame_logo_xy, width=3,
+                         validate="key", validatecommand=(validation, '%S'))
+e_logo_height = ttk.Entry(frame_logo_xy, width=3,
+                          validate="key", validatecommand=(validation, '%S'))
+e_logo_dx = ttk.Entry(frame_logo_xy, width=3,
+                      validate="key", validatecommand=(validation, '%S'))
+e_logo_dy = ttk.Entry(frame_logo_xy, width=3,
+                      validate="key", validatecommand=(validation, '%S'))
 
 frame_logo_xy.grid(row=3, column=1, columnspan=2)
 l_logo_XxY.grid(row=2, column=1, sticky=W, padx=5)
@@ -1270,10 +1282,12 @@ frame_resize.grid(column=1, row=2, columnspan=2,
 ###
 rb_resize_1 = ttk.Radiobutton(frame_resize, text=_("Pixels"),
                               variable=img_resize, value="1")
-e1_resize = ttk.Entry(frame_resize, width=7)
+e1_resize = ttk.Entry(frame_resize, width=7,
+                      validate="key", validatecommand=(validation, '%S'))
 rb_resize_2 = ttk.Radiobutton(frame_resize, text=_("Percent"),
                               variable=img_resize, value="2")
-e2_resize = ttk.Entry(frame_resize, width=7)
+e2_resize = ttk.Entry(frame_resize, width=7,
+                      validate="key", validatecommand=(validation, '%S'))
 rb_resize_3 = ttk.Radiobutton(frame_resize, text="FullHD (1920x1080)",
                               variable=img_resize, value="3")
 rb_resize_4 = ttk.Radiobutton(frame_resize, text="2K (2048×1556)",
@@ -1305,26 +1319,38 @@ rb1_crop = ttk.Radiobutton(frame_crop, variable=img_crop, value="1",
                            text=_("Coordinates (x1, y1) and (x2, y2)"))
 f_clickL_crop = ttk.Labelframe(frame_crop, text=_("Left Upper corner"))
 l_clickL_crop = ttk.Label(f_clickL_crop, text=_("Click left"))
-e1_crop_1 = ttk.Entry(f_clickL_crop, width=4)
-e2_crop_1 = ttk.Entry(f_clickL_crop, width=4)
+e1_crop_1 = ttk.Entry(f_clickL_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
+e2_crop_1 = ttk.Entry(f_clickL_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
 f_clickR_crop = ttk.Labelframe(frame_crop, text=_("Right lower corner"))
 l_clickR_crop = ttk.Label(f_clickR_crop, text=_("Click right"))
-e3_crop_1 = ttk.Entry(f_clickR_crop, width=4)
-e4_crop_1 = ttk.Entry(f_clickR_crop, width=4)
+e3_crop_1 = ttk.Entry(f_clickR_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
+e4_crop_1 = ttk.Entry(f_clickR_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
 
 rb2_crop = ttk.Radiobutton(frame_crop, variable=img_crop, value="2",
                            text=_("Origin (x1,y1) and dimensions (X, Y)"))
-e1_crop_2 = ttk.Entry(frame_crop, width=4)
-e2_crop_2 = ttk.Entry(frame_crop, width=4)
-e3_crop_2 = ttk.Entry(frame_crop, width=4)
-e4_crop_2 = ttk.Entry(frame_crop, width=4)
+e1_crop_2 = ttk.Entry(frame_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
+e2_crop_2 = ttk.Entry(frame_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
+e3_crop_2 = ttk.Entry(frame_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
+e4_crop_2 = ttk.Entry(frame_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
 
 rb3_crop = ttk.Radiobutton(frame_crop, variable=img_crop, value="3",
                            text=_("Offset (dx,dy), dimensions (X, Y)\nand gravity"))
-e1_crop_3 = ttk.Entry(frame_crop, width=4)
-e2_crop_3 = ttk.Entry(frame_crop, width=4)
-e3_crop_3 = ttk.Entry(frame_crop, width=4)
-e4_crop_3 = ttk.Entry(frame_crop, width=4)
+e1_crop_3 = ttk.Entry(frame_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
+e2_crop_3 = ttk.Entry(frame_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
+e3_crop_3 = ttk.Entry(frame_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
+e4_crop_3 = ttk.Entry(frame_crop, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
 
 frame_crop_gravity = ttk.Frame(frame_crop)
 rb_crop_NW = ttk.Radiobutton(frame_crop_gravity, text="NW",
@@ -1401,12 +1427,14 @@ e_text.grid(row=1, column=2, sticky=W, padx=5)
 ###
 frame_text_xy = ttk.Frame(frame_text)
 l_text_xy = ttk.Label(frame_text_xy, text=_("Offset (dx,dy)\n"))
-e_text_x = ttk.Entry(frame_text_xy, width=3)
-e_text_y = ttk.Entry(frame_text_xy, width=3)
+e_text_x = ttk.Entry(frame_text_xy, width=3,
+                     validate="key", validatecommand=(validation, '%S'))
+e_text_y = ttk.Entry(frame_text_xy, width=3,
+                     validate="key", validatecommand=(validation, '%S'))
 
 frame_text_xy.grid(row=2, column=1)
 l_text_xy.grid(row=1, column=1, sticky=W, padx=5)
-e_text_x.grid(row=1, column=2, sticky=W, padx=5)
+e_text_x.grid(row=1, column=2, sticky=W, padx=5,)
 e_text_y.grid(row=1, column=3, sticky=W, padx=5)
 ###
 frame_text_gravity = ttk.Frame(frame_text)
@@ -1444,7 +1472,8 @@ frame_text_font = ttk.Frame(frame_text)
 co_text_font = ttk.Combobox(frame_text_font, width=25,
                             textvariable=img_text_font)
 co_text_font.configure(state='readonly')
-e_text_size = ttk.Entry(frame_text_font, width=3)
+e_text_size = ttk.Entry(frame_text_font, width=3,
+                        validate="key", validatecommand=(validation, '%S'))
 b_text_color = ttk.Button(frame_text, text=_("Font color"),
                           command=color_choose)
 cb_text_box = ttk.Checkbutton(frame_text_font, text=_("Background"),
@@ -1504,7 +1533,8 @@ rb1_bw = ttk.Radiobutton(frame_bw, text=_("Black-white"),
                          variable=img_bw, value="1")
 rb2_bw = ttk.Radiobutton(frame_bw, text=_("Sepia"),
                          variable=img_bw, value="2")
-e_bw_sepia = ttk.Entry(frame_bw, width=3)
+e_bw_sepia = ttk.Entry(frame_bw, width=3,
+                       validate="key", validatecommand=(validation, '%S'))
 l_bw_sepia = ttk.Label(frame_bw, text="%")
 b_bw_run = ttk.Button(frame_bw, text=_("Execute"),
                       style="Brown.TButton",
@@ -1524,7 +1554,8 @@ frame_border = ttk.Labelframe(frame_first_col, text=_("Frame"),
 frame_border.grid(row=6, column=1, sticky=(N, W, E, S), padx=5, pady=1)
 ###
 l_border = Label(frame_border, text=_("Pixels"))
-e_border = ttk.Entry(frame_border, width=3)
+e_border = ttk.Entry(frame_border, width=3,
+                     validate="key", validatecommand=(validation, '%S'))
 b_border_color = ttk.Button(frame_border, text=_("Color"),
                             command=color_choose_border)
 b_border_run = ttk.Button(frame_border, text=_("Add frame"),
@@ -1696,8 +1727,7 @@ rb_apply_dir = ttk.Radiobutton(frame_apply, text=_("Folder"),
                                variable=file_dir_selector, value="1")
 rb_apply_file = ttk.Radiobutton(frame_apply, text=_("File"),
                                 variable=file_dir_selector, value="0")
-co_apply_type = ttk.Combobox(frame_apply, text=_("Type"), width=4,
-                               values=file_extension)
+co_apply_type = ttk.Combobox(frame_apply, width=4, values=file_extension)
 co_apply_type.configure(state='readonly')
 co_apply_type.current(file_extension.index("JPG"))
 b_apply_run = ttk.Button(frame_apply, text=_("Apply all"),
@@ -1706,7 +1736,7 @@ b_apply_run = ttk.Button(frame_apply, text=_("Apply all"),
 rb_apply_dir.grid(row=1, column=1, pady=5, sticky=W)
 rb_apply_file.grid(row=1, column=2, padx=5, pady=5, sticky=W)
 
-co_apply_type.grid(row=1, column=3, padx=5, pady=5, sticky=(W, E))
+co_apply_type.grid(row=1, column=3, padx=5, pady=1, sticky=(W, E))
 b_apply_run.grid(row=1, column=4, padx=5, pady=5, sticky=(W, E))
 
 pb = ttk.Progressbar(frame_apply, orient="horizontal",

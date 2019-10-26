@@ -130,7 +130,6 @@ def fonts_list_get(temp_dir, gm_or_im):
                         if re.search("\d$", line) is not None:
                             line = re.findall('^[-a-zA-Z]+', line)
                             fonts_list.append(line)
-                            print(line)
                 else:
                     # ImageMagick format
                     for line in file:
