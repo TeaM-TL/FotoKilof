@@ -8,6 +8,7 @@ import datetime
 import gettext
 import glob
 import os
+import re
 import sys
 
 from tkinter import Tk, ttk, Label, PhotoImage
@@ -43,7 +44,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-VERSION = "2.9"
+VERSION = "2.9.1"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -122,6 +123,17 @@ def preview_new_button():
         img.show()
     except:
         print("No new picture to preview")
+
+
+def extension_from_file():
+    """ set extension in ComboBox same as opened file"""
+    path = os.path.splitext(file_in_path.get())
+    extension = path[1]
+    extension = re.findall('[A-Z]+',extension.upper())
+    try:
+        co_apply_type.current(file_extension.index(extension[0]))
+    except:
+        print("! extension_from_file: wrong extension")
 
 
 def apply_all_convert(out_file, write_command):
@@ -482,6 +494,8 @@ def open_file():
     file_in_path.set(filedialog.askopenfilename(initialdir=directory,
                                                 filetypes=filetypes,
                                                 title=_("Select picture for processing")))
+    extension_from_file()
+
     file_select_L.configure(text=os.path.basename(file_in_path.get()))
     preview_orig()
 
@@ -501,6 +515,7 @@ def open_file_last():
                     file_select_L.configure(text=file)
                     file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
+                    extension_from_file()
                 except:
                     print("Error in open_file_last")
 
@@ -520,6 +535,7 @@ def open_file_next():
                     file_select_L.configure(text=file)
                     file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
+                    extension_from_file()
                 except:
                     print("Error in open_file_next")
 
@@ -539,6 +555,7 @@ def open_file_first():
                     file_select_L.configure(text=file)
                     file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
+                    extension_from_file()
                 except:
                     print("Error in open_file_first")
 
@@ -566,6 +583,7 @@ def open_file_prev():
                 directory = os.path.dirname(file_in_path.get())
                 file_in_path.set(os.path.join(directory, file))
                 preview_orig()
+                extension_from_file()
 
 
 def color_choose_border():
@@ -1074,6 +1092,7 @@ img_contrast_on = IntVar()
 img_custom_on = IntVar()
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
+file_extension = ("JPG", "PNG", "TIFF")
 #magick_commands = ("animate", "compare", "composite", "conjure", "convert",
 #                   "identify", "import", "mogrify", "montage", "stream")
 magick_commands = ("composite", "convert", "mogrify")
@@ -1530,7 +1549,8 @@ b_contrast_run = ttk.Button(frame_contrast, text=_("Contrast"),
                             command=convert_contrast_button)
 rb1_contrast = ttk.Radiobutton(frame_contrast, text=_("Contrast"),
                                variable=img_contrast, value="1")
-co_contrast_selection = ttk.Combobox(frame_contrast, width=2, values=contrast_selection)
+co_contrast_selection = ttk.Combobox(frame_contrast, width=2,
+                                     values=contrast_selection)
 rb2_contrast = ttk.Radiobutton(frame_contrast, text=_("Stretch"),
                                variable=img_contrast, value="2")
 e1_contrast = ttk.Entry(frame_contrast, width=4)
@@ -1676,25 +1696,28 @@ rb_apply_dir = ttk.Radiobutton(frame_apply, text=_("Folder"),
                                variable=file_dir_selector, value="1")
 rb_apply_file = ttk.Radiobutton(frame_apply, text=_("File"),
                                 variable=file_dir_selector, value="0")
+co_apply_type = ttk.Combobox(frame_apply, text=_("Type"), width=4,
+                               values=file_extension)
+co_apply_type.configure(state='readonly')
+co_apply_type.current(file_extension.index("JPG"))
 b_apply_run = ttk.Button(frame_apply, text=_("Apply all"),
                          command=apply_all_button,
                          style="Brown.TButton")
+rb_apply_dir.grid(row=1, column=1, pady=5, sticky=W)
+rb_apply_file.grid(row=1, column=2, padx=5, pady=5, sticky=W)
 
-rb_apply_dir.grid(column=1, row=1, padx=5, pady=5, sticky=W)
-rb_apply_file.grid(column=2, row=1, padx=5, pady=5, sticky=W)
-b_apply_run.grid(column=3, row=1, padx=5, pady=5, sticky=(W, E))
+co_apply_type.grid(row=1, column=3, padx=5, pady=5, sticky=(W, E))
+b_apply_run.grid(row=1, column=4, padx=5, pady=5, sticky=(W, E))
 
-##########################
-# ProgressBar
-#########################
 pb = ttk.Progressbar(frame_apply, orient="horizontal",
-                     mode="determinate",
-                     var=progress_var)
+                     mode="determinate", var=progress_var)
 pb['value'] = 0
-pb.grid(row=2, column=1, columnspan=3, padx=5, sticky=(W, E))
+pb.grid(row=2, column=1, columnspan=4, padx=5, sticky=(W, E))
 
 l_pb = ttk.Label(frame_apply, textvariable=progress_files)
-l_pb.grid(row=3, column=1, columnspan=3, padx=5, pady=2, sticky=W)
+l_pb.grid(row=3, column=1, columnspan=4, padx=5, pady=2, sticky=W)
+
+
 
 ##########################
 # Result preview
