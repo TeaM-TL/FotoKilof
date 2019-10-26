@@ -459,6 +459,8 @@ def open_file_logo():
                  (_("JPEG files"), "*.JPG"),
                  (_("png files"), "*.png"),
                  (_("PNG files"), "*.PNG"),
+                 (_("tif files"), "*.tif"),
+                 (_("tif files"), "*.TIFF"),
                  (_("All files"), "*.*"))
     file_logo_path.set(filedialog.askopenfilename(initialdir=directory,
                                                   filetypes=filetypes,
@@ -474,6 +476,8 @@ def open_file():
                  (_("JPEG files"), "*.JPG"),
                  (_("png files"), "*.png"),
                  (_("PNG files"), "*.PNG"),
+                 (_("tif files"), "*.tif"),
+                 (_("tif files"), "*.TIFF"),
                  (_("All files"), "*.*"))
     file_in_path.set(filedialog.askopenfilename(initialdir=directory,
                                                 filetypes=filetypes,

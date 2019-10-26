@@ -124,12 +124,13 @@ def fonts_list_get(temp_dir, gm_or_im):
                 print("!fonts_list_get: cannot read file_font")
             else:
                 fonts_list = []
-                if gm_or_im == "gm":
+                if gm_or_im == "gm ":
                     # GraphicsMagick format
                     for line in file:
                         if re.search("\d$", line) is not None:
                             line = re.findall('^[-a-zA-Z]+', line)
                             fonts_list.append(line)
+                            print(line)
                 else:
                     # ImageMagick format
                     for line in file:
