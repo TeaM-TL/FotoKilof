@@ -56,12 +56,12 @@ def preview_convert(file, dir_temp, command, size, gm_or_im):
         print("! Error in preview_convert: " + command)
 
     try:
-        result =  {'filename': file_preview, 'size': filesize, \
+        result = {'filename': file_preview, 'size': filesize, \
                 'width': width, 'height': height}
     except:
         print("! Error in preview_convert: return")
         result = None
-        
+
     return result
 
 # EOF

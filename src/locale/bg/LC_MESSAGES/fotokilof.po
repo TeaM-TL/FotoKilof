@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: FotoKilof\n"
-"POT-Creation-Date: 2019-10-26 21:00+0200\n"
-"PO-Revision-Date: 2019-10-26 21:01+0200\n"
+"POT-Creation-Date: 2019-10-30 23:07+0100\n"
+"PO-Revision-Date: 2019-10-30 23:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: bg_BG\n"
@@ -20,136 +20,136 @@ msgstr ""
 "X-Poedit-SearchPath-2: fotokilof.py\n"
 "X-Poedit-SearchPath-3: ini_read.py\n"
 
-#: fotokilof.py:70
+#: fotokilof.py:75
 msgid "Unfortunately, you are using Windows, thus not all option will work"
 msgstr ""
 "За съжаление, вие използвате Windows, така че не всички опции ще работят"
 
-#: fotokilof.py:234
+#: fotokilof.py:241
 msgid "Processing"
 msgstr "Обработване"
 
-#: fotokilof.py:254
+#: fotokilof.py:260
 msgid "of"
 msgstr "на"
 
-#: fotokilof.py:264
+#: fotokilof.py:270
 msgid "done"
 msgstr "готово"
 
-#: fotokilof.py:477 fotokilof.py:494
+#: fotokilof.py:484 fotokilof.py:501
 msgid "jpeg files"
 msgstr "jpeg файлове"
 
-#: fotokilof.py:478 fotokilof.py:495
+#: fotokilof.py:485 fotokilof.py:502
 msgid "JPEG files"
 msgstr "JPEG файлове"
 
-#: fotokilof.py:479 fotokilof.py:496
+#: fotokilof.py:486 fotokilof.py:503
 msgid "png files"
 msgstr "png файлове"
 
-#: fotokilof.py:480 fotokilof.py:497
+#: fotokilof.py:487 fotokilof.py:504
 msgid "PNG files"
 msgstr "PNG файлове"
 
-#: fotokilof.py:481 fotokilof.py:498
+#: fotokilof.py:488 fotokilof.py:505
 msgid "tiff files"
 msgstr "tiff файлове"
 
-#: fotokilof.py:482 fotokilof.py:499
+#: fotokilof.py:489 fotokilof.py:506
 msgid "TIFF files"
 msgstr "TIFF файлове"
 
-#: fotokilof.py:483 fotokilof.py:500
+#: fotokilof.py:490 fotokilof.py:507
 msgid "All files"
 msgstr "Всички файлове"
 
-#: fotokilof.py:486
+#: fotokilof.py:493
 msgid "Select logo picture for inserting"
 msgstr "Изберете картинка с лого за поставяне"
 
-#: fotokilof.py:503
+#: fotokilof.py:510
 msgid "Select picture for processing"
 msgstr "Изберете картинка за обработка"
 
-#: fotokilof.py:844
+#: fotokilof.py:853
 msgid "License"
 msgstr "Лиценз"
 
-#: fotokilof.py:1123
+#: fotokilof.py:1135
 msgid "Tools"
 msgstr "Инструменти"
 
-#: fotokilof.py:1127
+#: fotokilof.py:1139
 msgid "Histograms"
 msgstr "Хистограми"
 
-#: fotokilof.py:1130
+#: fotokilof.py:1142
 msgid "Scaling/Resize"
 msgstr "Мащабиране/Оразмеряване"
 
-#: fotokilof.py:1133 fotokilof.py:1313 fotokilof.py:1377
+#: fotokilof.py:1145 fotokilof.py:1325 fotokilof.py:1389
 msgid "Crop"
 msgstr "Изрязване"
 
-#: fotokilof.py:1136
+#: fotokilof.py:1148
 msgid "Text"
 msgstr "Текст"
 
-#: fotokilof.py:1139 fotokilof.py:1503 fotokilof.py:1515
+#: fotokilof.py:1151 fotokilof.py:1515 fotokilof.py:1527
 msgid "Rotate"
 msgstr "Завъртане"
 
-#: fotokilof.py:1142 fotokilof.py:1552
+#: fotokilof.py:1154 fotokilof.py:1564
 msgid "Frame"
 msgstr "Рамка"
 
-#: fotokilof.py:1145
+#: fotokilof.py:1157
 msgid "Black&white"
 msgstr "Черно и бяло"
 
-#: fotokilof.py:1147
+#: fotokilof.py:1159
 msgid "Colors normalize"
 msgstr "Нормализиране на цветове"
 
-#: fotokilof.py:1150 fotokilof.py:1574 fotokilof.py:1578 fotokilof.py:1581
+#: fotokilof.py:1162 fotokilof.py:1586 fotokilof.py:1590 fotokilof.py:1593
 msgid "Contrast"
 msgstr "контраст"
 
-#: fotokilof.py:1153 fotokilof.py:1196
+#: fotokilof.py:1165 fotokilof.py:1208
 msgid "Logo"
 msgstr "Лого"
 
-#: fotokilof.py:1156
+#: fotokilof.py:1168
 msgid "Custom"
 msgstr ""
 
-#: fotokilof.py:1163 fotokilof.py:1722
+#: fotokilof.py:1175 fotokilof.py:1742
 msgid "Apply"
 msgstr "Приложи"
 
-#: fotokilof.py:1181
+#: fotokilof.py:1193
 msgid "Settings"
 msgstr "Настройки"
 
-#: fotokilof.py:1185
+#: fotokilof.py:1197
 msgid "Save"
 msgstr "Запази"
 
-#: fotokilof.py:1187
+#: fotokilof.py:1199
 msgid "Load"
 msgstr "Зареди"
 
-#: fotokilof.py:1200 fotokilof.py:1664
+#: fotokilof.py:1212 fotokilof.py:1684
 msgid "File selection"
 msgstr "Избор на файл"
 
-#: fotokilof.py:1203 fotokilof.py:1539 fotokilof.py:1638
+#: fotokilof.py:1215 fotokilof.py:1551 fotokilof.py:1658
 msgid "Execute"
 msgstr "Изпълни"
 
-#: fotokilof.py:1214
+#: fotokilof.py:1226
 msgid ""
 "Width\n"
 "Height"
@@ -157,7 +157,7 @@ msgstr ""
 "Широчина\n"
 "Височина"
 
-#: fotokilof.py:1215
+#: fotokilof.py:1227
 msgid ""
 "Offset\n"
 "(dx,dy)"
@@ -165,51 +165,51 @@ msgstr ""
 "Отместване\n"
 "(dx,dy)"
 
-#: fotokilof.py:1243 fotokilof.py:1364 fotokilof.py:1449
+#: fotokilof.py:1255 fotokilof.py:1376 fotokilof.py:1461
 msgid "Center"
 msgstr "Центриране"
 
-#: fotokilof.py:1278
+#: fotokilof.py:1290
 msgid "Scale/Resize"
 msgstr "Мащабирай/Оразмери"
 
-#: fotokilof.py:1283 fotokilof.py:1556
+#: fotokilof.py:1295 fotokilof.py:1568
 msgid "Pixels"
 msgstr "Пиксели"
 
-#: fotokilof.py:1287
+#: fotokilof.py:1299
 msgid "Percent"
 msgstr "Процент"
 
-#: fotokilof.py:1297
+#: fotokilof.py:1309
 msgid "Resize"
 msgstr "Оразмеряване"
 
-#: fotokilof.py:1319
+#: fotokilof.py:1331
 msgid "Coordinates (x1, y1) and (x2, y2)"
 msgstr "Координати (x1, y1) и (x2, y2)"
 
-#: fotokilof.py:1320
+#: fotokilof.py:1332
 msgid "Left Upper corner"
 msgstr "Ляв горен ъгъл"
 
-#: fotokilof.py:1321
+#: fotokilof.py:1333
 msgid "Click left"
 msgstr "Щракнете вляво"
 
-#: fotokilof.py:1326
+#: fotokilof.py:1338
 msgid "Right lower corner"
 msgstr "Десен долен ъгъл"
 
-#: fotokilof.py:1327
+#: fotokilof.py:1339
 msgid "Click right"
 msgstr "Щракнете вдясно"
 
-#: fotokilof.py:1334
+#: fotokilof.py:1346
 msgid "Origin (x1,y1) and dimensions (X, Y)"
 msgstr "Произход (x1, y1) и размери (X, Y)"
 
-#: fotokilof.py:1345
+#: fotokilof.py:1357
 msgid ""
 "Offset (dx,dy), dimensions (X, Y)\n"
 "and gravity"
@@ -217,135 +217,143 @@ msgstr ""
 "Отместване (dx, dy), размери (X, Y)\n"
 "и гравитация"
 
-#: fotokilof.py:1375
+#: fotokilof.py:1387
 msgid "From image"
 msgstr "От изображение"
 
-#: fotokilof.py:1416
+#: fotokilof.py:1428
 msgid "Add text"
 msgstr "Добави текст"
 
-#: fotokilof.py:1429
+#: fotokilof.py:1441
 msgid "Offset (dx,dy)\n"
 msgstr "Отместване (dx,dy)\n"
 
-#: fotokilof.py:1477
+#: fotokilof.py:1489
 msgid "Font color"
 msgstr "Цвят на шрифта"
 
-#: fotokilof.py:1479
+#: fotokilof.py:1491
 msgid "Background"
 msgstr "Фон"
 
-#: fotokilof.py:1483
+#: fotokilof.py:1495
 msgid "Background color"
 msgstr "Цвят на фона"
 
-#: fotokilof.py:1486
+#: fotokilof.py:1498
 msgid "Put text"
 msgstr "Постави текст"
 
-#: fotokilof.py:1528 fotokilof.py:1532
+#: fotokilof.py:1540 fotokilof.py:1544
 msgid "Black-white"
 msgstr "Черно-бяло"
 
-#: fotokilof.py:1534
+#: fotokilof.py:1546
 msgid "Sepia"
 msgstr "Сепия"
 
-#: fotokilof.py:1559
+#: fotokilof.py:1571
 msgid "Color"
 msgstr "Цвят"
 
-#: fotokilof.py:1561
+#: fotokilof.py:1573
 msgid "Add frame"
 msgstr "Добави рамка"
 
-#: fotokilof.py:1585
+#: fotokilof.py:1597
 msgid "Stretch"
 msgstr "Разтегни"
 
-#: fotokilof.py:1589
+#: fotokilof.py:1601
 msgid "Black"
 msgstr "Черно"
 
-#: fotokilof.py:1590
+#: fotokilof.py:1602
 msgid "White"
 msgstr "Бяло"
 
-#: fotokilof.py:1605
+#: fotokilof.py:1617
 msgid "Color normalize"
 msgstr "Нормализиране на цвят"
 
-#: fotokilof.py:1609 fotokilof.py:1615
+#: fotokilof.py:1621 fotokilof.py:1633
 msgid "Normalize"
 msgstr "Нормализиране"
 
-#: fotokilof.py:1612
+#: fotokilof.py:1624
 msgid "AutoLevel"
 msgstr "Автоматично ниво"
 
 #: fotokilof.py:1627
+msgid "Equalize"
+msgstr ""
+
+#: fotokilof.py:1630
+msgid "Channel:"
+msgstr ""
+
+#: fotokilof.py:1647
 msgid "Custom command"
 msgstr ""
 
-#: fotokilof.py:1632
+#: fotokilof.py:1652
 msgid "Command:"
 msgstr ""
 
-#: fotokilof.py:1660
+#: fotokilof.py:1680
 msgid "Image"
 msgstr "Изображение"
 
-#: fotokilof.py:1669
+#: fotokilof.py:1689
 msgid "First"
 msgstr "Първо"
 
-#: fotokilof.py:1671
+#: fotokilof.py:1691
 msgid "Previous"
 msgstr "Предишно"
 
-#: fotokilof.py:1673
+#: fotokilof.py:1693
 msgid "Next"
 msgstr "Следващо"
 
-#: fotokilof.py:1675
+#: fotokilof.py:1695
 msgid "Last"
 msgstr "Последно"
 
-#: fotokilof.py:1689
+#: fotokilof.py:1709
 msgid "Original"
 msgstr "Оригинално"
 
-#: fotokilof.py:1694 fotokilof.py:1759
+#: fotokilof.py:1714 fotokilof.py:1779
 msgid "Preview"
 msgstr "Предварителен преглед"
 
-#: fotokilof.py:1706 fotokilof.py:1773
+#: fotokilof.py:1726 fotokilof.py:1793
 msgid "Histogram"
 msgstr "Хистограма"
 
-#: fotokilof.py:1726
+#: fotokilof.py:1746
 msgid "Folder"
 msgstr "Папка"
 
-#: fotokilof.py:1728
+#: fotokilof.py:1748
 msgid "File"
 msgstr "Файл"
 
-#: fotokilof.py:1733
+#: fotokilof.py:1753
 msgid "Apply all"
 msgstr "Приложете всички"
 
-#: fotokilof.py:1755
+#: fotokilof.py:1775
 msgid "Result"
 msgstr "Резултат"
 
-#: fotokilof.py:1815
+#: fotokilof.py:1840
 msgid "Error"
 msgstr ""
 
-#: fotokilof.py:1816
+#: fotokilof.py:1841
 msgid ""
 "ImageMagick nor GraphicsMagick are not installed in you system. Is impossile "
 "to process any graphics."

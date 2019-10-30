@@ -143,7 +143,7 @@ def extension_from_file():
     """ set extension in ComboBox same as opened file"""
     path = os.path.splitext(file_in_path.get())
     extension = path[1]
-    extension = re.findall('[A-Z]+',extension.upper())
+    extension = re.findall('[A-Z]+', extension.upper())
     try:
         co_apply_type.current(file_extension.index(extension[0]))
     except:
@@ -159,7 +159,8 @@ def apply_all_convert(out_file, write_command):
     text_separate = 0  # all conversion in one run
 
     if img_normalize_on.get() == 1:
-        cmd = cmd + " " + convert.convert_normalize(img_normalize.get())
+        cmd = cmd + " " + convert.convert_normalize(img_normalize.get(),
+                                                    co_normalize_channel.get())
 
     if img_contrast_on.get() == 1:
         cmd = cmd + " " + convert.convert_contrast(img_contrast.get(),
@@ -181,7 +182,8 @@ def apply_all_convert(out_file, write_command):
                                                  border)
     else:
         if int(img_crop_on.get()) == 1:
-            # if crop with mogrify, convert text in second run
+            # if crop with gravity, convert text in second run
+            print("!!")
             text_separate = 1
         cmd = cmd + " " + convert.convert_crop(img_crop.get(),
                                                img_crop_gravity.get(),
@@ -312,7 +314,8 @@ def convert_bw_button():
 def convert_normalize_button():
     """ normalize button """
     out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
-    cmd = convert.convert_normalize(img_normalize.get())
+    cmd = convert.convert_normalize(img_normalize.get(),
+                                    co_normalize_channel.get())
     cmd_magick = GM_or_IM + "mogrify"
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, out_file, cmd_magick)
@@ -720,9 +723,10 @@ def ini_read_wraper():
     e_bw_sepia.delete(0, "end")
     e_bw_sepia.insert(0, ini_entries['sepia'])
 
-    ini_entries = ini_read.ini_read_normalize(FILE_INI)
+    ini_entries = ini_read.ini_read_normalize(FILE_INI, normalize_channels)
     img_normalize_on.set(ini_entries['normalize_on'])
     img_normalize.set(ini_entries['normalize'])
+    co_normalize_channel.current(normalize_channels.index(ini_entries['channel']))
 
     ini_entries = ini_read.ini_read_contrast(FILE_INI)
     img_contrast_on.set(ini_entries['contrast_on'])
@@ -807,6 +811,7 @@ def ini_save():
     config.add_section('Normalize')
     config.set('Normalize', 'on', str(img_normalize_on.get()))
     config.set('Normalize', 'normalize', str(img_normalize.get()))
+    config.set('Normalize', 'channel', co_normalize_channel.get())
     config.add_section('Contrast')
     config.set('Contrast', 'on', str(img_contrast_on.get()))
     config.set('Contrast', 'contrast', str(img_contrast.get()))
@@ -1078,40 +1083,41 @@ TEMP_DIR = os.path.join(PWD, "tmp")
 work_dir = StringVar()  # default: "FotoKilof"
 file_dir_selector = IntVar()
 file_in_path = StringVar()  # fullpath original picture
+img_histograms_on = IntVar()
+img_logo_on = IntVar()  # Logo
 file_logo_path = StringVar()  # fullpath logo file
 img_logo_gravity = StringVar()
-img_resize = IntVar()
+img_resize_on = IntVar()  # Resize
+img_resize = IntVar()  # (1, 2, 3, 4, 5)
+img_text_on = IntVar()  # Text
 img_text_gravity = StringVar()
-img_rotate = IntVar()
 img_text_font = StringVar()
 img_text_font_list = []  # list available fonts, from fonts()
 img_text_color = StringVar()
 img_text_box = IntVar()
 img_text_box_color = StringVar()
-img_crop = IntVar()
+img_rotate_on = IntVar()  # Rotate
+img_rotate = IntVar()
+img_crop_on = IntVar()  # Crop
+img_crop = IntVar()  # (1, 2, 3)
 img_crop_gravity = StringVar()
+img_border_on = IntVar()  # Border
 img_border_color = StringVar()
-img_normalize = IntVar()
+img_normalize_on = IntVar()  # Normalize
+img_normalize = IntVar()  #  (1,2,3)
+normalize_channels = ("None", "Red", "Green", "Blue", "Alpha", "Gray", "Cyan", "Magenta", "Yellow", "Black", "Opacity", "Index", "RGB", "RGBA", "CMYK", "CMYKA")
+img_bw_on = IntVar()  # Black-white
 img_bw = IntVar()
-img_contrast = IntVar()
-img_histograms_on = IntVar()
-img_logo_on = IntVar()
-img_resize_on = IntVar()
-img_text_on = IntVar()
-img_rotate_on = IntVar()
-img_crop_on = IntVar()
-img_border_on = IntVar()
-img_normalize_on = IntVar()
-img_bw_on = IntVar()
-img_contrast_on = IntVar()
-img_custom_on = IntVar()
+img_contrast_on = IntVar()  # Contrast
+img_contrast = IntVar()  # (1, 2)
+contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
+img_custom_on = IntVar()  # Custom
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
 file_extension = ("JPG", "PNG", "TIF")
+magick_commands = ("composite", "convert", "mogrify")
 #magick_commands = ("animate", "compare", "composite", "conjure", "convert",
 #                   "identify", "import", "mogrify", "montage", "stream")
-magick_commands = ("composite", "convert", "mogrify")
-contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
 
 ######################################################################
 # Karty
@@ -1552,7 +1558,7 @@ rb2_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 e_bw_sepia.grid(row=1, column=2, padx=5, pady=5, sticky=E)
 l_bw_sepia.grid(row=1, column=3, padx=5, pady=5, sticky=W)
 rb1_bw.grid(row=2, column=1, padx=5, pady=5, sticky=W)
-b_bw_run.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky=E)
+b_bw_run.grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky=E)
 
 ###########################
 # Border
@@ -1620,14 +1626,22 @@ rb1_normalize = ttk.Radiobutton(frame_normalize, text=_("Normalize"),
 rb2_normalize = ttk.Radiobutton(frame_normalize, text=_("AutoLevel"),
                                 variable=img_normalize,
                                 value="2")
+rb3_normalize = ttk.Radiobutton(frame_normalize, text=_("Equalize"),
+                                variable=img_normalize,
+                                value="3")
+l_normalize_channel = ttk.Label(frame_normalize, text=_("Channel:"))
+co_normalize_channel = ttk.Combobox(frame_normalize, width=7,
+                                    values=normalize_channels)
 b_normalize_run = ttk.Button(frame_normalize, text=_("Normalize"),
                              style="Brown.TButton",
                              command=convert_normalize_button)
 
-rb1_normalize.grid(row=1, column=1, padx=5, pady=5, sticky=W)
-rb2_normalize.grid(row=1, column=2, padx=5, pady=5, sticky=W)
-b_normalize_run.grid(row=2, column=1, columnspan=2, padx=5, pady=5, sticky=E)
-
+rb3_normalize.grid(row=1, column=1, padx=5, pady=4, sticky=W)
+l_normalize_channel.grid(row=1, column=2, padx=5, pady=4, sticky=W)
+co_normalize_channel.grid(row=1, column=3, padx=5, pady=4, sticky=W)
+rb1_normalize.grid(row=2, column=1, padx=5, pady=0, sticky=W)
+rb2_normalize.grid(row=3, column=1, padx=5, pady=4, sticky=W)
+b_normalize_run.grid(row=3, column=2, columnspan=2, padx=5, pady=4, sticky=E)
 
 ############################
 # Custom command
@@ -1822,7 +1836,7 @@ if GM_or_IM is not None:
         b_text_color.configure(state=DISABLED)
         b_text_box_color.configure(state=DISABLED)
         b_border_color.configure(state=DISABLED)
-    
+
 else:
     root.withdraw()
     messagebox.showerror(title=_("Error"),

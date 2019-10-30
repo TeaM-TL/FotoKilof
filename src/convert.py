@@ -109,13 +109,18 @@ def convert_contrast(contrast, contrast_selected, entry1, entry2):
     return command
 
 
-def convert_normalize(normalize):
+def convert_normalize(normalize, channel):
     """ 7. Normalize """
 
     if normalize == 1:
         command = "-normalize"
     elif normalize == 2:
         command = "-auto-level"
+    elif normalize == 3:
+        if channel != "None":
+            command = "-channel " + channel + " -equalize"
+        else:
+            command = "-equalize"
     else:
         command = ""
     return command

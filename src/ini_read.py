@@ -348,7 +348,7 @@ def ini_read_color(file_ini):
     return dict_return
 
 
-def ini_read_normalize(file_ini):
+def ini_read_normalize(file_ini, channels):
     """ Normalize """
 
     # słownik wyjściowy
@@ -367,7 +367,13 @@ def ini_read_normalize(file_ini):
         normalize = config.getint('Normalize', 'normalize')
     except:
         normalize = 1
-    dict_return['normalize'] = entries.parse_list(normalize, (0, 1), 1)
+    dict_return['normalize'] = entries.parse_list(normalize, (1, 2, 3), 1)
+    
+    try:
+        normalize = config.getint('Normalize', 'channel')
+    except:
+        normalize = "None"
+    dict_return['channel'] = entries.parse_list(normalize, channels , "None")
 
     return dict_return
 
