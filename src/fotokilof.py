@@ -12,13 +12,18 @@ import re
 import sys
 
 from tkinter import Tk, ttk, Label, PhotoImage
-# from tkinter.scrolledtext import  Text
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog, messagebox
 from tkinter import TclError, StringVar, IntVar
 from tkinter import N, S, W, E, END, DISABLED, NORMAL
 
-from tkcolorpicker import askcolor
+try:
+    from tkcolorpicker import askcolor
+except:
+    tkcolorpicker_not_found = True
+else:
+    tkcolorpicker_not_found = False
+
 from PIL import Image
 
 # my modules
@@ -1810,6 +1815,10 @@ if GM_or_IM is not None:
     if os.path.isfile(file_logo_path.get()):
         # Load preview logo
         preview_logo()
+    if tkcolorpicker_not_found is True:
+        b_text_color.configure(state=DISABLED)
+        b_text_box_color.configure(state=DISABLED)
+        b_border_color.configure(state=DISABLED)
 else:
     root.withdraw()
     messagebox.showerror(title=_("Error"),
