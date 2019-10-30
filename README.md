@@ -53,7 +53,7 @@ package *fotokilof-windows-x64.zip* contains:
 ## Requirements
  - Windows, Linux, MacOS X, BSD,
  - FullHD screen for comfort work,
- - Linux, MacOSX:  - ImageMagick - home page: https://imagemagick.org/, GraphickMagick - not every command are working,
+ - Linux, MacOSX, BSD:  - ImageMagick - home page: https://imagemagick.org/, GraphickMagick - not every command are working,
  - to run from source: Python3, with modules (configparser, datetime, gettext, glob, os, PIL, platform, re, shutil, tkinter, tkcolorpicker, touch).
 
 ## Thanks
