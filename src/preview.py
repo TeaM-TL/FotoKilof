@@ -43,22 +43,25 @@ def preview_convert(file, dir_temp, command, size, gm_or_im):
     img = Image.open(file)
     width = str(img.size[0])
     height = str(img.size[1])
+    filesize = common.humansize(os.path.getsize(file))
 
     file_preview = common.spacja(os.path.join(dir_temp, "preview.ppm"))
     command = magick.magick_command(gm_or_im + "convert") \
         + common.spacja(file) \
         + " -resize " + str(size) + "x" + str(size) \
         + command + file_preview
-    # print("!", command)
     try:
         os.system(command)
     except:
         print("! Error in preview_convert: " + command)
 
     try:
-        return {'filename': file_preview, 'width': width, 'height': height}
+        result =  {'filename': file_preview, 'size': filesize, \
+                'width': width, 'height': height}
     except:
         print("! Error in preview_convert: return")
-        return None
+        result = None
+        
+    return result
 
 # EOF

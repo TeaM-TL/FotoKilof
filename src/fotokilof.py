@@ -49,7 +49,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-VERSION = "2.9.1"
+VERSION = "2.9.2"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -100,7 +100,9 @@ def preview_new(file_out, dir_temp):
     try:
         pi_preview_new.configure(file=preview_picture['filename'])
         l_preview_new.configure(text=preview_picture['width'] + "x" \
-                                + preview_picture['height'])
+                                + preview_picture['height'] \
+                                + " - " \
+                                + preview_picture['size'])
     except:
         print("! Error in preview_new: Nie można wczytać podglądu")
 
@@ -245,25 +247,24 @@ def apply_all_button():
         if result == "OK":
             preview_new(out_file, TEMP_DIR)
     else:
-        pwd = os.getcwd()
-        os.chdir(os.path.dirname(file_in_path.get()))
+        dirname = os.path.dirname(file_in_path.get())
         i = 0
-        files_list = glob.glob("*.[j|J][p|P][g|G]")
+        files_list = glob.glob(os.path.join(dirname, "*.[j|J][p|P][g|G]"))
         file_list_len = len(files_list)
         pb['maximum'] = file_list_len
         pb['mode'] = "determinate"
-        for files in glob.glob("*.[j|J][p|P][g|G]"):
-            out_file = magick.pre_magick(files, work_dir.get())
-            result = apply_all_convert(os.path.realpath(out_file), 0)
+        for file in files_list:  # glob.glob("*.[j|J][p|P][g|G]"):
+            out_file = magick.pre_magick(os.path.realpath(file), work_dir.get())
+            result = apply_all_convert(out_file, 0)
             i = i + 1
             progress_files.set(str(i) + " " + _("of") + " " \
-                               + str(file_list_len) + " : " + files)
+                               + str(file_list_len) + " : " \
+                               + os.path.basename(file))
             progress_var.set(i)
             root.update_idletasks()
         preview_orig()
         if result == "OK":
             preview_new(out_file, TEMP_DIR)
-        os.chdir(pwd)
 
     progress_var.set(0)
     progress_files.set(_("done"))
@@ -940,8 +941,10 @@ def preview_orig():
         print("! Error in preview_orig: Cannot load preview")
 
     try:
-        l_preview_orig.configure(text=preview_picture['width'] + "x"\
-                                 + preview_picture['height'])
+        l_preview_orig.configure(text=preview_picture['width'] + "x" \
+                                 + preview_picture['height'] \
+                                 + " - " \
+                                 + preview_picture['size'])
     except:
         print("! Error in preview_orig: Cannot load image size")
 
@@ -1819,6 +1822,7 @@ if GM_or_IM is not None:
         b_text_color.configure(state=DISABLED)
         b_text_box_color.configure(state=DISABLED)
         b_border_color.configure(state=DISABLED)
+    
 else:
     root.withdraw()
     messagebox.showerror(title=_("Error"),

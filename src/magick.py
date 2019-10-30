@@ -86,8 +86,12 @@ def magick_command(command):
     """
     make [Graphics|Image]Magick independent
     command: it depends:
-      convert, mogrify, composite - ImageMagick
-      gm convert, gm mogrify, gm composite - GraphicsMagick
+    - ImageMagick:
+      - Unix: convert, mogrify, composite
+      - Windows: magick.exe convert, magick.exe mogrify, magick.exe composite
+    - GraphicsMagick:
+      - Unix: gm convert, gm mogrify, gm composite
+      - Windows: gm.exe convert, gm.exe mogrify, gm.exe composite
     """
     if mswindows.windows() == 1:
         suffix = ".exe "
@@ -96,7 +100,8 @@ def magick_command(command):
     tool = command.split()
     tool.insert(1, suffix)
     tool.extend(' ')
-    return "".join(tool)
+    result = "".join(tool)
+    return result
 
 
 def fonts_list_get(temp_dir, gm_or_im):

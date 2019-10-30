@@ -50,7 +50,6 @@ def parse_color(entry, default):
         result = entry
     else:
         result = default
-    print(entry, default, result)
     return result
 
 # EOF
