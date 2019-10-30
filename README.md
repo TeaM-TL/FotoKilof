@@ -1,5 +1,4 @@
 # FotoKilof - GUI for ImageMagick
-
 GUI for the most used (by me) ImageMagick functionality for processing pictures. 
 
 ![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof.png)
@@ -34,30 +33,27 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 ## User manual
 RTFM in PDF: [English](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.pdf), [Polish](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/pl/fotokilof.pdf).
 
-## Translations
-
+## Available translations
 Available: English, Polish, German, Bulgarian and Indonesian.
 
-### Binaries
-In Release you can find current binary version for Windows (8.1 and newer) and Linux (Ubuntu 18.04.3 and newer)
+## Download 
+In [Release](https://github.com/TeaM-TL/FotoKilof/releases) you can find current binary version for Windows (8.1 and newer) and Linux
 
-#### Linux
+### Linux
  - download *locale.zip* and unzip
  - download *fotokilof-linux-distroname_x64* into unzipped directory
  - run
 
-#### Windows
-
+### Windows
 package *fotokilof-windows-x64.zip* contains:
  - ImageMagick binaries
  - documentation in PL and EN,
  - locales - translation into PL, DE, BG, ID.
 
-## Requirements
- - ImageMagick - home page: https://imagemagick.org/, GraphickMagick - not every command are working,
+### Requirements
  - Windows, Linux, MacOS X, BSD,
- - FullHD screen for comfort work
- - Python3, with modules, - only for script launch (configparser, datetime, gettext, glob, os, PIL, platform, re, shutil, tkinter, tkcolorpicker, touch)
+ - FullHD screen for comfort work,
+ - Linux, MacOSX, BSD:  - ImageMagick - home page: https://imagemagick.org/, GraphickMagick - not every toos are working properly.
 
 ## Thanks
  - Max von Forell - German translation
