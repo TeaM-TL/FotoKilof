@@ -49,7 +49,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-VERSION = "2.9.2"
+VERSION = "2.9.3"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -183,11 +183,11 @@ def apply_all_convert(out_file, write_command):
     else:
         if int(img_crop_on.get()) == 1:
             # if crop with gravity, convert text in second run
-            print("!!")
-            text_separate = 1
-        cmd = cmd + " " + convert.convert_crop(img_crop.get(),
-                                               img_crop_gravity.get(),
-                                               convert_crop_entries())
+            if int(img_crop_on.get()) == 3:
+                text_separate = 1
+            cmd = cmd + " " + convert.convert_crop(img_crop.get(),
+                                                   img_crop_gravity.get(),
+                                                   convert_crop_entries())
 
     if img_rotate_on.get() > 0:
         cmd = cmd + " " + convert.convert_rotate(img_rotate.get())
