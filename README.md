@@ -41,8 +41,8 @@ In [Release](https://github.com/TeaM-TL/FotoKilof/releases) you can find current
 
 ### Linux
  - download *locale.zip* and unzip
- - download *fotokilof-linux-distroname_x64* into unzipped directory
- - run
+ - download *fotokilof-linux-x64-distroname* into directory with unzipped *locale.zip*
+ - run fotokilof
 
 ### Windows
 package *fotokilof-windows-x64.zip* contains:
