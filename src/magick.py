@@ -18,33 +18,39 @@ def pre_magick(file_in, destination):
     destination - processing directory
     file_out - fullname file for processing in destination
     """
-
-    # Zakładanie katalogu na obrazki wynikowe - podkatalog folderu z obrazkiem
-    out_dir = os.path.join(os.path.dirname(file_in), destination)
+    result = "OK"  # initial value
     if file_in is not None:
-        if os.path.isdir(out_dir) is False:
-            try:
-                os.mkdir(out_dir)
-            except:
-                print("! Error in pre_imagick: Nie można utworzyć katalogu na przemielone rysunki")
-                return None
+        if os.path.isfile(file_in):
+            # Zakładanie katalogu na obrazki wynikowe o ile nie ma
+            out_dir = os.path.join(os.path.dirname(file_in), destination)
+            if os.path.isdir(out_dir) is False:
+                try:
+                    os.mkdir(out_dir)
+                except:
+                    print("! Error in pre_imagick: Nie można utworzyć katalogu na przemielone rysunki")
+                    result = None
+        else:
+            result = None
     else:
-        return None
+        result = None
 
-    # Kopiowanie oryginału do miejsca mielenia
-    file_out = os.path.join(out_dir, os.path.basename(file_in))
-    if file_out is not None:
-        try:
-            shutil.copyfile(file_in, file_out)
-        except IOError as error:
-            print("! Error in pre_imagick: Unable to copy file. %s" % error)
-            exit(1)
-        except:
-            print("! Error in pre_imagick: Unexpected error:", sys.exc_info())
-            exit(1)
+    if result == "OK":
+        # Kopiowanie oryginału do miejsca mielenia
+        file_out = os.path.join(out_dir, os.path.basename(file_in))
+        if file_out is not None:
+            try:
+                shutil.copyfile(file_in, file_out)
+            except IOError as error:
+                print("! Error in pre_imagick: Unable to copy file. %s" % error)
+                exit(1)
+            except:
+                print("! Error in pre_imagick: Unexpected error:", sys.exc_info())
+                exit(1)
+        else:
+            file_out = None
+            print("! pre_imagemagic: No selected file")
     else:
         file_out = None
-        print("! pre_imagemagic: No selected file")
     return file_out
 
 

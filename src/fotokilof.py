@@ -80,6 +80,11 @@ def print_command(cmd, cmd_magick):
     t_custom.insert(END, cmd + " ")
     # co_custom_command.current(magick_commands.index(cmd_magick))
 
+
+def convert_custom_clear():
+    """ clear custom widget """
+    t_custom.delete(1.0, END)
+
 ################
 # Preview
 
@@ -1557,8 +1562,8 @@ b_bw_run = ttk.Button(frame_bw, text=_("Execute"),
 rb2_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 e_bw_sepia.grid(row=1, column=2, padx=5, pady=5, sticky=E)
 l_bw_sepia.grid(row=1, column=3, padx=5, pady=5, sticky=W)
-rb1_bw.grid(row=2, column=1, padx=5, pady=5, sticky=W)
-b_bw_run.grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky=E)
+rb1_bw.grid(row=2, column=1, padx=5, pady=0, sticky=W)
+b_bw_run.grid(row=3, column=2, columnspan=2, padx=5, pady=5, sticky=E)
 
 ###########################
 # Border
@@ -1656,7 +1661,8 @@ co_custom_command = ttk.Combobox(frame_custom, width=9,
                                  values=magick_commands)
 co_custom_command.current(2)
 co_custom_command.configure(state='readonly')
-
+b_custom_clear = ttk.Button(frame_custom, text=_("Clear"),
+                          command=convert_custom_clear)
 b_custom_run = ttk.Button(frame_custom, text=_("Execute"),
                           style="Brown.TButton",
                           command=convert_custom_button)
@@ -1666,9 +1672,10 @@ t_custom = ScrolledText(frame_custom, state=NORMAL,
                         wrap='word', undo=True)
 
 t_custom.grid(row=1, column=1, columnspan=4, padx=5, pady=5, sticky=(W, E))
-l_custom_command.grid(row=2, column=1, padx=15, pady=5, sticky=E)
-co_custom_command.grid(row=2, column=2, padx=15, pady=5, sticky=W)
-b_custom_run.grid(row=2, column=3, padx=30, pady=5, sticky=E)
+l_custom_command.grid(row=2, column=1, padx=5, pady=5, sticky=E)
+co_custom_command.grid(row=2, column=2, padx=5, pady=5, sticky=W)
+b_custom_clear.grid(row=2, column=3, padx=5, pady=5, sticky=E)
+b_custom_run.grid(row=2, column=4, padx=5, pady=5, sticky=E)
 
 ########################################################################
 # Second column
