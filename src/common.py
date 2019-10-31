@@ -24,7 +24,7 @@ def humansize(nbytes):
     return '%s %s' % (f, suffixes[i])
 
 
-def check_command():
+def check_magick():
     """
     What is available: ImageMagick, Graphick Magick or none
     """

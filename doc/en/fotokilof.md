@@ -15,7 +15,7 @@ GUI for the common used ImageMagick functionality for processing pictures.
  - text annotation
  - black-white or sepia conversion
  - contrast or histogram stretching
- - color normalize/auto-level
+ - color normalize/auto-level/equalize
  - crop (three ways selection)
  - scaling/resize: own size (in pixel or percent) or predefined: HD, 2k, 4k
  - adding logo image o picture
@@ -55,6 +55,11 @@ GUI for the common used ImageMagick functionality for processing pictures.
 ### Black-white/Sepia
 
 ### Colors normalize
+#### Normalize
+
+#### AutoLevel
+
+#### Equalize
 
 ### Contrast
 
@@ -70,13 +75,13 @@ GUI for the common used ImageMagick functionality for processing pictures.
 - Unzip *fotokilof.zip* into folder, 
 - make shortcut to desktop,
 - and run
- > In future should be available installer package,  by NSIS.
+ > In future should be available installer package, by NSIS.
 
 ### Linux, MacOSX, *BSD
 * unzip and run
 
 ### Requirement
- - ImageMagick - home page: https://imagemagick.org/
+ - ImageMagick - home page: https://imagemagick.org/ or GraphicsMagick
  - Windows, Linux, MacOS X, BSD
  - FullHD screen for comfort work
 
@@ -95,7 +100,8 @@ only for launch sources
  - tkcolorpicker,
  - touch,
  - re,
- - shutil.
+ - shutil,
+ - tempfile.
 
 #### Start
 `python3 fotokilof.py

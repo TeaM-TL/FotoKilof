@@ -378,7 +378,7 @@ def ini_read_normalize(file_ini, channels):
     return dict_return
 
 
-def ini_read_contrast(file_ini):
+def ini_read_contrast(file_ini, contrast_selection_valid_list):
     """ Konfiguracja FotoKilofa """
 
     # słownik wyjściowy
@@ -403,7 +403,9 @@ def ini_read_contrast(file_ini):
         contrast_selection = config.get('Contrast', 'selection')
     except:
         contrast_selection = "0"
-    dict_return['contrast_selection'] = entries.parse_list(contrast_selection, ("-3", "-2", "-1", "0", "+1", "+2", "+3"), "0")
+    dict_return['contrast_selection'] = entries.parse_list(contrast_selection,
+                                                           contrast_selection_valid_list,
+                                                           "0")
 
     try:
         contrast_stretch_1 = float(config.get('Contrast', 'stretch1'))

@@ -13,7 +13,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - text annotation
  - black-white or sepia conversion
  - contrast or histogram stretching
- - color normalize/auto-level
+ - color normalize/auto-level/equalize
  - crop (three ways selection)
  - scaling/resize: own size (in pixel or percent) or predefined: HD, 2k, 4k
  - adding logo image o picture

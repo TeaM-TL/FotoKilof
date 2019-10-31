@@ -29,7 +29,7 @@ from PIL import Image
 # my modules
 import convert
 import common
-import entries
+import gui
 import ini_read
 import magick
 import mswindows
@@ -62,13 +62,6 @@ else:
 ##########################
 
 
-def only_numbers(char):
-    """  Validation entry widgets: only digits """
-    return char.isdigit()
-
-###
-
-
 def no_text_in_windows():
     """ info dla Windows, że może być problem z dodaniem tekstu """
     if mswindows.windows() == 1:
@@ -89,16 +82,10 @@ def convert_custom_clear():
 # Preview
 
 
-def preview_orig_bind(event):
-    """ preview orginal picture via bind """
-    preview_orig()
-
-
-def preview_new(file_out, dir_temp):
+def preview_new(file_out):
     """ generowanie podglądu wynikowego """
     # global img_histograms_on
     preview_picture = preview.preview_convert(file_out,
-                                              dir_temp,
                                               " ",
                                               PREVIEW_NEW,
                                               GM_or_IM)
@@ -114,7 +101,6 @@ def preview_new(file_out, dir_temp):
     if img_histograms_on.get() == 1:
         try:
             pi_histogram_new.configure(file=preview.preview_histogram(file_out,
-                                                                      TEMP_DIR,
                                                                       GM_or_IM))
         except:
             print("! Error in preview histogram_new")
@@ -252,7 +238,7 @@ def apply_all_button():
         out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
         result = apply_all_convert(out_file, 1)
         if result == "OK":
-            preview_new(out_file, TEMP_DIR)
+            preview_new(out_file)
     else:
         dirname = os.path.dirname(file_in_path.get())
         i = 0
@@ -271,7 +257,7 @@ def apply_all_button():
             root.update_idletasks()
         preview_orig()
         if result == "OK":
-            preview_new(out_file, TEMP_DIR)
+            preview_new(out_file)
 
     progress_var.set(0)
     progress_files.set(_("done"))
@@ -286,7 +272,7 @@ def convert_custom_button():
     cmd_magick = GM_or_IM + co_custom_command.get()
     result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
-        preview_new(out_file, TEMP_DIR)
+        preview_new(out_file)
 
 
 def convert_contrast_button():
@@ -301,7 +287,7 @@ def convert_contrast_button():
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
-        preview_new(out_file, TEMP_DIR)
+        preview_new(out_file)
     progress_var.set(0)
 
 
@@ -313,7 +299,7 @@ def convert_bw_button():
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
-        preview_new(out_file, TEMP_DIR)
+        preview_new(out_file)
 
 
 def convert_normalize_button():
@@ -325,7 +311,7 @@ def convert_normalize_button():
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
-        preview_new(out_file, TEMP_DIR)
+        preview_new(out_file)
 
 
 def convert_rotate_button():
@@ -336,7 +322,7 @@ def convert_rotate_button():
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
-        preview_new(out_file, TEMP_DIR)
+        preview_new(out_file)
 
 
 def convert_resize_button():
@@ -350,7 +336,7 @@ def convert_resize_button():
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
-        preview_new(out_file, TEMP_DIR)
+        preview_new(out_file)
 
 
 def convert_border_button():
@@ -363,7 +349,7 @@ def convert_border_button():
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
-        preview_new(out_file, TEMP_DIR)
+        preview_new(out_file)
 
 
 def convert_crop_button():
@@ -376,7 +362,7 @@ def convert_crop_button():
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
-        preview_new(out_file, TEMP_DIR)
+        preview_new(out_file)
 
 
 def convert_logo_button():
@@ -393,7 +379,7 @@ def convert_logo_button():
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
-        preview_new(out_file, TEMP_DIR)
+        preview_new(out_file)
 
 
 def convert_crop_entries():
@@ -438,13 +424,13 @@ def convert_text_button():
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, out_file, cmd_magick)
     if result == "OK":
-        preview_new(out_file, TEMP_DIR)
+        preview_new(out_file)
 
 
 def fonts():
     """ preparing font names for ImageMagick """
 
-    result = magick.fonts_list_get(TEMP_DIR, GM_or_IM)
+    result = magick.fonts_list_get(GM_or_IM)
     co_text_font['values'] = result
     return result
 
@@ -733,7 +719,7 @@ def ini_read_wraper():
     img_normalize.set(ini_entries['normalize'])
     co_normalize_channel.current(normalize_channels.index(ini_entries['channel']))
 
-    ini_entries = ini_read.ini_read_contrast(FILE_INI)
+    ini_entries = ini_read.ini_read_contrast(FILE_INI, contrast_selection)
     img_contrast_on.set(ini_entries['contrast_on'])
     img_contrast.set(ini_entries['contrast'])
     co_contrast_selection.current(contrast_selection.index(ini_entries['contrast_selection']))
@@ -941,7 +927,6 @@ def preview_orig():
         command = " "
 
     preview_picture = preview.preview_convert(file_in_path.get(),
-                                              TEMP_DIR,
                                               command,
                                               PREVIEW_ORIG,
                                               GM_or_IM)
@@ -960,9 +945,7 @@ def preview_orig():
 
     if img_histograms_on.get() == 1:
         try:
-            pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(),
-                                                                       TEMP_DIR,
-                                                                       GM_or_IM))
+            pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
         except:
             print("! Error in preview_orig: : Cannot load histogram preview")
 
@@ -973,7 +956,6 @@ def preview_logo():
     l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
 
     preview_picture = preview.preview_convert(file_logo_path.get(),
-                                              TEMP_DIR,
                                               " ",
                                               PREVIEW_LOGO,
                                               GM_or_IM)
@@ -1084,7 +1066,6 @@ style.configure("Fiolet.TLabelframe.Label", foreground="#800080")
 
 FILE_INI = "fotokilof.ini"
 PWD = os.getcwd()
-TEMP_DIR = os.path.join(PWD, "tmp")
 work_dir = StringVar()  # default: "FotoKilof"
 file_dir_selector = IntVar()
 file_in_path = StringVar()  # fullpath original picture
@@ -1130,7 +1111,7 @@ magick_commands = ("composite", "convert", "mogrify")
 main = ttk.Frame(root)
 main.pack()
 
-validation = main.register(only_numbers)  # Entry validation
+validation = main.register(gui.only_numbers)  # Entry validation
 ####################################################################
 # Kolumna menu
 ####################################################################
@@ -1662,7 +1643,7 @@ co_custom_command = ttk.Combobox(frame_custom, width=9,
 co_custom_command.current(2)
 co_custom_command.configure(state='readonly')
 b_custom_clear = ttk.Button(frame_custom, text=_("Clear"),
-                          command=convert_custom_clear)
+                            command=convert_custom_clear)
 b_custom_run = ttk.Button(frame_custom, text=_("Execute"),
                           style="Brown.TButton",
                           command=convert_custom_button)
@@ -1815,9 +1796,9 @@ l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
 l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
-rb1_crop.bind("<ButtonRelease-1>", preview_orig_bind)
-rb2_crop.bind("<ButtonRelease-1>", preview_orig_bind)
-rb3_crop.bind("<Button-1>", preview_orig_bind)
+rb1_crop.bind("<ButtonRelease-1>", gui.preview_orig_bind)
+rb2_crop.bind("<ButtonRelease-1>", gui.preview_orig_bind)
+rb3_crop.bind("<Button-1>", gui.preview_orig_bind)
 root.bind("<F1>", help_info)
 root.protocol("WM_DELETE_WINDOW", win_deleted)
 
@@ -1827,7 +1808,7 @@ root.protocol("WM_DELETE_WINDOW", win_deleted)
 no_text_in_windows()  # Warning if Windows
 
 # check if [Image|Graphics]Magick is available
-GM_or_IM = common.check_command()
+GM_or_IM = common.check_magick()
 if GM_or_IM is not None:
     img_text_font_list = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file

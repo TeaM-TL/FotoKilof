@@ -1,6 +1,13 @@
 # Changelog
 
 ## Current
+
+2.9.4 *$TMP* instead own *tmp* directory
+
+2.9.3 Added: option -equalize for Normalize, clean button for custom field
+
+2.9.2 Added: picture size, bug fixing
+
 2.9.1 Hardening: parsing INI entries against data out of range
 
 2.9 Added: GraphicsMagick support, Indonesian translation, code clean

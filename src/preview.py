@@ -3,12 +3,13 @@
 """ moduł z funkcjami ogólnego przeznaczenia """
 
 import os
+import tempfile
 from PIL import Image
 
 import common
 import magick
 
-def preview_histogram(file, dir_temp, gm_or_im):
+def preview_histogram(file, gm_or_im):
     """
     histogram generation
     file - fullname image file
@@ -17,7 +18,7 @@ def preview_histogram(file, dir_temp, gm_or_im):
     return: fullname of histogram
     """
 
-    file_histogram = common.spacja(os.path.join(dir_temp, "histogram.png"))
+    file_histogram = common.spacja(os.path.join(tempfile.gettempdir(), "histogram.png"))
     file = common.spacja(file)
 
     command = magick.magick_command(gm_or_im + "convert") + file \
@@ -30,7 +31,7 @@ def preview_histogram(file, dir_temp, gm_or_im):
         print("! Error in convert_histogram: " + command)
 
 
-def preview_convert(file, dir_temp, command, size, gm_or_im):
+def preview_convert(file, command, size, gm_or_im):
     """
     preview generation
     file - fullname image file
@@ -45,7 +46,7 @@ def preview_convert(file, dir_temp, command, size, gm_or_im):
     height = str(img.size[1])
     filesize = common.humansize(os.path.getsize(file))
 
-    file_preview = common.spacja(os.path.join(dir_temp, "preview.ppm"))
+    file_preview = common.spacja(os.path.join(tempfile.gettempdir(), "preview.ppm"))
     command = magick.magick_command(gm_or_im + "convert") \
         + common.spacja(file) \
         + " -resize " + str(size) + "x" + str(size) \
