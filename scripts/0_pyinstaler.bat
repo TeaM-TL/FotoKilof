@@ -5,5 +5,5 @@ rmdir build /S /Q
 rmdir src/__pycache__
 SET UPX=--upx-dir upx
 SET UPX=
-@pyinstaller --onefile %UPX% src\fotokilof.py
+@pyinstaller --nowindowed --onefile %UPX% src\fotokilof.py
 @pause

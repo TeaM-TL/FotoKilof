@@ -66,6 +66,7 @@ def no_text_in_windows():
     """ info dla Windows, że może być problem z dodaniem tekstu """
     if mswindows.windows() == 1:
         l_text_windows.configure(text=_("Unfortunately, you are using Windows, thus not all option will work"))
+        l_text_windows.grid(row=5, column=1, columnspan=4, sticky=(W, E))
 
 
 def print_command(cmd, cmd_magick):
@@ -80,6 +81,11 @@ def convert_custom_clear():
 
 ################
 # Preview
+
+
+def preview_orig_bind(event):
+    """ preview orginal picture via bind """
+    preview_orig()
 
 
 def preview_new(file_out):
@@ -1495,7 +1501,6 @@ co_text_font.grid(row=1, column=1, sticky=(W, E), padx=5)
 e_text_size.grid(row=1, column=2, sticky=W, padx=5)
 cb_text_box.grid(row=1, column=3, sticky=W, padx=5)
 b_text_run.grid(row=4, column=4, sticky=(W, E), padx=5, pady=5)
-# l_text_windows.grid(row=5, column=1, columnspan=4, sticky=(W, E))
 
 ###########################
 # Rotate
@@ -1796,9 +1801,9 @@ l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
 l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
-rb1_crop.bind("<ButtonRelease-1>", gui.preview_orig_bind)
-rb2_crop.bind("<ButtonRelease-1>", gui.preview_orig_bind)
-rb3_crop.bind("<Button-1>", gui.preview_orig_bind)
+rb1_crop.bind("<ButtonRelease-1>", preview_orig_bind)
+rb2_crop.bind("<ButtonRelease-1>", preview_orig_bind)
+rb3_crop.bind("<Button-1>", preview_orig_bind)
 root.bind("<F1>", help_info)
 root.protocol("WM_DELETE_WINDOW", win_deleted)
 

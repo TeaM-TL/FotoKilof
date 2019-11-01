@@ -28,7 +28,7 @@ def parse_range(entry, valid, default):
     entry - value to check
     default - value if entry is invalid
     valid - valid range
-    return - entru or default if entry is out of range
+    return - entry or default if entry is out of range
     """
     if entry >= valid[0] and entry <= valid[1]:
         result = entry

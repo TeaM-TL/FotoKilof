@@ -6,7 +6,6 @@
 import fnmatch
 import os
 import re
-import shutil
 from PIL import Image
 
 import mswindows
@@ -20,8 +19,8 @@ def humansize(nbytes):
     while nbytes >= 1024 and i < len(suffixes)-1:
         nbytes /= 1024.
         i += 1
-    f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
-    return '%s %s' % (f, suffixes[i])
+    value = ('%.2f' % nbytes).rstrip('0').rstrip('.')
+    return '%s %s' % (value, suffixes[i])
 
 
 def mouse_crop_calculation(file, size):

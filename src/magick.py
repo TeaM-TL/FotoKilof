@@ -131,7 +131,7 @@ def fonts_list_get(gm_or_im):
             if gm_or_im == "gm ":
                 # GraphicsMagick format
                 for line in file:
-                    if re.search("\d$", line) is not None:
+                    if re.search("\\d$", line) is not None:
                         line = re.findall('^[-a-zA-Z]+', line)
                         fonts_list.append(line)
             else:
@@ -157,7 +157,7 @@ def get_magick_version(gm_or_im):
 
     version = ""
     file_version = common.spacja(os.path.join(tempfile.gettempdir(),
-                                           "version"))
+                                              "version"))
     touch.touch(file_version)
     command = "-Version > "
     result = magick(command, common.spacja(file_version),
@@ -168,16 +168,9 @@ def get_magick_version(gm_or_im):
         except:
             print("!get_magick_version: cannot read file_version")
         else:
-            if gm_or_im == "gm ":
-                # GraphicsMagick format
-                version_object = re.search("\d+.\d+(.\d+)*", file.readline())
-                if version_object is not None:
-                    version = version_object[0] 
-            else:
-                # ImageMagick format
-                version_object = re.search("\d+.\d+.\d+", file.readline())
-                if version_object is not None:
-                    version = version_object[0] 
+            version_object = re.search("\\d+[.]\\d+([.]\\d+)*", file.readline())
+            if version_object is not None:
+                version = version_object[0]
             file.close()
             try:
                 os.remove(file_version)

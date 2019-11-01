@@ -368,12 +368,12 @@ def ini_read_normalize(file_ini, channels):
     except:
         normalize = 1
     dict_return['normalize'] = entries.parse_list(normalize, (1, 2, 3), 1)
-    
+
     try:
         normalize = config.getint('Normalize', 'channel')
     except:
         normalize = "None"
-    dict_return['channel'] = entries.parse_list(normalize, channels , "None")
+    dict_return['channel'] = entries.parse_list(normalize, channels, "None")
 
     return dict_return
 
