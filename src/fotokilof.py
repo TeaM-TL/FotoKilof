@@ -49,7 +49,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-VERSION = "2.9.3"
+VERSION = "2.9.4"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -1808,7 +1808,13 @@ root.protocol("WM_DELETE_WINDOW", win_deleted)
 no_text_in_windows()  # Warning if Windows
 
 # check if [Image|Graphics]Magick is available
-GM_or_IM = common.check_magick()
+GM_or_IM_data = magick.check_magick()
+GM_or_IM = GM_or_IM_data[0]
+GM_or_IM_name = GM_or_IM_data[1]
+GM_or_IM_version = magick.get_magick_version(GM_or_IM)
+root.title("Tomasz Łuczak : FotoKilof - " + str(VERSION) + " : " +
+           GM_or_IM_name + " - " + GM_or_IM_version + " : " +
+           str(datetime.date.today()))
 if GM_or_IM is not None:
     img_text_font_list = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file

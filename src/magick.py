@@ -151,4 +151,100 @@ def fonts_list_get(gm_or_im):
         fonts_list = ["Helvetica"]
     return fonts_list
 
+
+def get_magick_version(gm_or_im):
+    """ get version of *Magick """
+
+    version = ""
+    file_version = common.spacja(os.path.join(tempfile.gettempdir(),
+                                           "version"))
+    touch.touch(file_version)
+    command = "-Version > "
+    result = magick(command, common.spacja(file_version),
+                    gm_or_im + "convert")
+    if result is not None:
+        try:
+            file = open(file_version, "r")
+        except:
+            print("!get_magick_version: cannot read file_version")
+        else:
+            if gm_or_im == "gm ":
+                # GraphicsMagick format
+                version_object = re.search("\d+.\d+(.\d+)*", file.readline())
+                if version_object is not None:
+                    version = version_object[0] 
+            else:
+                # ImageMagick format
+                version_object = re.search("\d+.\d+.\d+", file.readline())
+                if version_object is not None:
+                    version = version_object[0] 
+            file.close()
+            try:
+                os.remove(file_version)
+            except:
+                print("!get_magick_version: cannot remove file_version")
+
+    return version
+
+
+
+def check_magick():
+    """
+    What is available: ImageMagick, Graphick Magick or none
+    """
+    if mswindows.windows() == 1:
+        suffix = ".exe"
+    else:
+        suffix = ""
+    if check_imagemagick(suffix) is not None:
+        version = "IM"
+        if mswindows.windows() == 1:
+            result = "magick "
+        else:
+            result = ""
+    elif check_graphicsmagick(suffix) is not None:
+        version = "GM"
+        result = "gm "
+    else:
+        version = ""
+        result = None
+
+    return (result, version)
+
+
+def check_imagemagick(suffix):
+    """ Check if ImageMmagick is avaialble"""
+    if shutil.which('convert' + suffix):
+        result1 = "OK"
+    else:
+        result1 = None
+
+    if shutil.which('mogrify' + suffix):
+        result2 = "OK"
+    else:
+        result2 = None
+
+    if shutil.which('convert' + suffix):
+        result3 = "OK"
+    else:
+        result3 = None
+
+    if result1 is not None and result2 is not None and result3 is not None:
+        result = "OK"
+    else:
+        result = None
+
+    return result
+
+
+def check_graphicsmagick(suffix):
+    """ Check if GraphicsMagick is avaialble"""
+    if shutil.which('gm' + suffix):
+        result = "OK"
+    else:
+        result = None
+
+    return result
+
+
 # EOF

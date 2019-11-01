@@ -24,64 +24,6 @@ def humansize(nbytes):
     return '%s %s' % (f, suffixes[i])
 
 
-def check_magick():
-    """
-    What is available: ImageMagick, Graphick Magick or none
-    """
-    if mswindows.windows() == 1:
-        suffix = ".exe"
-    else:
-        suffix = ""
-    if check_imagemagick(suffix) is not None:
-        print("ImageMagick")
-        if mswindows.windows() == 1:
-            result = "magick "
-        else:
-            result = ""
-    elif check_graphicsmagick(suffix) is not None:
-        print("GraphicsMagick")
-        result = "gm "
-    else:
-        result = None
-
-    return result
-
-
-def check_imagemagick(suffix):
-    """ Check if ImageMmagick is avaialble"""
-    if shutil.which('convert' + suffix):
-        result1 = "OK"
-    else:
-        result1 = None
-
-    if shutil.which('mogrify' + suffix):
-        result2 = "OK"
-    else:
-        result2 = None
-
-    if shutil.which('convert' + suffix):
-        result3 = "OK"
-    else:
-        result3 = None
-
-    if result1 is not None and result2 is not None and result3 is not None:
-        result = "OK"
-    else:
-        result = None
-
-    return result
-
-
-def check_graphicsmagick(suffix):
-    """ Check if GraphicsMagick is avaialble"""
-    if shutil.which('gm' + suffix):
-        result = "OK"
-    else:
-        result = None
-
-    return result
-
-
 def mouse_crop_calculation(file, size):
     """ przeliczenie pikseli podglądu  na piksele oryginału """
     # global file_in_path
