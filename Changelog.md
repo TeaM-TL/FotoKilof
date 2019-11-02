@@ -2,6 +2,8 @@
 
 ## Current
 
+2.9.5 .INI is in $HOME directory; crop and text work together properly
+
 2.9.4 *$TMP* instead own *tmp* directory
 
 2.9.3 Added: option -equalize for Normalize, clean button for custom field
