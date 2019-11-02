@@ -10,6 +10,7 @@ import glob
 import os
 import re
 import sys
+from pathlib import Path
 
 from tkinter import Tk, ttk, Label, PhotoImage
 from tkinter.scrolledtext import ScrolledText
@@ -49,7 +50,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-VERSION = "2.9.4"
+VERSION = "2.9.5"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -81,6 +82,14 @@ def convert_custom_clear():
 
 ################
 # Preview
+
+
+def preview_clear():
+    """ clear every preview if doesn't choose file """
+    print("not ready yet")
+    photo = ""
+    pi_preview_orig.configure(data=photo)
+    pi_histogram_orig.configure(file="")
 
 
 def preview_orig_bind(event):
@@ -179,9 +188,7 @@ def apply_all_convert(out_file, write_command):
                                                  border)
     else:
         if int(img_crop_on.get()) == 1:
-            # if crop with gravity, convert text in second run
-            if int(img_crop_on.get()) == 3:
-                text_separate = 1
+            text_separate = 1  # if crop - convert text in second run
             cmd = cmd + " " + convert.convert_crop(img_crop.get(),
                                                    img_crop_gravity.get(),
                                                    convert_crop_entries())
@@ -504,13 +511,17 @@ def open_file():
                  (_("tiff files"), "*.tif"),
                  (_("TIFF files"), "*.TIFF"),
                  (_("All files"), "*.*"))
-    file_in_path.set(filedialog.askopenfilename(initialdir=directory,
-                                                filetypes=filetypes,
-                                                title=_("Select picture for processing")))
-    extension_from_file()
+    result = filedialog.askopenfilename(initialdir=directory,
+                                        filetypes=filetypes,
+                                        title=_("Select picture for processing"))
+    if result:
+        extension_from_file()
+        file_in_path.set(result)
 
-    file_select_L.configure(text=os.path.basename(file_in_path.get()))
-    preview_orig()
+        file_select_L.configure(text=os.path.basename(file_in_path.get()))
+        preview_orig()
+    else:
+        preview_clear()
 
 
 def open_file_last():
@@ -1066,11 +1077,10 @@ style.configure("Blue.TButton", foreground="blue")
 style.configure("Brown.TButton", foreground="#8B0000")
 style.configure("Blue.TLabelframe.Label", foreground="blue")
 style.configure("Fiolet.TLabelframe.Label", foreground="#800080")
-
 ##########################
 # Zmienne globalne
 
-FILE_INI = "fotokilof.ini"
+FILE_INI = os.path.join(str(Path.home()), ".fotokilof.ini")
 PWD = os.getcwd()
 work_dir = StringVar()  # default: "FotoKilof"
 file_dir_selector = IntVar()

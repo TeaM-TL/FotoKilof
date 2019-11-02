@@ -104,6 +104,7 @@ Tylko gdy uruchamiamy ze źródeł
  - gettext,
  - glob,
  - os,
+ - pathlib,
  - platform,
  - PIL,
  - tkinter,

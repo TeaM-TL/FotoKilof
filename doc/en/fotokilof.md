@@ -94,6 +94,7 @@ only for launch sources
  - gettext,
  - glob,
  - os,
+ - pathlib,
  - platform,
  - PIL,
  - tkinter,
