@@ -25,7 +25,7 @@ except:
 else:
     tkcolorpicker_not_found = False
 
-from PIL import Image, ImageTk
+from PIL import Image
 
 # my modules
 import convert
@@ -1121,13 +1121,6 @@ file_extension = ("JPG", "PNG", "TIF")
 magick_commands = ("composite", "convert", "mogrify")
 #magick_commands = ("animate", "compare", "composite", "conjure", "convert",
 #                   "identify", "import", "mogrify", "montage", "stream")
-
-pi_histogram_orig = StringVar()
-pi_histogram_new = StringVar()
-preview_picture_orig = StringVar()
-preview_picture_new = StringVar()
-histogram_file = StringVar()
-histogram_file_tk = StringVar()
 
 ######################################################################
 # Karty
