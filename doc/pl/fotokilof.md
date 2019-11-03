@@ -99,17 +99,22 @@ Do przetwarzania folderu musimy użyć przycisku *Zaaplikuj wszystko* i zaznaczy
 Tylko gdy uruchamiamy ze źródeł
 
 #### Python3 i moduły
+
+#### via pip
  - configparser,
  - datetime,
+ - pathlib,
+ - Pillow (zawiera tkcolorpicker),
+ - touch,
+
+### via pakiety
+ - tkinter,
+
+#### powinny być w zestawie
  - gettext,
  - glob,
  - os,
- - pathlib,
  - platform,
- - PIL,
- - tkinter,
- - tkcolorpicker,
- - touch,
  - re,
  - shutil.
 
