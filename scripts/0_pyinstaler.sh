@@ -5,6 +5,6 @@ rm -rf __pycache__ build
 #pyinstaller --onefile --windowed fotokilof.py
 UPX="--upx-dir=upx"
 UPX=
-pyinstaller --onefile $UPX src/fotokilof.py
+pyinstaller --clean --onefile $UPX src/fotokilof.py
 rm -rf build
 
