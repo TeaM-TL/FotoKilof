@@ -65,9 +65,7 @@ def spacja(sciezka):
         path_escaped = []
         for i in path_splitted:
             path_escaped.append(re.escape(i))
-        print(path_escaped)
         sciezka = '/'.join(path_escaped) + path[1]
-        print(sciezka)
 
     return sciezka
 

@@ -25,7 +25,7 @@ except:
 else:
     tkcolorpicker_not_found = False
 
-from PIL import Image
+from PIL import Image, ImageTk
 
 # my modules
 import convert
@@ -960,11 +960,12 @@ def preview_orig():
     except:
         print("! Error in preview_orig: Cannot load image size")
 
-    if img_histograms_on.get() == 1:
-        try:
-            pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
-        except:
-            print("! Error in preview_orig: : Cannot load histogram preview")
+    if img_histograms_on.get() == 1:      
+        pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
+        #try:
+        #    pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
+        #except:
+        #    print("! Error in preview_orig: : Cannot load histogram preview")
 
 
 def preview_logo():
@@ -1120,6 +1121,13 @@ file_extension = ("JPG", "PNG", "TIF")
 magick_commands = ("composite", "convert", "mogrify")
 #magick_commands = ("animate", "compare", "composite", "conjure", "convert",
 #                   "identify", "import", "mogrify", "montage", "stream")
+
+pi_histogram_orig = StringVar()
+pi_histogram_new = StringVar()
+preview_picture_orig = StringVar()
+preview_picture_new = StringVar()
+histogram_file = StringVar()
+histogram_file_tk = StringVar()
 
 ######################################################################
 # Karty
@@ -1827,9 +1835,10 @@ GM_or_IM_data = magick.check_magick()
 GM_or_IM = GM_or_IM_data[0]
 GM_or_IM_name = GM_or_IM_data[1]
 GM_or_IM_version = magick.get_magick_version(GM_or_IM)
+Python_version = re.findall('^\\d[.]\\d+[.]\\d+', sys.version)
 root.title("Tomasz Łuczak : FotoKilof - " + str(VERSION) + " : " +
            GM_or_IM_name + " - " + GM_or_IM_version + " : " +
-           str(datetime.date.today()))
+           "Py - " + Python_version[0])
 if GM_or_IM is not None:
     img_text_font_list = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file

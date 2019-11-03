@@ -18,7 +18,7 @@ def preview_histogram(file, gm_or_im):
     return: fullname of histogram
     """
 
-    file_histogram = common.spacja(os.path.join(tempfile.gettempdir(), "histogram.png"))
+    file_histogram = common.spacja(os.path.join(tempfile.gettempdir(), "histogram.ppm"))
     file = common.spacja(file)
 
     command = magick.magick_command(gm_or_im + "convert") + file \
