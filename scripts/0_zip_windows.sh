@@ -10,4 +10,6 @@ echo "Files: " $FILES
 echo "Exclude: " $EXCLUDE
 
 cd ../$DIST
+rm $NAME-$OS-$VER.zip
 zip -r $NAME-$OS-$VER.zip $FILES $EXCLUDE
+
