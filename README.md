@@ -39,21 +39,15 @@ Available: English, Polish, German, Bulgarian and Indonesian.
 ## Download 
 In [Release](https://github.com/TeaM-TL/FotoKilof/releases) you can find current binary version for Windows (8.1 and newer) and Linux
 
-### Linux
- - download *locale.zip* and unzip
- - download *fotokilof-linux-x64-distroname* into directory with unzipped *locale.zip*
+ - download *fotokilof-linux-x64-distroname*
  - run fotokilof
 
 ### Windows
-package *fotokilof-windows-x64.zip* contains:
- - ImageMagick binaries
- - documentation in PL and EN,
- - locales - translation into PL, DE, BG, ID.
+package *fotokilof-windows-x64.zip* contains ImageMagick binaries
 
 ### Requirements
  - Windows, Linux, MacOS X, BSD,
- - FullHD screen for comfort work,
- - Linux, MacOSX, BSD:  - ImageMagick - home page: https://imagemagick.org/, GraphickMagick - not every toos are working properly.
+ - FullHD screen for comfort work
 
 ## Thanks
  - Max von Forell - German translation

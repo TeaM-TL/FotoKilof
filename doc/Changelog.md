@@ -2,6 +2,8 @@
 
 ## Current
 
+2.9.6 Added preview crop, updated Polish documentation
+
 2.9.5 .INI is in $HOME directory; crop and text work together properly
 
 2.9.4 *$TMP* instead own *tmp* directory
