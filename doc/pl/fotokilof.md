@@ -6,32 +6,44 @@
 [TOC]
 
 ## Wprowadzenie
-Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick dla przetwarzania obrazków.
+Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick dla przetwarzania obrazków. Umożliwia użycie innych poleceń programów *convert*, *mogrify* i *compose*.
 
 ### Konwersje
-
- - obrót (90, 180, 270 degree),
- - ramka wokół obrazka,
+ - skalowanie z zachowaniem proporcji,
+ - wycinek - trzy metody zaznaczania obszaru,
  - dodanie tekstu do obrazka,
+ - ramka wokół obrazka,
+ - obrót,
  - czarno-biały albo sepia,
  - zmiana kontrastu i rozciąganie kontrastu,
  - normalizacja koloru/auto-level/wyrównanie histogramu
- - wycinek - trzy metody zaznaczania obszaru,
- - skalowanie: włane (w pikselach lub procentach) lub predefiniowane: HD, 2k, 4k,
  - dodanie własnego logo do obrazka.
 
 ### Funkcje
-
- - przetwarzanie kopii obrazków, oryginały są bezpieczne,
+ - przetwarzanie obrazków w formatach JPG, PNG i TIFF,
+ - przetwarzanie tylko kopii obrazków, oryginały są bezpieczne,
  - przetwarzanie jednego pliku jak i całego katalogu,
  - wyświetlanie tylko aktywnych narzędzi,
  - wybór narzędzi przetwarzania,
  - podgląd oryginału i wyniku przetwarzania,
- - zaznaczania wycinka przez zaznaczenie na podglądzie lub za pomocą współrzędnych, trzema metodami,
+ - skalowanie własne (w pikselach lub procentach) lub predefiniowane: FullHD, 2k, 4k,
+ - zaznaczania wycinka przez zaznaczenie na podglądzie lub za pomocą współrzędnych,
+ - współrzędne wycinko można podać jako:
+     - współrzędne dwóch przeciwległych narożników (lewy-góry i prawy-dolny),
+     - współrzędne lewego-górnego narożnika oraz szerokości i wysokości wycinka,
+     - szerokość i wysokość wycinka, grawitacja i odsunięcie od kierunku grawitacji,
  - wybór koloru, fontu i wielkości dodawanego tekstu,
- - szybka nawigacja po plikach przeyciskami: *Pierwszy*, *Następny*, *Poprzedni*, *Ostatni*
- - wyświetlanie histogramu iryginału i wyniku przetwarzania,
- - Edytor własnych poleceń. Polecenia mogą być składane z wykonywanych przetwarzań.
+ - predefiniowane kąty obrotu: 90, 180 i 270 lub własne,
+ - regulowana sepia,
+ - wyrównanie (*Equalize*) także dla pojedynczego kanału,
+ - kontrast regulowany w zekresie od -3 do +3,
+ - rozszerzanie kontrastu,
+ - wyświetlanie histogramu oryginału i wyniku przetwarzania,
+ - szybka nawigacja po plikach przeyciskami: *Pierwszy*, *Następny*, *Poprzedni*, *Ostatni*,
+ - edytor własnych poleceń,
+ - polecenia mogą być składane z wykonywanych przetwarzań,
+ - można korzystać z innych poleceń ImageMagick np. *-gaussian-blur*,
+ - częściowe wsparcie dla GraphicsMagick.
 
 ### Zrzuty ekranu
 
@@ -43,17 +55,19 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
 
 ## Jak użyć
 
- - Wybierz plik
- - Przyciski Poprzedni i Następny otwierają kolejny lub poprzedni obrazek
- - Wybierz typy konwersji
- - Kliknij na przycisku Wykonaj
+ - Wybierz plik obrazka,
+ - Przyciski *Poprzedni* i *Następny* otwierają kolejny lub poprzedni obrazek,
+ - Wybierz typy konwersji,
+ - Kliknij *Wykonaj*
 
 ### Skalowanie
-Skalowanie polega na takim przeskalowaniu obrazka, by zmieścił się w zadanych wymiarach, bez zniekształceń.
+Skalowanie polega na takim przeskalowaniu obrazka, by zmieścił się w zadanych wymiarach, bez zniekształceń czyli z zachowaniem proporcji.
 Do wyboru mamy trzy predefiniowane wymiary: FullHD (1920x1050), 2K (2058x1556) i 4K (4096x2112). Ponadto można podać maksymalny rozmiar w pikselach lub w procentach (odnosi się do rozmiaru pierwowzoru).
 
 ### Wycinek
-Możemy wyciąć z obrazka interesujący nas fragment. Wycięcia możemy dokonać na trzy sposoby:
+Możemy wyciąć z obrazka interesujący nas fragment. 
+
+Wycięcia możemy dokonać na trzy sposoby:
 - przez podanie współrzędnych lewego górnego i prawego dolnego narożnika obrazka,
 - przez podanie współrzędnych lewego górnego narożnika oraz wymiarów obrazka,
 - przez podanie przesunięcia względem wybranej grawitacji oraz wymiarów obrazka. Grawitację wybieramy przyciskami oznaczającymi strony świata (np. N - północ, E - wschód itd), czyli kierunki do których wycinek będzie *ciążyć*.
@@ -78,7 +92,7 @@ Ponadto można wybrać font (niekoniecznie pod Windows), wielkość i kolor teks
 
 Mamy predefiniowane trzy kąty obrotu obrazka: 90, 180 i 270 stopni.
 
-Gdybyśmy chcieli iny kąt obrotu niż predefiniowane, to po kliknięciu na przycisk *Obrót*, w polu *Własne* zostanie wpisane polecenie obrotu. Można wówczas zmienić kąt obrotu na inny.
+Gdybyśmy chcieli podać inny kąt obrotu niż predefiniowane, to po kliknięciu na przycisk *Obrót*, w polu *Własne* zostanie wpisane polecenie obrotu. Można wówczas zmienić kąt obrotu na inny.
 
 ### Ramka
 
@@ -86,19 +100,33 @@ Obrazek można oprawić w ramkę o zadanej grubości i kolorze.
 
 ### Czarno-białe
 
-Obrazek możemy skonwertować do sepii (domyślna wartość to 95%) lub do obrazka czarno-białego.
+#### Czarno-biały
+Konwersja do skali szarości
+
+#### Sepia
+
+Symulacja tonów sepii. Można regulować próg intensywności (od 0 do 99,9%), domyślna wartość to 95%). Dokumentacja programu ImageMagick podaje że 80% jest dobrym punktem startu.
 
 ### Normalizacja kolorów
 
 Mamy trzy narzędzia do normalizacji kolorów:
-- wyrównanie (Equalize), można dodatkowo wybrać kanał (domyślnie *None*)
-- normalizacja
-- autoLevel - automatyczne wyrównanie poziomów
+
+#### Normalizacja
+Zwiększenie kontrastu za pomocą rozciągnięcia zakresu intensywności.
+
+#### AutoLevel
+Automagiczne wyrównanie poziomów kolorów obrazka.
+
+#### Wyrównanie (Equalize)
+Wyrównanie histogramu obrazka kanał po kanale. Można wybrać kanał (domyślnie *None*).
 
 ### Kontrast
 
-Możemy zmienić kontrast obrazka w zakresie do -3 do +3, skokowo co 1.
+##### Kontrast
+Możemy zwiększać lub redukować kontrast obrazka w zakresie do -3 do +3, skokowo co 1.
 
+
+##### Rozciągnięcie kontratu
 Drugą możliwością jest rozciągnięcie kontrastu od czerni do bieli. Domyślne wartości to 0,15 (czerń) i 0,05 (biel)
 
 ### Histogram
@@ -131,25 +159,23 @@ Do przetwarzania folderu musimy użyć przycisku *Zaaplikuj wszystko* i zaznaczy
 ### Ze źródeł
 Tylko gdy uruchamiamy ze źródeł
 
-#### Python3 i moduły
-
-#### via pip
- - configparser,
- - datetime,
- - pathlib,
- - Pillow (zawiera tkcolorpicker),
- - touch,
-
-### via pakiety
- - tkinter,
-
-#### powinny być w zestawie
- - gettext,
- - glob,
- - os,
- - platform,
- - re,
- - shutil.
+Python3 i moduły:
+ - via pip
+    - configparser,
+    - datetime,
+    - pathlib,
+    - Pillow (zawiera tkcolorpicker),
+    - touch,
+ - via pakiety
+     - tkinter,
+ - powinny być w zestawie
+     - gettext,
+     - glob,
+     - os,
+     - platform,
+     - re,
+     - shutil,
+     - tempfile.
 
 #### Uruchomienie
 `python3 fotokilof.py`
@@ -172,4 +198,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-

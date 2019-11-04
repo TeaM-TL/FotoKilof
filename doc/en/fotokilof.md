@@ -10,27 +10,41 @@
 GUI for the common used ImageMagick functionality for processing pictures.
 
 ### Conversions
- - rotation (90, 180, 270 degree)
- - frame around picture
- - text annotation
- - black-white or sepia conversion
- - contrast or histogram stretching
- - color normalize/auto-level/equalize
- - crop (three ways selection)
- - scaling/resize: own size (in pixel or percent) or predefined: HD, 2k, 4k
- - adding logo image o picture
+ - scaling/resize, but keep proportion,
+ - crop,
+ - text annotation,
+ - border around picture,
+ - rotation,
+ - black-white or sepia,
+ - contrast or histogram stretching,
+ - color normalize/auto-level/equalize,
+ - adding logo image o picture.
 
-### Functionality:
- - processing copy of picture, originals are safe
+## Functionality:
+ - processing JPG, PNG and TIFF images,
+ - processing copy of picture, originals are safe,
  - processing single file or whole directory,
  - display selected tools,
- - tools selection
- - preview
- - crop selection via click on preview or coordinates, in three ways
- - text: color, font and size selection (Linux, Mac OSX only)
- - fast file navigation: First, Prev, Next, Last
- - histograms of original and result pictures
- - own command editor, additionaly commands can be composed from started commands
+ - tools selection,
+ - preview orignal and result,
+ - resize custom (pixels or percent) or predefined: FullHD, 2k, 4k,
+ - crop selection via click on preview or coordinates,
+ - crop coordinates:
+   - two corners (upper left and lower right),
+   - upper left corner and width plus height,
+   - gravity, width plus height plus offset,
+ - text: color, font and size selection,
+ - predefined rotation: 90, 180 and 270 degree or custom,
+ - customized sepia,
+ - equalize by channel,
+ - contrast between -3 and +3,
+ - customized contrast stretching,
+ - histograms of original and result pictures,
+ - fast file navigation: First, Prev, Next, Last,
+ - own command editor,
+ - own command can be composed from executed commands,
+ - is possible to use other ImageMagick commands, eg. *-gaussian-blur*,
+ - GraphickMagick is supported partialy.
 
 ### Screenshots
 
@@ -42,26 +56,71 @@ GUI for the common used ImageMagick functionality for processing pictures.
 
 ## How to use it
 
+ - Select image file,
+ - Buttons *Previous* and *Next* will open previos or next picture,
+ - Select required conversion,
+ - Click *Execute*.
+
 ### Resize
+Scaling/resize, but keep proportion.
+Resize can use custom or predefined values: FullHD, 2k, 4k. Percent means percent size of original picture.
 
 ### Crop
 
+Cut rectangular region of the image.
+
+Crop methods:
+ - two corners (upper-left and lower-right),
+ - upper-left corner and width plus height,
+ - gravity, width plus height plus offset.
+
+Remember that upper-left coordinates of original picture are (0, 0).
+
+Coordinates is possible to type in fields or select via click on preview.
+
+*Preview* button will show crop rectangle on preview.
+
 ### Text
+Annotate an image with text.
+Is possible to choose color, font and size. Additionaly is possible to setup background with own color.
+
+Coordinates are given as gravity plus offset.
 
 ### Rotate
+Apply Paeth image rotation (using shear operations) to the image.
+
+Predefined dvalues: 90, 180 and 270 degrees. In *Custom comands* is possible to type any degree.
 
 ### Border
+Surround the image with a border of color. Is possible to choose color and type width of border (in pixels).
 
 ### Black-white/Sepia
 
+#### Black-white
+Convert image to grayscale
+
+#### Sepia
+simulate a sepia-toned photo.
+
+Specify threshold as the percent threshold of the intensity (0 - 99.9%). Advice from ImageMagick documentation: a threshold of 80% is a good starting point for a reasonable tone.
+
 ### Colors normalize
 #### Normalize
+Increase the contrast in an image by stretching the range of intensity values.
 
 #### AutoLevel
+Automagically adjust color levels of image
 
 #### Equalize
+Perform histogram equalization on the image channel-by-channel.
 
 ### Contrast
+
+#### Contrast
+Enhance or reduce the image contrast. Range is beetween -3 and +3.
+
+#### Contrast stretch
+Increase the contrast in an image by stretching the range of intensity values.
 
 ### Histogram
 
@@ -71,38 +130,36 @@ GUI for the common used ImageMagick functionality for processing pictures.
 
 ## Installation
 
-### Windows
 - Unzip *fotokilof.zip* into folder, 
 - make shortcut to desktop,
 - and run
  > In future should be available installer package, by NSIS.
 
-### Linux, MacOSX, *BSD
-* unzip and run
-
 ### Requirement
+ - FullHD screen for comfort work
  - ImageMagick - home page: https://imagemagick.org/ or GraphicsMagick
  - Windows, Linux, MacOS X, BSD
- - FullHD screen for comfort work
 
 ### From sources
-only for launch sources
+Only for launch sources
 
-#### Python3 and modules
- - configparser,
- - datetime,
- - gettext,
- - glob,
- - os,
- - pathlib,
- - platform,
- - PIL,
- - tkinter,
- - tkcolorpicker,
- - touch,
- - re,
- - shutil,
- - tempfile.
+Python3 and modules:
+ - via pip:
+    - configparser,
+    - datetime,
+    - pathlib,
+    - Pillow (contains tkcolorpicker),
+    - touch,
+ - via packets:
+     - tkinter,
+ - should be out of the box:
+     - gettext,
+     - glob,
+     - os,
+     - platform,
+     - re,
+     - shutil,
+     - tempfile.
 
 #### Start
 `python3 fotokilof.py
@@ -113,3 +170,15 @@ only for launch sources
  - Max von Forell - German translation
  - Bozhidar Kirev - Bulgarian translation
  - Afif Hendrawan - Indonesian translation
+
+## Licencja
+
+MIT License
+
+Copyright (c) 2019 Tomasz Łuczak, TeaM-TL
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

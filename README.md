@@ -17,6 +17,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - contrast or histogram stretching,
  - color normalize/auto-level/equalize,
  - adding logo image o picture.
+
 ## Functionality:
  - processing JPG, PNG and TIFF images,
  - processing copy of picture, originals are safe,
@@ -25,7 +26,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - tools selection,
  - preview orignal and result,
  - predefined rotation: 90, 180 and 270 degree or custom,
- - crop selection via click on preview,
+ - crop selection via click on preview or coordinates,
  - crop coordinates:
    - two corners (upper left and lower right),
    - upper left corner and width plus height,
@@ -35,11 +36,11 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - equalize by channel,
  - contrast between -3 and +3,
  - customized contrast stretching,
- - fast file navigation: First, Prev, Next, Last,
  - histograms of original and result pictures,
+ - fast file navigation: First, Prev, Next, Last,
  - own command editor,
  - own command can be composed from executed commands,
- - is possible to use other ImageMagick commands, eg. -gaussian-blur,
+ - is possible to use other ImageMagick commands, eg. *-gaussian-blur*,
  - GraphickMagick is supported partialy.
 
 ## User manual
