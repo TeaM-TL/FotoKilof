@@ -8,15 +8,15 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 ![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof2.png)
 
 ## Graphics conversion
- - rotation,
- - frame around picture,
+ - scaling/resize,
+ - crop,
  - text annotation,
- - black-white or sepia conversion,
+ - border around picture,
+ - rotation,
+ - black-white or sepia,
  - contrast or histogram stretching,
  - color normalize/auto-level/equalize,
- - crop,
- - scaling/resize,
- - adding logo image o picture
+ - adding logo image o picture.
 ## Functionality:
  - processing JPG, PNG and TIFF images,
  - processing copy of picture, originals are safe,
@@ -31,9 +31,15 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
    - upper left corner and width plus height,
    - gravity, width plus height plus offset,
  - text: color, font and size selection,
+ - customized sepia,
+ - equalize by channel,
+ - contrast between -3 and +3,
+ - customized contrast stretching,
  - fast file navigation: First, Prev, Next, Last,
  - histograms of original and result pictures,
- - own command editor, additionally command can be composed from executed commands,
+ - own command editor,
+ - own command can be composed from executed commands,
+ - is possible to use other ImageMagick commands, eg. -gaussian-blur,
  - GraphickMagick is supported partialy.
 
 ## User manual
