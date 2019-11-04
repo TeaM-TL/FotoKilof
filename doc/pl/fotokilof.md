@@ -117,15 +117,10 @@ Do przetwarzania folderu musimy użyć przycisku *Zaaplikuj wszystko* i zaznaczy
 
 ## Instalacja
 
-### Windows
-
 - Rozpakuj plik *fotokilof.zip* do folderu, 
 - zrób skrót na pulpicie,
 - i uruchom.
-> W przyszłości będzie dostępny instalator, wygenerowany za pomocą NSIS.
-
-### Linux, MacOSX, *BSD
-* rozpakuj i uruchom ()
+> Windows: W przyszłości będzie dostępny instalator, wygenerowany za pomocą NSIS.
 
 ### Wymagania
 
