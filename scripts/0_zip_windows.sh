@@ -4,7 +4,7 @@ NAME="fotokilof"
 OS="windows_x64"
 VER="8.1"
 FILES="Windows"
-EXCLUDE="-x locale/fotokilof.pot -x doc/*/*md"
+EXCLUDE="-x $FILES/locale/*/*/*.po -x $FILES/locale/fotokilof.pot -x  $FILES/doc/*/*md"
 
 echo "Files: " $FILES
 echo "Exclude: " $EXCLUDE
