@@ -2,7 +2,7 @@
 DIST=dist
 NAME="fotokilof"
 OS="linux_x86_64"
-VER="Ubuntu-19.10"
+VER="Ubuntu-18.04.3"
 FILES="Ubuntu"
 EXCLUDE="-x $FILES/locale/*/*/*.po -x $FILES/locale/fotokilof.pot -x $FILES/doc/*/*md"
 

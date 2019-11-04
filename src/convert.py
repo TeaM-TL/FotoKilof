@@ -153,6 +153,7 @@ def convert_bw(black_white, sepia):
 def convert_contrast(contrast, contrast_selected, entry1, entry2):
     """ 6. Contrast """
 
+    command = ""
     if contrast == 1:
         command = "-contrast-stretch " + entry1 + "x" + entry2 + "%"
     elif contrast == 2:
@@ -162,6 +163,8 @@ def convert_contrast(contrast, contrast_selected, entry1, entry2):
             command = "+contrast +contrast"
         elif contrast_selected == "+1":
             command = "+contrast"
+        elif contrast_selected == "0":
+            command = ""
         elif contrast_selected == "-1":
             command = "-contrast"
         elif contrast_selected == "-2":
