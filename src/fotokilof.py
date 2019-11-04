@@ -50,7 +50,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-VERSION = "2.9.5"
+VERSION = "2.9.6"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -90,11 +90,6 @@ def preview_clear():
     photo = ""
     pi_preview_orig.configure(data=photo)
     pi_histogram_orig.configure(file="")
-
-
-def preview_orig_bind(event):
-    """ preview orginal picture via bind """
-    preview_orig()
 
 
 def preview_new(file_out):
@@ -907,10 +902,12 @@ def mouse_crop_SE(event):
 
 def preview_orig():
     """
-    generation preview of originalpicture
+    generation preview of original picture
     and add crop rectangle
     """
     if img_crop_on.get() == 1:
+        # draw crop rectangle on preview
+        xy_max = common.mouse_crop_calculation(file_in_path.get(), PREVIEW_ORIG)
         if img_crop.get() == 1:
             x0 = int(e1_crop_1.get())
             y0 = int(e2_crop_1.get())
@@ -923,13 +920,19 @@ def preview_orig():
             x1 = x0 + int(e3_crop_2.get())
             y1 = y0 + int(e4_crop_2.get())
             do_nothing = 0
-        else:
-            do_nothing = 1
-    else:
-        do_nothing = 1
+        elif img_crop.get() == 3:
+            coord_for_crop = (int(e1_crop_3.get()), int(e2_crop_3.get()),
+                              int(e3_crop_3.get()), int(e4_crop_3.get()),
+                              img_crop_gravity.get())
+            coord = convert.convert_preview_crop_gravity(coord_for_crop,
+                                                         xy_max['x_orig'],
+                                                         xy_max['y_orig'])
+            x0 = coord[0]
+            y0 = coord[1]
+            x1 = coord[2]
+            y1 = coord[3]
+            do_nothing = 0
 
-    if do_nothing != 1:
-        xy_max = common.mouse_crop_calculation(file_in_path.get(), PREVIEW_ORIG)
         ratio_X = xy_max['x_max'] / xy_max['x_orig']
         ratio_Y = xy_max['y_max'] / xy_max['y_orig']
         x0 = int(x0 * ratio_X)
@@ -960,7 +963,7 @@ def preview_orig():
     except:
         print("! Error in preview_orig: Cannot load image size")
 
-    if img_histograms_on.get() == 1:      
+    if img_histograms_on.get() == 1:
         pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
         #try:
         #    pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
@@ -1388,12 +1391,15 @@ rb_crop_S = ttk.Radiobutton(frame_crop_gravity, text="S",
                             variable=img_crop_gravity, value="S")
 rb_crop_SE = ttk.Radiobutton(frame_crop_gravity, text="SE",
                              variable=img_crop_gravity, value="SE")
+frame_crop_buttons = ttk.Frame(frame_crop)
 
-b_crop_read = ttk.Button(frame_crop, text=_("From image"),
-                         command=crop_read)
-b_crop_run = ttk.Button(frame_crop, text=_("Crop"),
+b_crop_run = ttk.Button(frame_crop_buttons, text=_("Crop"),
                         style="Brown.TButton",
                         command=convert_crop_button)
+b_crop_show = ttk.Button(frame_crop_buttons, text=_("Preview"),
+                         command=preview_orig)
+b_crop_read = ttk.Button(frame_crop, text=_("From image"),
+                         command=crop_read)
 
 f_clickL_crop.grid(row=1, column=2, rowspan=2, columnspan=2, padx=5)
 f_clickR_crop.grid(row=1, column=4, rowspan=2, columnspan=2)
@@ -1424,8 +1430,10 @@ rb_crop_E.grid(row=2, column=3, sticky=W, pady=1)
 rb_crop_SW.grid(row=3, column=1, sticky=W, pady=1)
 rb_crop_S.grid(row=3, column=2, pady=1)
 rb_crop_SE.grid(row=3, column=3, sticky=W, pady=1)
+frame_crop_buttons.grid(row=5, column=1, sticky=(W, E))
+b_crop_run.grid(row=1, column=1, sticky=W, padx=15, pady=5)
+b_crop_show.grid(row=1, column=2, sticky=W, padx=5, pady=5)
 b_crop_read.grid(row=5, column=2, columnspan=2, sticky=W, padx=5, pady=5)
-b_crop_run.grid(row=5, column=1, sticky=W, padx=5, pady=5)
 
 ###########################
 # Tekst
@@ -1812,9 +1820,6 @@ l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
 l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
-rb1_crop.bind("<ButtonRelease-1>", preview_orig_bind)
-rb2_crop.bind("<ButtonRelease-1>", preview_orig_bind)
-rb3_crop.bind("<Button-1>", preview_orig_bind)
 root.bind("<F1>", help_info)
 root.protocol("WM_DELETE_WINDOW", win_deleted)
 

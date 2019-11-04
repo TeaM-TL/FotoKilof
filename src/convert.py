@@ -2,6 +2,72 @@
 """ Converters """
 
 
+def convert_preview_crop_gravity(coordinates, x_max, y_max):
+    """
+    convert corrdinates from crop3:
+    offset_x, offset_y, width, height, gravitation
+    original image size:
+    x_max, y_max
+    return coordinates for drawing crop: x0, y0, x1, y1
+    """
+    offset_x = coordinates[0]
+    offset_y = coordinates[1]
+    width = coordinates[2]
+    height = coordinates[3]
+    gravitation = coordinates[4]
+    if gravitation == "NW":
+        x0 = offset_x
+        y0 = offset_y
+        x1 = x0 + width
+        y1 = y0 + height
+    elif gravitation == "N":
+        x0 = x_max/2 - width/2
+        y0 = offset_y
+        x1 = x_max/2 + width/2
+        y1 = y0 + height
+    elif gravitation == "NE":
+        x0 = x_max - width - offset_x
+        y0 = offset_y
+        x1 = x_max - offset_x
+        y1 = y0 + height
+    elif gravitation == "W":
+        x0 = offset_x
+        y0 = y_max/2 - height/2
+        x1 = x0 + width
+        y1 = y_max/2 + height/2
+    elif gravitation == "C":
+        x0 = x_max/2 - width/2
+        y0 = y_max/2 - height/2
+        x1 = x_max/2 + width/2
+        y1 = y_max/2 + height/2
+    elif gravitation == "E":
+        x0 = x_max - width - offset_x
+        y0 = y_max/2 - height/2
+        x1 = x_max - offset_x
+        y1 = y_max/2 + height/2
+    elif gravitation == "SW":
+        x0 = offset_x
+        y0 = y_max - height - offset_y
+        x1 = x0 + width
+        y1 = y_max - offset_y
+    elif gravitation == "S":
+        x0 = x_max/2 - width/2
+        y0 = y_max - height - offset_y
+        x1 = x_max/2 + width/2
+        y1 = y_max - offset_y
+    elif gravitation == "SE":
+        x0 = x_max - width - offset_x
+        y0 = y_max - height - offset_y
+        x1 = x_max - offset_x
+        y1 = y_max - offset_y
+    else:
+        x0 = 5
+        y0 = 5
+        x1 = x_max - 5
+        y1 = y_max -5
+    return (x0, y0, x1, y1)
+
+
 def convert_border(width, color, border_on):
     """ 1. Add border """
 
