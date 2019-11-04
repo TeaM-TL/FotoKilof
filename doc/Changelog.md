@@ -2,6 +2,8 @@
 
 ## Current
 
+3.0 Order with Contrast and Normalize, updated documentation, fixed INI reading
+
 2.9.6 Added preview crop, updated documentation
 
 2.9.5 .INI is in $HOME directory; crop and text work together properly

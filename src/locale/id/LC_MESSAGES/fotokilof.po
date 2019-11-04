@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: FotoKilof\n"
-"POT-Creation-Date: 2019-10-31 08:59+0100\n"
-"PO-Revision-Date: 2019-10-31 08:59+0100\n"
+"POT-Creation-Date: 2019-11-04 22:01+0100\n"
+"PO-Revision-Date: 2019-11-04 22:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: id\n"
@@ -21,135 +21,137 @@ msgstr ""
 "X-Poedit-SearchPath-2: fotokilof.py\n"
 "X-Poedit-SearchPath-3: ini_read.py\n"
 
-#: fotokilof.py:75
+#: fotokilof.py:69
 msgid "Unfortunately, you are using Windows, thus not all option will work"
 msgstr ""
 
-#: fotokilof.py:248
+#: fotokilof.py:242
 msgid "Processing"
 msgstr "Sedang diproses"
 
-#: fotokilof.py:267
+#: fotokilof.py:261
 msgid "of"
 msgstr "dari"
 
-#: fotokilof.py:277
+#: fotokilof.py:271
 msgid "done"
 msgstr "Selesai"
 
-#: fotokilof.py:491 fotokilof.py:508
+#: fotokilof.py:485 fotokilof.py:502
 msgid "jpeg files"
 msgstr "berkas jpeg"
 
-#: fotokilof.py:492 fotokilof.py:509
+#: fotokilof.py:486 fotokilof.py:503
 msgid "JPEG files"
 msgstr "berkas JPEG"
 
-#: fotokilof.py:493 fotokilof.py:510
+#: fotokilof.py:487 fotokilof.py:504
 msgid "png files"
 msgstr "berkas png"
 
-#: fotokilof.py:494 fotokilof.py:511
+#: fotokilof.py:488 fotokilof.py:505
 msgid "PNG files"
 msgstr "berkas PNG"
 
-#: fotokilof.py:495 fotokilof.py:512
+#: fotokilof.py:489 fotokilof.py:506
 msgid "tiff files"
 msgstr "berkas tiff"
 
-#: fotokilof.py:496 fotokilof.py:513
+#: fotokilof.py:490 fotokilof.py:507
 msgid "TIFF files"
 msgstr "berkas TIFF"
 
-#: fotokilof.py:497 fotokilof.py:514
+#: fotokilof.py:491 fotokilof.py:508
 msgid "All files"
 msgstr "Semua berkas"
 
-#: fotokilof.py:500
+#: fotokilof.py:494
 msgid "Select logo picture for inserting"
 msgstr "Pilih gambar logo untuk dimasukkan"
 
-#: fotokilof.py:517
+#: fotokilof.py:511
 msgid "Select picture for processing"
 msgstr "Pilih gambar untuk diolah"
 
-#: fotokilof.py:860
+#: fotokilof.py:858
 msgid "License"
 msgstr "Lisensi"
 
-#: fotokilof.py:1142
+#: fotokilof.py:1143
 msgid "Tools"
 msgstr "Piranti"
 
-#: fotokilof.py:1146
+#: fotokilof.py:1147
 msgid "Histograms"
 msgstr "Histogram"
 
-#: fotokilof.py:1149
+#: fotokilof.py:1150
 msgid "Scaling/Resize"
 msgstr "Penyekalaan/Mengubah Ukuran"
 
-#: fotokilof.py:1152 fotokilof.py:1332 fotokilof.py:1396
+#: fotokilof.py:1153 fotokilof.py:1333
 msgid "Crop"
 msgstr "Potong"
 
-#: fotokilof.py:1155
+#: fotokilof.py:1156
 msgid "Text"
 msgstr "Teks"
 
-#: fotokilof.py:1158 fotokilof.py:1522 fotokilof.py:1534
+#: fotokilof.py:1159 fotokilof.py:1528
 msgid "Rotate"
 msgstr "Putar"
 
-#: fotokilof.py:1161 fotokilof.py:1571
-msgid "Frame"
-msgstr "Frame"
+#: fotokilof.py:1162 fotokilof.py:1577
+msgid "Border"
+msgstr ""
 
-#: fotokilof.py:1164
+#: fotokilof.py:1165
 msgid "Black&white"
 msgstr "Hitam&putih"
 
-#: fotokilof.py:1166
+#: fotokilof.py:1167
 msgid "Colors normalize"
 msgstr "Warna Normal"
 
-#: fotokilof.py:1169 fotokilof.py:1593 fotokilof.py:1597 fotokilof.py:1600
+#: fotokilof.py:1170 fotokilof.py:1599 fotokilof.py:1605
 msgid "Contrast"
 msgstr "Kontras"
 
-#: fotokilof.py:1172 fotokilof.py:1215
+#: fotokilof.py:1173 fotokilof.py:1216
 msgid "Logo"
 msgstr "Logo"
 
-#: fotokilof.py:1175
+#: fotokilof.py:1176
 msgid "Custom"
 msgstr "Kustom"
 
-#: fotokilof.py:1182 fotokilof.py:1751
+#: fotokilof.py:1183
 msgid "Apply"
 msgstr "Terapkan"
 
-#: fotokilof.py:1200
+#: fotokilof.py:1201
 msgid "Settings"
 msgstr "Pengaturan"
 
-#: fotokilof.py:1204
+#: fotokilof.py:1205
 msgid "Save"
 msgstr "Simpan"
 
-#: fotokilof.py:1206
+#: fotokilof.py:1207
 msgid "Load"
 msgstr "Memuat"
 
-#: fotokilof.py:1219 fotokilof.py:1693
+#: fotokilof.py:1220 fotokilof.py:1698
 msgid "File selection"
 msgstr "Pemilihan berkas"
 
-#: fotokilof.py:1222 fotokilof.py:1558 fotokilof.py:1666
+#: fotokilof.py:1223 fotokilof.py:1317 fotokilof.py:1400 fotokilof.py:1512
+#: fotokilof.py:1540 fotokilof.py:1564 fotokilof.py:1586 fotokilof.py:1616
+#: fotokilof.py:1646 fotokilof.py:1671
 msgid "Execute"
 msgstr "Jalankan"
 
-#: fotokilof.py:1233
+#: fotokilof.py:1234
 msgid ""
 "Width\n"
 "Height"
@@ -157,7 +159,7 @@ msgstr ""
 "Lebar\n"
 "Tinggi"
 
-#: fotokilof.py:1234
+#: fotokilof.py:1235
 msgid ""
 "Offset\n"
 "(dx,dy)"
@@ -165,51 +167,47 @@ msgstr ""
 "Offset\n"
 "(dx,dy)"
 
-#: fotokilof.py:1262 fotokilof.py:1383 fotokilof.py:1468
+#: fotokilof.py:1263 fotokilof.py:1384 fotokilof.py:1475
 msgid "Center"
 msgstr "Tengah"
 
-#: fotokilof.py:1297
+#: fotokilof.py:1298
 msgid "Scale/Resize"
 msgstr "Penyekalaan/Mengubah Ukuran"
 
-#: fotokilof.py:1302 fotokilof.py:1575
+#: fotokilof.py:1303 fotokilof.py:1581
 msgid "Pixels"
 msgstr "Pixel"
 
-#: fotokilof.py:1306
+#: fotokilof.py:1307
 msgid "Percent"
 msgstr "Persen"
 
-#: fotokilof.py:1316
-msgid "Resize"
-msgstr "Mengubah Ukuran"
-
-#: fotokilof.py:1338
+#: fotokilof.py:1339
 msgid "Coordinates (x1, y1) and (x2, y2)"
 msgstr "Koordinat (x1, y1) dan (x2, y2)"
 
-#: fotokilof.py:1339
+#: fotokilof.py:1340
 msgid "Left Upper corner"
 msgstr "Pojok kiri atas"
 
-#: fotokilof.py:1340
+#: fotokilof.py:1341
 msgid "Click left"
 msgstr "Klik kiri"
 
-#: fotokilof.py:1345
+#: fotokilof.py:1346
 msgid "Right lower corner"
 msgstr "Pojok kanan bawah"
 
-#: fotokilof.py:1346
+#: fotokilof.py:1347
 msgid "Click right"
 msgstr "Clik kanan"
 
-#: fotokilof.py:1353
+#: fotokilof.py:1354
 msgid "Origin (x1,y1) and dimensions (X, Y)"
 msgstr "Asal (x1,y1) dan dimensi (X,Y)"
 
-#: fotokilof.py:1364
+#: fotokilof.py:1365
 msgid ""
 "Offset (dx,dy), dimensions (X, Y)\n"
 "and gravity"
@@ -217,148 +215,157 @@ msgstr ""
 "Offset (dx,dy), dimensi (X,Y)\n"
 " and titik tengah"
 
-#: fotokilof.py:1394
-msgid "From image"
-msgstr "Dari gambar"
-
-#: fotokilof.py:1435
-msgid "Add text"
-msgstr "Tambah teks"
-
-#: fotokilof.py:1448
-msgid "Offset (dx,dy)\n"
-msgstr "Offset (dx,dy)\n"
-
-#: fotokilof.py:1496
-msgid "Font color"
-msgstr "Warna fonta"
-
-#: fotokilof.py:1498
-msgid "Background"
-msgstr "Latar belakang"
-
-#: fotokilof.py:1502
-msgid "Background color"
-msgstr "Warna latar belakang"
-
-#: fotokilof.py:1505
-msgid "Put text"
-msgstr "Letakkan teks"
-
-#: fotokilof.py:1547 fotokilof.py:1551
-msgid "Black-white"
-msgstr "Hitam-putih"
-
-#: fotokilof.py:1553
-msgid "Sepia"
-msgstr "Sepia"
-
-#: fotokilof.py:1578
-msgid "Color"
-msgstr "Warna"
-
-#: fotokilof.py:1580
-msgid "Add frame"
-msgstr "Tambahkan frame"
-
-#: fotokilof.py:1604
-msgid "Stretch"
-msgstr "Tarik"
-
-#: fotokilof.py:1608
-msgid "Black"
-msgstr "Hitam"
-
-#: fotokilof.py:1609
-msgid "White"
-msgstr "Putih"
-
-#: fotokilof.py:1624
-msgid "Color normalize"
-msgstr "Normalkan warna"
-
-#: fotokilof.py:1628 fotokilof.py:1640
-msgid "Normalize"
-msgstr "Pernormalan"
-
-#: fotokilof.py:1631
-msgid "AutoLevel"
-msgstr "Tingkatan Otomatis"
-
-#: fotokilof.py:1634
-msgid "Equalize"
-msgstr ""
-
-#: fotokilof.py:1637
-msgid "Channel:"
-msgstr ""
-
-#: fotokilof.py:1654
-msgid "Custom command"
-msgstr "Perintah kustom"
-
-#: fotokilof.py:1659
-msgid "Command:"
-msgstr "Perintah"
-
-#: fotokilof.py:1664
-msgid "Clear"
-msgstr ""
-
-#: fotokilof.py:1689
-msgid "Image"
-msgstr "Gambar"
-
-#: fotokilof.py:1698
-msgid "First"
-msgstr "Pertama"
-
-#: fotokilof.py:1700
-msgid "Previous"
-msgstr "Sebelumnya"
-
-#: fotokilof.py:1702
-msgid "Next"
-msgstr "Selanjutnya"
-
-#: fotokilof.py:1704
-msgid "Last"
-msgstr "Terakhir"
-
-#: fotokilof.py:1718
-msgid "Original"
-msgstr "Orisinil"
-
-#: fotokilof.py:1723 fotokilof.py:1788
+#: fotokilof.py:1396 fotokilof.py:1728 fotokilof.py:1793
 msgid "Preview"
 msgstr "Pratinjau"
 
-#: fotokilof.py:1735 fotokilof.py:1802
+#: fotokilof.py:1398
+msgid "From image"
+msgstr "Dari gambar"
+
+#: fotokilof.py:1442
+msgid "Add text"
+msgstr "Tambah teks"
+
+#: fotokilof.py:1455
+msgid "Offset (dx,dy)\n"
+msgstr "Offset (dx,dy)\n"
+
+#: fotokilof.py:1503
+msgid "Font color"
+msgstr "Warna fonta"
+
+#: fotokilof.py:1505
+msgid "Background"
+msgstr "Latar belakang"
+
+#: fotokilof.py:1509
+msgid "Background color"
+msgstr "Warna latar belakang"
+
+#: fotokilof.py:1553 fotokilof.py:1557
+msgid "Black-white"
+msgstr "Hitam-putih"
+
+#: fotokilof.py:1559
+msgid "Sepia"
+msgstr "Sepia"
+
+#: fotokilof.py:1584
+msgid "Color"
+msgstr "Warna"
+
+#: fotokilof.py:1603
+msgid "Stretch"
+msgstr "Tarik"
+
+#: fotokilof.py:1609
+msgid "Normalize"
+msgstr "Pernormalan"
+
+#: fotokilof.py:1614
+msgid "Black"
+msgstr "Hitam"
+
+#: fotokilof.py:1615
+msgid "White"
+msgstr "Putih"
+
+#: fotokilof.py:1633
+msgid "Color normalize"
+msgstr "Normalkan warna"
+
+#: fotokilof.py:1637
+msgid "Equalize"
+msgstr ""
+
+#: fotokilof.py:1640
+msgid "AutoLevel"
+msgstr "Tingkatan Otomatis"
+
+#: fotokilof.py:1643
+msgid "Channel:"
+msgstr ""
+
+#: fotokilof.py:1659
+msgid "Custom command"
+msgstr "Perintah kustom"
+
+#: fotokilof.py:1664
+msgid "Command:"
+msgstr "Perintah"
+
+#: fotokilof.py:1669
+msgid "Clear"
+msgstr ""
+
+#: fotokilof.py:1694
+msgid "Image"
+msgstr "Gambar"
+
+#: fotokilof.py:1703
+msgid "First"
+msgstr "Pertama"
+
+#: fotokilof.py:1705
+msgid "Previous"
+msgstr "Sebelumnya"
+
+#: fotokilof.py:1707
+msgid "Next"
+msgstr "Selanjutnya"
+
+#: fotokilof.py:1709
+msgid "Last"
+msgstr "Terakhir"
+
+#: fotokilof.py:1723
+msgid "Original"
+msgstr "Orisinil"
+
+#: fotokilof.py:1740 fotokilof.py:1807
 msgid "Histogram"
 msgstr "Histogram"
 
-#: fotokilof.py:1755
+#: fotokilof.py:1756 fotokilof.py:1767
+#, fuzzy
+#| msgid "Execute"
+msgid "Execute all"
+msgstr "Jalankan"
+
+#: fotokilof.py:1760
 msgid "Folder"
 msgstr "Map"
 
-#: fotokilof.py:1757
+#: fotokilof.py:1762
 msgid "File"
 msgstr "Berkas"
 
-#: fotokilof.py:1762
-msgid "Apply all"
-msgstr "Terapkan ke semua"
-
-#: fotokilof.py:1784
+#: fotokilof.py:1789
 msgid "Result"
 msgstr "Hasil"
 
-#: fotokilof.py:1849
+#: fotokilof.py:1858
 msgid "Error"
 msgstr ""
 
-#: fotokilof.py:1850
+#: fotokilof.py:1859
 msgid ""
 "ImageMagick nor GraphicsMagick are not installed in you system. Is impossile "
 "to process any graphics."
 msgstr ""
+
+#~ msgid "Frame"
+#~ msgstr "Frame"
+
+#~ msgid "Resize"
+#~ msgstr "Mengubah Ukuran"
+
+#~ msgid "Put text"
+#~ msgstr "Letakkan teks"
+
+#~ msgid "Add frame"
+#~ msgstr "Tambahkan frame"
+
+#~ msgid "Apply all"
+#~ msgstr "Terapkan ke semua"

@@ -298,7 +298,7 @@ def ini_read_border(file_ini):
     config.read(file_ini, encoding="utf8")
 
     try:
-        border_on = config.get('Border', 'on')
+        border_on = config.getint('Border', 'on')
     except:
         border_on = "1"
     dict_return['img_border_on'] = entries.parse_list(border_on, (0, 1), 0)
@@ -367,10 +367,10 @@ def ini_read_normalize(file_ini, channels):
         normalize = config.getint('Normalize', 'normalize')
     except:
         normalize = 1
-    dict_return['normalize'] = entries.parse_list(normalize, (1, 2, 3), 1)
+    dict_return['normalize'] = entries.parse_list(normalize, (1, 2), 1)
 
     try:
-        normalize = config.getint('Normalize', 'channel')
+        normalize = config.get('Normalize', 'channel')
     except:
         normalize = "None"
     dict_return['channel'] = entries.parse_list(normalize, channels, "None")
@@ -397,7 +397,7 @@ def ini_read_contrast(file_ini, contrast_selection_valid_list):
         contrast = config.getint('Contrast', 'contrast')
     except:
         contrast = "1"
-    dict_return['contrast'] = entries.parse_list(contrast, (0, 1), 1)
+    dict_return['contrast'] = entries.parse_list(contrast, (1, 2, 3), 1)
 
     try:
         contrast_selection = config.get('Contrast', 'selection')

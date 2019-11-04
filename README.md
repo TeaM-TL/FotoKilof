@@ -8,14 +8,14 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 ![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof2.png)
 
 ## Graphics conversion
- - scaling/resize,
+ - scaling/resize,file:///home/tlu/dev/GitHub/FotoKilof/doc/pl/fotokilof.md
  - crop,
  - text annotation,
  - border around picture,
  - rotation,
  - black-white or sepia,
- - contrast or histogram stretching,
- - color normalize/auto-level/equalize,
+ - contrast increase/decrease or normalize or histogram stretching,
+ - color auto-level or equalize,
  - adding logo image o picture.
 
 ## Functionality:

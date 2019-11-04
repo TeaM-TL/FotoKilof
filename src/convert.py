@@ -154,6 +154,8 @@ def convert_contrast(contrast, contrast_selected, entry1, entry2):
     """ 6. Contrast """
 
     if contrast == 1:
+        command = "-contrast-stretch " + entry1 + "x" + entry2 + "%"
+    elif contrast == 2:
         if contrast_selected == "+3":
             command = "+contrast +contrast +contrast"
         elif contrast_selected == "+2":
@@ -168,8 +170,8 @@ def convert_contrast(contrast, contrast_selected, entry1, entry2):
             command = "-contrast -contrast -contrast"
         else:
             command = ""
-    elif contrast == 2:
-        command = "-contrast-stretch " + entry1 + "x" + entry2 + "%"
+    elif contrast == 3:
+        commad = "-normalize"
     else:
         command = ""
     return command
@@ -179,14 +181,12 @@ def convert_normalize(normalize, channel):
     """ 7. Normalize """
 
     if normalize == 1:
-        command = "-normalize"
-    elif normalize == 2:
-        command = "-auto-level"
-    elif normalize == 3:
         if channel != "None":
             command = "-channel " + channel + " -equalize"
         else:
             command = "-equalize"
+    elif normalize == 2:
+        command = "-auto-level"
     else:
         command = ""
     return command

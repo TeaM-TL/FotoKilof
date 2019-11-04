@@ -16,8 +16,8 @@ GUI for the common used ImageMagick functionality for processing pictures.
  - border around picture,
  - rotation,
  - black-white or sepia,
- - contrast or histogram stretching,
- - color normalize/auto-level/equalize,
+ - contrast inxrease/decrease or normalize or histogram stretching,
+ - color normalize: auto-level or equalize,
  - adding logo image o picture.
 
 ## Functionality:
@@ -105,8 +105,6 @@ simulate a sepia-toned photo.
 Specify threshold as the percent threshold of the intensity (0 - 99.9%). Advice from ImageMagick documentation: a threshold of 80% is a good starting point for a reasonable tone.
 
 ### Colors normalize
-#### Normalize
-Increase the contrast in an image by stretching the range of intensity values.
 
 #### AutoLevel
 Automagically adjust color levels of image
@@ -120,6 +118,9 @@ Perform histogram equalization on the image channel-by-channel.
 Enhance or reduce the image contrast. Range is beetween -3 and +3.
 
 #### Contrast stretch
+Increase the contrast in an image by stretching the range of intensity values.
+
+#### Normalize
 Increase the contrast in an image by stretching the range of intensity values.
 
 ### Histogram
@@ -171,7 +172,7 @@ Python3 and modules:
  - Bozhidar Kirev - Bulgarian translation
  - Afif Hendrawan - Indonesian translation
 
-## Licencja
+## License
 
 MIT License
 

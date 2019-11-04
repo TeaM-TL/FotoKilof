@@ -15,8 +15,8 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
  - ramka wokół obrazka,
  - obrót,
  - czarno-biały albo sepia,
- - zmiana kontrastu i rozciąganie kontrastu,
- - normalizacja koloru/auto-level/wyrównanie histogramu
+ - zmiana kontrastu, normalizacja i rozciąganie kontrastu,
+ - normalizacja koloru: auto-level lu wyrównanie histogramu
  - dodanie własnego logo do obrazka.
 
 ### Funkcje
@@ -39,7 +39,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
  - kontrast regulowany w zekresie od -3 do +3,
  - rozszerzanie kontrastu,
  - wyświetlanie histogramu oryginału i wyniku przetwarzania,
- - szybka nawigacja po plikach przeyciskami: *Pierwszy*, *Następny*, *Poprzedni*, *Ostatni*,
+ - szybka nawigacja po plikach przyciskami: *Pierwszy*, *Następny*, *Poprzedni*, *Ostatni*,
  - edytor własnych poleceń,
  - polecenia mogą być składane z wykonywanych przetwarzań,
  - można korzystać z innych poleceń ImageMagick np. *-gaussian-blur*,
@@ -109,10 +109,7 @@ Symulacja tonów sepii. Można regulować próg intensywności (od 0 do 99,9%), 
 
 ### Normalizacja kolorów
 
-Mamy trzy narzędzia do normalizacji kolorów:
-
-#### Normalizacja
-Zwiększenie kontrastu za pomocą rozciągnięcia zakresu intensywności.
+Narzędzia do normalizacji kolorów:
 
 #### AutoLevel
 Automagiczne wyrównanie poziomów kolorów obrazka.
@@ -125,9 +122,11 @@ Wyrównanie histogramu obrazka kanał po kanale. Można wybrać kanał (domyśln
 ##### Kontrast
 Możemy zwiększać lub redukować kontrast obrazka w zakresie do -3 do +3, skokowo co 1.
 
-
 ##### Rozciągnięcie kontratu
 Drugą możliwością jest rozciągnięcie kontrastu od czerni do bieli. Domyślne wartości to 0,15 (czerń) i 0,05 (biel)
+
+#### Normalizacja kontrastu
+Zwiększenie kontrastu za pomocą rozciągnięcia zakresu intensywności.
 
 ### Histogram
 
