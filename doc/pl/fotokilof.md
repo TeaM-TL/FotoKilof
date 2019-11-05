@@ -16,7 +16,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
  - obrót,
  - czarno-biały albo sepia,
  - zmiana kontrastu, normalizacja i rozciąganie kontrastu,
- - normalizacja koloru: auto-level lu wyrównanie histogramu
+ - normalizacja koloru: auto-level lub wyrównanie histogramu
  - dodanie własnego logo do obrazka.
 
 ### Funkcje
@@ -36,7 +36,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
  - predefiniowane kąty obrotu: 90, 180 i 270 lub własne,
  - regulowana sepia,
  - wyrównanie (*Equalize*) także dla pojedynczego kanału,
- - kontrast regulowany w zekresie od -3 do +3,
+ - kontrast regulowany w zakresie od -3 do +3,
  - rozszerzanie kontrastu,
  - wyświetlanie histogramu oryginału i wyniku przetwarzania,
  - szybka nawigacja po plikach przyciskami: *Pierwszy*, *Następny*, *Poprzedni*, *Ostatni*,
@@ -47,20 +47,49 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
 
 ### Zrzuty ekranu
 
-![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof.png)
+![Screenshot](../../screenshots/fotokilof.png)
 
-![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof1.png)
+![Screenshot](../../screenshots/fotokilof1.png)
 
-![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof2.png)
+## Jak używać
 
-## Jak użyć
+### Podstawowe operacje
+ - Wybierz plik obrazka, niezależnie czy chcesz przetwarzać pojedynczy plik czy cały katalog.
+ - Przyciski *Poprzedni* i *Następny* otwierają kolejny lub poprzedni obrazek w katalogu.
+ - Przyciski *Pierwszy* i *Ostatni* otwierają pierwszy lub ostatni obrazek w katalogu.
+ - Przycisk *Zapisz* zapisuje bieżące ustawienia do pliku konfiguracyjnego *.fotokilof.ini*.
+ - Przycisk *Wczytaj* odczytuje ustawienia z pliku konfiguracyjnego *.fotokilof.ini*.
+ - Plik konfiguracyjny *.fotokilof.ini* zapisywany jest w katalogu użytkownika.
+ - Po zapisaniu konfiguracji, przy ponownym otwarciu, program odczyta konfigurację.
+ - Przyciski *Podgląd* otwierają obrazek w domyślnej przeglądarce.
+ - Program zamykamy poleceniem *Alt-F4* lub ikoną.
 
- - Wybierz plik obrazka,
- - Przyciski *Poprzedni* i *Następny* otwierają kolejny lub poprzedni obrazek,
- - Wybierz typy konwersji,
- - Kliknij *Wykonaj*
+### Przetwarzanie pojedynczego polecenia
+ - Zaznacz typ konwersji w panelu *Narzędzia*, np. *Obrót*.
+ - Kliknij *Zapisz*.
+ - W widgecie *Obrót* wybierz kąt, np. *90*.
+ - Kliknij *Wykonaj*.
+ - Zobacz podgląd.
+
+### Przetwarzanie wielu poleceń
+ - Zaznacz typy konwersji w panelu *Narzędzia*, np. *Obrót*, *Ramka*.
+ - Kliknij *Zapisz*.
+ - W widgecie *Obrót* wybierz kąt, np. *180*, a widgecie *Ramka* wybierz ulubiony kolor za pomocą przycisku *Kolor* i wpisz szerokość ramki np.*25*.
+ - Kliknij *Wykonaj wszystko*.
+ - Zobacz podgląd.
+
+### Przetwarzanie wszystkich plików w katalogu
+ - Wybierz jeden z plików w katalogu.
+ - Poćwicz na nim konwersje, jak w punkcie powyżej.
+ - Zaznacz *Folder*, a następnie,
+ - kliknij *Wykonaj wszystko*.
+ - W oknie podglądu zostanie wyświetlony podgląd ostatniego z przetwarzanych obrazków.
+ - Pod paskiem postępu zostanie wyświetlony numer pliku i jego nazwa oraz liczba wszystkich plików, które będą przetwarzane.
+
+## Przetwarzania obrazu
 
 ### Skalowanie
+
 Skalowanie polega na takim przeskalowaniu obrazka, by zmieścił się w zadanych wymiarach, bez zniekształceń czyli z zachowaniem proporcji.
 Do wyboru mamy trzy predefiniowane wymiary: FullHD (1920x1050), 2K (2058x1556) i 4K (4096x2112). Ponadto można podać maksymalny rozmiar w pikselach lub w procentach (odnosi się do rozmiaru pierwowzoru).
 
@@ -122,7 +151,8 @@ Wyrównanie histogramu obrazka kanał po kanale. Można wybrać kanał (domyśln
 ##### Kontrast
 Możemy zwiększać lub redukować kontrast obrazka w zakresie do -3 do +3, skokowo co 1.
 
-##### Rozciągnięcie kontratu
+##### Rozciągnięcie kontrastu
+
 Drugą możliwością jest rozciągnięcie kontrastu od czerni do bieli. Domyślne wartości to 0,15 (czerń) i 0,05 (biel)
 
 #### Normalizacja kontrastu
