@@ -2,6 +2,9 @@
 
 ## Current
 
+3.1 scalable preview widgets, DCOM image format, format conversion
+
+## OLD
 3.0 Order with Contrast and Normalize, updated documentation, fixed INI reading
 
 2.9.6 Added preview crop, updated documentation
@@ -33,8 +36,6 @@
 2.2 split main file into modules, code cleaning (pylint 7.74)
 
 2.1 code cleaning - pylint (jump from 3.87 to 7.03), histogram on/off
-
-## Very old
 
 2.0 faster multiple conversion: one run of imagemagick, way for creating plugins
 

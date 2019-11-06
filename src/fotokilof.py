@@ -50,7 +50,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-VERSION = "3.0"
+VERSION = "3.1"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -60,6 +60,7 @@ else:
     PREVIEW_NEW = 450
     PREVIEW_LOGO = 100
 
+preview_size_list = (300, 400, 450, 500, 600, 700, 800, 900, 1000)
 ##########################
 
 
@@ -97,7 +98,7 @@ def preview_new(file_out):
     # global img_histograms_on
     preview_picture = preview.preview_convert(file_out,
                                               " ",
-                                              PREVIEW_NEW,
+                                              co_preview_selector_new.get(),
                                               GM_or_IM)
     try:
         pi_preview_new.configure(file=preview_picture['filename'])
@@ -505,6 +506,7 @@ def open_file():
                  (_("PNG files"), "*.PNG"),
                  (_("tiff files"), "*.tif"),
                  (_("TIFF files"), "*.TIFF"),
+                 (_("DCOM files"), "*.DCOM"),
                  (_("All files"), "*.*"))
     result = filedialog.askopenfilename(initialdir=directory,
                                         filetypes=filetypes,
@@ -877,7 +879,7 @@ def mouse_crop_NW(event):
     y_preview = event.y
     # print("NW preview:", x_preview, y_preview)
 
-    xy_max = common.mouse_crop_calculation(file_in_path.get(), PREVIEW_ORIG)
+    xy_max = common.mouse_crop_calculation(file_in_path.get(), co_preview_selector_orig.get())
     width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
     height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
     e1_crop_1.delete(0, "end")
@@ -891,7 +893,7 @@ def mouse_crop_SE(event):
     x_preview = event.x
     y_preview = event.y
     # print("SE preview:", x_preview, y_preview)
-    xy_max = common.mouse_crop_calculation(file_in_path.get(), PREVIEW_ORIG)
+    xy_max = common.mouse_crop_calculation(file_in_path.get(), co_preview_selector_orig.get())
     width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
     height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
     e3_crop_1.delete(0, "end")
@@ -907,7 +909,7 @@ def preview_orig():
     """
     if img_crop_on.get() == 1:
         # draw crop rectangle on preview
-        xy_max = common.mouse_crop_calculation(file_in_path.get(), PREVIEW_ORIG)
+        xy_max = common.mouse_crop_calculation(file_in_path.get(), co_preview_selector_orig.get())
         if img_crop.get() == 1:
             x0 = int(e1_crop_1.get())
             y0 = int(e2_crop_1.get())
@@ -948,7 +950,7 @@ def preview_orig():
 
     preview_picture = preview.preview_convert(file_in_path.get(),
                                               command,
-                                              PREVIEW_ORIG,
+                                              co_preview_selector_orig.get(),
                                               GM_or_IM)
     try:
         pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
@@ -1176,11 +1178,18 @@ cb_logo = ttk.Checkbutton(frame_zero_set, text=_("Logo"),
 cb_custom = ttk.Checkbutton(frame_zero_set, text=_("Custom"),
                             variable=img_custom_on,
                             offvalue="0", onvalue="1")
-co_theme_selector = ttk.Combobox(frame_zero_set,
+frame_frame_zero_set = ttk.Labelframe(frame_zero_set, text=_("Layout"))
+co_preview_selector_orig = ttk.Combobox(frame_frame_zero_set, width=10,
+                                        values=preview_size_list)
+co_preview_selector_new = ttk.Combobox(frame_frame_zero_set, width=10,
+                                        values=preview_size_list)
+co_preview_selector_orig.configure(state='readonly')
+co_preview_selector_new.configure(state='readonly')
+co_theme_selector = ttk.Combobox(frame_frame_zero_set,
                                  width=10, values=theme_list)
 co_theme_selector.configure(state='readonly')
 
-b_last_set = ttk.Button(frame_zero_set, text=_("Apply"), command=tools_set)
+b_last_set = ttk.Button(frame_frame_zero_set, text=_("Apply"), command=tools_set)
 
 cb_histograms.pack(padx=5, pady=1, anchor=W)
 cb_resize.pack(padx=5, pady=1, anchor=W)
@@ -1193,8 +1202,11 @@ cb_contrast.pack(padx=5, pady=1, anchor=W)
 cb_normalize.pack(padx=5, pady=1, anchor=W)
 cb_logo.pack(padx=5, pady=1, anchor=W)
 cb_custom.pack(padx=5, pady=1, anchor=W)
-co_theme_selector.pack(padx=5, pady=5, anchor=W)
-b_last_set.pack(padx=5, pady=1)
+frame_frame_zero_set.pack(padx=5, pady=1, anchor=W)
+co_preview_selector_orig.grid(row=1, column=1, padx=5, pady=1, sticky=W)
+co_preview_selector_new.grid(row=1, column=2, padx=5, pady=5, sticky=W)
+co_theme_selector.grid(row=2, column=1, padx=5, pady=5, sticky=W)
+b_last_set.grid(row=2, column=2, padx=5, pady=1)
 ###########################
 # Przyciski
 ###########################
@@ -1838,6 +1850,8 @@ root.title("Tomasz Łuczak : FotoKilof - " + str(VERSION) + " : " +
            GM_or_IM_name + " - " + GM_or_IM_version + " : " +
            "Py - " + Python_version[0])
 if GM_or_IM is not None:
+    co_preview_selector_orig.current(preview_size_list.index(PREVIEW_ORIG))
+    co_preview_selector_new.current(preview_size_list.index(PREVIEW_NEW))
     img_text_font_list = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file
     tools_set()
