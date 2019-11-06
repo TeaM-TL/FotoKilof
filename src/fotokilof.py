@@ -656,7 +656,7 @@ def ini_read_wraper():
     img_histograms_on.set(ini_entries['img_histograms_on'])
     co_theme_selector.current(theme_list.index(ini_entries['theme']))
     co_preview_selector_orig.current(preview_size_list.index(ini_entries['preview_orig']))
-    co_preview_selector_new.current(preview_size_list.index(ini_entries['preview_new'])) 
+    co_preview_selector_new.current(preview_size_list.index(ini_entries['preview_new']))
 
     ini_entries = ini_read.ini_read_resize(FILE_INI)
     img_resize_on.set(ini_entries['img_resize_on'])
@@ -1186,7 +1186,7 @@ frame_frame_zero_set = ttk.Labelframe(frame_zero_set, text=_("Layout"))
 co_preview_selector_orig = ttk.Combobox(frame_frame_zero_set, width=10,
                                         values=preview_size_list)
 co_preview_selector_new = ttk.Combobox(frame_frame_zero_set, width=10,
-                                        values=preview_size_list)
+                                       values=preview_size_list)
 co_preview_selector_orig.configure(state='readonly')
 co_preview_selector_new.configure(state='readonly')
 co_theme_selector = ttk.Combobox(frame_frame_zero_set,
@@ -1623,8 +1623,8 @@ rb2_contrast = ttk.Radiobutton(frame_contrast, text=_("Contrast"),
 co_contrast_selection = ttk.Combobox(frame_contrast, width=2,
                                      values=contrast_selection)
 rb3_contrast = ttk.Radiobutton(frame_contrast, text=_("Normalize"),
-                                variable=img_contrast,
-                                value="3")
+                               variable=img_contrast,
+                               value="3")
 e1_contrast = ttk.Entry(frame_contrast, width=4)
 e2_contrast = ttk.Entry(frame_contrast, width=4)
 l1_contrast = ttk.Label(frame_contrast, text=_("Black"))
