@@ -11,7 +11,7 @@ import configparser
 import entries
 
 
-def ini_read(file_ini, theme_list):
+def ini_read(file_ini, theme_list, preview_size_list):
     """ Konfiguracja FotoKilofa """
 
     # słownik wyjściowy
@@ -50,6 +50,20 @@ def ini_read(file_ini, theme_list):
     except:
         theme = "default"
     dict_return['theme'] = entries.parse_list(theme, theme_list, "default")
+
+    try:
+        preview_orig = config.getint('Konfiguracja', 'preview_orig')
+    except:
+        preview_orig = 400
+    dict_return['preview_orig'] = entries.parse_list(preview_orig,
+                                                     preview_size_list, 400)
+
+    try:
+        preview_new = config.getint('Konfiguracja', 'preview_new')
+    except:
+        preview_new = 400
+    dict_return['preview_new'] = entries.parse_list(preview_new,
+                                                    preview_size_list, 400)
 
     return dict_return
 

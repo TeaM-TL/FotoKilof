@@ -649,12 +649,14 @@ def color_choose():
 def ini_read_wraper():
     """ Read config INI file """
 
-    ini_entries = ini_read.ini_read(FILE_INI, theme_list)
+    ini_entries = ini_read.ini_read(FILE_INI, theme_list, preview_size_list)
     file_in_path.set(ini_entries['file_in_path'])
     file_dir_selector.set(ini_entries['file_dir_selector'])
     work_dir.set(ini_entries['work_dir'])
     img_histograms_on.set(ini_entries['img_histograms_on'])
     co_theme_selector.current(theme_list.index(ini_entries['theme']))
+    co_preview_selector_orig.current(preview_size_list.index(ini_entries['preview_orig']))
+    co_preview_selector_new.current(preview_size_list.index(ini_entries['preview_new'])) 
 
     ini_entries = ini_read.ini_read_resize(FILE_INI)
     img_resize_on.set(ini_entries['img_resize_on'])
@@ -770,6 +772,8 @@ def ini_save():
     config.set('Konfiguracja', 'file_dir', str(file_dir_selector.get()))
     config.set('Konfiguracja', 'histograms', str(img_histograms_on.get()))
     config.set('Konfiguracja', 'theme', co_theme_selector.get())
+    config.set('Konfiguracja', 'preview_orig', co_preview_selector_orig.get())
+    config.set('Konfiguracja', 'preview_new', co_preview_selector_new.get())
     config.add_section('Resize')
     config.set('Resize', 'on', str(img_resize_on.get()))
     config.set('Resize', 'resize', str(img_resize.get()))
@@ -1850,8 +1854,6 @@ root.title("Tomasz Łuczak : FotoKilof - " + str(VERSION) + " : " +
            GM_or_IM_name + " - " + GM_or_IM_version + " : " +
            "Py - " + Python_version[0])
 if GM_or_IM is not None:
-    co_preview_selector_orig.current(preview_size_list.index(PREVIEW_ORIG))
-    co_preview_selector_new.current(preview_size_list.index(PREVIEW_NEW))
     img_text_font_list = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file
     tools_set()
