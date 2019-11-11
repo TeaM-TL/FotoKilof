@@ -98,7 +98,7 @@ def preview_new(file_out):
     # global img_histograms_on
     preview_picture = preview.preview_convert(file_out,
                                               " ",
-                                              co_preview_selector_new.get(),
+                                              int(co_preview_selector_new.get()),
                                               GM_or_IM)
     try:
         pi_preview_new.configure(file=preview_picture['filename'])
@@ -883,7 +883,7 @@ def mouse_crop_NW(event):
     y_preview = event.y
     # print("NW preview:", x_preview, y_preview)
 
-    xy_max = common.mouse_crop_calculation(file_in_path.get(), co_preview_selector_orig.get())
+    xy_max = common.mouse_crop_calculation(file_in_path.get(), int(co_preview_selector_orig.get()))
     width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
     height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
     e1_crop_1.delete(0, "end")
@@ -897,7 +897,7 @@ def mouse_crop_SE(event):
     x_preview = event.x
     y_preview = event.y
     # print("SE preview:", x_preview, y_preview)
-    xy_max = common.mouse_crop_calculation(file_in_path.get(), co_preview_selector_orig.get())
+    xy_max = common.mouse_crop_calculation(file_in_path.get(), int(co_preview_selector_orig.get()))
     width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
     height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
     e3_crop_1.delete(0, "end")
@@ -913,7 +913,7 @@ def preview_orig():
     """
     if img_crop_on.get() == 1:
         # draw crop rectangle on preview
-        xy_max = common.mouse_crop_calculation(file_in_path.get(), co_preview_selector_orig.get())
+        xy_max = common.mouse_crop_calculation(file_in_path.get(), int(co_preview_selector_orig.get()))
         if img_crop.get() == 1:
             x0 = int(e1_crop_1.get())
             y0 = int(e2_crop_1.get())
@@ -954,7 +954,7 @@ def preview_orig():
 
     preview_picture = preview.preview_convert(file_in_path.get(),
                                               command,
-                                              co_preview_selector_orig.get(),
+                                              int(co_preview_selector_orig.get()),
                                               GM_or_IM)
     try:
         pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
