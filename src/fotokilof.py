@@ -60,7 +60,7 @@ else:
     PREVIEW_NEW = 450
     PREVIEW_LOGO = 100
 
-preview_size_list = (300, 400, 450, 500, 600, 700, 800, 900, 1000)
+preview_size_list = (300, 350, 400, 450, 500, 600, 700, 800, 900, 1000)
 ##########################
 
 
@@ -506,7 +506,7 @@ def open_file():
                  (_("PNG files"), "*.PNG"),
                  (_("tiff files"), "*.tif"),
                  (_("TIFF files"), "*.TIFF"),
-                 (_("DCOM files"), "*.DCOM"),
+                 (_("DCOM files"), "*.DCM"),
                  (_("All files"), "*.*"))
     result = filedialog.askopenfilename(initialdir=directory,
                                         filetypes=filetypes,
@@ -1183,9 +1183,9 @@ cb_custom = ttk.Checkbutton(frame_zero_set, text=_("Custom"),
                             variable=img_custom_on,
                             offvalue="0", onvalue="1")
 frame_frame_zero_set = ttk.Labelframe(frame_zero_set, text=_("Layout"))
-co_preview_selector_orig = ttk.Combobox(frame_frame_zero_set, width=10,
+co_preview_selector_orig = ttk.Combobox(frame_frame_zero_set, width=4,
                                         values=preview_size_list)
-co_preview_selector_new = ttk.Combobox(frame_frame_zero_set, width=10,
+co_preview_selector_new = ttk.Combobox(frame_frame_zero_set, width=4,
                                        values=preview_size_list)
 co_preview_selector_orig.configure(state='readonly')
 co_preview_selector_new.configure(state='readonly')
@@ -1208,9 +1208,9 @@ cb_logo.pack(padx=5, pady=1, anchor=W)
 cb_custom.pack(padx=5, pady=1, anchor=W)
 frame_frame_zero_set.pack(padx=5, pady=1, anchor=W)
 co_preview_selector_orig.grid(row=1, column=1, padx=5, pady=1, sticky=W)
-co_preview_selector_new.grid(row=1, column=2, padx=5, pady=5, sticky=W)
-co_theme_selector.grid(row=2, column=1, padx=5, pady=5, sticky=W)
-b_last_set.grid(row=2, column=2, padx=5, pady=1)
+co_preview_selector_new.grid(row=2, column=1, padx=5, pady=5, sticky=W)
+co_theme_selector.grid(row=1, column=2, padx=5, pady=5, sticky=W)
+b_last_set.grid(row=2, column=2, padx=5, pady=1, sticky=E)
 ###########################
 # Przyciski
 ###########################
@@ -1563,30 +1563,6 @@ rb_rotate_180.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
 rb_rotate_270.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
 b_rotate_run.grid(row=1, column=5, padx=5, pady=5)
 
-############################
-# Black-white
-############################
-frame_bw = ttk.LabelFrame(frame_first_col, text=_("Black-white"),
-                          style="Fiolet.TLabelframe")
-frame_bw.grid(row=5, column=2, rowspan=2, sticky=(N, W, E, S), padx=5, pady=1)
-###
-rb1_bw = ttk.Radiobutton(frame_bw, text=_("Black-white"),
-                         variable=img_bw, value="1")
-rb2_bw = ttk.Radiobutton(frame_bw, text=_("Sepia"),
-                         variable=img_bw, value="2")
-e_bw_sepia = ttk.Entry(frame_bw, width=3,
-                       validate="key", validatecommand=(validation, '%S'))
-l_bw_sepia = ttk.Label(frame_bw, text="%")
-b_bw_run = ttk.Button(frame_bw, text=_("Execute"),
-                      style="Brown.TButton",
-                      command=convert_bw_button)
-
-rb2_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
-e_bw_sepia.grid(row=1, column=2, padx=5, pady=5, sticky=E)
-l_bw_sepia.grid(row=1, column=3, padx=5, pady=5, sticky=W)
-rb1_bw.grid(row=2, column=1, padx=5, pady=0, sticky=W)
-b_bw_run.grid(row=3, column=2, columnspan=2, padx=5, pady=5, sticky=E)
-
 ###########################
 # Border
 ###########################
@@ -1608,6 +1584,29 @@ e_border.grid(row=1, column=2, padx=5, pady=5)
 b_border_color.grid(row=1, column=3, padx=5, pady=5)
 b_border_run.grid(row=1, column=4, padx=5, pady=5, sticky=E)
 
+############################
+# Black-white
+############################
+frame_bw = ttk.LabelFrame(frame_first_col, text=_("Black-white"),
+                          style="Fiolet.TLabelframe")
+frame_bw.grid(row=5, column=2, rowspan=2, sticky=(N, E, S), padx=5, pady=1)
+###
+rb1_bw = ttk.Radiobutton(frame_bw, text=_("Black-white"),
+                         variable=img_bw, value="1")
+rb2_bw = ttk.Radiobutton(frame_bw, text=_("Sepia"),
+                         variable=img_bw, value="2")
+e_bw_sepia = ttk.Entry(frame_bw, width=3,
+                       validate="key", validatecommand=(validation, '%S'))
+l_bw_sepia = ttk.Label(frame_bw, text="%")
+b_bw_run = ttk.Button(frame_bw, text=_("Execute"),
+                      style="Brown.TButton",
+                      command=convert_bw_button)
+
+rb2_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
+e_bw_sepia.grid(row=1, column=2, padx=5, pady=5, sticky=E)
+l_bw_sepia.grid(row=1, column=3, padx=5, pady=5, sticky=W)
+rb1_bw.grid(row=2, column=1, padx=5, pady=0, sticky=W)
+b_bw_run.grid(row=3, column=2, columnspan=2, padx=5, pady=5, sticky=E)
 
 ########################
 # Contrast
@@ -1648,7 +1647,7 @@ b_contrast_run.grid(row=3, column=3, padx=5, pady=5, columnspan=3, sticky=E)
 ############################
 frame_normalize = ttk.LabelFrame(frame_first_col, text=_("Color normalize"),
                                  style="Fiolet.TLabelframe")
-frame_normalize.grid(row=7, column=2, sticky=(N, W, E, S), padx=5, pady=1)
+frame_normalize.grid(row=7, column=2, sticky=(N, E, S), padx=5, pady=1)
 ###
 rb1_normalize = ttk.Radiobutton(frame_normalize, text=_("Equalize"),
                                 variable=img_normalize,
@@ -1664,8 +1663,8 @@ b_normalize_run = ttk.Button(frame_normalize, text=_("Execute"),
                              command=convert_normalize_button)
 
 rb1_normalize.grid(row=1, column=1, padx=5, pady=0, sticky=W)
-l_normalize_channel.grid(row=1, column=2, padx=5, pady=4, sticky=W)
-co_normalize_channel.grid(row=1, column=3, padx=5, pady=4, sticky=W)
+l_normalize_channel.grid(row=1, column=2, padx=5, pady=4, sticky=E)
+co_normalize_channel.grid(row=1, column=3, padx=5, pady=4, sticky=E)
 rb2_normalize.grid(row=2, column=1, padx=5, pady=4, sticky=W)
 b_normalize_run.grid(row=3, column=2, columnspan=2, padx=5, pady=4, sticky=E)
 
