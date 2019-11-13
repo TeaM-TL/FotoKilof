@@ -9,21 +9,21 @@ from PIL import Image
 import common
 import magick
 
-def preview_histogram(file, gm_or_im):
+def preview_histogram(file_in, gm_or_im):
     """
     histogram generation
-    file - fullname image file
+    file_in - fullname image file
     dir_temp - fullname temporary directory
     --
     return: fullname of histogram
     """
 
-    file_histogram = common.spacja(os.path.join(tempfile.gettempdir(), "histogram.ppm"))
-    file = common.spacja(file)
+    cmd_magick = gm_or_im + "convert"
+    file_histogram = os.path.join(tempfile.gettempdir(), "histogram.ppm")
+    command = " -define histogram:unique-colors=false histogram:"
+    command = " histogram:"
 
-    command = magick.magick_command(gm_or_im + "convert") + file \
-        + " -colorspace Gray -define histogram:unique-colors=false histogram:" \
-        + file_histogram
+    magick.magick(command, file_in, file_histogram, cmd_magick)
     try:
         os.system(command)
         return file_histogram
@@ -31,31 +31,25 @@ def preview_histogram(file, gm_or_im):
         print("! Error in convert_histogram: " + command)
 
 
-def preview_convert(file, command, size, gm_or_im):
+def preview_convert(file_in, command, size, gm_or_im):
     """
     preview generation
-    file - fullname image file
+    file_in - fullname image file
     dir_temp - fullname temporary directory
     command - additional command for imagemagick or space
     --
     return: fullname preview file and size
     """
 
-    img = Image.open(file)
+    img = Image.open(file_in)
     width = str(img.size[0])
     height = str(img.size[1])
-    filesize = common.humansize(os.path.getsize(file))
+    filesize = common.humansize(os.path.getsize(file_in))
 
-    file_preview = common.spacja(os.path.join(tempfile.gettempdir(), "preview.ppm"))
-    command = magick.magick_command(gm_or_im + "convert") \
-        + common.spacja(file) \
-        + " -resize " + str(size) + "x" + str(size) \
-        + command + file_preview
-    try:
-        os.system(command)
-    except:
-        print("! Error in preview_convert: " + command)
-
+    cmd_magick = gm_or_im + "convert"
+    command = " -resize " + str(size) + "x" + str(size) + command
+    file_preview = os.path.join(tempfile.gettempdir(), "preview.ppm")
+    magick.magick(command, file_in, file_preview, cmd_magick)
     try:
         result = {'filename': file_preview, 'size': filesize, \
                 'width': width, 'height': height}

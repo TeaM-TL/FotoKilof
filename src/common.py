@@ -53,21 +53,23 @@ def mouse_crop_calculation(file, size):
 
 def spacja(sciezka):
     """ escaping space and special char in pathname """
-
-    sciezka = os.path.normpath(sciezka)
-    if mswindows.windows() == 1:
-        czy_spacja = re.search(" ", sciezka)
-        if czy_spacja is not None:
-            sciezka = '"' + sciezka + '"'
+    if len(sciezka) == 0:
+        result = sciezka
     else:
-        path = os.path.splitext(sciezka)
-        path_splitted = path[0].split('/')
-        path_escaped = []
-        for i in path_splitted:
-            path_escaped.append(re.escape(i))
-        sciezka = '/'.join(path_escaped) + path[1]
-
-    return sciezka
+        sciezka = os.path.normpath(sciezka)
+        if mswindows.windows() == 1:
+            czy_spacja = re.search(" ", sciezka)
+            if czy_spacja is not None:
+                sciezka = '"' + sciezka + '"'
+        else:
+            path = os.path.splitext(sciezka)
+            path_splitted = path[0].split('/')
+            path_escaped = []
+            for i in path_splitted:
+                path_escaped.append(re.escape(i))
+                sciezka = '/'.join(path_escaped) + path[1]
+        result = sciezka
+    return result
 
 def list_of_images(cwd):
     """

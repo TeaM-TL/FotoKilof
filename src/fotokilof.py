@@ -74,7 +74,7 @@ def no_text_in_windows():
 def print_command(cmd, cmd_magick):
     """ print command in custom window """
     t_custom.insert(END, cmd + " ")
-    # co_custom_command.current(magick_commands.index(cmd_magick))
+    co_custom_command.current(magick_commands.index(cmd_magick))
 
 
 def convert_custom_clear():
@@ -144,10 +144,9 @@ def preview_new_button():
 def extension_from_file():
     """ set extension in ComboBox same as opened file"""
     path = os.path.splitext(file_in_path.get())
-    extension = path[1]
-    extension = re.findall('[A-Z]+', extension.upper())
+    extension = path[1].upper()
     try:
-        co_apply_type.current(file_extension.index(extension[0]))
+        co_apply_type.current(file_extension.index(extension))
     except:
         print("! extension_from_file: wrong extension")
 
@@ -159,18 +158,22 @@ def apply_all_convert(out_file, write_command):
 
     cmd = ""
     text_separate = 0  # all conversion in one run
+    previous_command = 0 # if were any command before pip
 
     if img_normalize_on.get() == 1:
+        previous_command = 1
         cmd = cmd + " " + convert.convert_normalize(img_normalize.get(),
                                                     co_normalize_channel.get())
 
     if img_contrast_on.get() == 1:
+        previous_command = 1
         cmd = cmd + " " + convert.convert_contrast(img_contrast.get(),
                                                    co_contrast_selection.get(),
                                                    e1_contrast.get(),
                                                    e2_contrast.get())
 
     if img_bw_on.get() == 1:
+        previous_command = 1
         cmd = cmd + " " + convert.convert_bw(img_bw.get(), e_bw_sepia.get())
 
     if int(img_resize_on.get()) == 1:
@@ -178,56 +181,68 @@ def apply_all_convert(out_file, write_command):
             border = 0
         else:
             border = abs(int(e_border.get()))
+        previous_command = 1
         cmd = cmd + " " + convert.convert_resize(img_resize.get(),
                                                  e1_resize.get(),
                                                  e2_resize.get(),
                                                  border)
     else:
         if int(img_crop_on.get()) == 1:
+            previous_command = 1
             text_separate = 1  # if crop - convert text in second run
             cmd = cmd + " " + convert.convert_crop(img_crop.get(),
                                                    img_crop_gravity.get(),
                                                    convert_crop_entries())
 
     if img_rotate_on.get() > 0:
+        previous_command = 1
         cmd = cmd + " " + convert.convert_rotate(img_rotate.get())
 
     if img_border_on.get() == 1:
+        previous_command = 1
         border = int(e_border.get())
         cmd = cmd + " " + convert.convert_border(e_border.get(),
                                                  img_border_color.get(),
                                                  border)
 
-    cmd_magick = GM_or_IM + "mogrify"
+    cmd_magick = GM_or_IM + "convert"
     if write_command == 1:
         print_command(cmd, cmd_magick)
     cmd_text = convert.convert_text(convert_text_entries())
 
     if text_separate == 0:
         cmd = cmd + " " + cmd_text
-        result1 = magick.magick(cmd, out_file, cmd_magick)
+        result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
         result2 = None
     else:
         # because text gravity which makes problem with crop gravity
         # we have to force second run of conversion
         if write_command == 1:
             print_command(cmd, cmd_magick)
-        result1 = magick.magick(cmd, out_file, cmd_magick)
-        result2 = magick.magick(cmd_text, out_file, cmd_magick)
+        result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
+        result2 = magick.magick(cmd_text, file_in_path.get(), out_file,
+                                cmd_magick)
 
     if img_logo_on.get() == 1:
         cmd1 = convert.convert_pip(img_logo_gravity.get(),
                                    e_logo_width.get(),
                                    e_logo_height.get(),
                                    e_logo_dx.get(),
-                                   e_logo_dy.get())
-        cmd2 = " " + common.spacja(file_logo_path.get()) + " " \
-            + common.spacja(out_file)
-        cmd = cmd1 + cmd2
+                                   e_logo_dy.get()) \
+                + " " + common.spacja(file_logo_path.get()) + " " 
+        
+        if previous_command == 0:
+            cmd2 = common.spacja(file_in_path.get())
+        else:
+            cmd2 = common.spacja(out_file)
+        cmd3 = " " + common.spacja(out_file) + " "
+        cmd = cmd1 + cmd2 + cmd3
+        print("! ", cmd)
         cmd_magick = GM_or_IM + "composite"
         if write_command == 1:
             print_command(cmd, cmd_magick)
-        result3 = magick.magick(cmd, out_file, cmd_magick)
+
+        result3 = magick.magick(cmd, "", out_file, cmd_magick)
     else:
         result3 = None
 
@@ -244,7 +259,9 @@ def apply_all_button():
     pb.start()
     root.update_idletasks()
     if file_dir_selector.get() == 0:
-        out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
+        out_file = magick.pre_magick(file_in_path.get(),
+                                     work_dir.get(),
+                                     co_apply_type.get())
         result = apply_all_convert(out_file, 1)
         if result == "OK":
             preview_new(out_file)
@@ -256,7 +273,9 @@ def apply_all_button():
         pb['maximum'] = file_list_len
         pb['mode'] = "determinate"
         for file in files_list:  # glob.glob("*.[j|J][p|P][g|G]"):
-            out_file = magick.pre_magick(os.path.realpath(file), work_dir.get())
+            out_file = magick.pre_magick(os.path.realpath(file),
+                                         work_dir.get(),
+                                         co_apply_type.get())
             result = apply_all_convert(out_file, 0)
             i = i + 1
             progress_files.set(str(i) + " " + _("of") + " " \
@@ -276,10 +295,12 @@ def apply_all_button():
 
 def convert_custom_button():
     """ execute custom command """
-    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
     cmd = t_custom.get('1.0', 'end-1c')
     cmd_magick = GM_or_IM + co_custom_command.get()
-    result = magick.magick(cmd, out_file, cmd_magick)
+    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
 
@@ -287,14 +308,16 @@ def convert_custom_button():
 def convert_contrast_button():
     """ przycisk zmiany kontrastu """
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
     cmd = convert.convert_contrast(int(img_contrast.get()),
                                    co_contrast_selection.get(),
                                    e1_contrast.get(),
                                    e2_contrast.get())
-    cmd_magick = GM_or_IM + "mogrify"
+    cmd_magick = GM_or_IM + "convert"
     print_command(cmd, cmd_magick)
-    result = magick.magick(cmd, out_file, cmd_magick)
+    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
     progress_var.set(0)
@@ -302,91 +325,105 @@ def convert_contrast_button():
 
 def convert_bw_button():
     """ black-white or sepia button """
-    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
     cmd = convert.convert_bw(img_bw.get(), e_bw_sepia.get())
-    cmd_magick = GM_or_IM + "mogrify"
+    cmd_magick = GM_or_IM + "convert"
     print_command(cmd, cmd_magick)
-    result = magick.magick(cmd, out_file, cmd_magick)
+    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
 
 
 def convert_normalize_button():
     """ normalize button """
-    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
     cmd = convert.convert_normalize(img_normalize.get(),
                                     co_normalize_channel.get())
-    cmd_magick = GM_or_IM + "mogrify"
+    cmd_magick = GM_or_IM + "convert"
     print_command(cmd, cmd_magick)
-    result = magick.magick(cmd, out_file, cmd_magick)
+    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
 
 
 def convert_rotate_button():
     """ rotate button """
-    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
     cmd = convert.convert_rotate(img_rotate.get())
-    cmd_magick = GM_or_IM + "mogrify"
+    cmd_magick = GM_or_IM + "convert"
     print_command(cmd, cmd_magick)
-    result = magick.magick(cmd, out_file, cmd_magick)
+    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
 
 
 def convert_resize_button():
     """ resize button """
-    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
     cmd = convert.convert_resize(img_resize.get(),
                                  e1_resize.get(),
                                  e2_resize.get(),
                                  '0')
-    cmd_magick = GM_or_IM + "mogrify"
+    cmd_magick = GM_or_IM + "convert"
     print_command(cmd, cmd_magick)
-    result = magick.magick(cmd, out_file, cmd_magick)
+    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
 
 
 def convert_border_button():
     """ przycisk dodania ramki """
-    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
     cmd = convert.convert_border(e_border.get(),
                                  img_border_color.get(),
                                  img_border_on.get())
-    cmd_magick = GM_or_IM + "mogrify"
+    cmd_magick = GM_or_IM + "convert"
     print_command(cmd, cmd_magick)
-    result = magick.magick(cmd, out_file, cmd_magick)
+    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
 
 
 def convert_crop_button():
     """ przycisk wycinka """
-    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
     cmd = convert.convert_crop(img_crop.get(),
                                img_crop_gravity.get(),
                                convert_crop_entries())
-    cmd_magick = GM_or_IM + "mogrify"
+    cmd_magick = GM_or_IM + "convert"
     print_command(cmd, cmd_magick)
-    result = magick.magick(cmd, out_file, cmd_magick)
+    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
 
 
 def convert_logo_button():
     """ Button insert logo """
-    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
-    cmd1 = convert.convert_pip(img_logo_gravity.get(),
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
+    cmd = convert.convert_pip(img_logo_gravity.get(),
                                e_logo_width.get(),
                                e_logo_height.get(),
                                e_logo_dx.get(),
-                               e_logo_dy.get())
-    cmd2 = common.spacja(file_logo_path.get()) + " " + common.spacja(out_file)
-    cmd = cmd1 + " " + cmd2
+                               e_logo_dy.get()) \
+            + " " + common.spacja(file_logo_path.get()) \
+            + " " + common.spacja(file_in_path.get()) + " "
     cmd_magick = GM_or_IM + "composite"
     print_command(cmd, cmd_magick)
-    result = magick.magick(cmd, out_file, cmd_magick)
+    result = magick.magick(cmd, "", out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
 
@@ -427,11 +464,13 @@ def convert_text_entries():
 
 def convert_text_button():
     """ przycisk wstawiania tekstu """
-    out_file = magick.pre_magick(file_in_path.get(), work_dir.get())
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
     cmd = convert.convert_text(convert_text_entries())
-    cmd_magick = GM_or_IM + "mogrify"
+    cmd_magick = GM_or_IM + "convert"
     print_command(cmd, cmd_magick)
-    result = magick.magick(cmd, out_file, cmd_magick)
+    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
 
@@ -506,7 +545,7 @@ def open_file():
                  (_("PNG files"), "*.PNG"),
                  (_("tiff files"), "*.tif"),
                  (_("TIFF files"), "*.TIFF"),
-                 (_("DCOM files"), "*.DCM"),
+                 (_("DICOM files"), "*.DCM"),
                  (_("All files"), "*.*"))
     result = filedialog.askopenfilename(initialdir=directory,
                                         filetypes=filetypes,
@@ -1126,7 +1165,7 @@ contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
 img_custom_on = IntVar()  # Custom
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
-file_extension = ("JPG", "PNG", "TIF")
+file_extension = (".JPG", ".PNG", ".TIF")
 magick_commands = ("composite", "convert", "mogrify")
 #magick_commands = ("animate", "compare", "composite", "conjure", "convert",
 #                   "identify", "import", "mogrify", "montage", "stream")
@@ -1778,7 +1817,7 @@ rb_apply_file = ttk.Radiobutton(frame_apply, text=_("File"),
                                 variable=file_dir_selector, value="0")
 co_apply_type = ttk.Combobox(frame_apply, width=4, values=file_extension)
 co_apply_type.configure(state='readonly')
-co_apply_type.current(file_extension.index("JPG"))
+co_apply_type.current(file_extension.index(".JPG"))
 b_apply_run = ttk.Button(frame_apply, text=_("Execute all"),
                          command=apply_all_button,
                          style="Brown.TButton")

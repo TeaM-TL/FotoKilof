@@ -6,23 +6,23 @@
 import os
 import re
 import shutil
-import sys
 import tempfile
 import touch
 
 import common
 import mswindows
 
-def pre_magick(file_in, destination):
+def pre_magick(file_in, destination, extension):
     """
     file_in - original file for processing
-    destination - processing directory
+    destination - output directory
+    extension - extension of result file, for change format (jpg->png)
     file_out - fullname file for processing in destination
     """
     result = "OK"  # initial value
     if file_in is not None:
         if os.path.isfile(file_in):
-            # Zakładanie katalogu na obrazki wynikowe o ile nie ma
+            # making output diretory if not exist
             out_dir = os.path.join(os.path.dirname(file_in), destination)
             if os.path.isdir(out_dir) is False:
                 try:
@@ -36,51 +36,42 @@ def pre_magick(file_in, destination):
         result = None
 
     if result == "OK":
-        # Kopiowanie oryginału do miejsca mielenia
-        file_out = os.path.join(out_dir, os.path.basename(file_in))
-        if file_out is not None:
-            try:
-                shutil.copyfile(file_in, file_out)
-            except IOError as error:
-                print("! Error in pre_imagick: Unable to copy file. %s" % error)
-                exit(1)
-            except:
-                print("! Error in pre_imagick: Unexpected error:", sys.exc_info())
-                exit(1)
-        else:
-            file_out = None
-            print("! pre_imagemagic: No selected file")
+        # preparing output filename
+        file_in_without_ext = os.path.splitext(file_in)
+        file_out = os.path.join(out_dir, os.path.basename(file_in_without_ext[0] + extension))
     else:
         file_out = None
     return file_out
 
 
-def magick(cmd, file_out, command):
+def magick(cmd, file_in, file_out, command):
     """
     run imagemagick command.
     cmd - command for imagemagick
-    file_out - fullname picture for processing
+    file_in - fullname picture for processing
+    file_out - fullname output picture
     command: it depends:
       convert, mogrify, composite - ImageMagick
       gm convert, gm mogrify, gm composite - GraphicsMagick
     """
     result = None
     if cmd != "":
-        if file_out is not None:
-            if os.path.isfile(file_out):
-                file_out = common.spacja(file_out)
-                command = magick_command(command)
-                command = command + cmd + " " + file_out
-                # print("Excute: ", command)
-                try:
-                    os.system(command)
-                except:
-                    print("! Error in imagick: " + command)
-                    result = None
-                else:
-                    result = "OK"
+        if file_in is not None:
+#            if os.path.isfile(file_in):
+            file_in = common.spacja(file_in)
+            file_out = common.spacja(file_out)
+            command = magick_command(command)
+            command = command + " " + file_in  + " " + cmd + file_out
+            print("Execute: ", command)
+            try:
+                os.system(command)
+            except:
+                print("! Error in imagick: " + command)
+                result = None
             else:
-                print("imagick: No file for processing")
+                result = "OK"
+            #else:
+             #   print("imagick: No file for processing")
         else:
             print("imagick: No file for imagick")
             result = None
@@ -115,12 +106,9 @@ def fonts_list_get(gm_or_im):
     """ get available font list from imagemagick """
 
     fonts_list = None
-    file_font = common.spacja(os.path.join(tempfile.gettempdir(),
-                                           "fonts_list"))
-    touch.touch(file_font)
-    command = "-list font > "
-    result = magick(command, common.spacja(file_font),
-                    gm_or_im + "convert")
+    file_font = os.path.join(tempfile.gettempdir(), "fonts_list")
+    command = " -list font > "
+    result = magick(command, "", file_font, gm_or_im + "convert")
     if result is not None:
         try:
             file = open(file_font, "r")
@@ -160,7 +148,7 @@ def get_magick_version(gm_or_im):
                                               "version"))
     touch.touch(file_version)
     command = "-Version > "
-    result = magick(command, common.spacja(file_version),
+    result = magick(command, "", common.spacja(file_version),
                     gm_or_im + "convert")
     if result is not None:
         try:

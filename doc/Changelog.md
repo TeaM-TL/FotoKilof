@@ -2,7 +2,9 @@
 
 ## Current
 
-3.1 scalable preview widgets, DCOM image format, format conversion
+3.2 DCOM image format
+
+3.1 scalable preview widgets, format conversion, code standarization, speedup, bug_fix
 
 ## OLD
 3.0 Order with Contrast and Normalize, updated documentation, fixed INI reading

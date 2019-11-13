@@ -76,7 +76,7 @@ def convert_border(width, color, border_on):
             " -bordercolor \"" + color + "\""
     else:
         command = ""
-    return command
+    return command + " "
 
 
 def convert_text(entries):
@@ -94,10 +94,10 @@ def convert_text(entries):
             box = ""
         else:
             box = " -box \"" + entries['box_color'] + "\""
-        command = box + color + size + gravit + font + text
+        command = box + color + size + gravit + font + text + " "
     else:
         command = ""
-    return command
+    return command + " "
 
 
 def convert_crop(crop, gravitation, entries):
@@ -116,7 +116,7 @@ def convert_crop(crop, gravitation, entries):
         command = " -gravity " + gravity(gravitation) + " -crop " \
             + entries['three_width'] + "x" + entries['three_height'] \
             + "+" + entries['three_dx'] + "+" + entries['three_dy']
-    return command
+    return command + " "
 
 
 def convert_resize(resize, pixel, percent, border):
@@ -135,7 +135,7 @@ def convert_resize(resize, pixel, percent, border):
         image_resize = str(4096 - border) + "x" + str(3112 - border)
 
     command = "-resize " + image_resize
-    return command
+    return command + " "
 
 
 def convert_bw(black_white, sepia):
@@ -147,7 +147,7 @@ def convert_bw(black_white, sepia):
         command = "-sepia-tone " + str(int(sepia)) + "%"
     else:
         command = ""
-    return command
+    return command + " "
 
 
 def convert_contrast(contrast, contrast_selected, entry1, entry2):
@@ -174,10 +174,10 @@ def convert_contrast(contrast, contrast_selected, entry1, entry2):
         else:
             command = ""
     elif contrast == 3:
-        commad = "-normalize"
+        command = "-normalize"
     else:
         command = ""
-    return command
+    return command + " "
 
 
 def convert_normalize(normalize, channel):
@@ -192,7 +192,7 @@ def convert_normalize(normalize, channel):
         command = "-auto-level"
     else:
         command = ""
-    return command
+    return command + " "
 
 
 def convert_rotate(rotate):
@@ -202,7 +202,7 @@ def convert_rotate(rotate):
         command = "-rotate " + str(rotate)
     else:
         command = ""
-    return command
+    return command + " "
 
 
 def convert_pip(gravitation, width, height, offset_dx, offset_dy):
@@ -211,7 +211,7 @@ def convert_pip(gravitation, width, height, offset_dx, offset_dy):
     command = "-gravity " + gravity(gravitation) \
         + " -geometry " + width + "x" + height \
         + "+" + offset_dx + "+" + offset_dy
-    return command
+    return command + " "
 
 
 def gravity(gravitation):
