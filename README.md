@@ -14,11 +14,12 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - black-white or sepia,
  - contrast increase/decrease or normalize or histogram stretching,
  - color auto-level or equalize,
- - adding logo image o picture.
+ - adding logo image o picture,
+ - format conversion into JPG, PNG and TIFF.
 
 ## Functionality:
  - processing JPG, PNG and TIFF images,
- - processing copy of picture, originals are safe,
+ - processing picture in the fly, originals are safe,
  - processing single file or whole directory,
  - display selected tools,
  - tools selection,
@@ -67,3 +68,4 @@ To make life easier, package *fotokilof-windows-x64.zip* contains ImageMagick bi
  - Max von Forell - German translation,
  - Bozhidar Kirev - Bulgarian translation,
  - Afif Hendrawan - Indonesian translation.
+
