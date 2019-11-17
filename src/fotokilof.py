@@ -25,8 +25,6 @@ except:
 else:
     tkcolorpicker_not_found = False
 
-from PIL import Image
-
 # my modules
 import convert
 import common
@@ -74,7 +72,7 @@ def no_text_in_windows():
 def print_command(cmd, cmd_magick):
     """ print command in custom window """
     t_custom.insert(END, cmd + " ")
-    co_custom_command.current(magick_commands.index(cmd_magick))
+    # co_custom_command.current(magick_commands.index(cmd_magick))
 
 
 def convert_custom_clear():
@@ -95,7 +93,6 @@ def preview_clear():
 
 def preview_new(file_out):
     """ generowanie podglądu wynikowego """
-    # global img_histograms_on
     preview_picture = preview.preview_convert(file_out,
                                               " ",
                                               int(co_preview_selector_new.get()),
@@ -122,21 +119,25 @@ def preview_orig_button():
     # global file_in_path
 
     try:
-        img = Image.open(file_in_path.get())
-        img.show()
+        # img = Image.open(file_in_path.get())
+        # img.show()
+        magick.display_image(file_in_path.get(), GM_or_IM)
     except:
         print("No orig picture to preview")
 
 
 def preview_new_button():
     """ podgląd wynikowego obrazka """
-
+    
     file_show = os.path.join(os.path.dirname(file_in_path.get()),
                              work_dir.get(),
                              os.path.basename(file_in_path.get()))
+    
+    file_show = magick.pre_magick(file_in_path.get(),
+                                     work_dir.get(),
+                                     co_apply_type.get())
     try:
-        img = Image.open(file_show)
-        img.show()
+        magick.display_image(file_show, GM_or_IM)
     except:
         print("No new picture to preview")
 
@@ -213,15 +214,15 @@ def apply_all_convert(out_file, write_command):
     if text_separate == 0:
         cmd = cmd + " " + cmd_text
         result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-        result2 = None
+        result2 = "OK"
     else:
         # because text gravity which makes problem with crop gravity
         # we have to force second run of conversion
         if write_command == 1:
             print_command(cmd, cmd_magick)
         result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-        result2 = magick.magick(cmd_text, file_in_path.get(), out_file,
-                                cmd_magick)
+        cmd_magick = GM_or_IM + "mogrify"
+        result2 = magick.magick(cmd_text, "", out_file, cmd_magick)
 
     if img_logo_on.get() == 1:
         cmd1 = convert.convert_pip(img_logo_gravity.get(),
@@ -234,10 +235,8 @@ def apply_all_convert(out_file, write_command):
         if previous_command == 0:
             cmd2 = common.spacja(file_in_path.get())
         else:
-            cmd2 = common.spacja(out_file)
-        cmd3 = " " + common.spacja(out_file) + " "
-        cmd = cmd1 + cmd2 + cmd3
-        print("! ", cmd)
+            cmd2 = common.spacja(out_file) + " "
+        cmd = cmd1 + cmd2
         cmd_magick = GM_or_IM + "composite"
         if write_command == 1:
             print_command(cmd, cmd_magick)
@@ -489,9 +488,10 @@ def font_selected(event):
 
 def crop_read():
     """ Wczytanie rozmiarów z obrazka do wycinka """
-    img = Image.open(file_in_path.get())
-    width = img.size[0]
-    height = img.size[1]
+    img = magick.get_image_size(file_in_path.get(), GM_or_IM)
+    width = img[0]
+    height = img[1]
+    
     e1_crop_1.delete(0, "end")
     e1_crop_1.insert(0, "0")
     e2_crop_1.delete(0, "end")
@@ -522,31 +522,47 @@ def crop_read():
 def open_file_logo():
     """ open logo file for inserting """
     directory = os.path.dirname(file_logo_path.get())
-    filetypes = ((_("jpeg files"), "*.jpg"),
-                 (_("JPEG files"), "*.JPG"),
-                 (_("png files"), "*.png"),
-                 (_("PNG files"), "*.PNG"),
-                 (_("tiff files"), "*.tif"),
-                 (_("TIFF files"), "*.TIF"),
-                 (_("All files"), "*.*"))
-    file_logo_path.set(filedialog.askopenfilename(initialdir=directory,
-                                                  filetypes=filetypes,
-                                                  title=_("Select logo picture for inserting")))
-
-    preview_logo()
+    if mswindows.windows() == 1:
+        filetypes = ((_("JPEG files"), "*.JPG"),
+                     (_("PNG files"), "*.PNG"),
+                     (_("TIFF files"), "*.TIF"),
+                     (_("SVG files"), "*.SVG"))
+    else:
+        filetypes = ((_("jpeg files"), "*.jpg"),
+                     (_("JPEG files"), "*.JPG"),
+                     (_("png files"), "*.png"),
+                     (_("PNG files"), "*.PNG"),
+                     (_("tiff files"), "*.tif"),
+                     (_("TIFF files"), "*.TIF"),
+                     (_("svg files"), "*.svg"),
+                     (_("SVG files"), "*.SVG"))
+    result = file_logo_path.set(filedialog.askopenfilename(initialdir=directory,
+                                                           filetypes=filetypes,
+                                                           title=_("Select logo picture for inserting")))
+    if result:
+        preview_logo()
 
 
 def open_file():
     """ open image for processing """
     directory = os.path.dirname(file_in_path.get())
-    filetypes = ((_("jpeg files"), "*.jpg"),
-                 (_("JPEG files"), "*.JPG"),
-                 (_("png files"), "*.png"),
-                 (_("PNG files"), "*.PNG"),
-                 (_("tiff files"), "*.tif"),
-                 (_("TIFF files"), "*.TIFF"),
-                 (_("DICOM files"), "*.DCM"),
-                 (_("All files"), "*.*"))
+    
+    if mswindows.windows() == 1:
+        filetypes = ((_("JPEG files"), "*.JPG"),
+                     (_("PNG files"), "*.PNG"),
+                     (_("TIFF files"), "*.TIF"),
+                     (_("SVG files"), "*.SVG"),
+                     (_("All files"), "*.*"))
+    else:
+        filetypes = ((_("jpeg files"), "*.jpg"),
+                     (_("JPEG files"), "*.JPG"),
+                     (_("png files"), "*.png"),
+                     (_("PNG files"), "*.PNG"),
+                     (_("tiff files"), "*.tif"),
+                     (_("TIFF files"), "*.TIF"),
+                     (_("svg files"), "*.svg"),
+                     (_("SVG files"), "*.SVG"),
+                     (_("All files"), "*.*"))
     result = filedialog.askopenfilename(initialdir=directory,
                                         filetypes=filetypes,
                                         title=_("Select picture for processing"))
@@ -922,7 +938,9 @@ def mouse_crop_NW(event):
     y_preview = event.y
     # print("NW preview:", x_preview, y_preview)
 
-    xy_max = common.mouse_crop_calculation(file_in_path.get(), int(co_preview_selector_orig.get()))
+    xy_max = common.mouse_crop_calculation(file_in_path.get(),
+                                           int(co_preview_selector_orig.get()),
+                                           GM_or_IM)
     width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
     height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
     e1_crop_1.delete(0, "end")
@@ -936,7 +954,9 @@ def mouse_crop_SE(event):
     x_preview = event.x
     y_preview = event.y
     # print("SE preview:", x_preview, y_preview)
-    xy_max = common.mouse_crop_calculation(file_in_path.get(), int(co_preview_selector_orig.get()))
+    xy_max = common.mouse_crop_calculation(file_in_path.get(),
+                                           int(co_preview_selector_orig.get()),
+                                           GM_or_IM)
     width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
     height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
     e3_crop_1.delete(0, "end")
@@ -952,7 +972,9 @@ def preview_orig():
     """
     if img_crop_on.get() == 1:
         # draw crop rectangle on preview
-        xy_max = common.mouse_crop_calculation(file_in_path.get(), int(co_preview_selector_orig.get()))
+        xy_max = common.mouse_crop_calculation(file_in_path.get(),
+                                               int(co_preview_selector_orig.get()),
+                                           GM_or_IM)
         if img_crop.get() == 1:
             x0 = int(e1_crop_1.get())
             y0 = int(e2_crop_1.get())
@@ -1166,7 +1188,7 @@ img_custom_on = IntVar()  # Custom
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
 file_extension = (".JPG", ".PNG", ".TIF")
-magick_commands = ("composite", "convert", "mogrify")
+magick_commands = ("composite", "convert")
 #magick_commands = ("animate", "compare", "composite", "conjure", "convert",
 #                   "identify", "import", "mogrify", "montage", "stream")
 
@@ -1718,7 +1740,7 @@ frame_custom.grid(row=10, column=1, columnspan=2,
 l_custom_command = ttk.Label(frame_custom, text=_("Command:"))
 co_custom_command = ttk.Combobox(frame_custom, width=9,
                                  values=magick_commands)
-co_custom_command.current(2)
+co_custom_command.current(1)
 co_custom_command.configure(state='readonly')
 b_custom_clear = ttk.Button(frame_custom, text=_("Clear"),
                             command=convert_custom_clear)
@@ -1727,12 +1749,12 @@ b_custom_run = ttk.Button(frame_custom, text=_("Execute"),
                           command=convert_custom_button)
 
 t_custom = ScrolledText(frame_custom, state=NORMAL,
-                        height=5, width=0,
+                        height=5, width=45,
                         wrap='word', undo=True)
 
 t_custom.grid(row=1, column=1, columnspan=4, padx=5, pady=5, sticky=(W, E))
-l_custom_command.grid(row=2, column=1, padx=5, pady=5, sticky=E)
-co_custom_command.grid(row=2, column=2, padx=5, pady=5, sticky=W)
+# l_custom_command.grid(row=2, column=1, padx=5, pady=5, sticky=E)
+# co_custom_command.grid(row=2, column=2, padx=5, pady=5, sticky=W)
 b_custom_clear.grid(row=2, column=3, padx=5, pady=5, sticky=E)
 b_custom_run.grid(row=2, column=4, padx=5, pady=5, sticky=E)
 

@@ -12,6 +12,7 @@ import touch
 import common
 import mswindows
 
+
 def pre_magick(file_in, destination, extension):
     """
     file_in - original file for processing
@@ -62,7 +63,7 @@ def magick(cmd, file_in, file_out, command):
             file_out = common.spacja(file_out)
             command = magick_command(command)
             command = command + " " + file_in  + " " + cmd + file_out
-            print("Execute: ", command)
+            # print("Execute: ", command)
             try:
                 os.system(command)
             except:
@@ -70,8 +71,6 @@ def magick(cmd, file_in, file_out, command):
                 result = None
             else:
                 result = "OK"
-            #else:
-             #   print("imagick: No file for processing")
         else:
             print("imagick: No file for imagick")
             result = None
@@ -168,7 +167,6 @@ def get_magick_version(gm_or_im):
     return version
 
 
-
 def check_magick():
     """
     What is available: ImageMagick, Graphick Magick or none
@@ -205,12 +203,18 @@ def check_imagemagick(suffix):
     else:
         result2 = None
 
-    if shutil.which('convert' + suffix):
+    if shutil.which('compose' + suffix):
         result3 = "OK"
     else:
         result3 = None
 
-    if result1 is not None and result2 is not None and result3 is not None:
+    if shutil.which('identify' + suffix):
+        result4 = "OK"
+    else:
+        result4 = None
+
+    if result1 is not None and result2 is not None \
+       and result3 is not None and result4 is not None:
         result = "OK"
     else:
         result = None
@@ -227,5 +231,60 @@ def check_graphicsmagick(suffix):
 
     return result
 
+
+def get_image_size(file_in, gm_or_im):
+    """
+    identify width and height of picture
+    input: file name
+    output: width and height
+    """
+
+    width = 0
+    height = 0
+    file_info_size = common.spacja(os.path.join(tempfile.gettempdir(),
+                                                "image_size"))
+    touch.touch(file_info_size)
+    command = ' -format "%[fx:w]\\n%[fx:h]" ' + common.spacja(file_in) + ' > '
+    result = magick(command, "", common.spacja(file_info_size),
+                    gm_or_im + "identify")
+    if result is not None:
+        try:
+            file = open(file_info_size, "r")
+        except:
+            print("!get_image_size: cannot read file_info_size")
+        else:
+            width = int(file.readline())
+            height = int(file.readline())
+            file.close()
+            try:
+                os.remove(file_version)
+            except:
+                print("!get_image_size: cannot remove file_info_size")
+    # print("identify: ", width, height)
+    return (width, height)
+
+
+def display_image(file_in, gm_or_im):
+    """ display image """
+    file_in = common.spacja(file_in)
+    if mswindows.windows() == 1:
+        display = "IMDisplay"
+        ampersand = ''
+    else:
+        display = "display"
+        ampersand = ' &'
+
+    command = magick_command(gm_or_im + display)
+    command = command + " " + file_in + ampersand
+    # print("Execute: ", command)
+    try:
+        os.system(command)
+    except:
+        print("! Error in imagick: " + command)
+        result = None
+    else:
+        result = "OK"
+
+    return result
 
 # EOF

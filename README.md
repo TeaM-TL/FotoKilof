@@ -15,7 +15,8 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - contrast increase/decrease or normalize or histogram stretching,
  - color auto-level or equalize,
  - adding logo image o picture,
- - format conversion into JPG, PNG and TIFF.
+ - file formats: JPG, PNG, TIFF, SVG
+ - format conversion into JPG, PNG, TIFF.
 
 ## Functionality:
  - processing JPG, PNG and TIFF images,

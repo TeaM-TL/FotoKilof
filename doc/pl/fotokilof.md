@@ -20,7 +20,8 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
  - dodanie własnego logo do obrazka.
 
 ### Funkcje
- - przetwarzanie obrazków w formatach JPG, PNG i TIFF,
+ - przetwarzanie obrazków w formatach: JPG, PNG, TIFF, SVG,
+ - przetwarzanie obrazków do formatów JPG, PNG i TIFF,
  - przetwarzanie tylko kopii obrazków, oryginały są bezpieczne,
  - przetwarzanie jednego pliku jak i całego katalogu,
  - wyświetlanie tylko aktywnych narzędzi,
@@ -193,7 +194,7 @@ Python3 i moduły:
     - configparser,
     - datetime,
     - pathlib,
-    - Pillow (zawiera tkcolorpicker),
+    - tkcolorpicker (bez niego też działa),
     - touch,
  - via pakiety
      - tkinter,

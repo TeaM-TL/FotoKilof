@@ -6,8 +6,8 @@
 import fnmatch
 import os
 import re
-from PIL import Image
 
+import magick
 import mswindows
 
 
@@ -23,12 +23,12 @@ def humansize(nbytes):
     return '%s %s' % (value, suffixes[i])
 
 
-def mouse_crop_calculation(file, size):
+def mouse_crop_calculation(file_in, size, gm_or_im):
     """ przeliczenie pikseli podglądu  na piksele oryginału """
     # global file_in_path
-    img = Image.open(file)
-    x_orig = img.size[0]
-    y_orig = img.size[1]
+    image_size = magick.get_image_size(file_in, gm_or_im)
+    x_orig = image_size[0]
+    y_orig = image_size[1]
 
     # x_max, y_max - wymiary podglądu, znamy max czyli PREVIEW
     if x_orig > y_orig:
@@ -51,25 +51,26 @@ def mouse_crop_calculation(file, size):
     return dict_return
 
 
-def spacja(sciezka):
+def spacja(file_path):
     """ escaping space and special char in pathname """
-    if len(sciezka) == 0:
-        result = sciezka
+    if len(file_path) == 0:
+        result = file_path
     else:
-        sciezka = os.path.normpath(sciezka)
+        file_path = os.path.normpath(file_path)
         if mswindows.windows() == 1:
-            czy_spacja = re.search(" ", sciezka)
+            czy_spacja = re.search(" ", file_path)
             if czy_spacja is not None:
-                sciezka = '"' + sciezka + '"'
+                file_path = '"' + file_path + '"'
         else:
-            path = os.path.splitext(sciezka)
+            path = os.path.splitext(file_path)
             path_splitted = path[0].split('/')
             path_escaped = []
             for i in path_splitted:
                 path_escaped.append(re.escape(i))
-                sciezka = '/'.join(path_escaped) + path[1]
-        result = sciezka
+                file_path = '/'.join(path_escaped) + path[1]
+        result = file_path
     return result
+
 
 def list_of_images(cwd):
     """

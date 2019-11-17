@@ -4,7 +4,7 @@
 
 3.2 DCOM image format
 
-3.1 scalable preview widgets, format conversion, code standarization, speedup, bug_fix
+3.1 scalable preview widgets, format conversion, code standarization, speedup, bug_fix, no Pillow required
 
 ## OLD
 3.0 Order with Contrast and Normalize, updated documentation, fixed INI reading

@@ -4,7 +4,6 @@
 
 import os
 import tempfile
-from PIL import Image
 
 import common
 import magick
@@ -41,9 +40,9 @@ def preview_convert(file_in, command, size, gm_or_im):
     return: fullname preview file and size
     """
 
-    img = Image.open(file_in)
-    width = str(img.size[0])
-    height = str(img.size[1])
+    image_size = magick.get_image_size(file_in, gm_or_im)
+    width = str(image_size[0])
+    height = str(image_size[1])
     filesize = common.humansize(os.path.getsize(file_in))
 
     cmd_magick = gm_or_im + "convert"

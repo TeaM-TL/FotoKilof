@@ -21,7 +21,8 @@ GUI for the common used ImageMagick functionality for processing pictures.
  - adding logo image o picture.
 
 ## Functionality:
- - processing JPG, PNG and TIFF images,
+ - processing JPG, PNG, TIFF and SVG images,
+ - conversion into JPG, PNG and TIFF format,
  - processing copy of picture, originals are safe,
  - processing single file or whole directory,
  - display selected tools,
@@ -149,7 +150,7 @@ Python3 and modules:
     - configparser,
     - datetime,
     - pathlib,
-    - Pillow (contains tkcolorpicker),
+    - tkcolorpicker (not mandatory to work),
     - touch,
  - via packets:
      - tkinter,
