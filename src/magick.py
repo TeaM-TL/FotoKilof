@@ -143,6 +143,9 @@ def get_magick_version(gm_or_im):
     """ get version of *Magick """
 
     version = ""
+    if gm_or_im == None:
+        gm_or_im = ""
+        
     file_version = common.spacja(os.path.join(tempfile.gettempdir(),
                                               "version"))
     touch.touch(file_version)
