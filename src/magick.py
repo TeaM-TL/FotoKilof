@@ -104,7 +104,7 @@ def fonts_list_get(gm_or_im):
     """ get available font list from imagemagick """
 
     fonts_list = None
-    file_font = os.path.join(tempfile.gettempdir(), ".fotokilof_fonts_list")
+    file_font = os.path.join(tempfile.gettempdir(), "fotokilof_fonts_list")
     command = " -list font > "
     result = magick(command, "", file_font, gm_or_im + "convert")
     if result is not None:
@@ -146,7 +146,7 @@ def get_magick_version(gm_or_im):
         gm_or_im = ""
 
     file_version = common.spacja(os.path.join(tempfile.gettempdir(),
-                                              ".fotokilof_version"))
+                                              "fotokilof_version"))
     #touch.touch(file_version)
     command = "-Version > "
     result = magick(command, "", common.spacja(file_version),
@@ -235,7 +235,7 @@ def get_image_size(file_in, gm_or_im):
     width = 1
     height = 1
     size = ""
-    file_info = common.spacja(os.path.join(tempfile.gettempdir(), ".fotokilof_image_info"))
+    file_info = common.spacja(os.path.join(tempfile.gettempdir(), "fotokilof_image_info"))
     touch.touch(file_info)
     command = ' -format "%w\\n%h\\n%b" '
     command = command + common.spacja(file_in) + ' > '
