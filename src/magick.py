@@ -58,12 +58,11 @@ def magick(cmd, file_in, file_out, command):
     result = None
     if cmd != "":
         if file_in is not None:
-#            if os.path.isfile(file_in):
             file_in = common.spacja(file_in)
             file_out = common.spacja(file_out)
             command = magick_command(command)
             command = command + " " + file_in  + " " + cmd + file_out
-            # print("Execute: ", command)
+            print("Execute: ", command)
             try:
                 os.system(command)
             except:
@@ -105,7 +104,7 @@ def fonts_list_get(gm_or_im):
     """ get available font list from imagemagick """
 
     fonts_list = None
-    file_font = os.path.join(tempfile.gettempdir(), "fonts_list")
+    file_font = os.path.join(tempfile.gettempdir(), ".fotokilof_fonts_list")
     command = " -list font > "
     result = magick(command, "", file_font, gm_or_im + "convert")
     if result is not None:
@@ -147,8 +146,8 @@ def get_magick_version(gm_or_im):
         gm_or_im = ""
 
     file_version = common.spacja(os.path.join(tempfile.gettempdir(),
-                                              "version"))
-    touch.touch(file_version)
+                                              ".fotokilof_version"))
+    #touch.touch(file_version)
     command = "-Version > "
     result = magick(command, "", common.spacja(file_version),
                     gm_or_im + "convert")
@@ -197,29 +196,21 @@ def check_magick():
 def check_imagemagick(suffix):
     """ Check if ImageMmagick is avaialble"""
     if shutil.which('convert' + suffix):
-        result1 = "OK"
-    else:
-        result1 = None
-
-    if shutil.which('mogrify' + suffix):
-        result2 = "OK"
-    else:
-        result2 = None
-
-    if shutil.which('compose' + suffix):
-        result3 = "OK"
-    else:
-        result3 = None
-
-    if shutil.which('identify' + suffix):
-        result4 = "OK"
-    else:
-        result4 = None
-
-    if result1 is not None and result2 is not None and result3 is not None and result4 is not None:
         result = "OK"
+        if shutil.which('mogrify' + suffix):
+            result = "OK"
+            if shutil.which('composite' + suffix):
+                result = "OK"
+                if shutil.which('identify' + suffix):
+                    result = "OK"
+                else:
+                    result = None
+            else:
+                result = None
+        else:
+            result = None
     else:
-        result = None
+        result = None  
 
     return result
 
@@ -244,16 +235,9 @@ def get_image_size(file_in, gm_or_im):
     width = 1
     height = 1
     size = ""
-    profiles = ""
-    bit_depth = ""
-    colors = ""
-    colorspace = ""
-    compression = ""
-    basename = ""
-    file_info = common.spacja(os.path.join(tempfile.gettempdir(), "image_info"))
+    file_info = common.spacja(os.path.join(tempfile.gettempdir(), ".fotokilof_image_info"))
     touch.touch(file_info)
-    # without n%[profiles] - not available in IM < 7.0
-    command = ' -format "%[width]\\n%[height]\\n%[size]\\n%[bit-depth]\\n%[colors]\\n%[colorspace]\\n%[compression]\\n%[basename]" '
+    command = ' -format "%w\\n%h\\n%b" '
     command = command + common.spacja(file_in) + ' > '
     result = magick(command, "", file_info, gm_or_im + "identify")
     if result is not None:
@@ -265,19 +249,12 @@ def get_image_size(file_in, gm_or_im):
             width = int(file.readline())
             height = int(file.readline())
             size = file.readline()
-            bit_depth = file.readline()
-            colors = file.readline()
-            colorspace = file.readline()
-            compression = file.readline()
-            basename = file.readline()
-            # profiles = file.readline()
             file.close()
             try:
                 os.remove(file_info)
             except:
-                print("!get_image_size: cannot remove file_info")
-    print("identify: ", basename, "\n", width, "x", height, "\n", size, "\n",
-          profiles, bit_depth, colors, colorspace, compression)
+                print("!get_image_size: cannot remove image_info")
+    print("identify: ", width, "x", height, "-", size)
     return (width, height, size)
 
 
@@ -285,15 +262,15 @@ def display_image(file_in, gm_or_im):
     """ display image """
     file_in = common.spacja(file_in)
     if mswindows.windows() == 1:
-        display = "IMDisplay"
+        display = 'explorer'  # this is the best idea for Windows
         ampersand = ''
     else:
-        display = "display"
+        display = gm_or_im + "display"
         ampersand = ' &'
 
-    command = magick_command(gm_or_im + display)
+    command = magick_command(display)
     command = command + " " + file_in + ampersand
-    # print("Execute: ", command)
+    print("Execute: ", command)
     try:
         os.system(command)
     except:

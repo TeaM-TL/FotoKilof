@@ -39,17 +39,17 @@ def preview_convert(file_in, command, size, gm_or_im):
     --
     return: fullname preview file and size
     """
-
-    image_size = magick.get_image_size(file_in, gm_or_im)
-    width = str(image_size[0])
-    height = str(image_size[1])
-    filesize = common.humansize(os.path.getsize(file_in))
-
-    cmd_magick = gm_or_im + "convert"
-    command = " -resize " + str(size) + "x" + str(size) + command
-    file_preview = os.path.join(tempfile.gettempdir(), "preview.ppm")
-    magick.magick(command, file_in, file_preview, cmd_magick)
     try:
+        image_size = magick.get_image_size(file_in, gm_or_im)
+        width = str(image_size[0])
+        height = str(image_size[1])
+        filesize = common.humansize(os.path.getsize(file_in))
+
+        cmd_magick = gm_or_im + "convert"
+        command = " -resize " + str(size) + "x" + str(size) + command
+        file_preview = os.path.join(tempfile.gettempdir(), "preview.ppm")
+        magick.magick(command, file_in, file_preview, cmd_magick)
+
         result = {'filename': file_preview, 'size': filesize, \
                 'width': width, 'height': height}
     except:

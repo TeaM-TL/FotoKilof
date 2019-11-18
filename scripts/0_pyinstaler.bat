@@ -9,3 +9,4 @@ SET ONEFILE=--onefile
 SET ONEFILE=
 pyinstaller --clean --console %ONEFILE% %UPX% src\fotokilof.py
 pause
+cd scripts
