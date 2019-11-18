@@ -18,6 +18,21 @@ ONEFILE=""
 ZIPFILE=$NAME-$VER-$OS-$OSVER.zip
 EXCLUDE="-x locale/*/*/*.po -x locale/fotokilof.pot -x doc/*/*md"
 
+echo "= Locale ========================="
+cd ../src/locale/
+for i in ??; do
+    echo $i
+    cd $i/LC_MESSAGES
+    if [ -e $NAME.po ]; then
+        msgfmt $NAME.po -o $NAME.mo
+        ls $NAME*
+    fi
+    cd ../../
+done
+
+cd $CWD
+
+
 
 echo "= PyInstaller ===================="
 cd ..
@@ -36,9 +51,9 @@ pyinstaller --clean $ONEFILE $UPX src/fotokilof.py
 rm -rf build
 cd $CWD
 
+echo "= Packing ===================="
 cd ../$DIST
 if [ -d $NAME ]; then
-    echo "= Packing ===================="
     echo "ZIPFILE: " $ZIPFILE
     echo "Exclude: " $EXCLUDE
     
@@ -66,3 +81,4 @@ fi
 cd $CWD
 
 # EOF
+
