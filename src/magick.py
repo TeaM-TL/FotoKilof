@@ -145,7 +145,7 @@ def get_magick_version(gm_or_im):
     version = ""
     if gm_or_im == None:
         gm_or_im = ""
-        
+
     file_version = common.spacja(os.path.join(tempfile.gettempdir(),
                                               "version"))
     touch.touch(file_version)
@@ -241,29 +241,44 @@ def get_image_size(file_in, gm_or_im):
     output: width and height
     """
 
-    width = 0
-    height = 0
-    file_info_size = common.spacja(os.path.join(tempfile.gettempdir(),
-                                                "image_size"))
-    touch.touch(file_info_size)
-    command = ' -format "%[fx:w]\\n%[fx:h]" ' + common.spacja(file_in) + ' > '
-    result = magick(command, "", common.spacja(file_info_size),
-                    gm_or_im + "identify")
+    width = 1
+    height = 1
+    size = ""
+    profiles = ""
+    bit_depth = ""
+    colors = ""
+    colorspace = ""
+    compression = ""
+    basename = ""
+    file_info = common.spacja(os.path.join(tempfile.gettempdir(), "image_info"))
+    touch.touch(file_info)
+    # without n%[profiles] - not available in IM < 7.0
+    command = ' -format "%[width]\\n%[height]\\n%[size]\\n%[bit-depth]\\n%[colors]\\n%[colorspace]\\n%[compression]\\n%[basename]" '
+    command = command + common.spacja(file_in) + ' > '
+    result = magick(command, "", file_info, gm_or_im + "identify")
     if result is not None:
         try:
-            file = open(file_info_size, "r")
+            file = open(file_info, "r")
         except:
-            print("!get_image_size: cannot read file_info_size")
+            print("!get_image_size: cannot read file_info")
         else:
             width = int(file.readline())
             height = int(file.readline())
+            size = file.readline()
+            bit_depth = file.readline()
+            colors = file.readline()
+            colorspace = file.readline()
+            compression = file.readline()
+            basename = file.readline()
+            # profiles = file.readline()
             file.close()
             try:
-                os.remove(file_version)
+                os.remove(file_info)
             except:
-                print("!get_image_size: cannot remove file_info_size")
-    # print("identify: ", width, height)
-    return (width, height)
+                print("!get_image_size: cannot remove file_info")
+    print("identify: ", basename, "\n", width, "x", height, "\n", size, "\n",
+          profiles, bit_depth, colors, colorspace, compression)
+    return (width, height, size)
 
 
 def display_image(file_in, gm_or_im):
