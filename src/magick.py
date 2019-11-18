@@ -216,8 +216,7 @@ def check_imagemagick(suffix):
     else:
         result4 = None
 
-    if result1 is not None and result2 is not None \
-       and result3 is not None and result4 is not None:
+    if result1 is not None and result2 is not None and result3 is not None and result4 is not None:
         result = "OK"
     else:
         result = None
