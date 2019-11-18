@@ -255,44 +255,47 @@ def apply_all_convert(out_file, write_command):
 
 def apply_all_button():
     """ all option together, processing one file or whole directory """
-    progress_files.set(_("Processing"))
-    pb.start()
-    root.update_idletasks()
-    if file_dir_selector.get() == 0:
-        out_file = magick.pre_magick(file_in_path.get(),
-                                     work_dir.get(),
-                                     co_apply_type.get())
-        result = apply_all_convert(out_file, 1)
-        if result == "OK":
-            preview_new(out_file)
-    else:
-        dirname = os.path.dirname(file_in_path.get())
-        i = 0
-        files_list = glob.glob(os.path.join(dirname, "*.[j|J][p|P][g|G]"))
-        file_list_len = len(files_list)
-        pb['maximum'] = file_list_len
-        pb['mode'] = "determinate"
-        for file_in in files_list:  # glob.glob("*.[j|J][p|P][g|G]"):
-            out_file = magick.pre_magick(os.path.realpath(file_in),
+    if os.path.isfile(file_in_path.get()):
+        progress_files.set(_("Processing"))
+        pb.start()
+        root.update_idletasks()
+        if file_dir_selector.get() == 0:
+            out_file = magick.pre_magick(file_in_path.get(),
                                          work_dir.get(),
                                          co_apply_type.get())
-            result = apply_all_convert(out_file, 0)
-            i = i + 1
-            progress_files.set(str(i) + " " + _("of") + " " \
-                               + str(file_list_len) + " : " \
-                               + os.path.basename(file_in))
-            progress_var.set(i)
-            root.update_idletasks()
-        file_in_path.set(os.path.realpath(file_in))
-        preview_orig()
-        if result == "OK":
-            preview_new(out_file)
+            result = apply_all_convert(out_file, 1)
+            if result == "OK":
+                preview_new(out_file)
+        else:
+            dirname = os.path.dirname(file_in_path.get())
+            i = 0
+            files_list = glob.glob(os.path.join(dirname, "*.[j|J][p|P][g|G]"))
+            file_list_len = len(files_list)
+            pb['maximum'] = file_list_len
+            pb['mode'] = "determinate"
+            for file_in in files_list:
+                file_in_path.set(os.path.realpath(file_in))
+                out_file = magick.pre_magick(os.path.realpath(file_in),
+                                             work_dir.get(),
+                                             co_apply_type.get())
+                result = apply_all_convert(out_file, 0)
+                i = i + 1
+                progress_files.set(str(i) + " " + _("of") + " " \
+                                   + str(file_list_len) + " : " \
+                                   + os.path.basename(file_in))
+                progress_var.set(i)
+                root.update_idletasks()
+        
+            preview_orig()
+            if result == "OK":
+                preview_new(out_file)
 
-    progress_var.set(0)
-    progress_files.set(_("done"))
-    pb.stop()
-    root.update_idletasks()
-
+        progress_var.set(0)
+        progress_files.set(_("done"))
+        pb.stop()
+        root.update_idletasks()
+    else:
+        print("No file selected")
 
 def convert_custom_button():
     """ execute custom command """
