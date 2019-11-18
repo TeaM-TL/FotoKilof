@@ -62,7 +62,7 @@ def magick(cmd, file_in, file_out, command):
             file_out = common.spacja(file_out)
             command = magick_command(command)
             command = command + " " + file_in  + " " + cmd + file_out
-            print("Execute: ", command)
+            # print("Execute: ", command)
             try:
                 os.system(command)
             except:
@@ -210,7 +210,7 @@ def check_imagemagick(suffix):
         else:
             result = None
     else:
-        result = None  
+        result = None
 
     return result
 
@@ -254,7 +254,7 @@ def get_image_size(file_in, gm_or_im):
                 os.remove(file_info)
             except:
                 print("!get_image_size: cannot remove image_info")
-    print("identify: ", width, "x", height, "-", size)
+    # print("identify: ", width, "x", height, "-", size)
     return (width, height, size)
 
 
@@ -270,7 +270,7 @@ def display_image(file_in, gm_or_im):
 
     command = magick_command(display)
     command = command + " " + file_in + ampersand
-    print("Execute: ", command)
+    # print("Execute: ", command)
     try:
         os.system(command)
     except:

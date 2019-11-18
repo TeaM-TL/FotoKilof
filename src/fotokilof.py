@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=line-too-long
+# pylint: disable=invalid-name
 
 """ nice GUI for ImageMagick command common used (by me)  """
 
@@ -128,14 +129,14 @@ def preview_orig_button():
 
 def preview_new_button():
     """ podgląd wynikowego obrazka """
-    
+
     file_show = os.path.join(os.path.dirname(file_in_path.get()),
                              work_dir.get(),
                              os.path.basename(file_in_path.get()))
-    
+
     file_show = magick.pre_magick(file_in_path.get(),
-                                     work_dir.get(),
-                                     co_apply_type.get())
+                                  work_dir.get(),
+                                  co_apply_type.get())
     try:
         magick.display_image(file_show, GM_or_IM)
     except:
@@ -230,8 +231,8 @@ def apply_all_convert(out_file, write_command):
                                    e_logo_height.get(),
                                    e_logo_dx.get(),
                                    e_logo_dy.get()) \
-                + " " + common.spacja(file_logo_path.get()) + " " 
-        
+                + " " + common.spacja(file_logo_path.get()) + " "
+
         if previous_command == 0:
             cmd2 = common.spacja(file_in_path.get())
         else:
@@ -271,17 +272,18 @@ def apply_all_button():
         file_list_len = len(files_list)
         pb['maximum'] = file_list_len
         pb['mode'] = "determinate"
-        for file in files_list:  # glob.glob("*.[j|J][p|P][g|G]"):
-            out_file = magick.pre_magick(os.path.realpath(file),
+        for file_in in files_list:  # glob.glob("*.[j|J][p|P][g|G]"):
+            out_file = magick.pre_magick(os.path.realpath(file_in),
                                          work_dir.get(),
                                          co_apply_type.get())
             result = apply_all_convert(out_file, 0)
             i = i + 1
             progress_files.set(str(i) + " " + _("of") + " " \
                                + str(file_list_len) + " : " \
-                               + os.path.basename(file))
+                               + os.path.basename(file_in))
             progress_var.set(i)
             root.update_idletasks()
+        file_in_path.set(os.path.realpath(file_in))
         preview_orig()
         if result == "OK":
             preview_new(out_file)
@@ -414,12 +416,12 @@ def convert_logo_button():
                                  work_dir.get(),
                                  co_apply_type.get())
     cmd = convert.convert_pip(img_logo_gravity.get(),
-                               e_logo_width.get(),
-                               e_logo_height.get(),
-                               e_logo_dx.get(),
-                               e_logo_dy.get()) \
-            + " " + common.spacja(file_logo_path.get()) \
-            + " " + common.spacja(file_in_path.get()) + " "
+                              e_logo_width.get(),
+                              e_logo_height.get(),
+                              e_logo_dx.get(),
+                              e_logo_dy.get()) \
+          + " " + common.spacja(file_logo_path.get()) \
+          + " " + common.spacja(file_in_path.get()) + " "
     cmd_magick = GM_or_IM + "composite"
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, "", out_file, cmd_magick)
@@ -491,7 +493,7 @@ def crop_read():
     img = magick.get_image_size(file_in_path.get(), GM_or_IM)
     width = img[0]
     height = img[1]
-    
+
     e1_crop_1.delete(0, "end")
     e1_crop_1.insert(0, "0")
     e2_crop_1.delete(0, "end")
@@ -536,17 +538,19 @@ def open_file_logo():
                      (_("TIFF files"), "*.TIF"),
                      (_("svg files"), "*.svg"),
                      (_("SVG files"), "*.SVG"))
-    result = file_logo_path.set(filedialog.askopenfilename(initialdir=directory,
-                                                           filetypes=filetypes,
-                                                           title=_("Select logo picture for inserting")))
-    if result:
+    file_logo_path.set(filedialog.askopenfilename(initialdir=directory,
+                                                  filetypes=filetypes,
+                                                  title=_("Select logo picture for inserting")))
+    if os.path.isfile(file_logo_path.get()):
         preview_logo()
+    else:
+        preview_logo_clear()
 
 
 def open_file():
     """ open image for processing """
     directory = os.path.dirname(file_in_path.get())
-    
+
     if mswindows.windows() == 1:
         filetypes = ((_("JPEG files"), "*.JPG"),
                      (_("PNG files"), "*.PNG"),
@@ -974,19 +978,19 @@ def preview_orig():
         # draw crop rectangle on preview
         xy_max = common.mouse_crop_calculation(file_in_path.get(),
                                                int(co_preview_selector_orig.get()),
-                                           GM_or_IM)
+                                               GM_or_IM)
         if img_crop.get() == 1:
             x0 = int(e1_crop_1.get())
             y0 = int(e2_crop_1.get())
             x1 = int(e3_crop_1.get())
             y1 = int(e4_crop_1.get())
-            do_nothing = 0
+            # do_nothing = 0
         elif img_crop.get() == 2:
             x0 = int(e1_crop_2.get())
             y0 = int(e2_crop_2.get())
             x1 = x0 + int(e3_crop_2.get())
             y1 = y0 + int(e4_crop_2.get())
-            do_nothing = 0
+            # do_nothing = 0
         elif img_crop.get() == 3:
             coord_for_crop = (int(e1_crop_3.get()), int(e2_crop_3.get()),
                               int(e3_crop_3.get()), int(e4_crop_3.get()),
@@ -998,7 +1002,7 @@ def preview_orig():
             y0 = coord[1]
             x1 = coord[2]
             y1 = coord[3]
-            do_nothing = 0
+            # do_nothing = 0
 
         ratio_X = xy_max['x_max'] / xy_max['x_orig']
         ratio_Y = xy_max['y_max'] / xy_max['y_orig']
@@ -1032,27 +1036,29 @@ def preview_orig():
 
     if img_histograms_on.get() == 1:
         pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
-        #try:
-        #    pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
-        #except:
-        #    print("! Error in preview_orig: : Cannot load histogram preview")
 
 
 def preview_logo():
     """ generating logo preview """
+    if os.path.isfile(file_logo_path.get()):
+        l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
 
-    l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
-
-    preview_picture = preview.preview_convert(file_logo_path.get(),
-                                              " ",
-                                              PREVIEW_LOGO,
-                                              GM_or_IM)
-    try:
+        preview_picture = preview.preview_convert(file_logo_path.get(),
+                                                  " ",
+                                                  PREVIEW_LOGO,
+                                                  GM_or_IM)
         pi_logo_preview.configure(file=preview_picture['filename'])
- #      l_logo_preview.configure(text=preview['width'] + "x" + preview['height'])
-    except:
-        print("! Error in preview_logo: Cannot load preview")
+        l_logo_preview.configure(text=preview_picture['width'] + "x" \
+                                 + preview_picture['height'])
+    else:
+        print("! Error in preview_logo: Cannot load file")
 
+
+def preview_logo_clear():
+    """ clear if no logo picture is selected """
+    l_logo_filename.configure(text=_("No file selected"))
+    pi_logo_preview.configure(file="")
+    l_logo_preview.configure(text="")
 
 def tools_set():
     """ wybór narzędzi do wyświetlenia """
@@ -1362,6 +1368,8 @@ rb_logo_SE.grid(row=3, column=3, sticky=W, pady=1)
 pi_logo_preview = PhotoImage()
 l_logo_preview_pi = ttk.Label(frame_logo, image=pi_logo_preview)
 l_logo_preview_pi.grid(row=5, column=1, columnspan=2, padx=5, pady=1)
+l_logo_preview = ttk.Label(frame_logo)
+l_logo_preview.grid(row=6, column=1, columnspan=2, padx=5, pady=1)
 
 #####################################################################
 # First column
