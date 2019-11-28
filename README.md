@@ -1,12 +1,18 @@
 # FotoKilof - GUI for ImageMagick
 GUI for the most used (by me) ImageMagick functionality for processing pictures. 
 
+## Screenshots
+
+### Linux
 ![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof.png)
 
 ![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof1.png)
 
+## Mac OSX
 ![Screenshot MacOS](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_macos.png)
 
+## Windows
+![Screenshot Windows](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_windows.png)
 
 ## Graphics conversion
  - scaling/resize,
