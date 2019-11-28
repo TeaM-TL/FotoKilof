@@ -5,6 +5,9 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 
 ![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof1.png)
 
+![Screenshot MacOS](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_macos.png)
+
+
 ## Graphics conversion
  - scaling/resize,
  - crop,
