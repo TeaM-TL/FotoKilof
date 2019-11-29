@@ -49,7 +49,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-VERSION = "3.1"
+VERSION = "3.1.1"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -146,7 +146,7 @@ def preview_new_button():
 def extension_from_file():
     """ set extension in ComboBox same as opened file"""
     path = os.path.splitext(file_in_path.get())
-    extension = path[1].upper()
+    extension = path[1].lower()
     try:
         co_apply_type.current(file_extension.index(extension))
     except:
@@ -1196,7 +1196,7 @@ contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
 img_custom_on = IntVar()  # Custom
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
-file_extension = (".JPG", ".PNG", ".TIF")
+file_extension = (".jpg", ".png", ".tif")
 magick_commands = ("composite", "convert")
 #magick_commands = ("animate", "compare", "composite", "conjure", "convert",
 #                   "identify", "import", "mogrify", "montage", "stream")
@@ -1850,7 +1850,7 @@ rb_apply_file = ttk.Radiobutton(frame_apply, text=_("File"),
                                 variable=file_dir_selector, value="0")
 co_apply_type = ttk.Combobox(frame_apply, width=4, values=file_extension)
 co_apply_type.configure(state='readonly')
-co_apply_type.current(file_extension.index(".JPG"))
+co_apply_type.current(file_extension.index(".jpg"))
 b_apply_run = ttk.Button(frame_apply, text=_("Execute all"),
                          command=apply_all_button,
                          style="Brown.TButton")
