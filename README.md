@@ -54,7 +54,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 
 ## User manual
 - PDF: [English](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.pdf), [Polish](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/pl/fotokilof.pdf).
-- MD: [English](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.md), [Polish](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/pl/fotokilof.md).
+- MD: [English](doc/en/fotokilof.md), [Polish](doc/pl/fotokilof.md).
 
 
 ## Available translations
