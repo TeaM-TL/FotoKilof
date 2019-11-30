@@ -8,10 +8,10 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 
 ![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof1.png)
 
-## Mac OSX
+### Mac OSX
 ![Screenshot MacOS](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_macos.png)
 
-## Windows
+### Windows
 ![Screenshot Windows](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_windows.png)
 
 ## Graphics conversion
@@ -53,7 +53,9 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - GraphickMagick is supported partialy.
 
 ## User manual
-RTFM in PDF: [English](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.pdf), [Polish](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/pl/fotokilof.pdf).
+- PDF: [English](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.pdf), [Polish](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/pl/fotokilof.pdf).
+- MD: [English](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.md), [Polish](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/pl/fotokilof.md).
+
 
 ## Available translations
 Available: English, Polish, German, Bulgarian and Indonesian.
