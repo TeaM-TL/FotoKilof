@@ -2,7 +2,9 @@
 
 ## Current
 
-3.2 DCOM image format
+3.3 DCOM image format
+
+3.2 small code review, standarize temporary file
 
 3.1 scalable preview widgets, format conversion, SVG conversion, code standarization, speedup, bug_fix, removed Pillow module,
 
