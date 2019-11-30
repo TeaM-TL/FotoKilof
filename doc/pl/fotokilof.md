@@ -48,9 +48,16 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
 
 ### Zrzuty ekranu
 
-![Screenshot](../../screenshots/fotokilof.png)
+#### Linux
+![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof.png)
 
-![Screenshot](../../screenshots/fotokilof1.png)
+![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof1.png)
+
+#### Mac OSX
+![Screenshot MacOS](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_macos.png)
+
+#### Windows
+![Screenshot Windows](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_windows.png)
 
 ## Jak używać
 
