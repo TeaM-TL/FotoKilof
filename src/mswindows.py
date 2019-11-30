@@ -5,7 +5,7 @@ import platform
 
 
 def windows():
-    """ check system Windows or normal OS """
+    """ checking: system Windows or normal OS """
     if platform.system() == "Windows":
         result = 1
     else:
