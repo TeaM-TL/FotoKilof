@@ -1,13 +1,16 @@
 ## Localization
 
 If there are not *fotokilof* in your language, you are able to do it. Example steps for Hungarian:
-`cd src/locale`
-`NEWLANG=hu/LC_MESSAGES`
-`mkdir -p $NEWLANG`
-`cp fotokilof.pot $NEWLANG/fotokilof.po`
-`cd $NEWLANG`
-`[vim|poedit] fotokilof.po`
-`msgfmt -o fotokilof.mo fotokilof`
+
+```
+cd src/locale
+NEWLANG=hu/LC_MESSAGES
+mkdir -p $NEWLANG
+cp fotokilof.pot $NEWLANG/fotokilof.po
+cd $NEWLANG
+[vim|poedit] fotokilof.po
+msgfmt -o fotokilof.mo fotokilof
+```
 
 ### Advices
 
@@ -19,8 +22,9 @@ If there are not *fotokilof* in your language, you are able to do it. Example st
 
 ### Test
 
-`cd ../../../`
-`python3 fotokilof.py`
+```cd ../../../
+python3 fotokilof.py
+```
 
 ---
 
