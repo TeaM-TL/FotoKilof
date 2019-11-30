@@ -2,8 +2,20 @@
 # pylint: disable=line-too-long
 
 """
-moduł z funkcjami odczytu zawartości pliku konfiguracyjnego ini
-każda funkcja odczytuje kawałek ini
+module contains function for reading entries from config file.
+Every function read part of config file
+- ini_read - general setting for FotoKilof
+- ini_read_resize
+- ini_read_text
+- ini_read_rotate
+- ini_read_crop
+- ini_read_border
+- ini_read_color
+- ini_read_normalize
+- ini_read_contrast
+- ini_read_logo
+- ini_read_custom
+
 """
 
 import configparser
@@ -12,7 +24,7 @@ import entries
 
 
 def ini_read(file_ini, theme_list, preview_size_list):
-    """ Konfiguracja FotoKilofa """
+    """ General settings """
 
     # słownik wyjściowy
     dict_return = {}
@@ -69,7 +81,7 @@ def ini_read(file_ini, theme_list, preview_size_list):
 
 
 def ini_read_resize(file_ini):
-    """ Skalowanie """
+    """ Resize/scalling """
 
     # słownik wyjściowy
     dict_return = {}
@@ -105,7 +117,7 @@ def ini_read_resize(file_ini):
 
 
 def ini_read_text(file_ini, fonts_list):
-    """ Konfiguracja FotoKilofa """
+    """ Text configuration """
 
     # słownik wyjściowy
     dict_return = {}
@@ -177,7 +189,7 @@ def ini_read_text(file_ini, fonts_list):
 
 
 def ini_read_rotate(file_ini):
-    """ Konfiguracja FotoKilofa """
+    """ Rotate configuration """
 
     # słownik wyjściowy
     dict_return = {}
@@ -201,7 +213,7 @@ def ini_read_rotate(file_ini):
 
 
 def ini_read_crop(file_ini):
-    """ Konfiguracja FotoKilofa """
+    """ Crop configuration """
 
     # słownik wyjściowy
     dict_return = {}
@@ -303,7 +315,7 @@ def ini_read_crop(file_ini):
 
 
 def ini_read_border(file_ini):
-    """ Konfiguracja FotoKilofa """
+    """ Border congiguration """
 
     # słownik wyjściowy
     dict_return = {}
@@ -333,7 +345,7 @@ def ini_read_border(file_ini):
 
 
 def ini_read_color(file_ini):
-    """ Konfiguracja FotoKilofa """
+    """ Color configuration """
 
     # słownik wyjściowy
     dict_return = {}
@@ -393,7 +405,7 @@ def ini_read_normalize(file_ini, channels):
 
 
 def ini_read_contrast(file_ini, contrast_selection_valid_list):
-    """ Konfiguracja FotoKilofa """
+    """ Contrast configuration """
 
     # słownik wyjściowy
     dict_return = {}

@@ -199,6 +199,7 @@ Python3 i moduły:
  - via pakiety
      - tkinter,
  - powinny być w zestawie
+     - getpass,
      - gettext,
      - glob,
      - os,

@@ -1,8 +1,21 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=line-too-long
 
-""" call ImageMagick command """
+"""
+module to work with *Magick:
+- pre_magick - prepare output file for conversion
+- magick - picture conversion
+- magick_command - make [Graphics|Image]Magick independent
+- display_image - display picture
+- get_image_size - identify picture: width and height
+- get_fonts_list - get available fonts list
+- get_magick_version - get version of *Magick
+- check_magick - check what is available
+- check_imagemagick - checker for ImageMagick
+- check_graphickmagick - checker for GraphicsMagick
+"""
 
+import getpass
 import os
 import re
 import shutil
@@ -39,7 +52,9 @@ def pre_magick(file_in, destination, extension):
     if result == "OK":
         # preparing output filename
         file_in_without_ext = os.path.splitext(file_in)
-        file_out = os.path.join(out_dir, os.path.basename(file_in_without_ext[0] + extension))
+        file_out = os.path.join(out_dir,
+                                os.path.basename(file_in_without_ext[0] \
+                                                 + extension))
     else:
         file_out = None
     return file_out
@@ -100,18 +115,19 @@ def magick_command(command):
     return result
 
 
-def fonts_list_get(gm_or_im):
+def get_fonts_list(gm_or_im):
     """ get available font list from imagemagick """
 
     fonts_list = None
-    file_font = os.path.join(tempfile.gettempdir(), "fotokilof_fonts_list")
+    file_font = os.path.join(tempfile.gettempdir(),
+                             "fotokilof_" + getpass.getuser() + "_fonts_list")
     command = " -list font > "
     result = magick(command, "", file_font, gm_or_im + "convert")
     if result is not None:
         try:
             file = open(file_font, "r")
         except:
-            print("!fonts_list_get: cannot read file_font")
+            print("!get_fonts_list: cannot read file_font")
         else:
             fonts_list = []
             if gm_or_im == "gm ":
@@ -131,7 +147,7 @@ def fonts_list_get(gm_or_im):
             try:
                 os.remove(file_font)
             except:
-                print("!fonts_list_get: cannot remove file_font")
+                print("!get_fonts_list: cannot remove file_font")
 
     if fonts_list is None or len(fonts_list) == 0:
         fonts_list = ["Helvetica"]
@@ -142,11 +158,12 @@ def get_magick_version(gm_or_im):
     """ get version of *Magick """
 
     version = ""
-    if gm_or_im == None:
+    if gm_or_im is None:
         gm_or_im = ""
 
     file_version = common.spacja(os.path.join(tempfile.gettempdir(),
-                                              "fotokilof_version"))
+                                              "fotokilof_" + \
+                                              getpass.getuser() + "_version"))
     #touch.touch(file_version)
     command = "-Version > "
     result = magick(command, "", common.spacja(file_version),
@@ -194,7 +211,7 @@ def check_magick():
 
 
 def check_imagemagick(suffix):
-    """ Check if ImageMmagick is avaialble"""
+    """ Check if ImageMagick is avaialble"""
     if shutil.which('convert' + suffix):
         result = "OK"
         if shutil.which('mogrify' + suffix):
@@ -235,7 +252,9 @@ def get_image_size(file_in, gm_or_im):
     width = 1
     height = 1
     size = ""
-    file_info = common.spacja(os.path.join(tempfile.gettempdir(), "fotokilof_image_info"))
+    file_info = common.spacja(os.path.join(tempfile.gettempdir(),
+                                           "fotokilof_" + getpass.getuser() \
+                                           + "_image_info"))
     touch.touch(file_info)
     command = ' -format "%w\\n%h\\n%b" '
     command = command + common.spacja(file_in) + ' > '

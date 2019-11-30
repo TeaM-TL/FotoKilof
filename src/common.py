@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=line-too-long
 
-""" moduł z funkcjami ogólnego przeznaczenia """
+"""
+module contains common functions:
+- humansize - converts B to kB or MB
+- mouse_crop_calculation - recalculation pixels from previev original image
+- spacja - escaping space and special char in pathname
+- list_of_images - sorted list od jpg and png images in cwd
+- file_from_list_of_images - return filename from file_list depends of request
+"""
 
 import fnmatch
 import os
@@ -12,8 +18,10 @@ import mswindows
 
 
 def humansize(nbytes):
-    """ convert size in Byte into human readable: kB, MB, GB
-    https://stackoverflow.com/questions/14996453/python-libraries-to-calculate-human-readable-filesize-from-bytes """
+    """
+    convert size in Byte into human readable: kB, MB, GB
+    https://stackoverflow.com/questions/14996453/python-libraries-to-calculate-human-readable-filesize-from-bytes
+    """
     suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
     i = 0
     while nbytes >= 1024 and i < len(suffixes)-1:
@@ -24,7 +32,7 @@ def humansize(nbytes):
 
 
 def mouse_crop_calculation(file_in, size, gm_or_im):
-    """ przeliczenie pikseli podglądu  na piksele oryginału """
+    """ recalculation pixels from previev original image """
     # global file_in_path
     image_size = magick.get_image_size(file_in, gm_or_im)
     x_orig = image_size[0]
@@ -94,7 +102,8 @@ def list_of_images(cwd):
 
 
 def file_from_list_of_images(file_list, current_file, request):
-    """return filename from file_list depends of request
+    """
+    return filename from file_list depends of request
     request: position on the list
     """
     if file_list:

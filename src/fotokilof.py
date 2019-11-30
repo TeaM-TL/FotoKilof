@@ -64,7 +64,7 @@ preview_size_list = (300, 350, 400, 450, 500, 600, 700, 800, 900, 1000)
 
 
 def no_text_in_windows():
-    """ info dla Windows, że może być problem z dodaniem tekstu """
+    """ info for Windows user, that may be problem with adding text """
     if mswindows.windows() == 1:
         l_text_windows.configure(text=_("Unfortunately, you are using Windows, thus not all option will work"))
         l_text_windows.grid(row=5, column=1, columnspan=4, sticky=(W, E))
@@ -285,7 +285,7 @@ def apply_all_button():
                                    + os.path.basename(file_in))
                 progress_var.set(i)
                 root.update_idletasks()
-        
+
             preview_orig()
             if result == "OK":
                 preview_new(out_file)
@@ -482,7 +482,7 @@ def convert_text_button():
 def fonts():
     """ preparing font names for ImageMagick """
 
-    result = magick.fonts_list_get(GM_or_IM)
+    result = magick.get_fonts_list(GM_or_IM)
     co_text_font['values'] = result
     return result
 

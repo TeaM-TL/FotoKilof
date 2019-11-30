@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=line-too-long
 
-"""  module contains function for parsing GUI entries and INI entries """
+"""
+module contains function for parsing GUI entries and INI entries:
+- parse_list - validation entry if is on list
+- parse_range - validation entry if is in range
+- parse_color - validation entry if is a color specification
+"""
 
 import re
 
@@ -30,7 +34,8 @@ def parse_range(entry, valid, default):
     valid - valid range
     return - entry or default if entry is out of range
     """
-    if entry >= valid[0] and entry <= valid[1]:
+
+    if valid[0] <= entry <= valid[1]:
         result = entry
     else:
         result = default

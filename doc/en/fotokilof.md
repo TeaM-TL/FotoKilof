@@ -155,6 +155,7 @@ Python3 and modules:
  - via packets:
      - tkinter,
  - should be out of the box:
+     - getpass,
      - gettext,
      - glob,
      - os,

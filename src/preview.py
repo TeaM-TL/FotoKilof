@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 
-""" moduł z funkcjami ogólnego przeznaczenia """
+"""
+module contains function for generating preview and histogram:
+- preview_histogram
+- preview_convert
+ """
 
+import getpass
 import os
 import tempfile
 
@@ -18,7 +23,9 @@ def preview_histogram(file_in, gm_or_im):
     """
 
     cmd_magick = gm_or_im + "convert"
-    file_histogram = os.path.join(tempfile.gettempdir(), "histogram.ppm")
+    file_histogram = os.path.join(tempfile.gettempdir(),
+                                  "fotokilof_" + getpass.getuser() \
+                                  + "_histogram.ppm")
     command = " -define histogram:unique-colors=false histogram:"
     command = " histogram:"
 
@@ -47,7 +54,9 @@ def preview_convert(file_in, command, size, gm_or_im):
 
         cmd_magick = gm_or_im + "convert"
         command = " -resize " + str(size) + "x" + str(size) + command
-        file_preview = os.path.join(tempfile.gettempdir(), "preview.ppm")
+        file_preview = os.path.join(tempfile.gettempdir(),
+                                    "fotokilof_" + getpass.getuser() \
+                                    + "_preview.ppm")
         magick.magick(command, file_in, file_preview, cmd_magick)
 
         result = {'filename': file_preview, 'size': filesize, \

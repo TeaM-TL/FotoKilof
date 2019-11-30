@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
-""" Converters """
+""" Converters
+- convert_preview_crop_gravity - convert corrdinates from crop3
+- convert_border - add border to picture
+- convert_text - add text
+- convert_crop - crop picture
+- convert_resize - resize picture
+- convert_contrast - modify contrast
+- convert_normalize - normalize levels
+- convert_rotate - rotate picture
+- convert_pip - picture in picture, for inserting logo
+- convert_gravity - translate eg. NS to Northsouth as Tk expect
+
+"""
 
 
 def convert_preview_crop_gravity(coordinates, x_max, y_max):
@@ -80,7 +92,7 @@ def convert_border(width, color, border_on):
 
 
 def convert_text(entries):
-    """ 2. Umieszczenie napisu na obrazku """
+    """ 2. Insert text into picture """
 
     if entries['text_on'] == 1:
         size = " -pointsize " + entries['font_size']
@@ -218,24 +230,24 @@ def gravity(gravitation):
     """ translate gavitation name according to Tk specification"""
 
     if gravitation == "N":
-        gravitation = "North"
+        result = "North"
     if gravitation == "NW":
-        gravitation = "Northwest"
+        result = "Northwest"
     if gravitation == "NE":
-        gravitation = "Northeast"
+        result = "Northeast"
     if gravitation == "W":
-        gravitation = "West"
+        result = "West"
     if gravitation == "C":
-        gravitation = "Center"
+        result = "Center"
     if gravitation == "E":
-        gravitation = "East"
+        result = "East"
     if gravitation == "SW":
-        gravitation = "Southwest"
+        result = "Southwest"
     if gravitation == "S":
-        gravitation = "South"
+        result = "South"
     if gravitation == "SE":
-        gravitation = "Southeast"
+        result = "Southeast"
 
-    return gravitation
+    return result
 
 # EOF
