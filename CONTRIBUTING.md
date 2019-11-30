@@ -22,7 +22,8 @@ msgfmt -o fotokilof.mo fotokilof
 
 ### Test
 
-```cd ../../../
+```
+cd ../../../
 python3 fotokilof.py
 ```
 
