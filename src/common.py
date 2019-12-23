@@ -5,7 +5,7 @@ module contains common functions:
 - humansize - converts B to kB or MB
 - mouse_crop_calculation - recalculation pixels from previev original image
 - spacja - escaping space and special char in pathname
-- list_of_images - sorted list od jpg and png images in cwd
+- list_of_images - sorted list images in cwd
 - file_from_list_of_images - return filename from file_list depends of request
 """
 

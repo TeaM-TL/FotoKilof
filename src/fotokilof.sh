@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# modify MYPATH to path to FotoKilof python source
-# and make this script executable
-MYPATH=~/dev/GitHub/FotoKilof/src
+# MYPATH - path to FotoKilof python source
+
+MYPATH="${0%/*}"
 cd $MYPATH
 python3 fotokilof.py &
+
