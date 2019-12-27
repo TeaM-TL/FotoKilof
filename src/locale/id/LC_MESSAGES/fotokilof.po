@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: FotoKilof\n"
-"POT-Creation-Date: 2019-12-27 10:47+0100\n"
-"PO-Revision-Date: 2019-12-27 10:47+0100\n"
+"POT-Creation-Date: 2019-12-27 10:51+0100\n"
+"PO-Revision-Date: 2019-12-27 10:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: id\n"
@@ -242,6 +242,14 @@ msgstr "Dari gambar"
 #: fotokilof.py:1536
 msgid "Add text"
 msgstr "Tambah teks"
+
+#: fotokilof.py:1549
+msgid "Inside"
+msgstr ""
+
+#: fotokilof.py:1551
+msgid "Outside"
+msgstr ""
 
 #: fotokilof.py:1553
 msgid "Offset (dx,dy)\n"

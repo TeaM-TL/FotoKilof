@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: FotoKilof\n"
-"POT-Creation-Date: 2019-12-27 10:48+0100\n"
-"PO-Revision-Date: 2019-12-27 10:48+0100\n"
+"POT-Creation-Date: 2019-12-27 10:50+0100\n"
+"PO-Revision-Date: 2019-12-27 10:51+0100\n"
 "Last-Translator: Tomasz Łuczak\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -243,6 +243,14 @@ msgstr "Z obrazka"
 #: fotokilof.py:1536
 msgid "Add text"
 msgstr "Dodaj tekst"
+
+#: fotokilof.py:1549
+msgid "Inside"
+msgstr "Wewnątrz"
+
+#: fotokilof.py:1551
+msgid "Outside"
+msgstr "Zewnątrz"
 
 #: fotokilof.py:1553
 msgid "Offset (dx,dy)\n"
