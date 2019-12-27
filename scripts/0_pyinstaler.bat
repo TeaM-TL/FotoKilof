@@ -1,4 +1,3 @@
-@REM $Id: 0_pyinstaler 9 2019-08-30 14:28:33Z tlu $
 @ECHO OFF
 cd ..
 rmdir build /S /Q
