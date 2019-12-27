@@ -112,7 +112,7 @@ def convert_text(entries):
             # outside
             gravitations = gravity_outside(entries['gravitation'])
             gravitation = " -gravity " + gravitations['horizontal']
-            text = " label:\'" + entries['text'] + "\' "
+            text = " label:\"" + entries['text'] + "\" "
             if gravitations['vertical'] == "top":
                 outside = "+swap -append "
             else:
