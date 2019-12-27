@@ -35,7 +35,7 @@ def preview_histogram(file_in, gm_or_im):
         os.system(command)
         return file_histogram
     except:
-        log.write_log("! Error in convert_histogram: " + command)
+        log.write_log("Error in convert_histogram: " + command, "E")
 
 
 def preview_convert(file_in, command, size, gm_or_im):
@@ -63,7 +63,7 @@ def preview_convert(file_in, command, size, gm_or_im):
         result = {'filename': file_preview, 'size': filesize, \
                 'width': width, 'height': height}
     except:
-        log.write_log("! Error in preview_convert: return")
+        log.write_log("Error in preview_convert: return", "E")
         result = None
 
     return result

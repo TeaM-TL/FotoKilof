@@ -22,7 +22,6 @@ def parse_list(entry, valid, default):
     else:
         result = default
 
-    # print(entry, valid, default, result)
     return result
 
 
@@ -40,7 +39,6 @@ def parse_range(entry, valid, default):
     else:
         result = default
 
-    print(entry, valid, default, result)
     return result
 
 

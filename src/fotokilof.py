@@ -48,9 +48,12 @@ translate = gettext.translation('fotokilof', localedir, fallback=True)
 gettext.install('fotokilof', localedir)
 _ = translate.gettext
 
+translate_info = str(gettext.find('base', 'locales'))
+log.write_log(translate_info, "E", "w")
+
 ###################
 # CONSTANTS
-VERSION = "3.2.0"
+VERSION = "3.2.1"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -87,7 +90,7 @@ def convert_custom_clear():
 
 def preview_clear():
     """ clear every preview if doesn't choose file """
-    print("not ready yet")
+    log.write_log("not ready yet", "M")
     photo = ""
     pi_preview_orig.configure(data=photo)
     pi_histogram_orig.configure(file="")
@@ -106,14 +109,14 @@ def preview_new(file_out):
                                 + " - " \
                                 + preview_picture['size'])
     except:
-        log.write_log("! Error in preview_new: Nie można wczytać podglądu")
+        log.write_log("preview_new: Cannot read preview", "E")
 
     if img_histograms_on.get() == 1:
         try:
             pi_histogram_new.configure(file=preview.preview_histogram(file_out,
                                                                       GM_or_IM))
         except:
-            log.write_log("! Error in preview histogram_new")
+            log.write_log("previe_new: errot in preview histogram_new", "E")
 
 
 def preview_orig_button():
@@ -123,7 +126,7 @@ def preview_orig_button():
     try:
         magick.display_image(file_in_path.get(), GM_or_IM)
     except:
-        log.write_log("No orig picture to preview")
+        log.write_log("No orig picture to preview", "W")
 
 
 def preview_new_button():
@@ -139,7 +142,7 @@ def preview_new_button():
     try:
         magick.display_image(file_show, GM_or_IM)
     except:
-        log.write_log("No new picture to preview")
+        log.write_log("No new picture to preview", "W")
 
 
 def extension_from_file():
@@ -149,7 +152,7 @@ def extension_from_file():
     try:
         co_apply_type.current(file_extension.index(extension))
     except:
-        log.write_log("! extension_from_file: wrong extension")
+        log.write_log("extension_from_file: wrong extension", "W")
 
 
 def apply_all_convert(out_file, write_command):
@@ -296,7 +299,7 @@ def apply_all_button():
         pb.stop()
         root.update_idletasks()
     else:
-        log.write_log("No file selected")
+        log.write_log("No file selected", "M")
 
 def convert_custom_button():
     """ execute custom command """
@@ -602,7 +605,7 @@ def open_file_last():
                     preview_orig()
                     extension_from_file()
                 except:
-                    log.write_log("Error in open_file_last")
+                    log.write_log("Error in open_file_last", "E")
 
 
 def open_file_next():
@@ -622,7 +625,7 @@ def open_file_next():
                     preview_orig()
                     extension_from_file()
                 except:
-                    log.write_log("Error in open_file_next")
+                    log.write_log("Error in open_file_next", "E")
 
 
 def open_file_first():
@@ -642,7 +645,7 @@ def open_file_first():
                     preview_orig()
                     extension_from_file()
                 except:
-                    log.write_log("Error in open_file_first")
+                    log.write_log("Error in open_file_first", "E")
 
 
 def open_file_prev():
@@ -661,7 +664,7 @@ def open_file_prev():
                     file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
                 except:
-                    log.write_log("Error in open_file_first")
+                    log.write_log("Error in open_file_first", "E")
 
                 file_select_L.configure(text=file)
 
@@ -721,6 +724,7 @@ def ini_read_wraper():
     co_theme_selector.current(theme_list.index(ini_entries['theme']))
     co_preview_selector_orig.current(preview_size_list.index(ini_entries['preview_orig']))
     co_preview_selector_new.current(preview_size_list.index(ini_entries['preview_new']))
+    log_level.set(ini_entries['log_level'])
 
     ini_entries = ini_read.ini_read_resize(FILE_INI)
     img_resize_on.set(ini_entries['img_resize_on'])
@@ -839,6 +843,7 @@ def ini_save():
     config.set('Konfiguracja', 'theme', co_theme_selector.get())
     config.set('Konfiguracja', 'preview_orig', co_preview_selector_orig.get())
     config.set('Konfiguracja', 'preview_new', co_preview_selector_new.get())
+    config.set('Konfiguracja', 'log', log_level.get())
     config.add_section('Resize')
     config.set('Resize', 'on', str(img_resize_on.get()))
     config.set('Resize', 'resize', str(img_resize.get()))
@@ -909,7 +914,7 @@ def ini_save():
         with open(FILE_INI, 'w', encoding='utf-8', buffering=1) as configfile:
             config.write(configfile)
     except:
-        log.write_log("! Error in ini_save: cannot save config file: " + FILE_INI)
+        log.write_log("ini_save: cannot save config file: " + FILE_INI, "E")
 
 
 def help_info(event):
@@ -924,7 +929,7 @@ def help_info(event):
             message = message + i
         # file.close
     except:
-        log.write_log("! Error in help_info: error during loading license file")
+        log.write_log("help_info: error during loading license file", "W")
         message = "Copyright 2019 Tomasz Łuczak under MIT license"
 
     messagebox.showinfo(title=_("License"), message=message)
@@ -939,7 +944,7 @@ def close_window():
 
 def win_deleted():
     """ close program window """
-    log.write_log("closed")
+    log.write_log("closed", "M")
     close_window()
 
 
@@ -947,7 +952,6 @@ def mouse_crop_NW(event):
     """ Left-Upper corner """
     x_preview = event.x
     y_preview = event.y
-    # print("NW preview:", x_preview, y_preview)
 
     xy_max = common.mouse_crop_calculation(file_in_path.get(),
                                            int(co_preview_selector_orig.get()),
@@ -964,7 +968,6 @@ def mouse_crop_SE(event):
     """ Right-Lower corner """
     x_preview = event.x
     y_preview = event.y
-    # print("SE preview:", x_preview, y_preview)
     xy_max = common.mouse_crop_calculation(file_in_path.get(),
                                            int(co_preview_selector_orig.get()),
                                            GM_or_IM)
@@ -1031,7 +1034,7 @@ def preview_orig():
     try:
         pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
     except:
-        log.write_log("! Error in preview_orig: Cannot load preview")
+        log.write_log("preview_orig: Cannot load preview", "E")
 
     try:
         l_preview_orig.configure(text=preview_picture['width'] + "x" \
@@ -1039,7 +1042,7 @@ def preview_orig():
                                  + " - " \
                                  + preview_picture['size'])
     except:
-        log.write_log("! Error in preview_orig: Cannot load image size")
+        log.write_log("preview_orig: Cannot load image size", "E")
 
     if img_histograms_on.get() == 1:
         pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
@@ -1058,7 +1061,7 @@ def preview_logo():
         l_logo_preview.configure(text=preview_picture['width'] + "x" \
                                  + preview_picture['height'])
     else:
-        log.write_log("! Error in preview_logo: Cannot load file")
+        log.write_log("Preview_logo: Cannot load file", "E")
 
 
 def preview_logo_clear():
@@ -1166,6 +1169,7 @@ style.configure("Fiolet.TLabelframe.Label", foreground="#800080")
 
 FILE_INI = os.path.join(str(Path.home()), ".fotokilof.ini")
 PWD = os.getcwd()
+log_level = StringVar() # E(rror), W(arning), A(ll)
 work_dir = StringVar()  # default: "FotoKilof"
 file_dir_selector = IntVar()
 file_in_path = StringVar()  # fullpath original picture

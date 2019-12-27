@@ -43,7 +43,7 @@ def pre_magick(file_in, destination, extension):
                 try:
                     os.mkdir(out_dir)
                 except:
-                    log.write_log("! Error in pre_imagick: Nie można utworzyć katalogu na przemielone rysunki")
+                    log.write_log("pre_imagick: Cannot make directory for output pictures", "E")
                     result = None
         else:
             result = None
@@ -78,16 +78,16 @@ def magick(cmd, file_in, file_out, command):
             file_out = common.spacja(file_out)
             command = magick_command(command)
             command = command + " " + file_in  + " " + cmd + file_out
-            log.write_log("Execute: " + command)
+            log.write_log("Execute: " + command, "M")
             try:
                 os.system(command)
             except:
-                log.write_log("! Error in imagick: " + command)
+                log.write_log("Errot in imagick: " + command, "E")
                 result = None
             else:
                 result = "OK"
         else:
-            log.write_log("imagick: No file for imagick")
+            log.write_log("imagick: No file for imagick", "W")
             result = None
     else:
         result = None
@@ -128,7 +128,7 @@ def get_fonts_list(gm_or_im):
         try:
             file = open(file_font, "r")
         except:
-            log.write_log("!get_fonts_list: cannot read file_font")
+            log.write_log("get_fonts_list: cannot read file_font", "E")
         else:
             fonts_list = []
             if gm_or_im == "gm ":
@@ -148,7 +148,7 @@ def get_fonts_list(gm_or_im):
             try:
                 os.remove(file_font)
             except:
-                log.write_log("!get_fonts_list: cannot remove file_font")
+                log.write_log("get_fonts_list: cannot remove file_font", "W")
 
     if fonts_list is None or len(fonts_list) == 0:
         fonts_list = ["Helvetica"]
@@ -173,7 +173,7 @@ def get_magick_version(gm_or_im):
         try:
             file = open(file_version, "r")
         except:
-            log.write_log("!get_magick_version: cannot read file_version")
+            log.write_log("get_magick_version: cannot read file_version", "W")
         else:
             version_object = re.search("\\d+[.]\\d+([.]\\d+)*", file.readline())
             if version_object is not None:
@@ -182,7 +182,7 @@ def get_magick_version(gm_or_im):
             try:
                 os.remove(file_version)
             except:
-                log.write_log("!get_magick_version: cannot remove file_version")
+                log.write_log("get_magick_version: cannot remove file_version", "W")
 
     return version
 
@@ -264,7 +264,7 @@ def get_image_size(file_in, gm_or_im):
         try:
             file = open(file_info, "r")
         except:
-            log.write_log("!get_image_size: cannot read file_info")
+            log.write_log("get_image_size: cannot read file_info", "W")
         else:
             width = int(file.readline())
             height = int(file.readline())
@@ -273,8 +273,7 @@ def get_image_size(file_in, gm_or_im):
             try:
                 os.remove(file_info)
             except:
-                log.write_log("!get_image_size: cannot remove image_info")
-    # print("identify: ", width, "x", height, "-", size)
+                log.write_log("get_image_size: cannot remove image_info", "W")
     return (width, height, size)
 
 
@@ -290,11 +289,11 @@ def display_image(file_in, gm_or_im):
 
     command = magick_command(display)
     command = command + " " + file_in + ampersand
-    log.write_log("Execute: ", command)
+    log.write_log("Execute: " + command, "M")
     try:
         os.system(command)
     except:
-        log.write_log("! Error in imagick: " + command)
+        log.write_log(" Error in imagick: " + command, "E")
         result = None
     else:
         result = "OK"

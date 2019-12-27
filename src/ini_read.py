@@ -15,7 +15,6 @@ Every function read part of config file
 - ini_read_contrast
 - ini_read_logo
 - ini_read_custom
-
 """
 
 import configparser
@@ -76,6 +75,14 @@ def ini_read(file_ini, theme_list, preview_size_list):
         preview_new = 400
     dict_return['preview_new'] = entries.parse_list(preview_new,
                                                     preview_size_list, 400)
+
+    try:
+        log_level = config.get('Konfiguracja', 'log_level')
+    except:
+        log_level = "E"
+    dict_return['log_level'] = entries.parse_list(log_level,
+                                                  ("E", "W", "A"),
+                                                  "E")
 
     return dict_return
 
@@ -523,6 +530,5 @@ def ini_read_custom(file_ini):
     dict_return['custom_on'] = entries.parse_list(custom_on, (0, 1), 0)
 
     return dict_return
-
 
 # EOF
