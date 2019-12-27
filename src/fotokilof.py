@@ -1546,9 +1546,9 @@ e_text.grid(row=1, column=2, sticky=W, padx=5)
 # cb_text_on.grid(row=1, column=3, sticky=W, padx=5)
 ###
 frame_text_xy = ttk.Frame(frame_text)
-rb_text_in = ttk.Radiobutton(frame_text_xy, text="Inside",
+rb_text_in = ttk.Radiobutton(frame_text_xy, text=_("Inside"),
                              variable=img_text_inout, value="0")
-rb_text_out = ttk.Radiobutton(frame_text_xy, text="Outside",
+rb_text_out = ttk.Radiobutton(frame_text_xy, text=_("Outside"),
                               variable=img_text_inout, value="1")
 l_text_xy = ttk.Label(frame_text_xy, text=_("Offset (dx,dy)\n"))
 e_text_x = ttk.Entry(frame_text_xy, width=3,

@@ -1,10 +1,11 @@
 #!/bin/sh
+
 # Variables:
 # common
 CWD=`pwd`
 DIST=dist
 NAME="fotokilof"
-VER="3.1" 
+VER="3.2"
 OS=`echo $0 | sed 's/^..//g'`
 OSVER="x86_64"
 
@@ -18,6 +19,7 @@ ONEFILE=""
 ZIPFILE=$NAME-$VER-$OS-$OSVER.zip
 EXCLUDE="-x locale/*/*/*.po -x locale/fotokilof.pot -x doc/*/*md"
 
+# ---------------------------------------
 echo "= Locale ========================="
 cd ../src/locale/
 for i in ??; do
@@ -32,8 +34,6 @@ done
 
 cd $CWD
 
-
-
 echo "= PyInstaller ===================="
 cd ..
 echo "UPX: " $UPX
@@ -42,8 +42,8 @@ echo "ONEFILE: " $ONEFILE
 echo "= Remove working directories ===================="
 for DIR in "__pycache__" "build" $DIST/$NAME; do
     if [ -d $DIR ]; then
-	echo "remove: $DIR"
-	rm -rf $DIR
+    echo "remove: $DIR"
+    rm -rf $DIR
     fi
 done
 
@@ -56,18 +56,18 @@ cd ../$DIST
 if [ -d $NAME ]; then
     echo "ZIPFILE: " $ZIPFILE
     echo "Exclude: " $EXCLUDE
-    
+
     cd $NAME
     ln -s ../../src/locale locale
     ln -s ../../doc doc
     ln -s ../../LICENSE LICENSE
     cd ..
-    
+
     if [ -e $ZIPFILE ]; then
-	echo "Remove old zip file"
-	rm $ZIPFILE
+    echo "Remove old zip file"
+    rm $ZIPFILE
     fi
-    
+
     zip -r $ZIPFILE $NAME $EXCLUDE
     echo "= Done: = $ZIPFILE ===================="
 else
