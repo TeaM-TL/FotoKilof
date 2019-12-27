@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=line-too-long
+# pylint: disable=bare-except
 
 """
 module contains function for reading entries from config file.

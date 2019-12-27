@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=line-too-long
 # pylint: disable=invalid-name
+# pylint: disable=bare-except
 
 """ nice GUI for ImageMagick command common used (by me)  """
 
@@ -193,7 +194,11 @@ def apply_all_convert(out_file, write_command):
     else:
         if int(img_crop_on.get()) == 1:
             previous_command = 1
-            text_separate = 1  # if crop - convert text in second run
+            if img_text_inout.get() == 0:
+                text_separate = 1  # if crop - convert text in second run
+            else:
+                text_separate = 0  # crop + convert text run together
+
             cmd = cmd + " " + convert.convert_crop(img_crop.get(),
                                                    img_crop_gravity.get(),
                                                    convert_crop_entries())

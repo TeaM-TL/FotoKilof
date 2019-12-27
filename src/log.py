@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=bare-except
 
 """
 module to log writing
@@ -34,7 +35,7 @@ def write_log(message, level="M", mode="a"):
         if level == "E":
             write = 1
     elif log_lev == "W":
-        if level == "E" or "W":
+        if level in ("E", "W"):
             write = 1
     elif log_lev == "A":
         write = 1

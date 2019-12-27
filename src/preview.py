@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=bare-except
 
 """
 module contains function for generating preview and histogram:
