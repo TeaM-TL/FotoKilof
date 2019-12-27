@@ -11,7 +11,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
 ### Konwersje
  - skalowanie z zachowaniem proporcji,
  - wycinek - trzy metody zaznaczania obszaru,
- - dodanie tekstu do obrazka,
+ - dodanie tekstu do obrazka (wewnątrz i na zewnątrz),
  - ramka wokół obrazka,
  - obrót,
  - czarno-biały albo sepia,
@@ -44,6 +44,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
  - edytor własnych poleceń,
  - polecenia mogą być składane z wykonywanych przetwarzań,
  - można korzystać z innych poleceń ImageMagick np. *-gaussian-blur*,
+ - logowanie konwersji i komunikatów wewnętrznych,
  - częściowe wsparcie dla GraphicsMagick.
 
 ### Zrzuty ekranu

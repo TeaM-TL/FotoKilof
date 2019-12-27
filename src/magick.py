@@ -23,6 +23,7 @@ import tempfile
 import touch
 
 import common
+import log
 import mswindows
 
 
@@ -42,7 +43,7 @@ def pre_magick(file_in, destination, extension):
                 try:
                     os.mkdir(out_dir)
                 except:
-                    print("! Error in pre_imagick: Nie można utworzyć katalogu na przemielone rysunki")
+                    log.write_log("! Error in pre_imagick: Nie można utworzyć katalogu na przemielone rysunki")
                     result = None
         else:
             result = None
@@ -77,11 +78,11 @@ def magick(cmd, file_in, file_out, command):
             file_out = common.spacja(file_out)
             command = magick_command(command)
             command = command + " " + file_in  + " " + cmd + file_out
-            # print("Execute: ", command)
+            log.write_log("Execute: " + command)
             try:
                 os.system(command)
             except:
-                print("! Error in imagick: " + command)
+                log.write_log("! Error in imagick: " + command)
                 result = None
             else:
                 result = "OK"
@@ -127,7 +128,7 @@ def get_fonts_list(gm_or_im):
         try:
             file = open(file_font, "r")
         except:
-            print("!get_fonts_list: cannot read file_font")
+            log.write_log("!get_fonts_list: cannot read file_font")
         else:
             fonts_list = []
             if gm_or_im == "gm ":

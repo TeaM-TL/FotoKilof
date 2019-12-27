@@ -9,10 +9,9 @@
 - convert_normalize - normalize levels
 - convert_rotate - rotate picture
 - convert_pip - picture in picture, for inserting logo
-- convert_gravity - translate eg. NS to Northsouth as Tk expect
-
+- gravity - translate eg. NS to Northsouth as Tk expect
+- gravity_outside - translate gravitation for adding text outside
 """
-
 
 def convert_preview_crop_gravity(coordinates, x_max, y_max):
     """
@@ -98,15 +97,32 @@ def convert_text(entries):
         size = " -pointsize " + entries['font_size']
         font = " -font '" + entries['font'] + "'"
         color = " -fill \"" + entries['text_color'] + "\""
-        gravit = " -gravity " + gravity(entries['gravitation'])
 
-        text = " -draw \"text " + entries['dx'] + "," + entries['dy'] \
-            + " '" + entries['text'] + "'\""
-        if entries['box'] == 0:
-            box = ""
+        if entries['text_inout'] == 0:
+            # inside
+            outside = ""
+            gravitation = " -gravity " + gravity(entries['gravitation'])
+            text = " -draw \"text " + entries['dx'] + "," + entries['dy'] \
+                + " '" + entries['text'] + "'\" "
+            if entries['box'] == 0:
+                box = ""
+            else:
+                box = " -box \"" + entries['box_color'] + "\""
         else:
-            box = " -box \"" + entries['box_color'] + "\""
-        command = box + color + size + gravit + font + text + " "
+            # outside
+            gravitations = gravity_outside(entries['gravitation'])
+            gravitation = " -gravity " + gravitations['horizontal']
+            text = " label:\'" + entries['text'] + "\' "
+            if gravitations['vertical'] == "top":
+                outside = "+swap -append "
+            else:
+                outside = "-append "
+            if entries['box'] == 0:
+                box = ""
+            else:
+                box = " -background \"" + entries['box_color'] + "\""
+
+        command = box + color + size + gravitation + font + text + outside
     else:
         command = ""
     return command + " "
@@ -227,7 +243,7 @@ def convert_pip(gravitation, width, height, offset_dx, offset_dy):
 
 
 def gravity(gravitation):
-    """ translate gavitation name according to Tk specification"""
+    """ translate gravitation name according to Tk specification"""
 
     if gravitation == "N":
         result = "North"
@@ -249,5 +265,40 @@ def gravity(gravitation):
         result = "Southeast"
 
     return result
+
+
+def gravity_outside(gravitation):
+    """ translate gavitation name for adding text outside"""
+
+    dict_return = {}
+    if gravitation == "N":
+        dict_return['vertical'] = "top"
+        dict_return['horizontal'] = "Center"
+    if gravitation == "NW":
+        dict_return['vertical'] = "top"
+        dict_return['horizontal'] = "West"
+    if gravitation == "NE":
+        dict_return['vertical'] = "top"
+        dict_return['horizontal'] = "East"
+    if gravitation == "W":
+        dict_return['vertical'] = "top"
+        dict_return['horizontal'] = "West"
+    if gravitation == "C":
+        dict_return['vertical'] = "top"
+        dict_return['horizontal'] = "Center"
+    if gravitation == "E":
+        dict_return['vertical'] = "top"
+        dict_return['horizontal'] = "East"
+    if gravitation == "SW":
+        dict_return['vertical'] = "bottom"
+        dict_return['horizontal'] = "West"
+    if gravitation == "S":
+        dict_return['vertical'] = "bottom"
+        dict_return['horizontal'] = "Center"
+    if gravitation == "SE":
+        dict_return['vertical'] = "bottom"
+        dict_return['horizontal'] = "East"
+
+    return dict_return
 
 # EOF

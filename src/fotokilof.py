@@ -49,7 +49,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-VERSION = "3.1.1"
+VERSION = "3.2.0"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -208,12 +208,12 @@ def apply_all_convert(out_file, write_command):
                                                  border)
 
     cmd_magick = GM_or_IM + "convert"
-    if write_command == 1:
-        print_command(cmd, cmd_magick)
     cmd_text = convert.convert_text(convert_text_entries())
 
     if text_separate == 0:
         cmd = cmd + " " + cmd_text
+        if write_command == 1:
+            print_command(cmd, cmd_magick)
         result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
         result2 = "OK"
     else:
@@ -223,6 +223,8 @@ def apply_all_convert(out_file, write_command):
             print_command(cmd, cmd_magick)
         result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
         cmd_magick = GM_or_IM + "mogrify"
+        if write_command == 1:
+            print_command(cmd_text, cmd_magick)
         result2 = magick.magick(cmd_text, "", out_file, cmd_magick)
 
     if img_logo_on.get() == 1:
@@ -454,6 +456,7 @@ def convert_text_entries():
     """ słownik ze zmiennymi dla funkcji convert_text """
     dict_return = {}
     dict_return['text_on'] = img_text_on.get()
+    dict_return['text_inout'] = img_text_inout.get()
     dict_return['text'] = e_text.get()
     dict_return['dx'] = e_text_x.get()
     dict_return['dy'] = e_text_y.get()
@@ -730,6 +733,7 @@ def ini_read_wraper():
 
     ini_entries = ini_read.ini_read_text(FILE_INI, img_text_font_list)
     img_text_on.set(ini_entries['img_text_on'])
+    img_text_inout.set(ini_entries['img_text_inout'])
     img_text_font.set(ini_entries['text_font'])
     img_text_color.set(ini_entries['text_color'])
     img_text_gravity.set(ini_entries['img_text_gravity'])
@@ -843,6 +847,7 @@ def ini_save():
     config.set('Resize', 'size_percent', e2_resize.get())
     config.add_section('Text')
     config.set('Text', 'on', str(img_text_on.get()))
+    config.set('Text', 'inout', str(img_text_inout.get()))
     config.set('Text', 'text', e_text.get())
     config.set('Text', 'gravity', img_text_gravity.get())
     config.set('Text', 'font', img_text_font.get())
@@ -1178,6 +1183,7 @@ img_text_font_list = []  # list available fonts, from fonts()
 img_text_color = StringVar()
 img_text_box = IntVar()
 img_text_box_color = StringVar()
+img_text_inout = IntVar()  # Text inside or outside picture
 img_rotate_on = IntVar()  # Rotate
 img_rotate = IntVar()
 img_crop_on = IntVar()  # Crop
@@ -1540,16 +1546,22 @@ e_text.grid(row=1, column=2, sticky=W, padx=5)
 # cb_text_on.grid(row=1, column=3, sticky=W, padx=5)
 ###
 frame_text_xy = ttk.Frame(frame_text)
+rb_text_in = ttk.Radiobutton(frame_text_xy, text="Inside",
+                             variable=img_text_inout, value="0")
+rb_text_out = ttk.Radiobutton(frame_text_xy, text="Outside",
+                              variable=img_text_inout, value="1")
 l_text_xy = ttk.Label(frame_text_xy, text=_("Offset (dx,dy)\n"))
 e_text_x = ttk.Entry(frame_text_xy, width=3,
                      validate="key", validatecommand=(validation, '%S'))
 e_text_y = ttk.Entry(frame_text_xy, width=3,
                      validate="key", validatecommand=(validation, '%S'))
 
-frame_text_xy.grid(row=2, column=1)
-l_text_xy.grid(row=1, column=1, sticky=W, padx=5)
-e_text_x.grid(row=1, column=2, sticky=W, padx=5,)
-e_text_y.grid(row=1, column=3, sticky=W, padx=5)
+frame_text_xy.grid(row=2, column=1, padx=5, pady=2, sticky=(W, N))
+rb_text_in.grid(row=1, column=1, sticky=W, padx=5, pady=1)
+rb_text_out.grid(row=2, column=1, sticky=W, padx=5, pady=1)
+l_text_xy.grid(row=3, column=1, sticky=W, padx=5, pady=1)
+e_text_x.grid(row=3, column=2, sticky=(W, N), padx=5, pady=1)
+e_text_y.grid(row=3, column=3, sticky=(W, N), padx=5, pady=1)
 ###
 frame_text_gravity = ttk.Frame(frame_text)
 rb_text_NW = ttk.Radiobutton(frame_text_gravity, text="NW",
@@ -1570,7 +1582,7 @@ rb_text_S = ttk.Radiobutton(frame_text_gravity, text="S",
                             variable=img_text_gravity, value="S")
 rb_text_SE = ttk.Radiobutton(frame_text_gravity, text="SE",
                              variable=img_text_gravity, value="SE")
-frame_text_gravity.grid(row=2, column=2, columnspan=3)
+frame_text_gravity.grid(row=2, column=2, columnspan=3, pady=2, sticky=(W, N))
 rb_text_NW.grid(row=1, column=1, sticky=W, pady=1)
 rb_text_N.grid(row=1, column=2, pady=1)
 rb_text_NE.grid(row=1, column=3, sticky=W, pady=1)

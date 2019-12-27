@@ -132,6 +132,12 @@ def ini_read_text(file_ini, fonts_list):
     dict_return['img_text_on'] = entries.parse_list(text_on, (0, 1), 1)
 
     try:
+        text_inout = config.getint('Text', 'inout')
+    except:
+        text_inout = "1"
+    dict_return['img_text_inout'] = entries.parse_list(text_inout, (0, 1), 1)
+
+    try:
         text = config.get('Text', 'text')
     except:
         text = ""

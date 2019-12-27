@@ -12,7 +12,7 @@ GUI for the common used ImageMagick functionality for processing pictures.
 ### Conversions
  - scaling/resize, but keep proportion,
  - crop,
- - text annotation,
+ - text annotation (inside or outside of picture),
  - border around picture,
  - rotation,
  - black-white or sepia,
@@ -45,6 +45,7 @@ GUI for the common used ImageMagick functionality for processing pictures.
  - own command editor,
  - own command can be composed from executed commands,
  - is possible to use other ImageMagick commands, eg. *-gaussian-blur*,
+ - logging conversion and internal messages,
  - GraphickMagick is supported partialy.
 
 ### Screenshots
