@@ -87,7 +87,7 @@ def magick(cmd, file_in, file_out, command):
             else:
                 result = "OK"
         else:
-            print("imagick: No file for imagick")
+            log.write_log("imagick: No file for imagick")
             result = None
     else:
         result = None
@@ -148,7 +148,7 @@ def get_fonts_list(gm_or_im):
             try:
                 os.remove(file_font)
             except:
-                print("!get_fonts_list: cannot remove file_font")
+                log.write_log("!get_fonts_list: cannot remove file_font")
 
     if fonts_list is None or len(fonts_list) == 0:
         fonts_list = ["Helvetica"]
@@ -173,7 +173,7 @@ def get_magick_version(gm_or_im):
         try:
             file = open(file_version, "r")
         except:
-            print("!get_magick_version: cannot read file_version")
+            log.write_log("!get_magick_version: cannot read file_version")
         else:
             version_object = re.search("\\d+[.]\\d+([.]\\d+)*", file.readline())
             if version_object is not None:
@@ -182,7 +182,7 @@ def get_magick_version(gm_or_im):
             try:
                 os.remove(file_version)
             except:
-                print("!get_magick_version: cannot remove file_version")
+                log.write_log("!get_magick_version: cannot remove file_version")
 
     return version
 
@@ -264,7 +264,7 @@ def get_image_size(file_in, gm_or_im):
         try:
             file = open(file_info, "r")
         except:
-            print("!get_image_size: cannot read file_info")
+            log.write_log("!get_image_size: cannot read file_info")
         else:
             width = int(file.readline())
             height = int(file.readline())
@@ -273,7 +273,7 @@ def get_image_size(file_in, gm_or_im):
             try:
                 os.remove(file_info)
             except:
-                print("!get_image_size: cannot remove image_info")
+                log.write_log("!get_image_size: cannot remove image_info")
     # print("identify: ", width, "x", height, "-", size)
     return (width, height, size)
 
@@ -290,11 +290,11 @@ def display_image(file_in, gm_or_im):
 
     command = magick_command(display)
     command = command + " " + file_in + ampersand
-    # print("Execute: ", command)
+    log.write_log("Execute: ", command)
     try:
         os.system(command)
     except:
-        print("! Error in imagick: " + command)
+        log.write_log("! Error in imagick: " + command)
         result = None
     else:
         result = "OK"

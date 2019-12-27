@@ -31,6 +31,7 @@ import convert
 import common
 import gui
 import ini_read
+import log
 import magick
 import mswindows
 import preview
@@ -105,14 +106,14 @@ def preview_new(file_out):
                                 + " - " \
                                 + preview_picture['size'])
     except:
-        print("! Error in preview_new: Nie można wczytać podglądu")
+        log.write_log("! Error in preview_new: Nie można wczytać podglądu")
 
     if img_histograms_on.get() == 1:
         try:
             pi_histogram_new.configure(file=preview.preview_histogram(file_out,
                                                                       GM_or_IM))
         except:
-            print("! Error in preview histogram_new")
+            log.write_log("! Error in preview histogram_new")
 
 
 def preview_orig_button():
@@ -120,11 +121,9 @@ def preview_orig_button():
     # global file_in_path
 
     try:
-        # img = Image.open(file_in_path.get())
-        # img.show()
         magick.display_image(file_in_path.get(), GM_or_IM)
     except:
-        print("No orig picture to preview")
+        log.write_log("No orig picture to preview")
 
 
 def preview_new_button():
@@ -140,7 +139,7 @@ def preview_new_button():
     try:
         magick.display_image(file_show, GM_or_IM)
     except:
-        print("No new picture to preview")
+        log.write_log("No new picture to preview")
 
 
 def extension_from_file():
@@ -150,7 +149,7 @@ def extension_from_file():
     try:
         co_apply_type.current(file_extension.index(extension))
     except:
-        print("! extension_from_file: wrong extension")
+        log.write_log("! extension_from_file: wrong extension")
 
 
 def apply_all_convert(out_file, write_command):
@@ -297,7 +296,7 @@ def apply_all_button():
         pb.stop()
         root.update_idletasks()
     else:
-        print("No file selected")
+        log.write_log("No file selected")
 
 def convert_custom_button():
     """ execute custom command """
@@ -603,7 +602,7 @@ def open_file_last():
                     preview_orig()
                     extension_from_file()
                 except:
-                    print("Error in open_file_last")
+                    log.write_log("Error in open_file_last")
 
 
 def open_file_next():
@@ -623,7 +622,7 @@ def open_file_next():
                     preview_orig()
                     extension_from_file()
                 except:
-                    print("Error in open_file_next")
+                    log.write_log("Error in open_file_next")
 
 
 def open_file_first():
@@ -643,7 +642,7 @@ def open_file_first():
                     preview_orig()
                     extension_from_file()
                 except:
-                    print("Error in open_file_first")
+                    log.write_log("Error in open_file_first")
 
 
 def open_file_prev():
@@ -662,7 +661,7 @@ def open_file_prev():
                     file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
                 except:
-                    print("Error in open_file_first")
+                    log.write_log("Error in open_file_first")
 
                 file_select_L.configure(text=file)
 
@@ -910,7 +909,7 @@ def ini_save():
         with open(FILE_INI, 'w', encoding='utf-8', buffering=1) as configfile:
             config.write(configfile)
     except:
-        print("! Error in ini_save: cannot save config file: " + FILE_INI)
+        log.write_log("! Error in ini_save: cannot save config file: " + FILE_INI)
 
 
 def help_info(event):
@@ -925,7 +924,7 @@ def help_info(event):
             message = message + i
         # file.close
     except:
-        print("! Error in help_info: error during loading license file")
+        log.write_log("! Error in help_info: error during loading license file")
         message = "Copyright 2019 Tomasz Łuczak under MIT license"
 
     messagebox.showinfo(title=_("License"), message=message)
@@ -940,7 +939,7 @@ def close_window():
 
 def win_deleted():
     """ close program window """
-    print("closed")
+    log.write_log("closed")
     close_window()
 
 
@@ -1032,7 +1031,7 @@ def preview_orig():
     try:
         pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
     except:
-        print("! Error in preview_orig: Cannot load preview")
+        log.write_log("! Error in preview_orig: Cannot load preview")
 
     try:
         l_preview_orig.configure(text=preview_picture['width'] + "x" \
@@ -1040,7 +1039,7 @@ def preview_orig():
                                  + " - " \
                                  + preview_picture['size'])
     except:
-        print("! Error in preview_orig: Cannot load image size")
+        log.write_log("! Error in preview_orig: Cannot load image size")
 
     if img_histograms_on.get() == 1:
         pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
@@ -1059,7 +1058,7 @@ def preview_logo():
         l_logo_preview.configure(text=preview_picture['width'] + "x" \
                                  + preview_picture['height'])
     else:
-        print("! Error in preview_logo: Cannot load file")
+        log.write_log("! Error in preview_logo: Cannot load file")
 
 
 def preview_logo_clear():

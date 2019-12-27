@@ -11,6 +11,7 @@ import os
 import tempfile
 
 import common
+import log
 import magick
 
 def preview_histogram(file_in, gm_or_im):
@@ -34,7 +35,7 @@ def preview_histogram(file_in, gm_or_im):
         os.system(command)
         return file_histogram
     except:
-        print("! Error in convert_histogram: " + command)
+        log.write_log("! Error in convert_histogram: " + command)
 
 
 def preview_convert(file_in, command, size, gm_or_im):
@@ -62,7 +63,7 @@ def preview_convert(file_in, command, size, gm_or_im):
         result = {'filename': file_preview, 'size': filesize, \
                 'width': width, 'height': height}
     except:
-        print("! Error in preview_convert: return")
+        log.write_log("! Error in preview_convert: return")
         result = None
 
     return result
