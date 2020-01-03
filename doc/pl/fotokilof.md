@@ -11,7 +11,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
 ### Konwersje
  - skalowanie z zachowaniem proporcji,
  - wycinek - trzy metody zaznaczania obszaru,
- - dodanie tekstu do obrazka (wewnątrz i na zewnątrz),
+ - dodanie tekstu do obrazka, wewnątrz i na zewnątrz (generator memów)
  - ramka wokół obrazka,
  - obrót,
  - czarno-biały albo sepia,

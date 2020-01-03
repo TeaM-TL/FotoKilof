@@ -17,7 +17,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 ## Graphics conversion
  - scaling/resize,
  - crop,
- - text annotation (inside or outside of picture),
+ - text annotation, inside or outside of picture (mems generator),
  - border around picture,
  - rotation,
  - black-white or sepia,
