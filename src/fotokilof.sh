@@ -4,5 +4,5 @@
 
 MYPATH="${0%/*}"
 cd $MYPATH
-python3 fotokilof.py &
+python3 __main__.py &
 

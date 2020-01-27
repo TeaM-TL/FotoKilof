@@ -1,5 +1,5 @@
 # FotoKilof - GUI for ImageMagick
-GUI for the most used (by me) ImageMagick functionality for processing pictures. 
+GUI for the most used (by me) ImageMagick functionality for processing pictures.
 
 ## Screenshots
 
@@ -82,3 +82,9 @@ To make life easier, package *fotokilof-windows-x64.zip* contains ImageMagick bi
  - Bozhidar Kirev - Bulgarian translation,
  - Afif Hendrawan - Indonesian translation.
 
+## Origin of name
+
+Foto - is obvious
+Kilof - tool for heavy work, see [Wikipedia](https://pl.wikipedia.org/wiki/Kilof)
+
+---
