@@ -80,7 +80,7 @@ To make life easier, package *fotokilof-windows-x64.zip* contains ImageMagick bi
 
 ```
 pip3 install fotokilof
-python fotokilof-3.2.2-py3-none-any.whl/src
+python3 fotokilof-3.2.2-py3-none-any.whl/src
 ```
 
 ## Requirements
