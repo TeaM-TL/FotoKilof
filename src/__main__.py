@@ -54,7 +54,7 @@ log.write_log(translate_info, "E", "w")
 
 ###################
 # CONSTANTS
-VERSION = "3.2.1"
+VERSION = "3.2.2"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
