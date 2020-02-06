@@ -21,7 +21,7 @@ import os
 import re
 import shutil
 import tempfile
-import touch
+#import touch
 
 import common
 import log
@@ -257,7 +257,7 @@ def get_image_size(file_in, gm_or_im):
     file_info = common.spacja(os.path.join(tempfile.gettempdir(),
                                            "fotokilof_" + getpass.getuser() \
                                            + "_image_info"))
-    touch.touch(file_info)
+    #touch.touch(file_info)
     command = ' -format "%w\\n%h\\n%b" '
     command = command + common.spacja(file_in) + ' > '
     result = magick(command, "", file_info, gm_or_im + "identify")
