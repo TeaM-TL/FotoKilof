@@ -202,8 +202,7 @@ Python3 i moduły:
     - configparser,
     - datetime,
     - pathlib,
-    - tkcolorpicker (nieobligatoryjny, można obejść),
-    - touch,
+    - tkcolorpicker (nieobligatoryjny, można obejść).
  - via pakiety
      - tkinter,
  - powinny być w zestawie

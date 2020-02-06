@@ -156,8 +156,7 @@ Python3 and modules:
     - configparser,
     - datetime,
     - pathlib,
-    - tkcolorpicker (not mandatory),
-    - touch,
+    - tkcolorpicker (not mandatory).
  - via packets:
      - tkinter,
  - should be out of the box:
