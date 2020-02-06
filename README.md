@@ -1,5 +1,5 @@
 # FotoKilof - GUI for ImageMagick
-GUI for the most used (by me) ImageMagick functionality for processing pictures.
+GUI for the most used (by me) ImageMagick functionality for processing pictures. 
 
 ## Screenshots
 
@@ -61,18 +61,29 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 ## Available translations
 Available: English, Polish, German, Bulgarian and Indonesian.
 
-## Download 
+## Run
+
+### As package
+
+#### Download 
 In [Release](https://github.com/TeaM-TL/FotoKilof/releases) you can find current binary version for Windows (8.1 and newer) and Linux
 
-## Run
+#### Run
  - unzip downloaded *fotokilof-\**
  - optionaly make shortcut on the desktop,
  - run fotokilof.
 
-### Windows
+#### Windows
 To make life easier, package *fotokilof-windows-x64.zip* contains ImageMagick binaries.
 
-### Requirements
+### As pypi package
+
+```
+pip3 install fotokilof
+python fotokilof-3.2.2-py3-none-any.whl/src
+```
+
+## Requirements
  - Windows, Linux, MacOS X, BSD,
  - FullHD screen for comfort work.
 
@@ -82,9 +93,3 @@ To make life easier, package *fotokilof-windows-x64.zip* contains ImageMagick bi
  - Bozhidar Kirev - Bulgarian translation,
  - Afif Hendrawan - Indonesian translation.
 
-## Origin of name
-
-Foto - is obvious
-Kilof - tool for heavy work, see [Wikipedia](https://pl.wikipedia.org/wiki/Kilof)
-
----
