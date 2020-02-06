@@ -82,7 +82,7 @@ def ini_read(file_ini, theme_list, preview_size_list):
     except:
         log_level = "E"
     dict_return['log_level'] = entries.parse_list(log_level,
-                                                  ("E", "W", "A"),
+                                                  ("E", "W", "M"),
                                                   "E")
 
     return dict_return

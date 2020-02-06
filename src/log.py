@@ -13,32 +13,38 @@ from pathlib import Path
 
 import entries
 
-def write_log(message, level="M", mode="a"):
+def write_log(message, level="M", mode="a", initial="0"):
     """
     write message into log file with datestamp
     level: E(rror), W(arning), M(essage)
     mode: a(ppend), w(rite) into log file
+    self: to print initial entry into log
     """
 
     file_ini = os.path.join(str(Path.home()), ".fotokilof.ini")
     config = configparser.ConfigParser()
     config.read(file_ini, encoding="utf8")
     try:
-        log_lev = config.get('Konfiguracja', 'log_level')
+        log_level = config.get('Konfiguracja', 'log_level')
     except:
-        log_lev = "E"
-    log_lev = entries.parse_list(log_lev, ("E", "W", "A"), "E")
+        log_level = "E"
+    log_level = entries.parse_list(log_level, ("E", "W", "M"), "E")
 
     # default, 0 - no logging
     write = 0
-    if log_lev == "E":
+    if log_level == "E":
         if level == "E":
             write = 1
-    elif log_lev == "W":
+    elif log_level == "W":
         if level in ("E", "W"):
             write = 1
-    elif log_lev == "A":
+    elif log_level == "M":
         write = 1
+
+    if initial == 1:
+        write = 1
+        mode = "w"
+        message = message + " : : " + log_level
 
     if write == 1:
         logfile = os.path.join(str(Path.home()), ".fotokilof.log")

@@ -5,7 +5,7 @@
 CWD=`pwd`
 DIST=dist
 NAME="fotokilof"
-VER="3.2"
+VER="3.2.2"
 OS=`echo $0 | sed 's/^..//g'`
 OSVER="x86_64"
 
@@ -17,7 +17,7 @@ ONEFILE=""
 
 # zipping
 ZIPFILE=$NAME-$VER-$OS-$OSVER.zip
-EXCLUDE="-x locale/*/*/*.po -x locale/fotokilof.pot -x doc/*/*md"
+EXCLUDE="-x locale/*/*/*.po -x locale/$NAME.pot -x doc/*/*md"
 
 # ---------------------------------------
 echo "= Locale ========================="
@@ -40,14 +40,14 @@ echo "UPX: " $UPX
 echo "ONEFILE: " $ONEFILE
 
 echo "= Remove working directories ===================="
-for DIR in "__pycache__" "build" $DIST/$NAME; do
+for DIR in __pycache__ build $DIST/$NAME; do
     if [ -d $DIR ]; then
     echo "remove: $DIR"
     rm -rf $DIR
     fi
 done
 
-pyinstaller --clean $ONEFILE $UPX src/fotokilof.py
+pyinstaller --clean $ONEFILE $UPX src/$NAME.py
 rm -rf build
 cd $CWD
 

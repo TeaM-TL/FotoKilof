@@ -37,6 +37,9 @@ import magick
 import mswindows
 import preview
 
+# Start logging
+log.write_log('Start', "M", "w", 1)
+
 # set locale for Windows
 if mswindows.windows() == 1:
     import locale
@@ -45,12 +48,17 @@ if mswindows.windows() == 1:
         os.environ['LANG'] = lang
 
 localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
+if not os.path.isdir(localedir):
+    localedir = os.path.join('..', 'FotoKilof', 'locale')
+translate_info = str("Locale directory: " + localedir)
+log.write_log(translate_info, "M")
+
 translate = gettext.translation('fotokilof', localedir, fallback=True)
 gettext.install('fotokilof', localedir)
 _ = translate.gettext
 
 translate_info = str(gettext.find('base', 'locales'))
-log.write_log(translate_info, "E", "w")
+log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
