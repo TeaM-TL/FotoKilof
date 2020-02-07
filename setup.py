@@ -21,8 +21,8 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    setup_require = ["mo_installer"],
-    locale_src = "src/locale",
+#    setup_require = ["mo_installer"],
+#    locale_src = "src/locale",
 #    packages_dir={'': 'src'},
 #    package_data={'fotokilof': ['src/locale//LC_MESSAGES/.mo']},
     install_requires=['configparser','datetime','pathlib','tkcolorpicker']

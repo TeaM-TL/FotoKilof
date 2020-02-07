@@ -49,7 +49,7 @@ if mswindows.windows() == 1:
 
 localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
 if not os.path.isdir(localedir):
-    localedir = os.path.join('..', 'FotoKilof', 'locale')
+    localedir = os.path.join(os.getcwd(), 'locale')
 translate_info = str("Locale directory: " + localedir)
 log.write_log(translate_info, "M")
 
