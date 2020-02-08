@@ -14,6 +14,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/TeaM-TL/FotoKilof",
     packages=setuptools.find_packages(),
+    license="MIT",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python :: 3",
@@ -21,10 +22,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-#    setup_require = ["mo_installer"],
-#    locale_src = "src/locale",
-#    packages_dir={'': 'src'},
-#    package_data={'fotokilof': ['src/locale//LC_MESSAGES/.mo']},
     install_requires=['configparser','datetime','pathlib','tkcolorpicker']
-#    scripts=['bin/fotokilof']
 )
