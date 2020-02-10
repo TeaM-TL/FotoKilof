@@ -11,6 +11,9 @@ cd ..
 touch $INITPY
 mv $MAINPY $MAIN__PY
 
+# Python 3.8
+#python3 setup.py sdist bdist
+# Python 3.7
 python3 setup.py sdist bdist_wheel
 
 mv $MAIN__PY $MAINPY

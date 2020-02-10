@@ -23,6 +23,7 @@ from tkinter import N, S, W, E, END, DISABLED, NORMAL
 try:
     from tkcolorpicker import askcolor
 except:
+    write_log("tkcolorpicker not found", level="W")
     tkcolorpicker_not_found = True
 else:
     tkcolorpicker_not_found = False

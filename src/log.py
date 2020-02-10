@@ -27,10 +27,10 @@ def write_log(message, level="M", mode="a", initial="0"):
     try:
         log_level = config.get('Konfiguracja', 'log_level')
     except:
-        log_level = "E"
+        log_level = "M"
     log_level = entries.parse_list(log_level, ("E", "W", "M"), "E")
 
-    # default, 0 - no logging
+    # default, write=0 - no logging
     write = 0
     if log_level == "E":
         if level == "E":
