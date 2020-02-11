@@ -1227,18 +1227,85 @@ magick_commands = ("composite", "convert")
 ######################################################################
 # Karty
 ######################################################################
-#main = ttk.Frame()
+main_menu = ttk.Frame()
 main = PanedWindow()
-main.pack()
+
+main_menu.pack(side='top', expand=0, fill='both')
+main.pack(side='bottom', expand=1, fill='both')
 
 validation = main.register(gui.only_numbers)  # Entry validation
+
 ####################################################################
-# Kolumna menu
+# main_menu row
+####################################################################
+
+###########################
+# Picture selection
+###########################
+frame_file_select = ttk.Labelframe(main_menu, text=_("Image"),
+                                   style="Fiolet.TLabelframe")
+frame_file_select.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+
+b_file_select = ttk.Button(frame_file_select, text=_("File selection"),
+                           command=open_file, style="Brown.TButton")
+
+file_select_L = ttk.Label(frame_file_select, width=30)
+
+b_file_select_first = ttk.Button(frame_file_select, text=_("First"),
+                                 command=open_file_first)
+b_file_select_prev = ttk.Button(frame_file_select, text=_("Previous"),
+                                command=open_file_prev)
+b_file_select_next = ttk.Button(frame_file_select, text=_("Next"),
+                                command=open_file_next)
+b_file_select_last = ttk.Button(frame_file_select, text=_("Last"),
+                                command=open_file_last)
+
+b_file_select.grid(column=1, row=1, padx=5, pady=5, sticky=W)
+#
+b_file_select_first.grid(column=2, row=1, padx=5, pady=5, sticky=W)
+b_file_select_prev.grid(column=3, row=1, padx=5, pady=5, sticky=W)
+b_file_select_next.grid(column=4, row=1, padx=5, pady=5, sticky=W)
+b_file_select_last.grid(column=5, row=1, padx=5, pady=5, sticky=W)
+#
+file_select_L.grid(column=6, row=1, padx=5, pady=5, sticky=W, columnspan=3)
+
+##########################
+# Apply all
+##########################
+frame_apply = ttk.LabelFrame(main_menu, text=_("Execute all"),
+                             style="Fiolet.TLabelframe")
+frame_apply.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
+
+rb_apply_dir = ttk.Radiobutton(frame_apply, text=_("Folder"),
+                               variable=file_dir_selector, value="1")
+rb_apply_file = ttk.Radiobutton(frame_apply, text=_("File"),
+                                variable=file_dir_selector, value="0")
+co_apply_type = ttk.Combobox(frame_apply, width=4, values=file_extension)
+co_apply_type.configure(state='readonly')
+co_apply_type.current(file_extension.index(".jpg"))
+b_apply_run = ttk.Button(frame_apply, text=_("Execute all"),
+                         command=apply_all_button,
+                         style="Brown.TButton")
+rb_apply_dir.grid(row=1, column=1, pady=5, sticky=W)
+rb_apply_file.grid(row=1, column=2, padx=5, pady=5, sticky=W)
+
+co_apply_type.grid(row=1, column=3, padx=5, pady=1, sticky=(W, E))
+b_apply_run.grid(row=1, column=4, padx=5, pady=5, sticky=(W, E))
+
+pb = ttk.Progressbar(frame_apply, orient="horizontal",
+                     mode="determinate", var=progress_var)
+pb['value'] = 0
+pb.grid(row=1, column=6, padx=5, sticky=(W, E))
+
+l_pb = ttk.Label(frame_apply, textvariable=progress_files, width=15)
+l_pb.grid(row=1, column=5, padx=5, pady=2, sticky=W)
+####################################################################
+# menu column
 ####################################################################
 frame_zero_col = ttk.Frame(main)
-#frame_zero_col.grid(row=1, column=1, rowspan=2, sticky=(N, W, E, S))
+
 ###########################
-# Wybór poleceń
+# Tools selection
 ###########################
 frame_zero_set = ttk.Labelframe(frame_zero_col, text=_("Tools"),
                                 style="Fiolet.TLabelframe")
@@ -1402,7 +1469,6 @@ l_logo_preview.grid(row=6, column=1, columnspan=2, padx=5, pady=1)
 # First column
 #####################################################################
 frame_first_col = ttk.Frame(main)
-#frame_first_col.grid(row=1, column=2, rowspan=2, sticky=(N, W, E, S))
 
 ###########################
 # Resize
@@ -1803,36 +1869,7 @@ b_custom_run.grid(row=2, column=4, padx=5, pady=5, sticky=E)
 # Second column
 ########################################################################
 frame_second_col = ttk.Frame(main)
-#frame_second_col.grid(row=1, column=3, sticky=(N, W, E, S))
 
-###########################
-# Picture selection
-###########################
-frame_file_select = ttk.Labelframe(frame_second_col, text=_("Image"),
-                                   style="Fiolet.TLabelframe")
-frame_file_select.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
-
-b_file_select = ttk.Button(frame_file_select, text=_("File selection"),
-                           command=open_file, style="Brown.TButton")
-
-file_select_L = ttk.Label(frame_file_select, width=24)
-
-b_file_select_first = ttk.Button(frame_file_select, text=_("First"),
-                                 command=open_file_first)
-b_file_select_prev = ttk.Button(frame_file_select, text=_("Previous"),
-                                command=open_file_prev)
-b_file_select_next = ttk.Button(frame_file_select, text=_("Next"),
-                                command=open_file_next)
-b_file_select_last = ttk.Button(frame_file_select, text=_("Last"),
-                                command=open_file_last)
-
-b_file_select.grid(column=1, row=1, padx=5, pady=5, sticky=W)
-file_select_L.grid(column=2, row=1, padx=5, pady=5, sticky=W, columnspan=3)
-#
-b_file_select_first.grid(column=1, row=2, padx=5, pady=5, sticky=W)
-b_file_select_prev.grid(column=2, row=2, padx=5, pady=5, sticky=W)
-b_file_select_next.grid(column=3, row=2, padx=5, pady=5, sticky=W)
-b_file_select_last.grid(column=4, row=2, padx=5, pady=5, sticky=W)
 
 ############################
 # Original preview
@@ -1865,46 +1902,7 @@ l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
 # Third column
 #####################################################
 frame_third_col = ttk.Frame(main)
-#frame_third_col.grid(row=1, column=4, sticky=(N, W, E, S))
 
-##########################
-# Apply all
-##########################
-frame_apply = ttk.LabelFrame(frame_third_col, text=_("Execute all"),
-                             style="Fiolet.TLabelframe")
-frame_apply.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
-
-rb_apply_dir = ttk.Radiobutton(frame_apply, text=_("Folder"),
-                               variable=file_dir_selector, value="1")
-rb_apply_file = ttk.Radiobutton(frame_apply, text=_("File"),
-                                variable=file_dir_selector, value="0")
-co_apply_type = ttk.Combobox(frame_apply, width=4, values=file_extension)
-co_apply_type.configure(state='readonly')
-co_apply_type.current(file_extension.index(".jpg"))
-b_apply_run = ttk.Button(frame_apply, text=_("Execute all"),
-                         command=apply_all_button,
-                         style="Brown.TButton")
-rb_apply_dir.grid(row=1, column=1, pady=5, sticky=W)
-rb_apply_file.grid(row=1, column=2, padx=5, pady=5, sticky=W)
-
-co_apply_type.grid(row=1, column=3, padx=5, pady=1, sticky=(W, E))
-b_apply_run.grid(row=1, column=4, padx=5, pady=5, sticky=(W, E))
-
-pb = ttk.Progressbar(frame_apply, orient="horizontal",
-                     mode="determinate", var=progress_var)
-pb['value'] = 0
-pb.grid(row=2, column=1, columnspan=4, padx=5, sticky=(W, E))
-
-l_pb = ttk.Label(frame_apply, textvariable=progress_files)
-l_pb.grid(row=3, column=1, columnspan=4, padx=5, pady=2, sticky=W)
-
-##############################
-# Add Frames into PanedWindow
-##############################
-main.add(frame_zero_col)
-main.add(frame_first_col)
-main.add(frame_second_col)
-main.add(frame_third_col)
 
 ##########################
 # Result preview
@@ -1934,6 +1932,13 @@ pi_histogram_new = PhotoImage()
 l_histogram_new = ttk.Label(frame_histogram_new, image=pi_histogram_new)
 l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 
+###############################################################################
+# Add Frames into PanedWindow
+###############################################################################
+main.add(frame_zero_col)
+main.add(frame_first_col)
+main.add(frame_second_col)
+main.add(frame_third_col)
 
 ###############################################################################
 # bind
