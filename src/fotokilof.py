@@ -1292,21 +1292,27 @@ rb_apply_file.grid(row=1, column=2, padx=5, pady=5, sticky=W)
 co_apply_type.grid(row=1, column=3, padx=5, pady=1, sticky=(W, E))
 b_apply_run.grid(row=1, column=4, padx=5, pady=5, sticky=(W, E))
 
+l_pb = ttk.Label(frame_apply, textvariable=progress_files, width=25)
+l_pb.grid(row=1, column=5, padx=5, pady=2, sticky=W)
+
 pb = ttk.Progressbar(frame_apply, orient="horizontal",
                      mode="determinate", var=progress_var)
 pb['value'] = 0
 pb.grid(row=1, column=6, padx=5, sticky=(W, E))
 
-l_pb = ttk.Label(frame_apply, textvariable=progress_files, width=15)
-l_pb.grid(row=1, column=5, padx=5, pady=2, sticky=W)
+##############################################################################
+# main row
+##############################################################################
+
 ####################################################################
-# menu column
+# Tools, settings, logo column
 ####################################################################
+
 frame_zero_col = ttk.Frame(main)
 
-###########################
+############################
 # Tools selection
-###########################
+############################
 frame_zero_set = ttk.Labelframe(frame_zero_col, text=_("Tools"),
                                 style="Fiolet.TLabelframe")
 frame_zero_set.grid(row=1, column=1, padx=5, pady=5, sticky=(W, E))
@@ -1344,12 +1350,7 @@ cb_custom = ttk.Checkbutton(frame_zero_set, text=_("Custom"),
                             variable=img_custom_on,
                             offvalue="0", onvalue="1")
 frame_frame_zero_set = ttk.Labelframe(frame_zero_set, text=_("Layout"))
-co_preview_selector_orig = ttk.Combobox(frame_frame_zero_set, width=4,
-                                        values=preview_size_list)
-co_preview_selector_new = ttk.Combobox(frame_frame_zero_set, width=4,
-                                       values=preview_size_list)
-co_preview_selector_orig.configure(state='readonly')
-co_preview_selector_new.configure(state='readonly')
+
 co_theme_selector = ttk.Combobox(frame_frame_zero_set,
                                  width=10, values=theme_list)
 co_theme_selector.configure(state='readonly')
@@ -1368,8 +1369,6 @@ cb_normalize.pack(padx=5, pady=1, anchor=W)
 cb_logo.pack(padx=5, pady=1, anchor=W)
 cb_custom.pack(padx=5, pady=1, anchor=W)
 frame_frame_zero_set.pack(padx=5, pady=1, anchor=W)
-co_preview_selector_orig.grid(row=1, column=1, padx=5, pady=1, sticky=W)
-co_preview_selector_new.grid(row=2, column=1, padx=5, pady=5, sticky=W)
 co_theme_selector.grid(row=1, column=2, padx=5, pady=5, sticky=W)
 b_last_set.grid(row=2, column=2, padx=5, pady=1, sticky=E)
 ###########################
@@ -1882,11 +1881,15 @@ frame_preview_orig.grid(row=2, column=1, columnspan=2,
 b_preview_orig_run = ttk.Button(frame_preview_orig, text=_("Preview"),
                                 command=preview_orig_button)
 l_preview_orig = ttk.Label(frame_preview_orig)
+co_preview_selector_orig = ttk.Combobox(frame_preview_orig, width=4,
+                                        values=preview_size_list)
+co_preview_selector_orig.configure(state='readonly')
 pi_preview_orig = PhotoImage()
 l_preview_orig_pi = ttk.Label(frame_preview_orig, image=pi_preview_orig)
 b_preview_orig_run.grid(row=1, column=1, padx=5, pady=5)
 l_preview_orig.grid(row=1, column=2, padx=5, pady=5)
-l_preview_orig_pi.grid(row=2, column=1, columnspan=2)
+co_preview_selector_orig.grid(row=1, column=3, padx=5, pady=1, sticky=W)
+l_preview_orig_pi.grid(row=2, column=1, columnspan=3)
 
 ###########################
 # Histogram original
@@ -1914,12 +1917,16 @@ frame_preview_new.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 b_preview_new_run = ttk.Button(frame_preview_new, text=_("Preview"),
                                command=preview_new_button)
 l_preview_new = ttk.Label(frame_preview_new)
+co_preview_selector_new = ttk.Combobox(frame_preview_new, width=4,
+                                       values=preview_size_list)
+co_preview_selector_new.configure(state='readonly')
 pi_preview_new = PhotoImage()
 l_preview_new_pi = ttk.Label(frame_preview_new, image=pi_preview_new)
 # c_preview_new_pi = Canvas(frame_preview_new, width=300, height=300)
 b_preview_new_run.grid(row=1, column=1, padx=5, pady=5)
 l_preview_new.grid(row=1, column=2, padx=5, pady=5)
-l_preview_new_pi.grid(row=2, column=1, columnspan=2)
+co_preview_selector_new.grid(row=1, column=3, padx=5, pady=5, sticky=W)
+l_preview_new_pi.grid(row=2, column=1, columnspan=3)
 # c_preview_new_pi.grid(row=3, column=1, columnspan=2, padx=5, pady=5)
 
 ###########################
