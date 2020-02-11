@@ -628,6 +628,7 @@ def open_file_last():
                     file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
                     extension_from_file()
+                    preview_new_refresh("none")
                 except:
                     log.write_log("Error in open_file_last", "E")
 
@@ -648,6 +649,7 @@ def open_file_next():
                     file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
                     extension_from_file()
+                    preview_new_refresh("none")
                 except:
                     log.write_log("Error in open_file_next", "E")
 
@@ -668,6 +670,7 @@ def open_file_first():
                     file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
                     extension_from_file()
+                    preview_new_refresh("none")
                 except:
                     log.write_log("Error in open_file_first", "E")
 
@@ -696,6 +699,7 @@ def open_file_prev():
                 file_in_path.set(os.path.join(directory, file))
                 preview_orig()
                 extension_from_file()
+                preview_new_refresh("none")
 
 
 def color_choose_border():
