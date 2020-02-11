@@ -63,7 +63,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.3.0"
+VERSION = "3.3.1"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -1262,12 +1262,12 @@ b_file_select_last = ttk.Button(frame_file_select, text=_("Last"),
 
 b_file_select.grid(column=1, row=1, padx=5, pady=5, sticky=W)
 #
-b_file_select_first.grid(column=2, row=1, padx=5, pady=5, sticky=W)
-b_file_select_prev.grid(column=3, row=1, padx=5, pady=5, sticky=W)
-b_file_select_next.grid(column=4, row=1, padx=5, pady=5, sticky=W)
-b_file_select_last.grid(column=5, row=1, padx=5, pady=5, sticky=W)
+file_select_L.grid(column=2, row=1, padx=5, pady=5, sticky=(W, E))
 #
-file_select_L.grid(column=6, row=1, padx=5, pady=5, sticky=W, columnspan=3)
+b_file_select_first.grid(column=3, row=1, padx=5, pady=5, sticky=W)
+b_file_select_prev.grid(column=4, row=1, padx=5, pady=5, sticky=W)
+b_file_select_next.grid(column=5, row=1, padx=5, pady=5, sticky=W)
+b_file_select_last.grid(column=6, row=1, padx=5, pady=5, sticky=W)
 
 ##########################
 # Apply all
@@ -1286,13 +1286,14 @@ co_apply_type.current(file_extension.index(".jpg"))
 b_apply_run = ttk.Button(frame_apply, text=_("Execute all"),
                          command=apply_all_button,
                          style="Brown.TButton")
-rb_apply_dir.grid(row=1, column=1, pady=5, sticky=W)
-rb_apply_file.grid(row=1, column=2, padx=5, pady=5, sticky=W)
 
-co_apply_type.grid(row=1, column=3, padx=5, pady=1, sticky=(W, E))
-b_apply_run.grid(row=1, column=4, padx=5, pady=5, sticky=(W, E))
+b_apply_run.grid(row=1, column=1, padx=5, pady=5, sticky=(W, E))
+rb_apply_dir.grid(row=1, column=2, pady=5, sticky=W)
+rb_apply_file.grid(row=1, column=3, padx=5, pady=5, sticky=W)
 
-l_pb = ttk.Label(frame_apply, textvariable=progress_files, width=25)
+co_apply_type.grid(row=1, column=4, padx=5, pady=1, sticky=(W, E))
+
+l_pb = ttk.Label(frame_apply, textvariable=progress_files, width=35)
 l_pb.grid(row=1, column=5, padx=5, pady=2, sticky=W)
 
 pb = ttk.Progressbar(frame_apply, orient="horizontal",
