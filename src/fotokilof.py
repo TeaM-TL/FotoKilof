@@ -106,6 +106,13 @@ def preview_clear():
     pi_histogram_orig.configure(file="")
 
 
+def preview_new_refresh(event):
+    """ callback after selection of size preview"""
+
+    # to define file_out
+    #preview_new(file_out)
+
+
 def preview_new(file_out):
     """ generowanie podglądu wynikowego """
     preview_picture = preview.preview_convert(file_out,
@@ -991,6 +998,11 @@ def mouse_crop_SE(event):
     e3_crop_1.insert(0, width)
     e4_crop_1.delete(0, "end")
     e4_crop_1.insert(0, height)
+
+
+def preview_orig_refresh(event):
+    """ callback after selection of size preview"""
+    preview_orig()
 
 
 def preview_orig():
@@ -1891,10 +1903,11 @@ co_preview_selector_orig = ttk.Combobox(frame_preview_orig, width=4,
 co_preview_selector_orig.configure(state='readonly')
 pi_preview_orig = PhotoImage()
 l_preview_orig_pi = ttk.Label(frame_preview_orig, image=pi_preview_orig)
-b_preview_orig_run.grid(row=1, column=1, padx=5, pady=5)
-l_preview_orig.grid(row=1, column=2, padx=5, pady=5)
-co_preview_selector_orig.grid(row=1, column=3, padx=5, pady=1, sticky=W)
-l_preview_orig_pi.grid(row=2, column=1, columnspan=3)
+
+l_preview_orig_pi.pack(side='bottom')
+b_preview_orig_run.pack(side='left', padx=5, pady=5)
+l_preview_orig.pack(side='left', padx=5, pady=5)
+co_preview_selector_orig.pack(side='left', padx=5, pady=1)
 
 ###########################
 # Histogram original
@@ -1927,13 +1940,11 @@ co_preview_selector_new = ttk.Combobox(frame_preview_new, width=4,
 co_preview_selector_new.configure(state='readonly')
 pi_preview_new = PhotoImage()
 l_preview_new_pi = ttk.Label(frame_preview_new, image=pi_preview_new)
-# c_preview_new_pi = Canvas(frame_preview_new, width=300, height=300)
-b_preview_new_run.grid(row=1, column=1, padx=5, pady=5)
-l_preview_new.grid(row=1, column=2, padx=5, pady=5)
-co_preview_selector_new.grid(row=1, column=3, padx=5, pady=5, sticky=W)
-l_preview_new_pi.grid(row=2, column=1, columnspan=3)
-# c_preview_new_pi.grid(row=3, column=1, columnspan=2, padx=5, pady=5)
 
+l_preview_new_pi.pack(side='bottom')
+b_preview_new_run.pack(side='left', padx=5, pady=5)
+l_preview_new.pack(side='left', padx=5, pady=5)
+co_preview_selector_new.pack(side='left', padx=5, pady=1)
 ###########################
 # Histogram new
 ###########################
@@ -1955,13 +1966,14 @@ main.add(frame_third_col)
 ###############################################################################
 # bind
 ###############################################################################
-
 # binding commands to widgets
+co_preview_selector_orig.bind("<<ComboboxSelected>>", preview_orig_refresh)
+co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
 l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
-#root.bind("<F1>", help_info)
-#root.protocol("WM_DELETE_WINDOW", win_deleted)
+root.bind("<F1>", help_info)
+root.protocol("WM_DELETE_WINDOW", win_deleted)
 
 ##########################################
 # Run functions
