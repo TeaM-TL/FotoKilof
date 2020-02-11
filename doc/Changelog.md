@@ -2,7 +2,9 @@
 
 ## Current
 
-3.3 DCOM image format
+4. DCOM image format
+
+3.3 Added: paned frames, reorder GUI
 
 3.2 Added: text inside and outside, logging. Small code review, standarize temporary file
 

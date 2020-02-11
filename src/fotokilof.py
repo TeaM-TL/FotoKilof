@@ -14,7 +14,7 @@ import re
 import sys
 from pathlib import Path
 
-from tkinter import Tk, ttk, Label, PhotoImage
+from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog, messagebox
 from tkinter import TclError, StringVar, IntVar
@@ -63,7 +63,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.2.2"
+VERSION = "3.3.0"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -1227,7 +1227,8 @@ magick_commands = ("composite", "convert")
 ######################################################################
 # Karty
 ######################################################################
-main = ttk.Frame(root)
+#main = ttk.Frame()
+main = PanedWindow()
 main.pack()
 
 validation = main.register(gui.only_numbers)  # Entry validation
@@ -1235,7 +1236,7 @@ validation = main.register(gui.only_numbers)  # Entry validation
 # Kolumna menu
 ####################################################################
 frame_zero_col = ttk.Frame(main)
-frame_zero_col.grid(row=1, column=1, rowspan=2, sticky=(N, W, E, S))
+#frame_zero_col.grid(row=1, column=1, rowspan=2, sticky=(N, W, E, S))
 ###########################
 # Wybór poleceń
 ###########################
@@ -1401,7 +1402,7 @@ l_logo_preview.grid(row=6, column=1, columnspan=2, padx=5, pady=1)
 # First column
 #####################################################################
 frame_first_col = ttk.Frame(main)
-frame_first_col.grid(row=1, column=2, rowspan=2, sticky=(N, W, E, S))
+#frame_first_col.grid(row=1, column=2, rowspan=2, sticky=(N, W, E, S))
 
 ###########################
 # Resize
@@ -1802,7 +1803,7 @@ b_custom_run.grid(row=2, column=4, padx=5, pady=5, sticky=E)
 # Second column
 ########################################################################
 frame_second_col = ttk.Frame(main)
-frame_second_col.grid(row=1, column=3, sticky=(N, W, E, S))
+#frame_second_col.grid(row=1, column=3, sticky=(N, W, E, S))
 
 ###########################
 # Picture selection
@@ -1864,7 +1865,7 @@ l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
 # Third column
 #####################################################
 frame_third_col = ttk.Frame(main)
-frame_third_col.grid(row=1, column=4, sticky=(N, W, E, S))
+#frame_third_col.grid(row=1, column=4, sticky=(N, W, E, S))
 
 ##########################
 # Apply all
@@ -1897,7 +1898,13 @@ pb.grid(row=2, column=1, columnspan=4, padx=5, sticky=(W, E))
 l_pb = ttk.Label(frame_apply, textvariable=progress_files)
 l_pb.grid(row=3, column=1, columnspan=4, padx=5, pady=2, sticky=W)
 
-
+##############################
+# Add Frames into PanedWindow
+##############################
+main.add(frame_zero_col)
+main.add(frame_first_col)
+main.add(frame_second_col)
+main.add(frame_third_col)
 
 ##########################
 # Result preview
@@ -1936,8 +1943,8 @@ l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
 l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
-root.bind("<F1>", help_info)
-root.protocol("WM_DELETE_WINDOW", win_deleted)
+#root.bind("<F1>", help_info)
+#root.protocol("WM_DELETE_WINDOW", win_deleted)
 
 ##########################################
 # Run functions
