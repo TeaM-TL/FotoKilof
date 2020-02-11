@@ -5,7 +5,7 @@
 CWD=`pwd`
 DIST=dist
 NAME="fotokilof"
-VER="3.3"
+VER="3.3.1"
 OS=`echo $0 | sed 's/^..//g'`
 OSVER="x86_64"
 
