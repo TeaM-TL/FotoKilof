@@ -1349,13 +1349,13 @@ cb_logo = ttk.Checkbutton(frame_zero_set, text=_("Logo"),
 cb_custom = ttk.Checkbutton(frame_zero_set, text=_("Custom"),
                             variable=img_custom_on,
                             offvalue="0", onvalue="1")
-frame_frame_zero_set = ttk.Labelframe(frame_zero_set, text=_("Layout"))
+frame_frame_zero_set = ttk.Frame(frame_zero_set)
 
 co_theme_selector = ttk.Combobox(frame_frame_zero_set,
-                                 width=10, values=theme_list)
+                                 width=9, values=theme_list)
 co_theme_selector.configure(state='readonly')
 
-b_last_set = ttk.Button(frame_frame_zero_set, text=_("Apply"), command=tools_set)
+b_layout_set = ttk.Button(frame_frame_zero_set, text=_("Apply"), command=tools_set)
 
 cb_histograms.pack(padx=5, pady=1, anchor=W)
 cb_resize.pack(padx=5, pady=1, anchor=W)
@@ -1368,11 +1368,12 @@ cb_contrast.pack(padx=5, pady=1, anchor=W)
 cb_normalize.pack(padx=5, pady=1, anchor=W)
 cb_logo.pack(padx=5, pady=1, anchor=W)
 cb_custom.pack(padx=5, pady=1, anchor=W)
-frame_frame_zero_set.pack(padx=5, pady=1, anchor=W)
-co_theme_selector.grid(row=1, column=2, padx=5, pady=5, sticky=W)
-b_last_set.grid(row=2, column=2, padx=5, pady=1, sticky=E)
+frame_frame_zero_set.pack(padx=0, pady=0, anchor=W)
+co_theme_selector.grid(row=1, column=1, padx=5, pady=5, sticky=W)
+b_layout_set.grid(row=1, column=2, padx=5, pady=1, sticky=E)
+
 ###########################
-# Przyciski
+# Buttons
 ###########################
 frame_zero_cmd = ttk.Labelframe(frame_zero_col, text=_("Settings"),
                                 style="Fiolet.TLabelframe")
