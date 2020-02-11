@@ -98,12 +98,21 @@ def convert_custom_clear():
 # Preview
 
 
-def preview_clear():
+def preview_orig_clear():
     """ clear every preview if doesn't choose file """
     log.write_log("not ready yet", "M")
-    photo = ""
-    pi_preview_orig.configure(data=photo)
-    pi_histogram_orig.configure(file="")
+#    pi_histogram_orig.configure(image='')
+    l_preview_orig_pi.configure(image='')
+
+
+def preview_new_clear():
+    """ clear every preview if doesn't choose file """
+    log.write_log("not ready yet", "M")
+#    photo = ""
+#    pi_preview_orig.configure(data=photo)
+#    pi_histogram_new.configure(file="")
+#    pi_histogram_orig.configure(image='')
+    l_preview_new_pi.configure(image='')
 
 
 def preview_new_refresh(event):
@@ -113,7 +122,10 @@ def preview_new_refresh(event):
     file_out = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
-    preview_new(file_out)
+    if os.path.isfile(file_out):
+        preview_new(file_out)
+    else:
+        preview_new_clear()
 
 
 def preview_new(file_out):
@@ -609,7 +621,7 @@ def open_file():
         file_select_L.configure(text=os.path.basename(file_in_path.get()))
         preview_orig()
     else:
-        preview_clear()
+        preview_orig_clear()
 
 
 def open_file_last():
