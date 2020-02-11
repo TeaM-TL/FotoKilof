@@ -110,7 +110,10 @@ def preview_new_refresh(event):
     """ callback after selection of size preview"""
 
     # to define file_out
-    #preview_new(file_out)
+    file_out = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
+    preview_new(file_out)
 
 
 def preview_new(file_out):
