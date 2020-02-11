@@ -113,6 +113,7 @@ def preview_new_clear():
 #    pi_histogram_new.configure(file="")
 #    pi_histogram_orig.configure(image='')
     l_preview_new_pi.configure(image='')
+    l_preview_new_pi.image.blank()
 
 
 def preview_new_refresh(event):
