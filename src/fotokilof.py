@@ -1843,12 +1843,7 @@ frame_custom = ttk.LabelFrame(frame_first_col, text=_("Custom command"),
                               style="Fiolet.TLabelframe")
 frame_custom.grid(row=10, column=1, columnspan=2,
                   sticky=(N, W, E, S), padx=5, pady=1)
-###
-l_custom_command = ttk.Label(frame_custom, text=_("Command:"))
-co_custom_command = ttk.Combobox(frame_custom, width=9,
-                                 values=magick_commands)
-co_custom_command.current(1)
-co_custom_command.configure(state='readonly')
+
 b_custom_clear = ttk.Button(frame_custom, text=_("Clear"),
                             command=convert_custom_clear)
 b_custom_run = ttk.Button(frame_custom, text=_("Execute"),
@@ -1859,11 +1854,19 @@ t_custom = ScrolledText(frame_custom, state=NORMAL,
                         height=5, width=45,
                         wrap='word', undo=True)
 
-t_custom.grid(row=1, column=1, columnspan=4, padx=5, pady=5, sticky=(W, E))
+t_custom.pack(expand=1, fill='both', padx=5, pady=5)
+b_custom_run.pack(side='right', padx=5, pady=5)
+b_custom_clear.pack(side='right', padx=5, pady=5)
+
+### temporary off, later will be enabled
+l_custom_command = ttk.Label(frame_custom, text=_("Command:"))
+co_custom_command = ttk.Combobox(frame_custom, width=9,
+                                 values=magick_commands)
+co_custom_command.current(1)
+co_custom_command.configure(state='readonly')
+
 # l_custom_command.grid(row=2, column=1, padx=5, pady=5, sticky=E)
 # co_custom_command.grid(row=2, column=2, padx=5, pady=5, sticky=W)
-b_custom_clear.grid(row=2, column=3, padx=5, pady=5, sticky=E)
-b_custom_run.grid(row=2, column=4, padx=5, pady=5, sticky=E)
 
 ########################################################################
 # Second column
