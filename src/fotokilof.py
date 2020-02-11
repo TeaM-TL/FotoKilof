@@ -12,7 +12,6 @@ import glob
 import os
 import re
 import sys
-from pathlib import Path
 
 from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow
 from tkinter.scrolledtext import ScrolledText
@@ -23,10 +22,7 @@ from tkinter import N, S, W, E, END, DISABLED, NORMAL
 try:
     from tkcolorpicker import askcolor
 except:
-    write_log("tkcolorpicker not found", level="W")
-    tkcolorpicker_not_found = True
-else:
-    tkcolorpicker_not_found = False
+    from tkinter.colorchooser import askcolor
 
 # my modules
 import convert
@@ -63,7 +59,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.3.1"
+VERSION = "3.3.2"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -151,7 +147,7 @@ def preview_new(file_out):
 
 
 def preview_orig_button():
-    """ podgląd oryginału """
+    """ original preview """
     # global file_in_path
 
     try:
@@ -161,7 +157,7 @@ def preview_orig_button():
 
 
 def preview_new_button():
-    """ podgląd wynikowego obrazka """
+    """ preview ne picture """
 
     file_show = os.path.join(os.path.dirname(file_in_path.get()),
                              work_dir.get(),
@@ -335,6 +331,7 @@ def apply_all_button():
         root.update_idletasks()
     else:
         log.write_log("No file selected", "M")
+
 
 def convert_custom_button():
     """ execute custom command """
@@ -527,7 +524,7 @@ def fonts():
     return result
 
 def font_selected(event):
-    """ wywołanie przez bind wyboru fontu """
+    """ callback via bind for font selection """
     img_text_font.set(co_text_font.get())
 
 
@@ -737,7 +734,7 @@ def color_choose_box_active():
 def color_choose_box():
     """ Background color selection """
     if img_text_box.get() != 0:
-        color = askcolor(img_text_color.get(), root)
+        color = askcolor(img_text_color.get())
         if color[1] is None:
             img_text_box_color.set("#FFFFFF")
         else:
@@ -747,7 +744,7 @@ def color_choose_box():
 
 def color_choose():
     """ Color selection """
-    color = askcolor(img_text_color.get(), root)
+    color = askcolor(img_text_color.get())
     if color[1] is None:
         img_text_color.set("#FFFFFF")
     else:
@@ -1119,6 +1116,7 @@ def preview_logo_clear():
     pi_logo_preview.configure(file="")
     l_logo_preview.configure(text="")
 
+
 def tools_set():
     """ wybór narzędzi do wyświetlenia """
 
@@ -1216,7 +1214,7 @@ style.configure("Fiolet.TLabelframe.Label", foreground="#800080")
 ##########################
 # Zmienne globalne
 
-FILE_INI = os.path.join(str(Path.home()), ".fotokilof.ini")
+FILE_INI = os.path.join(os.path.expanduser("~"), ".fotokilof.ini")
 PWD = os.getcwd()
 log_level = StringVar() # E(rror), W(arning), A(ll)
 work_dir = StringVar()  # default: "FotoKilof"
@@ -1823,8 +1821,9 @@ rb1_contrast = ttk.Radiobutton(frame_contrast, text=_("Stretch"),
                                variable=img_contrast, value="1")
 rb2_contrast = ttk.Radiobutton(frame_contrast, text=_("Contrast"),
                                variable=img_contrast, value="2")
-co_contrast_selection = ttk.Combobox(frame_contrast, width=2,
+co_contrast_selection = ttk.Combobox(frame_contrast, width=3,
                                      values=contrast_selection)
+co_contrast_selection.configure(state='readonly')
 rb3_contrast = ttk.Radiobutton(frame_contrast, text=_("Normalize"),
                                variable=img_contrast,
                                value="3")
@@ -2023,10 +2022,6 @@ if GM_or_IM is not None:
     if os.path.isfile(file_logo_path.get()):
         # Load preview logo
         preview_logo()
-    if tkcolorpicker_not_found is True:
-        b_text_color.configure(state=DISABLED)
-        b_text_box_color.configure(state=DISABLED)
-        b_border_color.configure(state=DISABLED)
 
 else:
     root.withdraw()

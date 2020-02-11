@@ -7,13 +7,13 @@ module contains function for generating preview and histogram:
 - preview_convert
  """
 
-import getpass
 import os
 import tempfile
 
 import common
 import log
 import magick
+
 
 def preview_histogram(file_in, gm_or_im):
     """
@@ -26,7 +26,7 @@ def preview_histogram(file_in, gm_or_im):
 
     cmd_magick = gm_or_im + "convert"
     file_histogram = os.path.join(tempfile.gettempdir(),
-                                  "fotokilof_" + getpass.getuser() \
+                                  "fotokilof_" + os.getlogin() \
                                   + "_histogram.ppm")
     command = " -define histogram:unique-colors=false histogram:"
     command = " histogram:"
@@ -57,7 +57,7 @@ def preview_convert(file_in, command, size, gm_or_im):
         cmd_magick = gm_or_im + "convert"
         command = " -resize " + str(size) + "x" + str(size) + command
         file_preview = os.path.join(tempfile.gettempdir(),
-                                    "fotokilof_" + getpass.getuser() \
+                                    "fotokilof_" + os.getlogin() \
                                     + "_preview.ppm")
         magick.magick(command, file_in, file_preview, cmd_magick)
 

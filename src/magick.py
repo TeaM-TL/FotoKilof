@@ -16,7 +16,6 @@ module to work with *Magick:
 - check_graphickmagick - checker for GraphicsMagick
 """
 
-import getpass
 import os
 import re
 import shutil
@@ -121,7 +120,7 @@ def get_fonts_list(gm_or_im):
 
     fonts_list = None
     file_font = os.path.join(tempfile.gettempdir(),
-                             "fotokilof_" + getpass.getuser() + "_fonts_list")
+                             "fotokilof_" + os.getlogin() + "_fonts_list")
     command = " -list font > "
     result = magick(command, "", file_font, gm_or_im + "convert")
     if result is not None:
@@ -164,7 +163,7 @@ def get_magick_version(gm_or_im):
 
     file_version = common.spacja(os.path.join(tempfile.gettempdir(),
                                               "fotokilof_" + \
-                                              getpass.getuser() + "_version"))
+                                              os.getlogin() + "_version"))
 
     command = "-Version > "
     result = magick(command, "", common.spacja(file_version),
@@ -254,7 +253,7 @@ def get_image_size(file_in, gm_or_im):
     height = 1
     size = ""
     file_info = common.spacja(os.path.join(tempfile.gettempdir(),
-                                           "fotokilof_" + getpass.getuser() \
+                                           "fotokilof_" + os.getlogin() \
                                            + "_image_info"))
 
     command = ' -format "%w\\n%h\\n%b" '

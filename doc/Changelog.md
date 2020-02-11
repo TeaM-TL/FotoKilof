@@ -2,6 +2,8 @@
 
 ## Current
 
+3.3.2 remove not necessary modules: getpass, pathlib
+
 3.3.1 GUI user friendly, preview new (if exists) during avigation, clear preview
 
 3.3 Added: paned frames, reorder GUI

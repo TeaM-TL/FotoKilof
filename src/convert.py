@@ -83,8 +83,8 @@ def convert_border(width, color, border_on):
     """ 1. Add border """
 
     if border_on > 0:
-        command = "-border " + str(abs(int(width))) + \
-            " -bordercolor \"" + color + "\""
+        command = " -bordercolor \"" + color + "\"" + \
+                  " -border " + str(abs(int(width))) + " "
     else:
         command = ""
     return command + " "

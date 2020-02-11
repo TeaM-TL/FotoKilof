@@ -9,7 +9,6 @@ module to log writing
 import configparser
 import datetime
 import os
-from pathlib import Path
 
 import entries
 
@@ -21,7 +20,7 @@ def write_log(message, level="M", mode="a", initial="0"):
     self: to print initial entry into log
     """
 
-    file_ini = os.path.join(str(Path.home()), ".fotokilof.ini")
+    file_ini = os.path.join(os.path.expanduser("~"), ".fotokilof.ini")
     config = configparser.ConfigParser()
     config.read(file_ini, encoding="utf8")
     try:
@@ -47,7 +46,7 @@ def write_log(message, level="M", mode="a", initial="0"):
         message = message + " : : " + log_level
 
     if write == 1:
-        logfile = os.path.join(str(Path.home()), ".fotokilof.log")
+        logfile = os.path.join(os.path.expanduser("~"), ".fotokilof.log")
         now = str(datetime.datetime.now())
         log_content = now + " :" + level + ": " + message + "\n"
         try:

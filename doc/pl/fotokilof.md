@@ -198,15 +198,14 @@ Do przetwarzania folderu musimy użyć przycisku *Zaaplikuj wszystko* i zaznaczy
 Tylko gdy uruchamiamy ze źródeł
 
 Python3 i moduły:
- - via pip
+ - via pip:
     - configparser,
-    - datetime,
-    - pathlib,
-    - tkcolorpicker (nieobligatoryjny, można obejść).
- - via pakiety
+    - tkcolorpicker (nieobligatoryjny).
+ - via pakiety:
      - tkinter,
- - powinny być w zestawie
-     - getpass,
+ - powinny być w zestawie:
+     - datetime,
+     - fnmatch,
      - gettext,
      - glob,
      - os,
@@ -229,7 +228,7 @@ Python3 i moduły:
 
 MIT License
 
-Copyright (c) 2019 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2020 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
