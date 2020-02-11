@@ -2,7 +2,7 @@
 
 ## Current
 
-4. DCOM image format
+3.3.1 GUI user friendly, preview new (if exists) during avigation, clear preview
 
 3.3 Added: paned frames, reorder GUI
 

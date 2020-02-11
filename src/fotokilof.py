@@ -100,21 +100,17 @@ def convert_custom_clear():
 
 def preview_orig_clear():
     """ clear every preview if doesn't choose file """
-    log.write_log("not ready yet", "M")
-#    pi_histogram_orig.configure(image='')
+    log.write_log("clear preview", "M")
+    l_histogram_orig.configure(image='')
     l_preview_orig_pi.configure(image='')
-
+    # if no original, new previe should be clear too
+    preview_new_clear()
 
 def preview_new_clear():
     """ clear every preview if doesn't choose file """
-    log.write_log("not ready yet", "M")
-#    photo = ""
-#    pi_preview_orig.configure(data=photo)
-#    pi_histogram_new.configure(file="")
-#    pi_histogram_orig.configure(image='')
+    log.write_log("clear preview", "M")
+    l_histogram_new.configure(image='')
     l_preview_new_pi.configure(image='')
-    l_preview_new_pi.image.blank()
-
 
 def preview_new_refresh(event):
     """ callback after selection of size preview"""
@@ -137,6 +133,7 @@ def preview_new(file_out):
                                               GM_or_IM)
     try:
         pi_preview_new.configure(file=preview_picture['filename'])
+        l_preview_new_pi.configure(image=pi_preview_new)
         l_preview_new.configure(text=preview_picture['width'] + "x" \
                                 + preview_picture['height'] \
                                 + " - " \
@@ -146,6 +143,7 @@ def preview_new(file_out):
 
     if img_histograms_on.get() == 1:
         try:
+            l_histogram_new.configure(image=pi_histogram_new)
             pi_histogram_new.configure(file=preview.preview_histogram(file_out,
                                                                       GM_or_IM))
         except:
@@ -662,9 +660,12 @@ def open_file_next():
                     file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
                     preview_orig()
                     extension_from_file()
-                    preview_new_refresh("none")
                 except:
                     log.write_log("Error in open_file_next", "E")
+                try:
+                    preview_new_refresh("none")
+                except:
+                    log.write_log("Error in open_file_next refresh", "E")
 
 
 def open_file_first():
@@ -1079,6 +1080,7 @@ def preview_orig():
                                               GM_or_IM)
     try:
         pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
+        l_preview_orig_pi.configure(image=pi_preview_orig)
     except:
         log.write_log("preview_orig: Cannot load preview", "E")
 
@@ -1092,6 +1094,7 @@ def preview_orig():
 
     if img_histograms_on.get() == 1:
         pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
+        l_histogram_orig.configure(image=pi_histogram_orig)
 
 
 def preview_logo():
