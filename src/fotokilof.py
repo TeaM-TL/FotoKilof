@@ -81,7 +81,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.3.2"
+VERSION = "3.3.3"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -357,6 +357,8 @@ def apply_all_button():
 
 def convert_custom_button():
     """ execute custom command """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
@@ -365,10 +367,12 @@ def convert_custom_button():
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
+    progress_files.set(_("done"))
 
 
 def convert_contrast_button():
     """ przycisk zmiany kontrastu """
+    progress_files.set(_("Processing"))
     root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
@@ -382,11 +386,13 @@ def convert_contrast_button():
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
-    progress_var.set(0)
+    progress_files.set(_("done"))
 
 
 def convert_bw_button():
     """ black-white or sepia button """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
@@ -396,10 +402,13 @@ def convert_bw_button():
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
+    progress_files.set(_("done"))
 
 
 def convert_normalize_button():
     """ normalize button """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
@@ -410,10 +419,13 @@ def convert_normalize_button():
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
+    progress_files.set(_("done"))
 
 
 def convert_rotate_button():
     """ rotate button """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
@@ -423,10 +435,13 @@ def convert_rotate_button():
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
+    progress_files.set(_("done"))
 
 
 def convert_resize_button():
     """ resize button """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
@@ -439,10 +454,13 @@ def convert_resize_button():
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
+    progress_files.set(_("done"))
 
 
 def convert_border_button():
     """ przycisk dodania ramki """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
@@ -454,9 +472,12 @@ def convert_border_button():
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
+    progress_files.set(_("done"))
 
 
 def convert_crop_button():
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
     """ przycisk wycinka """
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
@@ -469,10 +490,13 @@ def convert_crop_button():
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
+    progress_files.set(_("done"))
 
 
 def convert_logo_button():
     """ Button insert logo """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
@@ -488,7 +512,23 @@ def convert_logo_button():
     result = magick.magick(cmd, "", out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
+    progress_files.set(_("done"))
 
+
+def convert_text_button():
+    """ przycisk wstawiania tekstu """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
+    cmd = convert.convert_text(convert_text_entries())
+    cmd_magick = GM_or_IM + "convert"
+    print_command(cmd, cmd_magick)
+    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
+    if result == "OK":
+        preview_new(out_file)
+    progress_files.set(_("done"))
 
 def convert_crop_entries():
     """ słownik ze zmiennymi dla funkcji convert_crop """
@@ -523,19 +563,6 @@ def convert_text_entries():
     dict_return['box'] = img_text_box.get()
     dict_return['box_color'] = img_text_box_color.get()
     return dict_return
-
-
-def convert_text_button():
-    """ przycisk wstawiania tekstu """
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_text(convert_text_entries())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd, cmd_magick)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
 
 
 def fonts():
