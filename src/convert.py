@@ -174,20 +174,32 @@ def convert_crop(crop, gravitation, entries):
 def convert_resize(resize, pixel, percent, border):
     """ 4. Resize """
 
+    # słownik wyjściowy
+    dict_return = {}
     border = 2 * abs(int(border))
-    if resize == 1:
-        image_resize = pixel + "x" + pixel
-    elif resize == 2:
-        image_resize = percent + "%"
-    elif resize == 3:
-        image_resize = str(1920 - border) + "x" + str(1080 - border)
-    elif resize == 4:
-        image_resize = str(2048 - border) + "x" + str(1556 - border)
-    elif resize == 5:
-        image_resize = str(4096 - border) + "x" + str(3112 - border)
 
-    command = "-resize " + image_resize
-    return command + " "
+    if resize == 0:
+        command = ""
+        sub_dir = ""
+    if resize == 1:
+        command = "-resize " + pixel + "x" + pixel + " "
+        sub_dir = pixel
+    elif resize == 2:
+        command = "-resize " + percent + "% "
+        sub_dir = percent
+    elif resize == 3:
+        command = "-resize " + str(1920 - border) + "x" + str(1080 - border) + " "
+        sub_dir = "1920x1080"
+    elif resize == 4:
+        command = "-resize " + str(2048 - border) + "x" + str(1556 - border) + " "
+        sub_dir = "2048x1556"
+    elif resize == 5:
+        command = "-resize " + str(4096 - border) + "x" + str(3112 - border) + " "
+        sub_dir = "4096x3112"
+
+    dict_return['command'] = command
+    dict_return['sub_dir'] = sub_dir
+    return dict_return
 
 
 def convert_bw(black_white, sepia):

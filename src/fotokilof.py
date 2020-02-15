@@ -81,7 +81,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.3.3"
+VERSION = "3.4.0"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -135,7 +135,8 @@ def preview_new_refresh(event):
 
     # to define file_out
     file_out = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
+                                 os.path.join(work_dir.get(),
+                                              work_sub_dir.get()),
                                  co_apply_type.get())
     if os.path.isfile(file_out):
         preview_new(file_out)
@@ -145,6 +146,9 @@ def preview_new_refresh(event):
 
 def preview_new(file_out):
     """ generowanie podglądu wynikowego """
+#    file_out = os.path.join(os.path.dirname(file_out),
+#                            work_sub_dir.get(),
+#                            os.path.basename(file_out))
     preview_picture = preview.preview_convert(file_out,
                                               " ",
                                               int(co_preview_selector_new.get()),
@@ -183,11 +187,13 @@ def preview_new_button():
 
     file_show = os.path.join(os.path.dirname(file_in_path.get()),
                              work_dir.get(),
+                             work_sub_dir.get(),
                              os.path.basename(file_in_path.get()))
 
-    file_show = magick.pre_magick(file_in_path.get(),
-                                  work_dir.get(),
-                                  co_apply_type.get())
+#    file_show = magick.pre_magick(file_in_path.get(),
+#                                  os.path.join(work_dir.get(),
+#                                               work_sub_dir.get())
+#                                  co_apply_type.get())
     try:
         magick.display_image(file_show, GM_or_IM)
     except:
@@ -235,10 +241,12 @@ def apply_all_convert(out_file, write_command):
         else:
             border = abs(int(e_border.get()))
         previous_command = 1
-        cmd = cmd + " " + convert.convert_resize(img_resize.get(),
-                                                 e1_resize.get(),
-                                                 e2_resize.get(),
-                                                 border)
+
+        resize = convert.convert_resize(img_resize.get(),
+                                        e1_resize.get(),
+                                        e2_resize.get(),
+                                        border)
+        cmd = cmd + " " + resize['command']
     else:
         if int(img_crop_on.get()) == 1:
             previous_command = 1
@@ -316,9 +324,21 @@ def apply_all_button():
         progress_files.set(_("Processing"))
         pb.start()
         root.update_idletasks()
+
+        # work_sub_dir if will be resize
+        if int(img_resize_on.get()) == 1:
+            resize = convert.convert_resize(img_resize.get(),
+                                            e1_resize.get(),
+                                            e2_resize.get(),
+                                            0)
+            work_sub_dir.set(resize['sub_dir'])
+        else:
+            work_sub_dir.set("")
+
         if file_dir_selector.get() == 0:
             out_file = magick.pre_magick(file_in_path.get(),
-                                         work_dir.get(),
+                                         os.path.join(work_dir.get(),
+                                                      work_sub_dir.get()),
                                          co_apply_type.get())
             result = apply_all_convert(out_file, 1)
             if result == "OK":
@@ -333,7 +353,8 @@ def apply_all_button():
             for file_in in files_list:
                 file_in_path.set(os.path.realpath(file_in))
                 out_file = magick.pre_magick(os.path.realpath(file_in),
-                                             work_dir.get(),
+                                             os.path.join(work_dir.get(),
+                                                          work_sub_dir.get()),
                                              co_apply_type.get())
                 result = apply_all_convert(out_file, 0)
                 i = i + 1
@@ -351,6 +372,7 @@ def apply_all_button():
         progress_files.set(_("done"))
         pb.stop()
         root.update_idletasks()
+        #work_sub_dir.set("")  # reset subdir name for next processing
     else:
         log.write_log("No file selected", "M")
 
@@ -442,19 +464,24 @@ def convert_resize_button():
     """ resize button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
+    resize= convert.convert_resize(img_resize.get(),
+                                   e1_resize.get(),
+                                   e2_resize.get(),
+                                   '0')
+    cmd = resize['command']
+    work_sub_dir.set(resize['sub_dir'])
+
     out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
+                                 os.path.join(work_dir.get(),
+                                              work_sub_dir.get()),
                                  co_apply_type.get())
-    cmd = convert.convert_resize(img_resize.get(),
-                                 e1_resize.get(),
-                                 e2_resize.get(),
-                                 '0')
     cmd_magick = GM_or_IM + "convert"
     print_command(cmd, cmd_magick)
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
     progress_files.set(_("done"))
+    #work_sub_dir.set("")  # reset subdir name for next processing
 
 
 def convert_border_button():
@@ -1265,8 +1292,10 @@ style.configure("Fiolet.TLabelframe.Label", foreground="#800080")
 
 FILE_INI = os.path.join(os.path.expanduser("~"), ".fotokilof.ini")
 PWD = os.getcwd()
-log_level = StringVar() # E(rror), W(arning), A(ll)
+log_level = StringVar() # E(rror), W(arning), M(essage)
 work_dir = StringVar()  # default: "FotoKilof"
+work_sub_dir = StringVar()  # subdir for resized pictures
+work_sub_dir.set("")  # default none
 file_dir_selector = IntVar()
 file_in_path = StringVar()  # fullpath original picture
 img_histograms_on = IntVar()

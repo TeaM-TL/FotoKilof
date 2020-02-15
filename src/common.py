@@ -132,22 +132,27 @@ def file_from_list_of_images(file_list, current_file, request):
         if request == "first":
             file = file_list[0]
         elif request == "previous":
-            position = file_list.index(current_file)
-            if position > 0:
-                file = file_list[position - 1]
+            if current_file in file_list:
+                position = file_list.index(current_file)
+                if position > 0:
+                    file = file_list[position - 1]
+                else:
+                    file = None
             else:
-                file = None
+                file = file_list[0]
         elif request == "next":
-            position = file_list.index(current_file)
-            if position <= len(file_list) - 2:
-                file = file_list[position + 1]
+            if current_file in file_list:
+                position = file_list.index(current_file)
+                if position <= len(file_list) - 2:
+                    file = file_list[position + 1]
+                else:
+                    file = None
             else:
-                file = None
+                file = file_list[-1]
         elif request == "last":
             file = file_list[-1]
         else:
             file = None
-
     else:
         file = None
 
