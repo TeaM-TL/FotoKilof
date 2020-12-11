@@ -22,5 +22,10 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    install_requires=['configparser','tkcolorpicker']
+    install_requires=['configparser','tkcolorpicker'],
+    entry_points = {
+        "gui_scripts": [
+            "fotokilof = src.__main__",
+        ]
+    },
 )
