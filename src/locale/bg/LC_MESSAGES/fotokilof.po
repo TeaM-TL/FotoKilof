@@ -22,8 +22,7 @@ msgstr ""
 
 #: fotokilof.py:69
 msgid "Unfortunately, you are using Windows, thus not all option will work"
-msgstr ""
-"За съжаление, вие използвате Windows, така че не всички опции ще работят"
+msgstr "За съжаление, вие използвате Windows, така че не всички опции ще работят"
 
 #: fotokilof.py:261
 msgid "Processing"
@@ -89,7 +88,7 @@ msgstr "Лиценз"
 #, fuzzy
 #| msgid "File selection"
 msgid "No file selected"
-msgstr "Избор на файл"
+msgstr "Не е избран файл"
 
 #: fotokilof.py:1225
 msgid "Tools"
@@ -117,7 +116,7 @@ msgstr "Завъртане"
 
 #: fotokilof.py:1244 fotokilof.py:1653
 msgid "Border"
-msgstr ""
+msgstr "Ръб"
 
 #: fotokilof.py:1247
 msgid "Black&white"
@@ -125,11 +124,11 @@ msgstr "Черно и бяло"
 
 #: fotokilof.py:1249
 msgid "Colors normalize"
-msgstr "Нормализиране на цветове"
+msgstr "Нормализиране на цветовете"
 
 #: fotokilof.py:1252 fotokilof.py:1698 fotokilof.py:1704
 msgid "Contrast"
-msgstr "контраст"
+msgstr "Контраст"
 
 #: fotokilof.py:1255 fotokilof.py:1308
 msgid "Logo"
@@ -137,11 +136,11 @@ msgstr "Лого"
 
 #: fotokilof.py:1258
 msgid "Custom"
-msgstr ""
+msgstr "Персонализиран"
 
 #: fotokilof.py:1261
 msgid "Layout"
-msgstr ""
+msgstr "Наредба"
 
 #: fotokilof.py:1272
 msgid "Apply"
@@ -223,7 +222,7 @@ msgstr "Щракнете вдясно"
 
 #: fotokilof.py:1448
 msgid "Origin (x1,y1) and dimensions (X, Y)"
-msgstr "Произход (x1, y1) и размери (X, Y)"
+msgstr "Начални координати (x1, y1) и размери (X, Y)"
 
 #: fotokilof.py:1459
 msgid ""
@@ -247,11 +246,11 @@ msgstr "Добави текст"
 
 #: fotokilof.py:1549
 msgid "Inside"
-msgstr ""
+msgstr "Вътре"
 
 #: fotokilof.py:1551
 msgid "Outside"
-msgstr ""
+msgstr "Отвън"
 
 #: fotokilof.py:1553
 msgid "Offset (dx,dy)\n"
@@ -303,7 +302,7 @@ msgstr "Нормализиране на цвят"
 
 #: fotokilof.py:1736
 msgid "Equalize"
-msgstr ""
+msgstr "Приравни"
 
 #: fotokilof.py:1739
 msgid "AutoLevel"
@@ -311,19 +310,19 @@ msgstr "Автоматично ниво"
 
 #: fotokilof.py:1742
 msgid "Channel:"
-msgstr ""
+msgstr "Канал:"
 
 #: fotokilof.py:1758
 msgid "Custom command"
-msgstr ""
+msgstr "Персонализирана команда"
 
 #: fotokilof.py:1763
 msgid "Command:"
-msgstr ""
+msgstr "Команда"
 
 #: fotokilof.py:1768
 msgid "Clear"
-msgstr ""
+msgstr "Изчисти"
 
 #: fotokilof.py:1793
 msgid "Image"
@@ -373,13 +372,14 @@ msgstr "Резултат"
 
 #: fotokilof.py:1957
 msgid "Error"
-msgstr ""
+msgstr "Грешка"
 
 #: fotokilof.py:1958
 msgid ""
 "ImageMagick nor GraphicsMagick are not installed in you system. Is impossile "
 "to process any graphics."
-msgstr ""
+msgstr "Няма нито ImageMagick, нито GraphicsMagick инсталиран на Вашата система."
+"В резултат на това не е възможно да се обработват графики."
 
 #~ msgid "DICOM files"
 #~ msgstr "DICOM файлове"
