@@ -6,7 +6,7 @@
 
 ## Current
 
-3.5.0 take and use screenshots
+3.5.0 take and use screenshots (window or selection), screenshot are stored in %TMP
 
 3.4.0 resized pictures are in subfolders, catching more exception
 
