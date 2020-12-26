@@ -81,7 +81,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.4.0"
+VERSION = "3.5.0"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -789,6 +789,10 @@ def open_file_prev():
                 preview_new_refresh("none")
 
 
+def open_screenshot():
+    """ Grab screenshot """
+
+
 def color_choose_border():
     """ Border color selection """
     color = askcolor(img_border_color.get())
@@ -1362,6 +1366,9 @@ b_file_select = ttk.Button(frame_file_select, text=_("File selection"),
 
 file_select_L = ttk.Label(frame_file_select, width=30)
 
+b_file_select_screenshot = ttk.Button(frame_file_select, text=_("Screenshot"),
+                                 command=open_screenshot)
+
 b_file_select_first = ttk.Button(frame_file_select, text=_("First"),
                                  command=open_file_first)
 b_file_select_prev = ttk.Button(frame_file_select, text=_("Previous"),
@@ -1373,12 +1380,14 @@ b_file_select_last = ttk.Button(frame_file_select, text=_("Last"),
 
 b_file_select.grid(column=1, row=1, padx=5, pady=5, sticky=W)
 #
-file_select_L.grid(column=2, row=1, padx=5, pady=5, sticky=(W, E))
+b_file_select_screenshot.grid(column=2, row=1, padx=5, pady=5, sticky=W)
 #
-b_file_select_first.grid(column=3, row=1, padx=5, pady=5, sticky=W)
-b_file_select_prev.grid(column=4, row=1, padx=5, pady=5, sticky=W)
-b_file_select_next.grid(column=5, row=1, padx=5, pady=5, sticky=W)
-b_file_select_last.grid(column=6, row=1, padx=5, pady=5, sticky=W)
+file_select_L.grid(column=3, row=1, padx=5, pady=5, sticky=(W, E))
+#
+b_file_select_first.grid(column=5, row=1, padx=5, pady=5, sticky=W)
+b_file_select_prev.grid(column=6, row=1, padx=5, pady=5, sticky=W)
+b_file_select_next.grid(column=7, row=1, padx=5, pady=5, sticky=W)
+b_file_select_last.grid(column=8, row=1, padx=5, pady=5, sticky=W)
 
 ##########################
 # Apply all

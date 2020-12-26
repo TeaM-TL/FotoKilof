@@ -1,10 +1,18 @@
 # Changelog
 
+## Future
+
+- use picture from clipboard
+
 ## Current
+
+3.5.0 take and use screenshots
+
+3.4.0 resized pictures are in subfolders, catching more exception
 
 3.3.2 remove not necessary modules: getpass, pathlib
 
-3.3.1 GUI user friendly, preview new (if exists) during avigation, clear preview
+3.3.1 GUI user friendly, preview new (if exists) during navigation, clear preview
 
 3.3 Added: paned frames, reorder GUI
 

@@ -31,6 +31,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - processing JPG, PNG, SVG and TIFF images,
  - processing picture in the fly, originals are safe,
  - processing single file or whole directory,
+ - take screenshot and use it as source picture
  - display selected tools,
  - tools selection,
  - preview orignal and result,
@@ -89,8 +90,10 @@ python3 FotoKilof-3.4.0-py3-none-any.whl/src
  - FullHD screen for comfort work.
 
 ## Thanks
+
  - Friends - some ideas and testing,
  - Max von Forell - German translation,
  - Bozhidar Kirev - Bulgarian translation,
- - Afif Hendrawan - Indonesian translation.
-
+ - Alexander Ignatov - Bulgarian translation,
+ - Afif Hendrawan - Indonesian translation,
+ - Sebastian Hiebl - python packaging.
