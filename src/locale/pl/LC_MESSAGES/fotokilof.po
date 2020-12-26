@@ -380,6 +380,10 @@ msgstr ""
 "ImageMagick ani GraphicsMagick nie zostały znalezione w Twoim systemie. "
 "Niestety nie można przetwarzać obrazków."
 
+#: fotokilof.py:1387
+msgid "Screenshot"
+msgstr "Zrzut ekranu"
+
 #~ msgid "DICOM files"
 #~ msgstr "Pliki DICOM"
 

@@ -371,3 +371,8 @@ msgid ""
 "ImageMagick nor GraphicsMagick are not installed in you system. Is impossile "
 "to process any graphics."
 msgstr ""
+
+#: fotokilof.py:1387
+msgid "Screenshot"
+msgstr ""
+
