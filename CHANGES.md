@@ -1,9 +1,5 @@
 # Changelog
 
-## Future
-
-- use picture from clipboard
-
 ## Current
 
 3.5.0 take and use screenshots (window or selection), screenshot are stored in %TMP
