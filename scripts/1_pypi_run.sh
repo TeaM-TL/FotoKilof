@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-VERSION=3.4.0
+VERSION=`cat ../src/__VERSION__`
 python3 ../dist/FotoKilof-$VERSION-py3-none-any.whl/src &
 exit
