@@ -88,9 +88,9 @@ def magick(cmd, file_in, file_out, command):
     cmd - command for imagemagick
     file_in - fullname picture for processing
     file_out - fullname output picture
-    command: it depends:
-      convert, mogrify, composite - ImageMagick
-      gm convert, gm mogrify, gm composite - GraphicsMagick
+    command:
+      convert, mogrify, composite, import - ImageMagick
+      gm convert, gm mogrify, gm composite, gm import - GraphicsMagick
     """
     result = None
     if cmd != "":

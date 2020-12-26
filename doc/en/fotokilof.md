@@ -25,6 +25,7 @@ GUI for the common used ImageMagick functionality for processing pictures.
  - conversion into JPG, PNG and TIF format,
  - processing copy of picture, originals are safe,
  - processing single file or whole directory,
+ - make screenshots,
  - display selected tools,
  - tools selection,
  - preview orignal and result,

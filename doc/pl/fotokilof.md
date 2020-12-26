@@ -24,6 +24,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
  - konwersja obrazków do formatu JPG, PNG i TIF,
  - przetwarzanie tylko kopii obrazków, oryginały są bezpieczne,
  - przetwarzanie jednego pliku jak i całego katalogu,
+ - wykonywanie zrzutu ekranu,
  - wyświetlanie tylko aktywnych narzędzi,
  - wybór narzędzi przetwarzania,
  - podgląd oryginału i wyniku przetwarzania,

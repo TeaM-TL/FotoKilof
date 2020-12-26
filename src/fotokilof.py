@@ -34,6 +34,7 @@ import glob
 import os
 import re
 import sys
+import tempfile
 
 from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow
 from tkinter.scrolledtext import ScrolledText
@@ -703,13 +704,13 @@ def open_file_last():
             cwd = os.path.dirname(file_in_path.get())
             file_list = common.list_of_images(cwd)
             current_file = os.path.basename(file_in_path.get())
-            file = common.file_from_list_of_images(file_list,
+            filename = common.file_from_list_of_images(file_list,
                                                    current_file,
                                                    "last")
-            if file is not None:
+            if filename is not None:
                 try:
-                    file_select_L.configure(text=file)
-                    file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
+                    file_select_L.configure(text=filename)
+                    file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     preview_orig()
                     extension_from_file()
                     preview_new_refresh("none")
@@ -724,13 +725,13 @@ def open_file_next():
             cwd = os.path.dirname(file_in_path.get())
             file_list = common.list_of_images(cwd)
             current_file = os.path.basename(file_in_path.get())
-            file = common.file_from_list_of_images(file_list,
+            filename = common.file_from_list_of_images(file_list,
                                                    current_file,
                                                    "next")
-            if file is not None:
+            if filename is not None:
                 try:
-                    file_select_L.configure(text=file)
-                    file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
+                    file_select_L.configure(text=filename)
+                    file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     preview_orig()
                     extension_from_file()
                 except:
@@ -748,13 +749,13 @@ def open_file_first():
             cwd = os.path.dirname(file_in_path.get())
             file_list = common.list_of_images(cwd)
             current_file = os.path.basename(file_in_path.get())
-            file = common.file_from_list_of_images(file_list,
+            filename = common.file_from_list_of_images(file_list,
                                                    current_file,
                                                    "first")
-            if file is not None:
+            if filename is not None:
                 try:
-                    file_select_L.configure(text=file)
-                    file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
+                    file_select_L.configure(text=filename)
+                    file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     preview_orig()
                     extension_from_file()
                     preview_new_refresh("none")
@@ -769,28 +770,44 @@ def open_file_prev():
             cwd = os.path.dirname(file_in_path.get())
             file_list = common.list_of_images(cwd)
             current_file = os.path.basename(file_in_path.get())
-            file = common.file_from_list_of_images(file_list,
+            filename = common.file_from_list_of_images(file_list,
                                                    current_file,
                                                    "previous")
-            if file is not None:
+            if filename is not None:
                 try:
-                    file_select_L.configure(text=file)
-                    file_in_path.set(os.path.normpath(os.path.join(cwd, file)))
+                    file_select_L.configure(text=filename)
+                    file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     preview_orig()
                 except:
                     log.write_log("Error in open_file_first", "E")
 
-                file_select_L.configure(text=file)
+                file_select_L.configure(text=filename)
 
                 directory = os.path.dirname(file_in_path.get())
-                file_in_path.set(os.path.join(directory, file))
+                file_in_path.set(os.path.join(directory, filename))
                 preview_orig()
                 extension_from_file()
                 preview_new_refresh("none")
 
 
 def open_screenshot():
-    """ Grab screenshot """
+    """ Make screenshot """
+    now = datetime.datetime.now()
+    today = now.strftime("%F")
+    today_dir = os.path.join(tempfile.gettempdir(), today)
+    if not os.path.isdir(today_dir):
+        try:
+            os.mkdir(today_dir)
+        except:
+            log.write_log("Error in open_screenshot, make today directory", "E")
+
+    filename = now.strftime("%F_%H-%M-%S_%f") + ".png"
+    out_file = os.path.join(today_dir, filename)
+    magick.magick(" ", "-quiet", out_file, "import")
+    file_in_path.set(out_file)
+    preview_orig()
+    extension_from_file()
+    preview_new_refresh("none")
 
 
 def color_choose_border():
