@@ -805,6 +805,7 @@ def open_screenshot():
     out_file = os.path.join(today_dir, filename)
     magick.magick(" ", "-quiet", out_file, "import")
     file_in_path.set(out_file)
+    file_select_L.configure(text=out_file)
     preview_orig()
     extension_from_file()
     preview_new_refresh("none")
