@@ -74,6 +74,15 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
  - Przyciski *Podgląd* otwierają obrazek w domyślnej przeglądarce.
  - Program zamykamy poleceniem *Alt-F4* lub ikoną.
 
+### Zrzuty ekranu
+
+- Wybierz przycisk *Zrzut ekranu*.
+- Kliknij w okno, którego obraz chcesz przechwycić.
+- Można zmiast kliknięcia, kliknąć i przytrzymać lewy klawsz myszy, by zaznaczyć obszar.
+- Obraz pojawi się w oknie podglądu FotoKilofa.
+- Zrzut ekranu jest automatycznie zapisywany w katalogu *$TMP/%Y-%m-%D*, np. /tmp/2020-12-26.
+- Po przetworzeniu obraz wynikowy zapisywany jest w podkatalogu *FotoKilof*.
+
 ### Przetwarzanie pojedynczego polecenia
  - Zaznacz typ konwersji w panelu *Narzędzia*, np. *Obrót*.
  - Kliknij *Zapisz*.
@@ -220,10 +229,13 @@ Python3 i moduły:
 
 ## Podziękowania
 
- - Przyjaciołom - za inspirację i rady,
- - Max von Forell - niemieckie tłumaczenie GUI
- - Bozhidar Kirev - bułgarskie tłumaczenie GUI
+ - Przyjaciołom - za inspirację, rady i testowanie,
+ - Max von Forell - niemieckie tłumaczenie GUI,
+ - Bozhidar Kirev - bułgarskie tłumaczenie GUI,
  - Afif Hendrawan - indonezyjskie tłumaczenie GUI
+ - Alexander Ignatov - bułgarskie tłumaczenie GUI,
+ - Sebastian Hiebl - python packaging.
+
 
 ## Licencja
 

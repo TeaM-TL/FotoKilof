@@ -69,6 +69,15 @@ GUI for the common used ImageMagick functionality for processing pictures.
  - Select required conversion,
  - Click *Execute*.
 
+### Make screenshots
+
+- Click button *Screenshot*,
+- Click (select) window for screenshot.
+- or Click and drag for selection rectangle for screenshot.
+- Taken picture appear in preview in FotoKilof.
+- Screenshot are automatically saved in directory *$TMP/%Y-%m-%D*, eg. /tmp/2020-12-26.
+- Result picture is saved in sudirectory *FotoKilof*.
+
 ### Resize
 Scaling/resize, but keep proportion.
 Resize can use custom or predefined values: FullHD, 2k, 4k. Percent means percent size of original picture.
@@ -174,7 +183,12 @@ Python3 and modules:
 
 ## Thanks
 
- - Friends - for inspiration and advices,
+ - Friends - for inspiration, advices and testing,
+ - Max von Forell - German translation,
+ - Bozhidar Kirev - Bulgarian translation,
+ - Alexander Ignatov - Bulgarian translation,
+ - Afif Hendrawan - Indonesian translation,
+ - Sebastian Hiebl - python packaging.
  - Max von Forell - German translation
  - Bozhidar Kirev - Bulgarian translation
  - Afif Hendrawan - Indonesian translation
