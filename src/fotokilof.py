@@ -2128,7 +2128,7 @@ if GM_or_IM is not None:
         # Load preview logo
         preview_logo()
     if mswindows.windows() == 1:
-        b_file_select_screenshot(state=DISABLED)
+        b_file_select_screenshot.configure(state=DISABLED)
 
 else:
     root.withdraw()
@@ -2154,7 +2154,7 @@ else:
     b_file_select_next.configure(state=DISABLED)
     b_file_select_last.configure(state=DISABLED)
     b_file_select.configure(state=DISABLED)
-    b_file_select_screenshot(state=DISABLED)
+    b_file_select_screenshot.configure(state=DISABLED)
     root.deiconify()
 
 root.mainloop()
