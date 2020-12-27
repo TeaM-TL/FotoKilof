@@ -193,6 +193,15 @@ Do przetwarzania folderu musimy użyć przycisku *Zaaplikuj wszystko* i zaznaczy
 
 ## Instalacja
 
+### Jako pakiet pypi
+
+```
+python3 -m pip install fotokilof
+fotokilof
+```
+
+### Z paczki zip
+
 - Rozpakuj plik *fotokilof.zip* do folderu, 
 - zrób skrót na pulpicie,
 - i uruchom.

@@ -2,6 +2,8 @@
 
 ## Current
 
+3.5.2 fixed setup.py for PyPi
+
 3.5.1 disable screenshot under MS Windows, disable screenshot if IM is unavailable
 
 3.5.0 take and use screenshots (window or selection), screenshot are stored in %TMP

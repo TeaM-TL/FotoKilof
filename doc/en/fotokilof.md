@@ -148,6 +148,15 @@ Increase the contrast in an image by stretching the range of intensity values.
 
 ## Installation
 
+### As pypi package
+
+```
+python3 -m pip install fotokilof
+fotokilof
+```
+
+### From zip
+
 - Unzip *fotokilof.zip* into folder, 
 - make shortcut to desktop,
 - and run
