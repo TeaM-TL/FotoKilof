@@ -82,7 +82,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.5.0"
+VERSION = "3.5.1"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -2127,6 +2127,8 @@ if GM_or_IM is not None:
     if os.path.isfile(file_logo_path.get()):
         # Load preview logo
         preview_logo()
+    if mswindows.windows() == 1:
+        b_file_select_screenshot(state=DISABLED)
 
 else:
     root.withdraw()
@@ -2152,6 +2154,7 @@ else:
     b_file_select_next.configure(state=DISABLED)
     b_file_select_last.configure(state=DISABLED)
     b_file_select.configure(state=DISABLED)
+    b_file_select_screenshot(state=DISABLED)
     root.deiconify()
 
 root.mainloop()
