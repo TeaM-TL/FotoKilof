@@ -242,10 +242,11 @@ def check_imagemagick(suffix):
                 result = "OK"
                 if shutil.which('identify' + suffix):
                     result = "OK"
-                    if shutil.which('import' + suffix):
-                        result = "OK"
-                    else:
-                        result = None
+                    if mswindows.windows() == 0:
+                        if shutil.which('import' + suffix):
+                            result = "OK"
+                        else:
+                            result = None
                 else:
                     result = None
             else:

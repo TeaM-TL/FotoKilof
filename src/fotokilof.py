@@ -57,6 +57,9 @@ import magick
 import mswindows
 import preview
 
+if mswindows.windows() == 1:
+    from PIL import ImageGrab
+
 # Start logging
 log.write_log('Start', "M", "w", 1)
 
@@ -82,7 +85,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.5.2"
+VERSION = "3.5.3"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -803,7 +806,14 @@ def open_screenshot():
 
     filename = now.strftime("%F_%H-%M-%S_%f") + ".png"
     out_file = os.path.join(today_dir, filename)
-    magick.magick(" ", "-quiet", out_file, "import")
+    if mswindows.windows() == 1:
+        screenshot = ImageGrab.grabclipboard()
+        try:
+            screenshot.save(out_file, 'PNG')
+        except:
+            log.write_log('Error in open_screenshot, save from clipboards', 'E')
+    else:
+        magick.magick(" ", "-quiet", out_file, "import")
     file_in_path.set(out_file)
     file_select_L.configure(text=out_file)
     preview_orig()
@@ -1386,6 +1396,8 @@ file_select_L = ttk.Label(frame_file_select, width=30)
 
 b_file_select_screenshot = ttk.Button(frame_file_select, text=_("Screenshot"),
                                  command=open_screenshot)
+if mswindows.windows() == 1:
+    b_file_select_screenshot.configure(text=_("Clipboard"))
 
 b_file_select_first = ttk.Button(frame_file_select, text=_("First"),
                                  command=open_file_first)
@@ -2127,8 +2139,6 @@ if GM_or_IM is not None:
     if os.path.isfile(file_logo_path.get()):
         # Load preview logo
         preview_logo()
-    if mswindows.windows() == 1:
-        b_file_select_screenshot.configure(state=DISABLED)
 
 else:
     root.withdraw()

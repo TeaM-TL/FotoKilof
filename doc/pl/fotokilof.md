@@ -219,7 +219,8 @@ Tylko gdy uruchamiamy ze źródeł
 Python3 i moduły:
  - via pip:
     - configparser,
-    - tkcolorpicker (nieobligatoryjny).
+    - tkcolorpicker (nieobligatoryjny, wymaga PIL),
+    - PIL dla Windows do obsugi schowka,
  - via pakiety:
      - tkinter,
  - powinny być w zestawie:
