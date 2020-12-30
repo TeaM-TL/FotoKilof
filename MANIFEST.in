@@ -9,3 +9,6 @@ include LICENSE
 # Include the data files
 recursive-include doc *
 
+# Include locale
+recursive-include src/locale *.po*
+
