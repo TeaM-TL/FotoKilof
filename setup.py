@@ -28,4 +28,5 @@ setuptools.setup(
             "fotokilof = src:__main__",
         ]
     },
+    include_package_data=True,
 )
