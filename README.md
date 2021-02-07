@@ -95,4 +95,6 @@ fotokilof
  - Bozhidar Kirev - Bulgarian translation,
  - Alexander Ignatov - Bulgarian translation,
  - Afif Hendrawan - Indonesian translation,
- - Sebastian Hiebl - python packaging.
+ - Sebastian Hiebl - python packaging,
+ - Matt Sephton - ideas for packing gui.
+
