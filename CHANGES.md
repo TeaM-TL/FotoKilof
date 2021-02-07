@@ -2,7 +2,9 @@
 
 ## Current
 
-3.5.3 fixed start for MS Windows (disable check magick import), getting picture from clipboard instead screenshot
+3.5.4 filename converted file moved into window title
+
+3.5.3 fixed start for MS Windows (disable check magick import), getting picture from clipboard instead screenshot (Windows)
 
 3.5.2 fixed setup.py for PyPi
 
