@@ -85,7 +85,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.5.3"
+VERSION = "3.5.4"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -693,8 +693,7 @@ def open_file():
     if result:
         extension_from_file()
         file_in_path.set(result)
-
-        file_select_L.configure(text=os.path.basename(file_in_path.get()))
+        root.title(window_title + file_in_path.get())
         preview_orig()
     else:
         preview_orig_clear()
@@ -712,8 +711,8 @@ def open_file_last():
                                                    "last")
             if filename is not None:
                 try:
-                    file_select_L.configure(text=filename)
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
+                    root.title(window_title + file_in_path.get())
                     preview_orig()
                     extension_from_file()
                     preview_new_refresh("none")
@@ -733,8 +732,8 @@ def open_file_next():
                                                    "next")
             if filename is not None:
                 try:
-                    file_select_L.configure(text=filename)
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
+                    root.title(window_title + file_in_path.get())
                     preview_orig()
                     extension_from_file()
                 except:
@@ -757,8 +756,8 @@ def open_file_first():
                                                    "first")
             if filename is not None:
                 try:
-                    file_select_L.configure(text=filename)
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
+                    root.title(window_title + file_in_path.get())
                     preview_orig()
                     extension_from_file()
                     preview_new_refresh("none")
@@ -778,13 +777,11 @@ def open_file_prev():
                                                    "previous")
             if filename is not None:
                 try:
-                    file_select_L.configure(text=filename)
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
+                    root.title(window_title + file_in_path.get())
                     preview_orig()
                 except:
                     log.write_log("Error in open_file_first", "E")
-
-                file_select_L.configure(text=filename)
 
                 directory = os.path.dirname(file_in_path.get())
                 file_in_path.set(os.path.join(directory, filename))
@@ -815,7 +812,7 @@ def open_screenshot():
     else:
         magick.magick(" ", "-quiet", out_file, "import")
     file_in_path.set(out_file)
-    file_select_L.configure(text=out_file)
+    root.title(window_title + out_file)
     preview_orig()
     extension_from_file()
     preview_new_refresh("none")
@@ -1392,8 +1389,6 @@ frame_file_select.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 b_file_select = ttk.Button(frame_file_select, text=_("File selection"),
                            command=open_file, style="Brown.TButton")
 
-file_select_L = ttk.Label(frame_file_select, width=30)
-
 b_file_select_screenshot = ttk.Button(frame_file_select, text=_("Screenshot"),
                                  command=open_screenshot)
 if mswindows.windows() == 1:
@@ -1410,9 +1405,7 @@ b_file_select_last = ttk.Button(frame_file_select, text=_("Last"),
 
 b_file_select.grid(column=1, row=1, padx=5, pady=5, sticky=W)
 #
-b_file_select_screenshot.grid(column=2, row=1, padx=5, pady=5, sticky=W)
-#
-file_select_L.grid(column=3, row=1, padx=5, pady=5, sticky=(W, E))
+b_file_select_screenshot.grid(column=2, row=1, padx=10, pady=5, sticky=W)
 #
 b_file_select_first.grid(column=5, row=1, padx=5, pady=5, sticky=W)
 b_file_select_prev.grid(column=6, row=1, padx=5, pady=5, sticky=W)
@@ -2125,15 +2118,15 @@ GM_or_IM = GM_or_IM_data[0]
 GM_or_IM_name = GM_or_IM_data[1]
 GM_or_IM_version = magick.get_magick_version(GM_or_IM)
 Python_version = re.findall('^\\d[.]\\d+[.]\\d+', sys.version)
-root.title("Tomasz Łuczak : FotoKilof - " + str(VERSION) + " : " +
-           GM_or_IM_name + " - " + GM_or_IM_version + " : " +
-           "Py - " + Python_version[0])
+window_title = "Tomasz Łuczak : FotoKilof - " + str(VERSION) + " : " + GM_or_IM_version + " : " + Python_version[0] + " | "
+root.title(window_title)
 if GM_or_IM is not None:
     img_text_font_list = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file
     tools_set()
     l_border.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
+        root.title(window_title + file_in_path.get())
         # Load preview picture
         preview_orig()
     if os.path.isfile(file_logo_path.get()):
