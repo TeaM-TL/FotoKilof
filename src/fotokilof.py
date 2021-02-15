@@ -85,7 +85,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.5.5"
+VERSION = "3.5.6"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -694,6 +694,10 @@ def open_file():
         preview_orig_clear()
 
 
+def open_file_last_key(event):
+    open_file_last()
+
+
 def open_file_last():
     """ Open last file """
     if file_in_path.get():
@@ -713,6 +717,10 @@ def open_file_last():
                     preview_new_refresh("none")
                 except:
                     log.write_log("Error in open_file_last", "E")
+
+
+def open_file_next_key(event):
+    open_file_next()
 
 
 def open_file_next():
@@ -739,6 +747,10 @@ def open_file_next():
                     log.write_log("Error in open_file_next refresh", "E")
 
 
+def open_file_first_key(event):
+    open_file_first()
+
+
 def open_file_first():
     """ Open first file """
     if file_in_path.get():
@@ -758,6 +770,10 @@ def open_file_first():
                     preview_new_refresh("none")
                 except:
                     log.write_log("Error in open_file_first", "E")
+
+
+def open_file_prev_key(event):
+    open_file_prev()
 
 
 def open_file_prev():
@@ -1069,7 +1085,7 @@ def help_info(event):
         # file.close
     except:
         log.write_log("help_info: error during loading license file", "W")
-        message = "Copyright 2019 Tomasz Łuczak under MIT license"
+        message = "Copyright 2019-2021 Tomasz Łuczak under MIT license"
 
     messagebox.showinfo(title=_("License"), message=message)
 
@@ -2102,6 +2118,11 @@ l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
 l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
 root.bind("<F1>", help_info)
 root.protocol("WM_DELETE_WINDOW", win_deleted)
+
+root.bind("<Left>", open_file_prev_key)
+root.bind("<Right>", open_file_next_key)
+root.bind("<Up>", open_file_first_key)
+root.bind("<Down>", open_file_last_key)
 
 ##########################################
 # Run functions
