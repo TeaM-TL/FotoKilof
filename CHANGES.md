@@ -1,8 +1,9 @@
 # Changelog
 
+
 ## Current
 
-3.5.6 added key binding for <left>,<right>,<up>,<down> for fast change picture
+3.5.6 added key binding for <Home>,<End>,<PgUp>,<PgDown> for fast change pictures
 
 3.5.5 no preview for orig or new picture
 

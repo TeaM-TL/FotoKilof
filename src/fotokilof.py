@@ -2119,10 +2119,10 @@ l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
 root.bind("<F1>", help_info)
 root.protocol("WM_DELETE_WINDOW", win_deleted)
 
-root.bind("<Left>", open_file_prev_key)
-root.bind("<Right>", open_file_next_key)
-root.bind("<Up>", open_file_first_key)
-root.bind("<Down>", open_file_last_key)
+root.bind("<Prior>", open_file_prev_key)
+root.bind("<Next>", open_file_next_key)
+root.bind("<Home>", open_file_first_key)
+root.bind("<End>", open_file_last_key)
 
 ##########################################
 # Run functions
