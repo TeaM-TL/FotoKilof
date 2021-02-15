@@ -85,7 +85,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.5.4"
+VERSION = "3.5.5"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -95,7 +95,7 @@ else:
     PREVIEW_NEW = 450
     PREVIEW_LOGO = 100
 
-preview_size_list = (300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 900, 1000, 1200, 1400, 1600, 1800)
+preview_size_list = (300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 'none')
 ##########################
 
 
@@ -150,30 +150,29 @@ def preview_new_refresh(event):
 
 def preview_new(file_out):
     """ generowanie podglądu wynikowego """
-#    file_out = os.path.join(os.path.dirname(file_out),
-#                            work_sub_dir.get(),
-#                            os.path.basename(file_out))
-    preview_picture = preview.preview_convert(file_out,
+
+    if co_preview_selector_new.get() != "none":
+        preview_picture = preview.preview_convert(file_out,
                                               " ",
                                               int(co_preview_selector_new.get()),
                                               GM_or_IM)
-    try:
-        pi_preview_new.configure(file=preview_picture['filename'])
-        l_preview_new_pi.configure(image=pi_preview_new)
-        l_preview_new.configure(text=preview_picture['width'] + "x" \
+        try:
+            pi_preview_new.configure(file=preview_picture['filename'])
+            l_preview_new_pi.configure(image=pi_preview_new)
+            l_preview_new.configure(text=preview_picture['width'] + "x" \
                                 + preview_picture['height'] \
                                 + " - " \
                                 + preview_picture['size'])
-    except:
-        log.write_log("preview_new: Cannot read preview", "E")
-
-    if img_histograms_on.get() == 1:
-        try:
-            l_histogram_new.configure(image=pi_histogram_new)
-            pi_histogram_new.configure(file=preview.preview_histogram(file_out,
-                                                                      GM_or_IM))
         except:
-            log.write_log("previe_new: errot in preview histogram_new", "E")
+            log.write_log("preview_new: Cannot read preview", "E")
+
+        if img_histograms_on.get() == 1:
+            try:
+                l_histogram_new.configure(image=pi_histogram_new)
+                pi_histogram_new.configure(file=preview.preview_histogram(file_out,
+                                                                      GM_or_IM))
+            except:
+                log.write_log("previe_new: errot in preview histogram_new", "E")
 
 
 def preview_orig_button():
@@ -187,17 +186,13 @@ def preview_orig_button():
 
 
 def preview_new_button():
-    """ preview ne picture """
+    """ preview new picture """
 
     file_show = os.path.join(os.path.dirname(file_in_path.get()),
                              work_dir.get(),
                              work_sub_dir.get(),
                              os.path.basename(file_in_path.get()))
 
-#    file_show = magick.pre_magick(file_in_path.get(),
-#                                  os.path.join(work_dir.get(),
-#                                               work_sub_dir.get())
-#                                  co_apply_type.get())
     try:
         magick.display_image(file_show, GM_or_IM)
     except:
@@ -1133,70 +1128,71 @@ def preview_orig():
     generation preview of original picture
     and add crop rectangle
     """
-    if img_crop_on.get() == 1:
-        # draw crop rectangle on preview
-        xy_max = common.mouse_crop_calculation(file_in_path.get(),
+    if co_preview_selector_orig.get() != "none":
+        if img_crop_on.get() == 1:
+            # draw crop rectangle on preview
+            xy_max = common.mouse_crop_calculation(file_in_path.get(),
                                                int(co_preview_selector_orig.get()),
                                                GM_or_IM)
-        if img_crop.get() == 1:
-            x0 = int(e1_crop_1.get())
-            y0 = int(e2_crop_1.get())
-            x1 = int(e3_crop_1.get())
-            y1 = int(e4_crop_1.get())
-            # do_nothing = 0
-        elif img_crop.get() == 2:
-            x0 = int(e1_crop_2.get())
-            y0 = int(e2_crop_2.get())
-            x1 = x0 + int(e3_crop_2.get())
-            y1 = y0 + int(e4_crop_2.get())
-            # do_nothing = 0
-        elif img_crop.get() == 3:
-            coord_for_crop = (int(e1_crop_3.get()), int(e2_crop_3.get()),
+            if img_crop.get() == 1:
+                x0 = int(e1_crop_1.get())
+                y0 = int(e2_crop_1.get())
+                x1 = int(e3_crop_1.get())
+                y1 = int(e4_crop_1.get())
+                # do_nothing = 0
+            elif img_crop.get() == 2:
+                x0 = int(e1_crop_2.get())
+                y0 = int(e2_crop_2.get())
+                x1 = x0 + int(e3_crop_2.get())
+                y1 = y0 + int(e4_crop_2.get())
+                # do_nothing = 0
+            elif img_crop.get() == 3:
+                coord_for_crop = (int(e1_crop_3.get()), int(e2_crop_3.get()),
                               int(e3_crop_3.get()), int(e4_crop_3.get()),
                               img_crop_gravity.get())
-            coord = convert.convert_preview_crop_gravity(coord_for_crop,
+                coord = convert.convert_preview_crop_gravity(coord_for_crop,
                                                          xy_max['x_orig'],
                                                          xy_max['y_orig'])
-            x0 = coord[0]
-            y0 = coord[1]
-            x1 = coord[2]
-            y1 = coord[3]
-            # do_nothing = 0
+                x0 = coord[0]
+                y0 = coord[1]
+                x1 = coord[2]
+                y1 = coord[3]
+                # do_nothing = 0
 
-        ratio_X = xy_max['x_max'] / xy_max['x_orig']
-        ratio_Y = xy_max['y_max'] / xy_max['y_orig']
-        x0 = int(x0 * ratio_X)
-        y0 = int(y0 * ratio_Y)
-        x1 = int(x1 * ratio_X)
-        y1 = int(y1 * ratio_Y)
+            ratio_X = xy_max['x_max'] / xy_max['x_orig']
+            ratio_Y = xy_max['y_max'] / xy_max['y_orig']
+            x0 = int(x0 * ratio_X)
+            y0 = int(y0 * ratio_Y)
+            x1 = int(x1 * ratio_X)
+            y1 = int(y1 * ratio_Y)
 
-        x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
-        command = " -fill none  -draw \"stroke '#FFFF00' rectangle " \
-            + x0y0x1y1 + "\" "
-    else:
-        command = " "
+            x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
+            command = " -fill none  -draw \"stroke '#FFFF00' rectangle " \
+                + x0y0x1y1 + "\" "
+        else:
+            command = " "
 
-    preview_picture = preview.preview_convert(file_in_path.get(),
+        preview_picture = preview.preview_convert(file_in_path.get(),
                                               command,
                                               int(co_preview_selector_orig.get()),
                                               GM_or_IM)
-    try:
-        pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
-        l_preview_orig_pi.configure(image=pi_preview_orig)
-    except:
-        log.write_log("preview_orig: Cannot load preview", "E")
+        try:
+            pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
+            l_preview_orig_pi.configure(image=pi_preview_orig)
+        except:
+            log.write_log("preview_orig: Cannot load preview", "E")
 
-    try:
-        l_preview_orig.configure(text=preview_picture['width'] + "x" \
+        try:
+            l_preview_orig.configure(text=preview_picture['width'] + "x" \
                                  + preview_picture['height'] \
                                  + " - " \
                                  + preview_picture['size'])
-    except:
-        log.write_log("preview_orig: Cannot load image size", "E")
+        except:
+            log.write_log("preview_orig: Cannot load image size", "E")
 
-    if img_histograms_on.get() == 1:
-        pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
-        l_histogram_orig.configure(image=pi_histogram_orig)
+        if img_histograms_on.get() == 1:
+            pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
+            l_histogram_orig.configure(image=pi_histogram_orig)
 
 
 def preview_logo():

@@ -2,6 +2,8 @@
 
 ## Current
 
+3.5.5 no preview for orig or new picture
+
 3.5.4 filename converted file moved into window title
 
 3.5.3 fixed start for MS Windows (disable check magick import), getting picture from clipboard instead screenshot (Windows)
