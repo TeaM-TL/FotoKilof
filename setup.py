@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="FotoKilof",
-    version="3.5.6a",
+    version="3.5.6b",
     author="Tomasz Łuczak",
     author_email="tlu@team-tl.pl",
     description="Nice gui for ImageMagick",

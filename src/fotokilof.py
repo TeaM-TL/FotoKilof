@@ -173,6 +173,8 @@ def preview_new(file_out):
                                                                       GM_or_IM))
             except:
                 log.write_log("previe_new: errot in preview histogram_new", "E")
+    else:
+        preview_new_clear()
 
 
 def preview_orig_button():
@@ -1209,6 +1211,8 @@ def preview_orig():
         if img_histograms_on.get() == 1:
             pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
             l_histogram_orig.configure(image=pi_histogram_orig)
+    else:
+        preview_orig_clear()
 
 
 def preview_logo():
