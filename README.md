@@ -96,5 +96,6 @@ fotokilof
  - Alexander Ignatov - Bulgarian translation,
  - Afif Hendrawan - Indonesian translation,
  - Sebastian Hiebl - python packaging,
- - Matt Sephton - ideas for packing gui.
+ - Matt Sephton - ideas for packing gui,
+ - emsspree - update german translation, jpeg
 
