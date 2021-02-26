@@ -3,6 +3,8 @@
 
 ## Current
 
+3.5.7 added jpeg file type, update German translation, minor bugfixes
+
 3.5.6 added key binding for <Home>,<End>,<PgUp>,<PgDown> for fast change pictures
 
 3.5.5 no preview for orig or new picture
