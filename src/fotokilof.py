@@ -642,13 +642,16 @@ def open_file_logo():
     """ open logo file for inserting """
     directory = os.path.dirname(file_logo_path.get())
     if mswindows.windows() == 1:
-        filetypes = ((_("JPEG files"), "*.JPG"),
+        filetypes = ((_("JPG files"), "*.JPG"),
+                     (_("JPEG files"), "*.JPEG"),
                      (_("PNG files"), "*.PNG"),
                      (_("TIFF files"), "*.TIF"),
                      (_("SVG files"), "*.SVG"))
     else:
-        filetypes = ((_("jpeg files"), "*.jpg"),
-                     (_("JPEG files"), "*.JPG"),
+        filetypes = ((_("jpg files"), "*.jpg"),
+                     (_("JPG files"), "*.JPG"),
+                     (_("jpeg files"), "*.jpeg"),
+                     (_("JPEG files"), "*.JPEG"),
                      (_("png files"), "*.png"),
                      (_("PNG files"), "*.PNG"),
                      (_("tiff files"), "*.tif"),
@@ -669,14 +672,17 @@ def open_file():
     directory = os.path.dirname(file_in_path.get())
 
     if mswindows.windows() == 1:
-        filetypes = ((_("JPEG files"), "*.JPG"),
+        filetypes = ((_("JPG files"), "*.JPG"),
+                     (_("JPEG files"), "*.JPEG"),
                      (_("PNG files"), "*.PNG"),
                      (_("TIFF files"), "*.TIF"),
                      (_("SVG files"), "*.SVG"),
                      (_("All files"), "*.*"))
     else:
-        filetypes = ((_("jpeg files"), "*.jpg"),
-                     (_("JPEG files"), "*.JPG"),
+        filetypes = ((_("jpg files"), "*.jpg"),
+                     (_("JPG files"), "*.JPG"),
+                     (_("jpeg files"), "*.jpeg"),
+                     (_("JPEG files"), "*.JPEG"),
                      (_("png files"), "*.png"),
                      (_("PNG files"), "*.PNG"),
                      (_("tiff files"), "*.tif"),
@@ -1375,7 +1381,7 @@ contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
 img_custom_on = IntVar()  # Custom
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
-file_extension = (".jpg", ".png", ".tif")
+file_extension = (".jpeg", ".jpg", ".png", ".tif")
 magick_commands = ("composite", "convert")
 #magick_commands = ("animate", "compare", "composite", "conjure", "convert",
 #                   "identify", "import", "mogrify", "montage", "stream")

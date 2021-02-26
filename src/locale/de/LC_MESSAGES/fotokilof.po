@@ -5,14 +5,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FotoKilof\n"
 "POT-Creation-Date: 2019-12-27 10:52+0100\n"
-"PO-Revision-Date: 2019-12-27 10:52+0100\n"
+"PO-Revision-Date: 2021-02-26 01:46+0100\n"
 "Last-Translator: Max von Forell\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-Basepath: ../../..\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
@@ -27,7 +27,7 @@ msgstr "Leider kann es unter Windows zu kleineren Fehlern kommen"
 
 #: fotokilof.py:261
 msgid "Processing"
-msgstr "Behandlung"
+msgstr "Verarbeite"
 
 #: fotokilof.py:285
 msgid "of"
@@ -35,7 +35,7 @@ msgstr "von"
 
 #: fotokilof.py:296
 msgid "done"
-msgstr "Abgemacht"
+msgstr "Fertig"
 
 #: fotokilof.py:534 fotokilof.py:540 fotokilof.py:561 fotokilof.py:568
 msgid "JPEG files"
@@ -71,11 +71,11 @@ msgstr "svg-Dateien"
 
 #: fotokilof.py:549
 msgid "Select logo picture for inserting"
-msgstr "Logo zum Verarbeiten auswählen"
+msgstr "Logo zum Einsetzen auswählen"
 
 #: fotokilof.py:565 fotokilof.py:575
 msgid "All files"
-msgstr "Alles Dateien"
+msgstr "Alle Dateien"
 
 #: fotokilof.py:578
 msgid "Select picture for processing"
@@ -87,7 +87,7 @@ msgstr "Lizenz"
 
 #: fotokilof.py:1067
 msgid "No file selected"
-msgstr "Dateiauswahlfehler"
+msgstr "Keine Datei ausgewählt"
 
 #: fotokilof.py:1225
 msgid "Tools"
@@ -115,7 +115,7 @@ msgstr "Drehen"
 
 #: fotokilof.py:1244 fotokilof.py:1653
 msgid "Border"
-msgstr ""
+msgstr "Rahmen"
 
 #: fotokilof.py:1247
 msgid "Black&white"
@@ -135,11 +135,11 @@ msgstr "Logo"
 
 #: fotokilof.py:1258
 msgid "Custom"
-msgstr ""
+msgstr "Eigene"
 
 #: fotokilof.py:1261
 msgid "Layout"
-msgstr ""
+msgstr "Layout"
 
 #: fotokilof.py:1272
 msgid "Apply"
@@ -159,7 +159,7 @@ msgstr "Laden"
 
 #: fotokilof.py:1312 fotokilof.py:1797
 msgid "File selection"
-msgstr "Dateiauswahl"
+msgstr "Datei öffnen"
 
 #: fotokilof.py:1315 fotokilof.py:1411 fotokilof.py:1494 fotokilof.py:1612
 #: fotokilof.py:1640 fotokilof.py:1662 fotokilof.py:1685 fotokilof.py:1715
@@ -180,12 +180,12 @@ msgid ""
 "Offset\n"
 "(dx,dy)"
 msgstr ""
-"Verschiebung\n"
+"Versatz\n"
 "(dx,dy)"
 
 #: fotokilof.py:1355 fotokilof.py:1478 fotokilof.py:1575
 msgid "Center"
-msgstr "Zentrum"
+msgstr "Mitte"
 
 #: fotokilof.py:1392
 msgid "Scale/Resize"
@@ -228,8 +228,8 @@ msgid ""
 "Offset (dx,dy), dimensions (X, Y)\n"
 "and gravity"
 msgstr ""
-"Verschiebung (dx,dy), Dimensionen (X, Y)\n"
-"und Schwerkraft"
+"Versatz (dx,dy), Maße (X, Y)\n"
+"und Richtung"
 
 #: fotokilof.py:1490 fotokilof.py:1827 fotokilof.py:1892
 msgid "Preview"
@@ -245,15 +245,15 @@ msgstr "Text hinzufügen"
 
 #: fotokilof.py:1549
 msgid "Inside"
-msgstr ""
+msgstr "Innen"
 
 #: fotokilof.py:1551
 msgid "Outside"
-msgstr ""
+msgstr "Außen"
 
 #: fotokilof.py:1553
 msgid "Offset (dx,dy)\n"
-msgstr "Verschiebung (dx,dy)\n"
+msgstr "Versatz (dx,dy)\n"
 
 #: fotokilof.py:1603
 msgid "Font color"
@@ -281,7 +281,7 @@ msgstr "Sepia"
 
 #: fotokilof.py:1702
 msgid "Stretch"
-msgstr "Ziehen"
+msgstr "Ausweiten"
 
 #: fotokilof.py:1708
 msgid "Normalize"
@@ -301,29 +301,27 @@ msgstr "Farbe normalisieren"
 
 #: fotokilof.py:1736
 msgid "Equalize"
-msgstr ""
+msgstr "Angleichen"
 
 #: fotokilof.py:1739
 msgid "AutoLevel"
-msgstr "AutoNiveau"
+msgstr "Auto-Niveau"
 
 #: fotokilof.py:1742
 msgid "Channel:"
 msgstr "Kanal:"
 
 #: fotokilof.py:1758
-#, fuzzy
-#| msgid "Commands"
 msgid "Custom command"
-msgstr "Befehle"
+msgstr "Benutzerdefinierter Befehl"
 
 #: fotokilof.py:1763
 msgid "Command:"
-msgstr "Befehle:"
+msgstr "Befehl:"
 
 #: fotokilof.py:1768
 msgid "Clear"
-msgstr "Klar"
+msgstr "Leeren"
 
 #: fotokilof.py:1793
 msgid "Image"
@@ -355,7 +353,7 @@ msgstr "Histogramm"
 
 #: fotokilof.py:1855 fotokilof.py:1866
 msgid "Execute all"
-msgstr "Ausführen Alles"
+msgstr "Alle ausführen"
 
 #: fotokilof.py:1859
 msgid "Folder"
@@ -378,6 +376,8 @@ msgid ""
 "ImageMagick nor GraphicsMagick are not installed in you system. Is impossile "
 "to process any graphics."
 msgstr ""
+"Weder ImageMagick noch GraphicsMagick sind installiert. Bilder können nicht "
+"verarbeitet werden."
 
 #~ msgid "DICOM files"
 #~ msgstr "DICOM-Dateien"
@@ -389,7 +389,7 @@ msgstr ""
 #~ msgstr "Größe ändern"
 
 #~ msgid "Put text"
-#~ msgstr "Text festsetzen"
+#~ msgstr "Text einsetzen"
 
 #~ msgid "Add frame"
 #~ msgstr "Rahmen hinzufügen"
