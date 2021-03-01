@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FotoKilof\n"
 "POT-Creation-Date: 2019-12-27 10:52+0100\n"
-"PO-Revision-Date: 2021-02-26 01:46+0100\n"
+"PO-Revision-Date: 2021-03-01 11:31+0100\n"
 "Last-Translator: Max von Forell\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -97,9 +97,10 @@ msgstr "Werkzeuge"
 msgid "Histograms"
 msgstr "Histogramme"
 
+# »Größen.« als Abkürzung
 #: fotokilof.py:1232
 msgid "Scaling/Resize"
-msgstr "Skalieren/Größe ändern"
+msgstr "Skalieren/Größen."
 
 #: fotokilof.py:1235 fotokilof.py:1427
 msgid "Crop"
@@ -157,9 +158,10 @@ msgstr "Speichern"
 msgid "Load"
 msgstr "Laden"
 
+# Auslassungspunkte weil sich Dialog öffnet
 #: fotokilof.py:1312 fotokilof.py:1797
 msgid "File selection"
-msgstr "Datei öffnen"
+msgstr "Datei …"
 
 #: fotokilof.py:1315 fotokilof.py:1411 fotokilof.py:1494 fotokilof.py:1612
 #: fotokilof.py:1640 fotokilof.py:1662 fotokilof.py:1685 fotokilof.py:1715
@@ -189,7 +191,7 @@ msgstr "Mitte"
 
 #: fotokilof.py:1392
 msgid "Scale/Resize"
-msgstr "Skalieren/Größe ändern"
+msgstr "Skalierung/Größenänderung"
 
 #: fotokilof.py:1397 fotokilof.py:1657
 msgid "Pixels"
@@ -313,7 +315,7 @@ msgstr "Kanal:"
 
 #: fotokilof.py:1758
 msgid "Custom command"
-msgstr "Benutzerdefinierter Befehl"
+msgstr "Eigener Befehl"
 
 #: fotokilof.py:1763
 msgid "Command:"
@@ -376,8 +378,8 @@ msgid ""
 "ImageMagick nor GraphicsMagick are not installed in you system. Is impossile "
 "to process any graphics."
 msgstr ""
-"Weder ImageMagick noch GraphicsMagick sind installiert. Bilder können nicht "
-"verarbeitet werden."
+"Es ist weder ImageMagick noch GraphicsMagick installiert. Bilder können "
+"nicht verarbeitet werden."
 
 #~ msgid "DICOM files"
 #~ msgstr "DICOM-Dateien"
