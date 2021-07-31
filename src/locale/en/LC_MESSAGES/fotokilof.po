@@ -160,7 +160,7 @@ msgstr "Load"
 
 #: fotokilof.py:1312 fotokilof.py:1797
 msgid "File selection"
-msgstr "File selection"
+msgstr "File selection…"
 
 #: fotokilof.py:1315 fotokilof.py:1411 fotokilof.py:1494 fotokilof.py:1612
 #: fotokilof.py:1640 fotokilof.py:1662 fotokilof.py:1685 fotokilof.py:1715
