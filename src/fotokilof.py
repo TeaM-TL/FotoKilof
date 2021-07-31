@@ -85,7 +85,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.5.8"
+VERSION = "3.5.9"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -347,7 +347,10 @@ def apply_all_button():
         else:
             dirname = os.path.dirname(file_in_path.get())
             i = 0
-            files_list = glob.glob(os.path.join(dirname, "*.[j|J][p|P][g|G]"))
+            files_list_short = common.list_of_images(dirname)
+            files_list = []
+            for filename_short in files_list_short:
+                files_list.append(os.path.join(dirname, filename_short))
             file_list_len = len(files_list)
             pb['maximum'] = file_list_len
             pb['mode'] = "determinate"
@@ -641,11 +644,21 @@ def crop_read():
 def open_file_logo():
     """ open logo file for inserting """
     directory = os.path.dirname(file_logo_path.get())
-
-    filetypes = ((_("JPG files"), ".JPG .jpg .jpeg .JPEG"),
+    if mswindows.windows() == 1:
+        filetypes = ((_("All graphics files"), ".JPG .JPEG .PNG .TIF .TIFF"),
+                     (_("JPG files"), ".JPG .JPEG"),
+                     (_("PNG files"), ".PNG"),
+                     (_("TIFF files"), ".TIF .TIFF"),
+                     (_("SVG files"), ".SVG"),
+                     (_("ALL types"), "*"))
+    else:
+        filetypes = ((_("All graphics files"), ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff"),
+                     (_("JPG files"), ".JPG .jpg .JPEG .jpeg"),
                      (_("PNG files"), ".PNG .png"),
                      (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
-                     (_("SVG files"), ".SVG .svg"))
+                     (_("SVG files"), ".SVG .svg"),
+                     (_("ALL types"), "*"))
+
     file_logo_path.set(filedialog.askopenfilename(initialdir=directory,
                                                   filetypes=filetypes,
                                                   title=_("Select logo picture for inserting")))
@@ -659,10 +672,12 @@ def open_file():
     """ open image for processing """
     directory = os.path.dirname(file_in_path.get())
 
-    filetypes = ((_("JPG files"), ".JPG .jpg .jpeg .JPEG"),
-                     (_("PNG files"), ".PNG .png"),
-                     (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
-                     (_("SVG files"), ".SVG .svg"))
+    filetypes = ((_("All graphics files"), ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff"),
+                 (_("JPG files"), ".JPG .jpg .JPEG .jpeg"),
+                 (_("PNG files"), ".PNG .png"),
+                 (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
+                 (_("SVG files"), ".SVG .svg"),
+                 (_("ALL types"), "*"))
     result = filedialog.askopenfilename(initialdir=directory,
                                         filetypes=filetypes,
                                         title=_("Select picture for processing"))

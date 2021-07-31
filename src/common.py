@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (c) 2019-2020 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2021 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -104,20 +104,17 @@ def spacja(file_path):
 
 def list_of_images(cwd):
     """
-    jpg and png images in cwd
+    jpg, png and tiff images in cwd
     return sorted list
     """
 
     list_of_files = os.listdir(cwd)
     file_list = []
-    pattern = "*.jpg"
-    for file in list_of_files:
-        if fnmatch.fnmatch(file, pattern):
-            file_list.append(file)
-    pattern = "*.png"
-    for file in list_of_files:
-        if fnmatch.fnmatch(file, pattern):
-            file_list.append(file)
+    patterns = ("*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.png", "*.PNG", "*.tif", "*.TIF", "*.tiff", "*.TIFF")
+    for pattern in patterns:
+        for file in list_of_files:
+            if fnmatch.fnmatch(file, pattern):
+                file_list.append(file)
 
     file_list.sort()
     return file_list
