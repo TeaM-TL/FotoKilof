@@ -85,7 +85,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.5.7"
+VERSION = "3.5.8"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -95,7 +95,7 @@ else:
     PREVIEW_NEW = 450
     PREVIEW_LOGO = 100
 
-preview_size_list = (300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 'none')
+preview_size_list = (300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 1920, 'none')
 ##########################
 
 
@@ -641,23 +641,11 @@ def crop_read():
 def open_file_logo():
     """ open logo file for inserting """
     directory = os.path.dirname(file_logo_path.get())
-    if mswindows.windows() == 1:
-        filetypes = ((_("JPG files"), "*.JPG"),
-                     (_("JPEG files"), "*.JPEG"),
-                     (_("PNG files"), "*.PNG"),
-                     (_("TIFF files"), "*.TIF"),
-                     (_("SVG files"), "*.SVG"))
-    else:
-        filetypes = ((_("jpg files"), "*.jpg"),
-                     (_("JPG files"), "*.JPG"),
-                     (_("jpeg files"), "*.jpeg"),
-                     (_("JPEG files"), "*.JPEG"),
-                     (_("png files"), "*.png"),
-                     (_("PNG files"), "*.PNG"),
-                     (_("tiff files"), "*.tif"),
-                     (_("TIFF files"), "*.TIF"),
-                     (_("svg files"), "*.svg"),
-                     (_("SVG files"), "*.SVG"))
+
+    filetypes = ((_("JPG files"), ".JPG .jpg .jpeg .JPEG"),
+                     (_("PNG files"), ".PNG .png"),
+                     (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
+                     (_("SVG files"), ".SVG .svg"))
     file_logo_path.set(filedialog.askopenfilename(initialdir=directory,
                                                   filetypes=filetypes,
                                                   title=_("Select logo picture for inserting")))
@@ -671,25 +659,10 @@ def open_file():
     """ open image for processing """
     directory = os.path.dirname(file_in_path.get())
 
-    if mswindows.windows() == 1:
-        filetypes = ((_("JPG files"), "*.JPG"),
-                     (_("JPEG files"), "*.JPEG"),
-                     (_("PNG files"), "*.PNG"),
-                     (_("TIFF files"), "*.TIF"),
-                     (_("SVG files"), "*.SVG"),
-                     (_("All files"), "*.*"))
-    else:
-        filetypes = ((_("jpg files"), "*.jpg"),
-                     (_("JPG files"), "*.JPG"),
-                     (_("jpeg files"), "*.jpeg"),
-                     (_("JPEG files"), "*.JPEG"),
-                     (_("png files"), "*.png"),
-                     (_("PNG files"), "*.PNG"),
-                     (_("tiff files"), "*.tif"),
-                     (_("TIFF files"), "*.TIF"),
-                     (_("svg files"), "*.svg"),
-                     (_("SVG files"), "*.SVG"),
-                     (_("All files"), "*.*"))
+    filetypes = ((_("JPG files"), ".JPG .jpg .jpeg .JPEG"),
+                     (_("PNG files"), ".PNG .png"),
+                     (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
+                     (_("SVG files"), ".SVG .svg"))
     result = filedialog.askopenfilename(initialdir=directory,
                                         filetypes=filetypes,
                                         title=_("Select picture for processing"))
