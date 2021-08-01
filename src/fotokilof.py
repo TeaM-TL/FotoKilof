@@ -59,6 +59,7 @@ import preview
 
 if mswindows.windows() == 1:
     from PIL import ImageGrab
+from PIL import Image, ImageTk
 
 # Start logging
 log.write_log('Start', "M", "w", 1)
@@ -85,7 +86,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.5.9"
+VERSION = "3.6.0"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -152,13 +153,15 @@ def preview_new(file_out):
     """ generowanie podglądu wynikowego """
 
     if co_preview_selector_new.get() != "none":
-        preview_picture = preview.preview_convert(file_out,
-                                              " ",
-                                              int(co_preview_selector_new.get()),
-                                              GM_or_IM)
+        preview_picture = preview.preview_pillow(file_in_path.get(),
+                                                int(co_preview_selector_new.get()))
+        image = Image.open(common.spacja(file_out))
+        image_preview = image.resize((int(preview_picture['width_resize']),
+                                      int(preview_picture['height_resize'])))
+        image_previewTK = ImageTk.PhotoImage(image_preview) 
+
         try:
-            pi_preview_new.configure(file=preview_picture['filename'])
-            l_preview_new_pi.configure(image=pi_preview_new)
+            l_preview_new_pi.configure(image=image_previewTK)
             l_preview_new.configure(text=preview_picture['width'] + "x" \
                                 + preview_picture['height'] \
                                 + " - " \
@@ -339,7 +342,7 @@ def apply_all_button():
         if file_dir_selector.get() == 0:
             out_file = magick.pre_magick(file_in_path.get(),
                                          os.path.join(work_dir.get(),
-                                                      work_sub_dir.get()),
+                                         work_sub_dir.get()),
                                          co_apply_type.get())
             result = apply_all_convert(out_file, 1)
             if result == "OK":
@@ -358,7 +361,7 @@ def apply_all_button():
                 file_in_path.set(os.path.realpath(file_in))
                 out_file = magick.pre_magick(os.path.realpath(file_in),
                                              os.path.join(work_dir.get(),
-                                                          work_sub_dir.get()),
+                                             work_sub_dir.get()),
                                              co_apply_type.get())
                 result = apply_all_convert(out_file, 0)
                 i = i + 1
@@ -1219,8 +1222,7 @@ def preview_logo():
                                                   PREVIEW_LOGO,
                                                   GM_or_IM)
         pi_logo_preview.configure(file=preview_picture['filename'])
-        l_logo_preview.configure(text=preview_picture['width'] + "x" \
-                                 + preview_picture['height'])
+        l_logo_preview.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
     else:
         log.write_log("Preview_logo: Cannot load file", "E")
 

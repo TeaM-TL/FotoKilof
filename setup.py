@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="FotoKilof",
-    version="3.5.9",
+    version="3.6.0",
     author="Tomasz Łuczak",
     author_email="tlu@team-tl.pl",
     description="Nice gui for ImageMagick",
@@ -22,7 +22,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    #install_requires=['pillow','colorpicker'],
+#    install_requires=['pillow','colorpicker'],
     entry_points = {
         "gui_scripts": [
             "fotokilof = src:__main__",

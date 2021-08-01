@@ -30,6 +30,7 @@ module contains function for generating preview and histogram:
  """
 
 import os
+from PIL import Image
 import tempfile
 
 import common
@@ -65,15 +66,17 @@ def preview_convert(file_in, command, size, gm_or_im):
     """
     preview generation
     file_in - fullname image file
-    dir_temp - fullname temporary directory
     command - additional command for imagemagick or space
+    dir_temp - fullname temporary directory
     --
     return: fullname preview file and size
     """
     try:
-        image_size = magick.get_image_size(file_in, gm_or_im)
-        width = str(image_size[0])
-        height = str(image_size[1])
+        #image_size = magick.get_image_size(file_in, gm_or_im)
+        #width = str(image_size[0])
+        #height = str(image_size[1])
+        im = Image.open(file_in)
+        width, height = im.size
         filesize = common.humansize(os.path.getsize(file_in))
 
         cmd_magick = gm_or_im + "convert"
@@ -84,9 +87,46 @@ def preview_convert(file_in, command, size, gm_or_im):
         magick.magick(command, file_in, file_preview, cmd_magick)
 
         result = {'filename': file_preview, 'size': filesize, \
-                'width': width, 'height': height}
+                'width': str(width), 'height': str(height)}
     except:
         log.write_log("Error in preview_convert: return", "E")
+        result = None
+
+    return result
+
+
+def preview_pillow(file_in, size):
+    """
+    preview generation
+    file_in - fullname image file
+    size - required size of image
+    --
+    return: 
+    - file size
+    - width and height
+    - widht and heighs for resize by Pillow
+    """
+    try:
+        im = Image.open(file_in)
+        width, height = im.size
+        filesize = common.humansize(os.path.getsize(file_in))
+        if width > height:
+            width_resize = size
+            height_resize = int( height / width * size )
+        elif width < height:
+            height_resize = size
+            width_resize = int( width / height * size )
+        else:
+            width_resize = size
+            height_resize = size
+
+        result = {'size': filesize,
+                  'width': str(width),
+                  'height': str(height),
+                  'width_resize': str(width_resize),
+                  'height_resize': str(height_resize)}
+    except:
+        log.write_log("Error in preview_pillow: return", "E")
         result = None
 
     return result
