@@ -59,7 +59,7 @@ import preview
 
 if mswindows.windows() == 1:
     from PIL import ImageGrab
-from PIL import Image, ImageTk
+from PIL import Image
 
 # Start logging
 log.write_log('Start', "M", "w", 1)
@@ -166,8 +166,7 @@ def preview_new(file_out):
         except:
             log.write_log("preview_new: Cannot read preview", "E")
 
-        if mswindows.windows() == 1:
-            windows_copy_to_clipboard(file_out)
+        gui.copy_to_clipboard(file_out)
 
         if img_histograms_on.get() == 1:
             try:

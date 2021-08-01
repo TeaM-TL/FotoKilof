@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Copyright (c) 2019-2020 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2021 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,36 @@ THE SOFTWARE.
 """
 
 """ function for GUI """
+
+#import io
+#import ctypes
+from io import BytesIO
+from PIL import Image
+
+import mswindows
+if mswindows.windows() == 1:
+    import win32clipboard
+
+
+def copy_to_clipboard(file_in):
+    """ Copy results into clipboard"""
+
+    if mswindows.windows() == 1:
+        """ https://stackoverflow.com/questions/34322132/copy-image-to-clipboard """
+        image = Image.open(file_in)
+
+        output = BytesIO()
+        image.convert("RGB").save(output, "BMP")
+        data = output.getvalue()[14:]
+        output.close()
+
+        win32clipboard.OpenClipboard()
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
+        win32clipboard.CloseClipboard()
+
+    else:
+        print('Not ready yet')
 
 
 def only_numbers(char):

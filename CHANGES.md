@@ -3,6 +3,10 @@
 
 ## Current
 
+3.6.0 faster under Windows (results preview by Pillow), results is copied into clipboard (only Windows)
+
+3.5.9 fixed execute all for png files
+
 3.5.8 multiple filetypes for open file dialog
 
 3.5.7 added jpeg file type, update German translation, minor bugfixes
@@ -21,6 +25,8 @@
 
 3.5.0 take and use screenshots (window or selection), screenshot are stored in %TMP
 
+## OLD
+
 3.4.0 resized pictures are in subfolders, catching more exception
 
 3.3.2 remove not necessary modules: getpass, pathlib
@@ -33,7 +39,6 @@
 
 3.1 scalable preview widgets, format conversion, SVG conversion, code standarization, speedup, bug_fix, removed Pillow module,
 
-## OLD
 3.0 Order with Contrast and Normalize, updated documentation, fixed INI reading
 
 2.9.6 Added preview crop, updated documentation
