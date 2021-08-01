@@ -166,6 +166,9 @@ def preview_new(file_out):
         except:
             log.write_log("preview_new: Cannot read preview", "E")
 
+        if mswindows.windows() == 1:
+            windows_copy_to_clipboard(file_out)
+
         if img_histograms_on.get() == 1:
             try:
                 l_histogram_new.configure(image=pi_histogram_new)
