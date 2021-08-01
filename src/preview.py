@@ -30,7 +30,7 @@ module contains function for generating preview and histogram:
  """
 
 import os
-from PIL import Image
+from PIL import Image, ImageTk
 import tempfile
 
 import common
@@ -101,33 +101,45 @@ def preview_pillow(file_in, size):
     file_in - fullname image file
     size - required size of image
     --
-    return: 
+    return:
+    - filename - path to PPM file
     - file size
     - width and height
-    - widht and heighs for resize by Pillow
     """
     try:
-        im = Image.open(file_in)
-        width, height = im.size
+        image = Image.open(file_in)
+        width = image.width
+        height = image.height
         filesize = common.humansize(os.path.getsize(file_in))
         if width > height:
-            width_resize = size
+            width_resize = int(size)
             height_resize = int( height / width * size )
         elif width < height:
-            height_resize = size
+            height_resize = int(size)
             width_resize = int( width / height * size )
         else:
-            width_resize = size
-            height_resize = size
+            width_resize = int(size)
+            height_resize = int(size)
 
-        result = {'size': filesize,
-                  'width': str(width),
-                  'height': str(height),
-                  'width_resize': str(width_resize),
-                  'height_resize': str(height_resize)}
+
     except:
         log.write_log("Error in preview_pillow: return", "E")
         result = None
+
+    image_resized = image.resize((width_resize, height_resize))
+
+    if image.mode != 'RGB':
+        image = image.convert('RGB')
+
+    file_preview = os.path.join(tempfile.gettempdir(),
+                                    "fotokilof_" + os.getlogin() \
+                                    + "_preview.ppm")
+    image_resized.save(file_preview, "PPM")
+
+    result = {'filename': file_preview,
+              'size': filesize,
+              'width': str(width),
+              'height': str(height)}
 
     return result
 

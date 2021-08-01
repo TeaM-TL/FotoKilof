@@ -141,7 +141,7 @@ def preview_new_refresh(event):
     # to define file_out
     file_out = magick.pre_magick(file_in_path.get(),
                                  os.path.join(work_dir.get(),
-                                              work_sub_dir.get()),
+                                 work_sub_dir.get()),
                                  co_apply_type.get())
     if os.path.isfile(file_out):
         preview_new(file_out)
@@ -153,19 +153,16 @@ def preview_new(file_out):
     """ generowanie podglądu wynikowego """
 
     if co_preview_selector_new.get() != "none":
-        preview_picture = preview.preview_pillow(file_in_path.get(),
+        preview_info = preview.preview_pillow(file_out,
                                                 int(co_preview_selector_new.get()))
-        image = Image.open(common.spacja(file_out))
-        image_preview = image.resize((int(preview_picture['width_resize']),
-                                      int(preview_picture['height_resize'])))
-        image_previewTK = ImageTk.PhotoImage(image_preview)
 
         try:
-            l_preview_new_pi.configure(image=image_previewTK)
-            l_preview_new.configure(text=preview_picture['width'] + "x" \
-                                + preview_picture['height'] \
+            l_preview_new.configure(text=preview_info['width'] + "x" \
+                                + preview_info['height'] \
                                 + " - " \
-                                + preview_picture['size'])
+                                + preview_info['size'])
+            pi_preview_new.configure(file=preview_info['filename'])
+            l_preview_new_pi.configure(image=pi_preview_new)
         except:
             log.write_log("preview_new: Cannot read preview", "E")
 
@@ -1217,12 +1214,16 @@ def preview_logo():
     if os.path.isfile(file_logo_path.get()):
         l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
 
-        preview_picture = preview.preview_convert(file_logo_path.get(),
-                                                  " ",
-                                                  PREVIEW_LOGO,
-                                                  GM_or_IM)
-        pi_logo_preview.configure(file=preview_picture['filename'])
-        l_logo_preview.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
+        preview_info = preview.preview_convert(file_logo_path.get(), " ", PREVIEW_LOGO, GM_or_IM)
+        # because PIL has problem with coversion RGBA->RGB, is impossible to use below command
+#        preview_info = preview.preview_pillow(file_logo_path.get(), PREVIEW_LOGO)
+
+        try:
+            pi_logo_preview.configure(file=preview_info['filename'])
+        except:
+            log.write_log("Preview_logo: Cannot display file", "E")
+
+        l_logo_preview.configure(text=preview_info['width'] + "x" + preview_info['height'])
     else:
         log.write_log("Preview_logo: Cannot load file", "E")
 
@@ -2146,9 +2147,10 @@ if GM_or_IM is not None:
         root.title(window_title + file_in_path.get())
         # Load preview picture
         preview_orig()
-    if os.path.isfile(file_logo_path.get()):
-        # Load preview logo
-        preview_logo()
+    if img_logo_on.get() == 1:
+        if os.path.isfile(file_logo_path.get()):
+            # Load preview logo
+            preview_logo()
 
 else:
     root.withdraw()
