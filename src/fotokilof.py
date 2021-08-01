@@ -158,7 +158,7 @@ def preview_new(file_out):
         image = Image.open(common.spacja(file_out))
         image_preview = image.resize((int(preview_picture['width_resize']),
                                       int(preview_picture['height_resize'])))
-        image_previewTK = ImageTk.PhotoImage(image_preview) 
+        image_previewTK = ImageTk.PhotoImage(image_preview)
 
         try:
             l_preview_new_pi.configure(image=image_previewTK)
