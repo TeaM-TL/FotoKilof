@@ -25,7 +25,7 @@
 
 3.5.1 disable screenshot under MS Windows, disable screenshot if IM is unavailable
 
-3.5.0 take and use screenshots (window or selection), screenshot are stored in %TMP
+3.5.0 take and use screenshots (window or selection), screenshot are stored in '$TMP' or '%TEMP%
 
 3.4.0 resized pictures are in subfolders, catching more exception
 
