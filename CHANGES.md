@@ -25,7 +25,7 @@
 
 3.5.1 disable screenshot under MS Windows, disable screenshot if IM is unavailable
 
-3.5.0 take and use screenshots (window or selection), screenshot are stored in '$TMP' or '%TEMP%
+3.5.0 take and use screenshots (window or selection), screenshot are stored in `$TMP` or `%TEMP%`
 
 3.4.0 resized pictures are in subfolders, catching more exception
 
@@ -47,7 +47,7 @@
 
 2.9.5 .INI is in $HOME directory; crop and text work together properly
 
-2.9.4 *$TMP* instead own *tmp* directory
+2.9.4 `$TMP` instead own temporary directory
 
 2.9.3 Added: option -equalize for Normalize, clean button for custom field
 
