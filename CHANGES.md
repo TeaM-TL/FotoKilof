@@ -3,7 +3,7 @@
 
 ## 2021
 
-3.6.0 faster under Windows (results preview by Pillow), results is copied into clipboard (only Windows)
+3.6.0 faster under Windows (result preview by Pillow), result is copied into clipboard (only Windows)
 
 3.5.9 fixed execute all for png files
 
@@ -11,7 +11,7 @@
 
 3.5.7 added jpeg file type, update German translation, minor bugfixes
 
-3.5.6 added key binding for <Home>,<End>,<PgUp>,<PgDown> for fast change pictures
+3.5.6 added key binding for `<Home>`,`<End>`,`<PgUp>`,`<PgDown>` for fast change pictures
 
 3.5.5 no preview for orig or new picture
 
