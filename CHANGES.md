@@ -1,7 +1,7 @@
 # Changelog
 
 
-## Current
+## 2021
 
 3.6.0 faster under Windows (results preview by Pillow), results is copied into clipboard (only Windows)
 
@@ -17,6 +17,8 @@
 
 3.5.4 filename converted file moved into window title
 
+## 2020
+
 3.5.3 fixed start for MS Windows (disable check magick import), getting picture from clipboard instead screenshot (Windows)
 
 3.5.2 fixed setup.py for PyPi
@@ -25,11 +27,11 @@
 
 3.5.0 take and use screenshots (window or selection), screenshot are stored in %TMP
 
-## OLD
-
 3.4.0 resized pictures are in subfolders, catching more exception
 
 3.3.2 remove not necessary modules: getpass, pathlib
+
+## 2019
 
 3.3.1 GUI user friendly, preview new (if exists) during navigation, clear preview
 
