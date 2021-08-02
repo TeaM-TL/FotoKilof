@@ -2,7 +2,7 @@
 # pylint: disable=bare-except
 
 """
-Copyright (c) 2019-2020 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2021 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,17 +21,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-"""
 
-"""
 module contains function for generating preview and histogram:
 - preview_histogram
 - preview_convert
- """
+"""
 
 import os
-from PIL import Image, ImageTk
 import tempfile
+from PIL import Image
 
 import common
 import log
@@ -61,6 +59,8 @@ def preview_histogram(file_in, gm_or_im):
     except:
         log.write_log("Error in convert_histogram: " + command, "E")
 
+    return 'none'
+
 
 def preview_convert(file_in, command, size, gm_or_im):
     """
@@ -69,14 +69,17 @@ def preview_convert(file_in, command, size, gm_or_im):
     command - additional command for imagemagick or space
     dir_temp - fullname temporary directory
     --
-    return: fullname preview file and size
+    return:
+    - filename - path to PPM file
+    - file size
+    - width and height
     """
     try:
         #image_size = magick.get_image_size(file_in, gm_or_im)
         #width = str(image_size[0])
         #height = str(image_size[1])
-        im = Image.open(file_in)
-        width, height = im.size
+        image = Image.open(file_in)
+        width, height = image.size
         filesize = common.humansize(os.path.getsize(file_in))
 
         cmd_magick = gm_or_im + "convert"

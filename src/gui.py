@@ -19,12 +19,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+function for GUI
 """
 
-""" function for GUI """
-
-#import io
-#import ctypes
 from io import BytesIO
 from PIL import Image
 
@@ -34,10 +32,11 @@ if mswindows.windows() == 1:
 
 
 def copy_to_clipboard(file_in):
-    """ Copy results into clipboard"""
-
+    """
+    Copy results into clipboard
+    https://stackoverflow.com/questions/34322132/copy-image-to-clipboard
+    """
     if mswindows.windows() == 1:
-        """ https://stackoverflow.com/questions/34322132/copy-image-to-clipboard """
         image = Image.open(file_in)
 
         output = BytesIO()

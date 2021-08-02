@@ -23,14 +23,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-"""
 
-""" nice GUI for ImageMagick command common used (by me)  """
+nice GUI for ImageMagick command common used (by me)
+"""
 
 import configparser
 import datetime
 import gettext
-import glob
 import os
 import re
 import sys
@@ -47,6 +46,10 @@ try:
 except:
     from tkinter.colorchooser import askcolor
 
+import mswindows
+if mswindows.windows() == 1:
+    from PIL import ImageGrab
+
 # my modules
 import convert
 import common
@@ -54,12 +57,7 @@ import gui
 import ini_read
 import log
 import magick
-import mswindows
 import preview
-
-if mswindows.windows() == 1:
-    from PIL import ImageGrab
-from PIL import Image
 
 # Start logging
 log.write_log('Start', "M", "w", 1)
