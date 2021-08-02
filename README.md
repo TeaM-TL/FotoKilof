@@ -32,6 +32,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - processing picture in the fly, originals are safe,
  - processing single file or whole directory,
  - take screenshot (Linux) or get picture from clipboard (Windows) and use it as source picture,
+ - after processing results is copied into clipboard (Windows),
  - display selected tools,
  - tools selection,
  - preview orignal and result,
@@ -50,7 +51,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - fast file navigation: First, Prev, Next, Last,
  - own command editor,
  - own command can be composed from executed commands,
- - is possible to use other ImageMagick commands, eg. *-gaussian-blur*,
+ - is possible to use other ImageMagick commands, eg. *-gaussian-blur* etc.,
  - logging conversion,
  - GraphickMagick is supported partialy.
 
@@ -64,25 +65,38 @@ Available: English, Polish, German, Bulgarian and Indonesian.
 
 ## Run
 
+### As pypi package
+
+Recommended option is get as PyPi package by PIP
+```
+python3 -m pip install fotokilof
+fotokilof
+```
+
 ### As package
+
+Packages are build from tim to time. The best way is use from PyPi as described above
 
 #### Download 
 In [Release](https://github.com/TeaM-TL/FotoKilof/releases) you can find current binary version for Windows (8.1 and newer) and Linux
 
 #### Run
- - unzip downloaded *fotokilof-\**
+ - unzip downloaded `fotokilof-*`
  - optionaly make shortcut on the desktop,
  - run fotokilof.
 
 #### Windows
-To make life easier, package *fotokilof-windows-x64.zip* contains ImageMagick binaries.
 
-### As pypi package
+But the best way is to install:
+- fresh ImageMagick (remember to add path into `%PATH%` environment variable during installation)
+- fresh Python3 (remember to add path into `%PATH%` environment variable during installation)
+- install from PyPi:
+```
+python -m pip install fotokilof
+```
 
-```
-python3 -m pip install fotokilof
-fotokilof
-```
+To make life easier, package `fotokilof-windows-x64.zip` contains ImageMagick binaries.
+But binaries can be old, because recommended way is via PyPi.
 
 ## Requirements
  - Windows, Linux, MacOS X, BSD,
