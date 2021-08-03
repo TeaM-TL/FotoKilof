@@ -232,27 +232,27 @@ def check_magick():
 
 def check_imagemagick(suffix):
     """ Check if ImageMagick is avaialble"""
-    if shutil.which('convert' + suffix):
-        result = "OK"
-        if shutil.which('mogrify' + suffix):
+
+    if mswindows.windows() == 1:
+        if shutil.which('magick' + suffix):
             result = "OK"
-            if shutil.which('composite' + suffix):
+        else:
+            result = None
+    else:
+        if shutil.which('convert'):
+            result = "OK"
+            if shutil.which('mogrify'):
                 result = "OK"
-                if shutil.which('identify' + suffix):
+                if shutil.which('composite'):
                     result = "OK"
-                    if mswindows.windows() == 0:
-                        if shutil.which('import' + suffix):
-                            result = "OK"
-                        else:
-                            result = None
+                    if shutil.which('identify'):
+                        result = "OK"
+                    else:
+                        result = None
                 else:
                     result = None
             else:
                 result = None
-        else:
-            result = None
-    else:
-        result = None
 
     return result
 

@@ -3,6 +3,8 @@
 
 ## 2021
 
+3.6.1 better recognize new version ImageMagick under Windows
+
 3.6.0 faster under Windows (result preview by Pillow), result is copied into clipboard (only Windows)
 
 3.5.9 fixed execute all for png files
