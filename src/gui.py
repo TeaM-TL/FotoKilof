@@ -49,8 +49,7 @@ def copy_to_clipboard(file_in):
         win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
         win32clipboard.CloseClipboard()
 
-    else:
-        print('Not ready yet')
+     #Copy to clipboard works for Windows only
 
 
 def only_numbers(char):

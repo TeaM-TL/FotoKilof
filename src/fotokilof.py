@@ -323,7 +323,6 @@ def apply_all_button():
     """ all option together, processing one file or whole directory """
     if os.path.isfile(file_in_path.get()):
         progress_files.set(_("Processing"))
-        pb.start()
         root.update_idletasks()
 
         # work_sub_dir if will be resize
@@ -352,8 +351,6 @@ def apply_all_button():
             for filename_short in files_list_short:
                 files_list.append(os.path.join(dirname, filename_short))
             file_list_len = len(files_list)
-            pb['maximum'] = file_list_len
-            pb['mode'] = "determinate"
             for file_in in files_list:
                 file_in_path.set(os.path.realpath(file_in))
                 out_file = magick.pre_magick(os.path.realpath(file_in),
@@ -374,7 +371,6 @@ def apply_all_button():
 
         progress_var.set(0)
         progress_files.set(_("done"))
-        pb.stop()
         root.update_idletasks()
         #work_sub_dir.set("")  # reset subdir name for next processing
     else:
@@ -1385,7 +1381,7 @@ main_tools = ttk.Frame()
 main = PanedWindow()
 
 main_menu.pack(side='top', expand=0, fill='both')
-main_tools.pack(side='bottom', expand=1, fill='both')
+main_tools.pack(side='top', expand=0, fill='both')
 main.pack(side='bottom', expand=1, fill='both')
 
 validation = main.register(gui.only_numbers)  # Entry validation
@@ -1454,93 +1450,86 @@ co_apply_type.grid(row=1, column=4, padx=5, pady=1, sticky=(W, E))
 l_pb = ttk.Label(frame_apply, textvariable=progress_files, width=35)
 l_pb.grid(row=1, column=5, padx=5, pady=2, sticky=W)
 
-pb = ttk.Progressbar(frame_apply, orient="horizontal",
-                     mode="determinate", var=progress_var)
-pb['value'] = 0
-pb.grid(row=1, column=6, padx=5, sticky=(W, E))
+###########################
+# Buttons
+###########################
+frame_save = ttk.LabelFrame(main_menu, text=_("Settings"),
+                       style="Fiolet.TLabelframe")
+frame_save.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
+
+b_last_save = ttk.Button(frame_save, text=_("Save"), command=ini_save)
+b_last_read = ttk.Button(frame_save, text=_("Load"), command=ini_read_wraper)
+
+b_last_save.pack(padx=5, pady=1, anchor=W, side='left')
+b_last_read.pack(padx=5, pady=1, anchor=W, side='left')
 
 ####################################################################
 # main_tools row
 ####################################################################
 
-frame_tools_selects = ttk.Frame(main)
+frame_tools_selection = ttk.Frame(main)
 
 ############################
 # Tools selection
 ############################
-frame_zero_set = ttk.Labelframe(main_tools, text=_("Tools"),
+frame_tools_set = ttk.Labelframe(main_tools, text=_("Tools"),
                                 style="Fiolet.TLabelframe")
-frame_zero_set.grid(row=1, column=1, padx=5, pady=5, sticky=(W, E))
+frame_tools_set.grid(row=1, column=1, padx=5, pady=2, sticky=(W, E))
 
-cb_histograms = ttk.Checkbutton(frame_zero_set, text=_("Histograms"),
-                                variable=img_histograms_on,
-                                offvalue="0", onvalue="1")
-cb_resize = ttk.Checkbutton(frame_zero_set, text=_("Scaling/Resize"),
+cb_resize = ttk.Checkbutton(frame_tools_set, text=_("Scaling/Resize"),
                             variable=img_resize_on,
                             offvalue="0", onvalue="1")
-cb_crop = ttk.Checkbutton(frame_zero_set, text=_("Crop"),
+cb_crop = ttk.Checkbutton(frame_tools_set, text=_("Crop"),
                           variable=img_crop_on,
                           offvalue="0", onvalue="1")
-cb_text = ttk.Checkbutton(frame_zero_set, text=_("Text"),
+cb_text = ttk.Checkbutton(frame_tools_set, text=_("Text"),
                           variable=img_text_on,
                           onvalue="1", offvalue="0")
-cb_rotate = ttk.Checkbutton(frame_zero_set, text=_("Rotate"),
+cb_rotate = ttk.Checkbutton(frame_tools_set, text=_("Rotate"),
                             variable=img_rotate_on,
                             offvalue="0", onvalue="1")
-cb_border = ttk.Checkbutton(frame_zero_set, text=_("Border"),
+cb_border = ttk.Checkbutton(frame_tools_set, text=_("Border"),
                             variable=img_border_on,
                             offvalue="0", onvalue="1")
-cb_bw = ttk.Checkbutton(frame_zero_set, text=_("Black&white"),
+cb_bw = ttk.Checkbutton(frame_tools_set, text=_("Black&white"),
                         variable=img_bw_on, offvalue="0")
-cb_normalize = ttk.Checkbutton(frame_zero_set, text=_("Colors normalize"),
+cb_normalize = ttk.Checkbutton(frame_tools_set, text=_("Colors normalize"),
                                variable=img_normalize_on,
                                offvalue="0", onvalue="1")
-cb_contrast = ttk.Checkbutton(frame_zero_set, text=_("Contrast"),
+cb_contrast = ttk.Checkbutton(frame_tools_set, text=_("Contrast"),
                               variable=img_contrast_on,
                               offvalue="0", onvalue="1")
-cb_logo = ttk.Checkbutton(frame_zero_set, text=_("Logo"),
+cb_logo = ttk.Checkbutton(frame_tools_set, text=_("Logo"),
                           variable=img_logo_on,
                           offvalue="0", onvalue="1")
-cb_custom = ttk.Checkbutton(frame_zero_set, text=_("Custom"),
+cb_custom = ttk.Checkbutton(frame_tools_set, text=_("Custom"),
                             variable=img_custom_on,
                             offvalue="0", onvalue="1")
-frame_frame_zero_set = ttk.Frame(frame_zero_set)
+cb_histograms = ttk.Checkbutton(frame_tools_set, text=_("Histograms"),
+                                variable=img_histograms_on,
+                                offvalue="0", onvalue="1")
 
-co_theme_selector = ttk.Combobox(frame_frame_zero_set,
+l_theme_selector = ttk.Label(frame_tools_set, text=_("Theme:"))
+co_theme_selector = ttk.Combobox(frame_tools_set,
                                  width=9, values=theme_list)
 co_theme_selector.configure(state='readonly')
 
-b_layout_set = ttk.Button(frame_frame_zero_set, text=_("Apply"), command=tools_set)
+b_layout_set = ttk.Button(frame_tools_set, text=_("Apply"), command=tools_set)
 
-cb_resize.pack(padx=5, pady=1, anchor=W)
-cb_crop.pack(padx=5, pady=1, anchor=W)
-cb_text.pack(padx=5, pady=1, anchor=W)
-cb_rotate.pack(padx=5, pady=1, anchor=W)
-cb_border.pack(padx=5, pady=1, anchor=W)
-cb_bw.pack(padx=5, pady=1, anchor=W)
-cb_contrast.pack(padx=5, pady=1, anchor=W)
-cb_normalize.pack(padx=5, pady=1, anchor=W)
-cb_logo.pack(padx=5, pady=1, anchor=W)
-cb_custom.pack(padx=5, pady=1, anchor=W)
-cb_histograms.pack(padx=5, pady=1, anchor=W)
-frame_frame_zero_set.pack(padx=0, pady=0, anchor=W)
-co_theme_selector.grid(row=1, column=1, padx=5, pady=5, sticky=W)
-b_layout_set.grid(row=1, column=2, padx=5, pady=1, sticky=E)
-
-###########################
-# Buttons
-###########################
-frame_zero_cmd = ttk.Labelframe(frame_tools_selects, text=_("Settings"),
-                                style="Fiolet.TLabelframe")
-frame_zero_cmd.grid(row=2, column=1, padx=5, pady=1, sticky=(W, E))
-
-b_last_save = ttk.Button(frame_zero_cmd, text=_("Save"),
-                         command=ini_save)
-b_last_read = ttk.Button(frame_zero_cmd, text=_("Load"),
-                         command=ini_read_wraper)
-
-b_last_save.grid(row=1, column=1, pady=5)
-b_last_read.grid(row=1, column=2, padx=5, pady=5)
+cb_resize.pack(padx=5, pady=1, anchor=W, side='left')
+cb_crop.pack(padx=5, pady=1, anchor=W, side='left')
+cb_text.pack(padx=5, pady=1, anchor=W, side='left')
+cb_rotate.pack(padx=5, pady=1, anchor=W, side='left')
+cb_border.pack(padx=5, pady=1, anchor=W, side='left')
+cb_bw.pack(padx=5, pady=1, anchor=W, side='left')
+cb_contrast.pack(padx=5, pady=1, anchor=W, side='left')
+cb_normalize.pack(padx=5, pady=1, anchor=W, side='left')
+cb_logo.pack(padx=5, pady=1, anchor=W, side='left')
+cb_custom.pack(padx=5, pady=1, anchor=W, side='left')
+cb_histograms.pack(padx=5, pady=1, anchor=W, side='left')
+b_layout_set.pack(padx=5, pady=1, anchor=W, side='left')
+l_theme_selector.pack(padx=5, pady=1, anchor=W, side='left')
+co_theme_selector.pack(padx=5, pady=1, anchor=W, side='left')
 
 ####################################################################
 # main row
@@ -1991,7 +1980,7 @@ l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
 ###########################
 # Logo
 ###########################
-frame_logo = ttk.Labelframe(frame_tools_selects, text=_("Logo"),
+frame_logo = ttk.Labelframe(frame_tools_selection, text=_("Logo"),
                             style="Fiolet.TLabelframe")
 frame_logo.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=1)
 
@@ -2106,7 +2095,6 @@ l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 ###############################################################################
 # Add Frames into PanedWindow
 ###############################################################################
-#main.add(frame_tools_selects)
 main.add(frame_first_col)
 main.add(frame_second_col)
 main.add(frame_third_col)
