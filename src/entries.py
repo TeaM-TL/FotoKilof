@@ -70,7 +70,7 @@ def parse_color(entry, default):
     default - value if entry is invalid
     return - entru or default if entry is out of range
     """
-    if re.match('^[#][0-9A-F]{6}$', entry):
+    if re.match('^[#][0-9a-fA-F]{6}$', entry):
         result = entry
     else:
         result = default

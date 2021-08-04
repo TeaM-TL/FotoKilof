@@ -461,7 +461,7 @@ def convert_rotate_button():
 
 
 def convert_resize_button():
-    """ resize button """
+    """ Resize button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
     resize= convert.convert_resize(img_resize.get(),
@@ -485,7 +485,7 @@ def convert_resize_button():
 
 
 def convert_border_button():
-    """ przycisk dodania ramki """
+    """ Border button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
@@ -503,9 +503,9 @@ def convert_border_button():
 
 
 def convert_crop_button():
+    """ Crop button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    """ przycisk wycinka """
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
@@ -521,7 +521,7 @@ def convert_crop_button():
 
 
 def convert_logo_button():
-    """ Button insert logo """
+    """ Logo button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
@@ -1211,7 +1211,8 @@ def preview_logo():
         l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
 
         preview_info = preview.preview_convert(file_logo_path.get(), " ", PREVIEW_LOGO, GM_or_IM)
-        # because PIL has problem with coversion RGBA->RGB, is impossible to use below command
+        # because PIL has problem with coversion RGBA->RGB,
+        # is impossible to use command as below :-(
 #        preview_info = preview.preview_pillow(file_logo_path.get(), PREVIEW_LOGO)
 
         try:
@@ -1907,12 +1908,93 @@ co_normalize_channel.grid(row=1, column=3, padx=5, pady=4, sticky=E)
 rb2_normalize.grid(row=2, column=1, padx=5, pady=4, sticky=W)
 b_normalize_run.grid(row=3, column=2, columnspan=2, padx=5, pady=4, sticky=E)
 
+###########################
+# Logo
+###########################
+frame_logo = ttk.Labelframe(frame_first_col, text=_("Logo"),
+                            style="Fiolet.TLabelframe")
+frame_logo.grid(row=10, column=1, columnspan=2,
+                sticky=(N, W, E, S), padx=5, pady=1)
+
+b_logo_select = ttk.Button(frame_logo, text=_("File selection"),
+                           command=open_file_logo)
+
+b_logo_run = ttk.Button(frame_logo, text=_("Execute"),
+                        command=convert_logo_button,
+                        style="Brown.TButton")
+l_logo_filename = ttk.Label(frame_logo, width=25)
+
+b_logo_select.grid(row=1, column=1, pady=5)
+l_logo_filename.grid(row=1, column=2, padx=5, pady=5, sticky=W)
+b_logo_run.grid(row=1, column=3, pady=5, sticky=E)
+
+###
+frame_logo_xy = ttk.Frame(frame_logo)
+l_logo_XxY = ttk.Label(frame_logo_xy, text=_("Width\nHeight"))
+l_logo_dxdy = ttk.Label(frame_logo_xy, text=_("Offset\n(dx,dy)"))
+e_logo_width = ttk.Entry(frame_logo_xy, width=3,
+                         validate="key", validatecommand=(validation, '%S'))
+e_logo_height = ttk.Entry(frame_logo_xy, width=3,
+                          validate="key", validatecommand=(validation, '%S'))
+e_logo_dx = ttk.Entry(frame_logo_xy, width=3,
+                      validate="key", validatecommand=(validation, '%S'))
+e_logo_dy = ttk.Entry(frame_logo_xy, width=3,
+                      validate="key", validatecommand=(validation, '%S'))
+
+frame_logo_xy.grid(row=2, column=2, padx=5, pady=5)
+l_logo_XxY.grid(row=1, column=1, sticky=W, padx=5)
+e_logo_width.grid(row=2, column=1, sticky=W, padx=5)
+e_logo_height.grid(row=3, column=1, sticky=W, padx=5)
+l_logo_dxdy.grid(row=1, column=2, sticky=W, padx=5)
+e_logo_dx.grid(row=2, column=2, sticky=W, padx=5)
+e_logo_dy.grid(row=3, column=2, sticky=W, padx=5)
+
+###
+frame_logo_gravity = ttk.Frame(frame_logo)
+rb_logo_NW = ttk.Radiobutton(frame_logo_gravity, text="NW",
+                             variable=img_logo_gravity, value="NW")
+rb_logo_N = ttk.Radiobutton(frame_logo_gravity, text="N",
+                            variable=img_logo_gravity, value="N")
+rb_logo_NE = ttk.Radiobutton(frame_logo_gravity, text="NE",
+                             variable=img_logo_gravity, value="NE")
+rb_logo_W = ttk.Radiobutton(frame_logo_gravity, text="W",
+                            variable=img_logo_gravity, value="W")
+rb_logo_C = ttk.Radiobutton(frame_logo_gravity, text=_("Center"),
+                            variable=img_logo_gravity, value="C")
+rb_logo_E = ttk.Radiobutton(frame_logo_gravity, text="E",
+                            variable=img_logo_gravity, value="E")
+rb_logo_SW = ttk.Radiobutton(frame_logo_gravity, text="SW",
+                             variable=img_logo_gravity, value="SW")
+rb_logo_S = ttk.Radiobutton(frame_logo_gravity, text="S",
+                            variable=img_logo_gravity, value="S")
+rb_logo_SE = ttk.Radiobutton(frame_logo_gravity, text="SE",
+                             variable=img_logo_gravity, value="SE")
+frame_logo_gravity.grid(row=2, column=3, sticky=E)
+rb_logo_NW.grid(row=1, column=1, sticky=W, pady=1)
+rb_logo_N.grid(row=1, column=2, pady=1)
+rb_logo_NE.grid(row=1, column=3, sticky=W, pady=1)
+rb_logo_W.grid(row=2, column=1, sticky=W, pady=1)
+rb_logo_C.grid(row=2, column=2, pady=1)
+rb_logo_E.grid(row=2, column=3, sticky=W, pady=1)
+rb_logo_SW.grid(row=3, column=1, sticky=W, pady=1)
+rb_logo_S.grid(row=3, column=2, pady=1)
+rb_logo_SE.grid(row=3, column=3, sticky=W, pady=1)
+
+###
+frame_logo_preview = ttk.Frame(frame_logo)
+frame_logo_preview.grid(row=2, column=1)
+pi_logo_preview = PhotoImage()
+l_logo_preview_pi = ttk.Label(frame_logo_preview, image=pi_logo_preview)
+l_logo_preview = ttk.Label(frame_logo_preview)
+l_logo_preview_pi.grid(row=2, column=1, padx=5, pady=1)
+l_logo_preview.grid(row=1, column=1, padx=5, pady=1)
+
 ############################
 # Custom command
 ############################
 frame_custom = ttk.LabelFrame(frame_first_col, text=_("Custom command"),
                               style="Fiolet.TLabelframe")
-frame_custom.grid(row=10, column=1, columnspan=2,
+frame_custom.grid(row=11, column=1, columnspan=2,
                   sticky=(N, W, E, S), padx=5, pady=1)
 
 b_custom_clear = ttk.Button(frame_custom, text=_("Clear"),
@@ -1939,11 +2021,11 @@ co_custom_command.configure(state='readonly')
 # l_custom_command.grid(row=2, column=1, padx=5, pady=5, sticky=E)
 # co_custom_command.grid(row=2, column=2, padx=5, pady=5, sticky=W)
 
+
 #####################################################
 # Second column
 #####################################################
 frame_second_col = ttk.Frame(main)
-
 
 ############################
 # Original preview
@@ -1976,84 +2058,6 @@ frame_histogram_orig.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 pi_histogram_orig = PhotoImage()
 l_histogram_orig = ttk.Label(frame_histogram_orig, image=pi_histogram_orig)
 l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
-
-###########################
-# Logo
-###########################
-frame_logo = ttk.Labelframe(frame_tools_selection, text=_("Logo"),
-                            style="Fiolet.TLabelframe")
-frame_logo.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=1)
-
-b_logo_select = ttk.Button(frame_logo, text=_("File selection"),
-                           command=open_file_logo)
-
-b_logo_run = ttk.Button(frame_logo, text=_("Execute"),
-                        command=convert_logo_button,
-                        style="Brown.TButton")
-l_logo_filename = ttk.Label(frame_logo, width=25)
-
-b_logo_select.grid(row=1, column=1, pady=5)
-b_logo_run.grid(row=1, column=2, pady=5)
-l_logo_filename.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky=W)
-
-###
-frame_logo_xy = ttk.Frame(frame_logo)
-l_logo_XxY = ttk.Label(frame_logo_xy, text=_("Width\nHeight"))
-l_logo_dxdy = ttk.Label(frame_logo_xy, text=_("Offset\n(dx,dy)"))
-e_logo_width = ttk.Entry(frame_logo_xy, width=3,
-                         validate="key", validatecommand=(validation, '%S'))
-e_logo_height = ttk.Entry(frame_logo_xy, width=3,
-                          validate="key", validatecommand=(validation, '%S'))
-e_logo_dx = ttk.Entry(frame_logo_xy, width=3,
-                      validate="key", validatecommand=(validation, '%S'))
-e_logo_dy = ttk.Entry(frame_logo_xy, width=3,
-                      validate="key", validatecommand=(validation, '%S'))
-
-frame_logo_xy.grid(row=3, column=1, columnspan=2)
-l_logo_XxY.grid(row=2, column=1, sticky=W, padx=5)
-e_logo_width.grid(row=2, column=2, sticky=W, padx=5)
-e_logo_height.grid(row=2, column=3, sticky=W, padx=5)
-l_logo_dxdy.grid(row=3, column=1, sticky=W, padx=5)
-e_logo_dx.grid(row=3, column=2, sticky=W, padx=5)
-e_logo_dy.grid(row=3, column=3, sticky=W, padx=5)
-
-###
-frame_logo_gravity = ttk.Frame(frame_logo)
-rb_logo_NW = ttk.Radiobutton(frame_logo_gravity, text="NW",
-                             variable=img_logo_gravity, value="NW")
-rb_logo_N = ttk.Radiobutton(frame_logo_gravity, text="N",
-                            variable=img_logo_gravity, value="N")
-rb_logo_NE = ttk.Radiobutton(frame_logo_gravity, text="NE",
-                             variable=img_logo_gravity, value="NE")
-rb_logo_W = ttk.Radiobutton(frame_logo_gravity, text="W",
-                            variable=img_logo_gravity, value="W")
-rb_logo_C = ttk.Radiobutton(frame_logo_gravity, text=_("Center"),
-                            variable=img_logo_gravity, value="C")
-rb_logo_E = ttk.Radiobutton(frame_logo_gravity, text="E",
-                            variable=img_logo_gravity, value="E")
-rb_logo_SW = ttk.Radiobutton(frame_logo_gravity, text="SW",
-                             variable=img_logo_gravity, value="SW")
-rb_logo_S = ttk.Radiobutton(frame_logo_gravity, text="S",
-                            variable=img_logo_gravity, value="S")
-rb_logo_SE = ttk.Radiobutton(frame_logo_gravity, text="SE",
-                             variable=img_logo_gravity, value="SE")
-frame_logo_gravity.grid(row=4, column=1, columnspan=2)
-rb_logo_NW.grid(row=1, column=1, sticky=W, pady=1)
-rb_logo_N.grid(row=1, column=2, pady=1)
-rb_logo_NE.grid(row=1, column=3, sticky=W, pady=1)
-rb_logo_W.grid(row=2, column=1, sticky=W, pady=1)
-rb_logo_C.grid(row=2, column=2, pady=1)
-rb_logo_E.grid(row=2, column=3, sticky=W, pady=1)
-rb_logo_SW.grid(row=3, column=1, sticky=W, pady=1)
-rb_logo_S.grid(row=3, column=2, pady=1)
-rb_logo_SE.grid(row=3, column=3, sticky=W, pady=1)
-
-###
-pi_logo_preview = PhotoImage()
-l_logo_preview_pi = ttk.Label(frame_logo, image=pi_logo_preview)
-l_logo_preview_pi.grid(row=5, column=1, columnspan=2, padx=5, pady=1)
-l_logo_preview = ttk.Label(frame_logo)
-l_logo_preview.grid(row=6, column=1, columnspan=2, padx=5, pady=1)
 
 
 #####################################################
