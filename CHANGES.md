@@ -3,6 +3,8 @@
 
 ## 2021
 
+3.7.0 new layout, tools selection has own row instead column
+
 3.6.1 better recognize new version ImageMagick under Windows
 
 3.6.0 faster under Windows (result preview by Pillow), result is copied into clipboard (only Windows)
