@@ -84,7 +84,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.6.1"
+VERSION = "3.7.0"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -1381,9 +1381,11 @@ magick_commands = ("composite", "convert")
 # Karty
 ######################################################################
 main_menu = ttk.Frame()
+main_tools = ttk.Frame()
 main = PanedWindow()
 
 main_menu.pack(side='top', expand=0, fill='both')
+main_tools.pack(side='bottom', expand=1, fill='both')
 main.pack(side='bottom', expand=1, fill='both')
 
 validation = main.register(gui.only_numbers)  # Entry validation
@@ -1457,20 +1459,16 @@ pb = ttk.Progressbar(frame_apply, orient="horizontal",
 pb['value'] = 0
 pb.grid(row=1, column=6, padx=5, sticky=(W, E))
 
-##############################################################################
-# main row
-##############################################################################
-
 ####################################################################
-# Tools, settings, logo column
+# main_tools row
 ####################################################################
 
-frame_zero_col = ttk.Frame(main)
+frame_tools_selects = ttk.Frame(main)
 
 ############################
 # Tools selection
 ############################
-frame_zero_set = ttk.Labelframe(frame_zero_col, text=_("Tools"),
+frame_zero_set = ttk.Labelframe(main_tools, text=_("Tools"),
                                 style="Fiolet.TLabelframe")
 frame_zero_set.grid(row=1, column=1, padx=5, pady=5, sticky=(W, E))
 
@@ -1514,7 +1512,6 @@ co_theme_selector.configure(state='readonly')
 
 b_layout_set = ttk.Button(frame_frame_zero_set, text=_("Apply"), command=tools_set)
 
-cb_histograms.pack(padx=5, pady=1, anchor=W)
 cb_resize.pack(padx=5, pady=1, anchor=W)
 cb_crop.pack(padx=5, pady=1, anchor=W)
 cb_text.pack(padx=5, pady=1, anchor=W)
@@ -1525,6 +1522,7 @@ cb_contrast.pack(padx=5, pady=1, anchor=W)
 cb_normalize.pack(padx=5, pady=1, anchor=W)
 cb_logo.pack(padx=5, pady=1, anchor=W)
 cb_custom.pack(padx=5, pady=1, anchor=W)
+cb_histograms.pack(padx=5, pady=1, anchor=W)
 frame_frame_zero_set.pack(padx=0, pady=0, anchor=W)
 co_theme_selector.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 b_layout_set.grid(row=1, column=2, padx=5, pady=1, sticky=E)
@@ -1532,7 +1530,7 @@ b_layout_set.grid(row=1, column=2, padx=5, pady=1, sticky=E)
 ###########################
 # Buttons
 ###########################
-frame_zero_cmd = ttk.Labelframe(frame_zero_col, text=_("Settings"),
+frame_zero_cmd = ttk.Labelframe(frame_tools_selects, text=_("Settings"),
                                 style="Fiolet.TLabelframe")
 frame_zero_cmd.grid(row=2, column=1, padx=5, pady=1, sticky=(W, E))
 
@@ -1544,87 +1542,13 @@ b_last_read = ttk.Button(frame_zero_cmd, text=_("Load"),
 b_last_save.grid(row=1, column=1, pady=5)
 b_last_read.grid(row=1, column=2, padx=5, pady=5)
 
-###########################
-# Logo
-###########################
-frame_logo = ttk.Labelframe(frame_zero_col, text=_("Logo"),
-                            style="Fiolet.TLabelframe")
-frame_logo.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=1)
+####################################################################
+# main row
+####################################################################
 
-b_logo_select = ttk.Button(frame_logo, text=_("File selection"),
-                           command=open_file_logo)
-
-b_logo_run = ttk.Button(frame_logo, text=_("Execute"),
-                        command=convert_logo_button,
-                        style="Brown.TButton")
-l_logo_filename = ttk.Label(frame_logo, width=25)
-
-b_logo_select.grid(row=1, column=1, pady=5)
-b_logo_run.grid(row=1, column=2, pady=5)
-l_logo_filename.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky=W)
-
-###
-frame_logo_xy = ttk.Frame(frame_logo)
-l_logo_XxY = ttk.Label(frame_logo_xy, text=_("Width\nHeight"))
-l_logo_dxdy = ttk.Label(frame_logo_xy, text=_("Offset\n(dx,dy)"))
-e_logo_width = ttk.Entry(frame_logo_xy, width=3,
-                         validate="key", validatecommand=(validation, '%S'))
-e_logo_height = ttk.Entry(frame_logo_xy, width=3,
-                          validate="key", validatecommand=(validation, '%S'))
-e_logo_dx = ttk.Entry(frame_logo_xy, width=3,
-                      validate="key", validatecommand=(validation, '%S'))
-e_logo_dy = ttk.Entry(frame_logo_xy, width=3,
-                      validate="key", validatecommand=(validation, '%S'))
-
-frame_logo_xy.grid(row=3, column=1, columnspan=2)
-l_logo_XxY.grid(row=2, column=1, sticky=W, padx=5)
-e_logo_width.grid(row=2, column=2, sticky=W, padx=5)
-e_logo_height.grid(row=2, column=3, sticky=W, padx=5)
-l_logo_dxdy.grid(row=3, column=1, sticky=W, padx=5)
-e_logo_dx.grid(row=3, column=2, sticky=W, padx=5)
-e_logo_dy.grid(row=3, column=3, sticky=W, padx=5)
-
-###
-frame_logo_gravity = ttk.Frame(frame_logo)
-rb_logo_NW = ttk.Radiobutton(frame_logo_gravity, text="NW",
-                             variable=img_logo_gravity, value="NW")
-rb_logo_N = ttk.Radiobutton(frame_logo_gravity, text="N",
-                            variable=img_logo_gravity, value="N")
-rb_logo_NE = ttk.Radiobutton(frame_logo_gravity, text="NE",
-                             variable=img_logo_gravity, value="NE")
-rb_logo_W = ttk.Radiobutton(frame_logo_gravity, text="W",
-                            variable=img_logo_gravity, value="W")
-rb_logo_C = ttk.Radiobutton(frame_logo_gravity, text=_("Center"),
-                            variable=img_logo_gravity, value="C")
-rb_logo_E = ttk.Radiobutton(frame_logo_gravity, text="E",
-                            variable=img_logo_gravity, value="E")
-rb_logo_SW = ttk.Radiobutton(frame_logo_gravity, text="SW",
-                             variable=img_logo_gravity, value="SW")
-rb_logo_S = ttk.Radiobutton(frame_logo_gravity, text="S",
-                            variable=img_logo_gravity, value="S")
-rb_logo_SE = ttk.Radiobutton(frame_logo_gravity, text="SE",
-                             variable=img_logo_gravity, value="SE")
-frame_logo_gravity.grid(row=4, column=1, columnspan=2)
-rb_logo_NW.grid(row=1, column=1, sticky=W, pady=1)
-rb_logo_N.grid(row=1, column=2, pady=1)
-rb_logo_NE.grid(row=1, column=3, sticky=W, pady=1)
-rb_logo_W.grid(row=2, column=1, sticky=W, pady=1)
-rb_logo_C.grid(row=2, column=2, pady=1)
-rb_logo_E.grid(row=2, column=3, sticky=W, pady=1)
-rb_logo_SW.grid(row=3, column=1, sticky=W, pady=1)
-rb_logo_S.grid(row=3, column=2, pady=1)
-rb_logo_SE.grid(row=3, column=3, sticky=W, pady=1)
-
-###
-pi_logo_preview = PhotoImage()
-l_logo_preview_pi = ttk.Label(frame_logo, image=pi_logo_preview)
-l_logo_preview_pi.grid(row=5, column=1, columnspan=2, padx=5, pady=1)
-l_logo_preview = ttk.Label(frame_logo)
-l_logo_preview.grid(row=6, column=1, columnspan=2, padx=5, pady=1)
-
-#####################################################################
+#####################################################
 # First column
-#####################################################################
+#####################################################
 frame_first_col = ttk.Frame(main)
 
 ###########################
@@ -2026,9 +1950,9 @@ co_custom_command.configure(state='readonly')
 # l_custom_command.grid(row=2, column=1, padx=5, pady=5, sticky=E)
 # co_custom_command.grid(row=2, column=2, padx=5, pady=5, sticky=W)
 
-########################################################################
+#####################################################
 # Second column
-########################################################################
+#####################################################
 frame_second_col = ttk.Frame(main)
 
 
@@ -2063,6 +1987,85 @@ frame_histogram_orig.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 pi_histogram_orig = PhotoImage()
 l_histogram_orig = ttk.Label(frame_histogram_orig, image=pi_histogram_orig)
 l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
+
+###########################
+# Logo
+###########################
+frame_logo = ttk.Labelframe(frame_tools_selects, text=_("Logo"),
+                            style="Fiolet.TLabelframe")
+frame_logo.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=1)
+
+b_logo_select = ttk.Button(frame_logo, text=_("File selection"),
+                           command=open_file_logo)
+
+b_logo_run = ttk.Button(frame_logo, text=_("Execute"),
+                        command=convert_logo_button,
+                        style="Brown.TButton")
+l_logo_filename = ttk.Label(frame_logo, width=25)
+
+b_logo_select.grid(row=1, column=1, pady=5)
+b_logo_run.grid(row=1, column=2, pady=5)
+l_logo_filename.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky=W)
+
+###
+frame_logo_xy = ttk.Frame(frame_logo)
+l_logo_XxY = ttk.Label(frame_logo_xy, text=_("Width\nHeight"))
+l_logo_dxdy = ttk.Label(frame_logo_xy, text=_("Offset\n(dx,dy)"))
+e_logo_width = ttk.Entry(frame_logo_xy, width=3,
+                         validate="key", validatecommand=(validation, '%S'))
+e_logo_height = ttk.Entry(frame_logo_xy, width=3,
+                          validate="key", validatecommand=(validation, '%S'))
+e_logo_dx = ttk.Entry(frame_logo_xy, width=3,
+                      validate="key", validatecommand=(validation, '%S'))
+e_logo_dy = ttk.Entry(frame_logo_xy, width=3,
+                      validate="key", validatecommand=(validation, '%S'))
+
+frame_logo_xy.grid(row=3, column=1, columnspan=2)
+l_logo_XxY.grid(row=2, column=1, sticky=W, padx=5)
+e_logo_width.grid(row=2, column=2, sticky=W, padx=5)
+e_logo_height.grid(row=2, column=3, sticky=W, padx=5)
+l_logo_dxdy.grid(row=3, column=1, sticky=W, padx=5)
+e_logo_dx.grid(row=3, column=2, sticky=W, padx=5)
+e_logo_dy.grid(row=3, column=3, sticky=W, padx=5)
+
+###
+frame_logo_gravity = ttk.Frame(frame_logo)
+rb_logo_NW = ttk.Radiobutton(frame_logo_gravity, text="NW",
+                             variable=img_logo_gravity, value="NW")
+rb_logo_N = ttk.Radiobutton(frame_logo_gravity, text="N",
+                            variable=img_logo_gravity, value="N")
+rb_logo_NE = ttk.Radiobutton(frame_logo_gravity, text="NE",
+                             variable=img_logo_gravity, value="NE")
+rb_logo_W = ttk.Radiobutton(frame_logo_gravity, text="W",
+                            variable=img_logo_gravity, value="W")
+rb_logo_C = ttk.Radiobutton(frame_logo_gravity, text=_("Center"),
+                            variable=img_logo_gravity, value="C")
+rb_logo_E = ttk.Radiobutton(frame_logo_gravity, text="E",
+                            variable=img_logo_gravity, value="E")
+rb_logo_SW = ttk.Radiobutton(frame_logo_gravity, text="SW",
+                             variable=img_logo_gravity, value="SW")
+rb_logo_S = ttk.Radiobutton(frame_logo_gravity, text="S",
+                            variable=img_logo_gravity, value="S")
+rb_logo_SE = ttk.Radiobutton(frame_logo_gravity, text="SE",
+                             variable=img_logo_gravity, value="SE")
+frame_logo_gravity.grid(row=4, column=1, columnspan=2)
+rb_logo_NW.grid(row=1, column=1, sticky=W, pady=1)
+rb_logo_N.grid(row=1, column=2, pady=1)
+rb_logo_NE.grid(row=1, column=3, sticky=W, pady=1)
+rb_logo_W.grid(row=2, column=1, sticky=W, pady=1)
+rb_logo_C.grid(row=2, column=2, pady=1)
+rb_logo_E.grid(row=2, column=3, sticky=W, pady=1)
+rb_logo_SW.grid(row=3, column=1, sticky=W, pady=1)
+rb_logo_S.grid(row=3, column=2, pady=1)
+rb_logo_SE.grid(row=3, column=3, sticky=W, pady=1)
+
+###
+pi_logo_preview = PhotoImage()
+l_logo_preview_pi = ttk.Label(frame_logo, image=pi_logo_preview)
+l_logo_preview_pi.grid(row=5, column=1, columnspan=2, padx=5, pady=1)
+l_logo_preview = ttk.Label(frame_logo)
+l_logo_preview.grid(row=6, column=1, columnspan=2, padx=5, pady=1)
+
 
 #####################################################
 # Third column
@@ -2103,7 +2106,7 @@ l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
 ###############################################################################
 # Add Frames into PanedWindow
 ###############################################################################
-main.add(frame_zero_col)
+#main.add(frame_tools_selects)
 main.add(frame_first_col)
 main.add(frame_second_col)
 main.add(frame_third_col)
