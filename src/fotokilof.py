@@ -1893,6 +1893,7 @@ rb2_normalize = ttk.Radiobutton(frame_normalize, text=_("AutoLevel"),
 l_normalize_channel = ttk.Label(frame_normalize, text=_("Channel:"))
 co_normalize_channel = ttk.Combobox(frame_normalize, width=7,
                                     values=normalize_channels)
+co_normalize_channel.configure(state='readonly')
 b_normalize_run = ttk.Button(frame_normalize, text=_("Execute"),
                              style="Brown.TButton",
                              command=convert_normalize_button)
