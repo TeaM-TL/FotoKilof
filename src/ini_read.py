@@ -144,7 +144,7 @@ def ini_read_resize(file_ini):
     return dict_return
 
 
-def ini_read_text(file_ini, fonts_list):
+def ini_read_text(file_ini, fonts_dict):
     """ Text configuration """
 
     # słownik wyjściowy
@@ -181,6 +181,7 @@ def ini_read_text(file_ini, fonts_list):
         text_font = config.get('Text', 'font')
     except:
         text_font = "Helvetica"
+    fonts_list = list(fonts_dict.keys())
     dict_return['text_font'] = entries.parse_list(text_font, fonts_list, "Helvetica")
 
     try:

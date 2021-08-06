@@ -98,13 +98,6 @@ preview_size_list = (300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 900, 1000
 ##########################
 
 
-def no_text_in_windows():
-    """ info for Windows user, that may be problem with adding text """
-    if mswindows.windows() == 1:
-        l_text_windows.configure(text=_("Unfortunately, you are using Windows, thus not all option will work"))
-        l_text_windows.grid(row=5, column=1, columnspan=4, sticky=(W, E))
-
-
 def print_command(cmd, cmd_magick):
     """ print command in custom window """
     t_custom.insert(END, cmd + " ")
@@ -584,7 +577,10 @@ def convert_text_entries():
     dict_return['dx'] = e_text_x.get()
     dict_return['dy'] = e_text_y.get()
     dict_return['gravitation'] = img_text_gravity.get()
-    dict_return['font'] = img_text_font.get()
+    if mswindows.windows() == 1:
+        dict_return['font'] = img_text_font_dict[img_text_font.get()]
+    else:
+        dict_return['font'] = img_text_font.get()
     dict_return['font_size'] = e_text_size.get()
     dict_return['text_color'] = img_text_color.get()
     dict_return['box'] = img_text_box.get()
@@ -595,8 +591,8 @@ def convert_text_entries():
 def fonts():
     """ preparing font names for ImageMagick """
 
-    result = magick.get_fonts_list(GM_or_IM)
-    co_text_font['values'] = result
+    result = magick.get_fonts_dict(GM_or_IM)
+    co_text_font['values'] = list(result.keys())
     return result
 
 def font_selected(event):
@@ -881,7 +877,7 @@ def ini_read_wraper():
     e2_resize.delete(0, "end")
     e2_resize.insert(0, ini_entries['resize_size_percent'])
 
-    ini_entries = ini_read.ini_read_text(FILE_INI, img_text_font_list)
+    ini_entries = ini_read.ini_read_text(FILE_INI, img_text_font_dict)
     img_text_on.set(ini_entries['img_text_on'])
     img_text_inout.set(ini_entries['img_text_inout'])
     img_text_font.set(ini_entries['text_font'])
@@ -1346,7 +1342,7 @@ img_resize = IntVar()  # (1, 2, 3, 4, 5)
 img_text_on = IntVar()  # Text
 img_text_gravity = StringVar()
 img_text_font = StringVar()
-img_text_font_list = []  # list available fonts, from fonts()
+img_text_font_dict = {}  # dict with available fonts, from fonts()
 img_text_color = StringVar()
 img_text_box = IntVar()
 img_text_box_color = StringVar()
@@ -1763,7 +1759,6 @@ cb_text_box = ttk.Checkbutton(frame_text_font, text=_("Background"),
                               command=color_choose_box_active)
 b_text_box_color = ttk.Button(frame_text, text=_("Background color"),
                               command=color_choose_box)
-l_text_windows = ttk.Label(frame_text, width=40)
 b_text_run = ttk.Button(frame_text, text=_("Execute"),
                         style="Brown.TButton", command=convert_text_button)
 l_text_font_selected = Label(frame_text, width=20, textvariable=img_text_font)
@@ -2123,7 +2118,6 @@ root.bind("<End>", open_file_last_key)
 ##########################################
 # Run functions
 #
-no_text_in_windows()  # Warning if Windows
 
 # check if [Image|Graphics]Magick is available
 GM_or_IM_data = magick.check_magick()
@@ -2134,7 +2128,7 @@ Python_version = re.findall('^\\d[.]\\d+[.]\\d+', sys.version)
 window_title = "Tomasz Łuczak : FotoKilof - " + str(VERSION) + " : " + GM_or_IM_version + " : " + Python_version[0] + " | "
 root.title(window_title)
 if GM_or_IM is not None:
-    img_text_font_list = fonts()    # Reading available fonts
+    img_text_font_dict = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file
     tools_set()
     l_border.configure(bg=img_border_color.get())

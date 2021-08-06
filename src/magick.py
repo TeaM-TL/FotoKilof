@@ -29,7 +29,7 @@ module to work with *Magick:
 - magick_command - make [Graphics|Image]Magick independent
 - display_image - display picture
 - get_image_size - identify picture: width and height
-- get_fonts_list - get available fonts list
+- get_fonts_dict - get available fonts dict
 - get_magick_version - get version of *Magick
 - check_magick - check what is available
 - check_imagemagick - checker for ImageMagick
@@ -135,8 +135,8 @@ def magick_command(command):
     return result
 
 
-def get_fonts_list(gm_or_im):
-    """ get available font list from imagemagick """
+def get_fonts_dict(gm_or_im):
+    """ get available font dict (name: path) from imagemagick """
 
     fonts_list = None
     file_font = os.path.join(tempfile.gettempdir(),
@@ -149,29 +149,38 @@ def get_fonts_list(gm_or_im):
         except:
             log.write_log("get_fonts_list: cannot read file_font", "E")
         else:
-            fonts_list = []
+            fonts_name = []
+            fonts_path = []
             if gm_or_im == "gm ":
                 # GraphicsMagick format
                 for line in file:
                     if re.search("\\d$", line) is not None:
                         line = re.findall('^[-a-zA-Z]+', line)
-                        fonts_list.append(line)
+                        fonts_dict[line] = ""
             else:
                 # ImageMagick format
                 for line in file:
-                    if re.search("Font", line) is not None:
+                    if re.search("^[ ]+Font:", line) is not None:
                         line = re.sub('^[ ]+Font:[ ]*', "", line)
                         line = re.sub('\n', "", line)
-                        fonts_list.append(line)
+                        fonts_name.append(line)
+                    elif re.search("^[ ]+glyphs:", line) is not None:
+                        line = re.sub('^[ ]+glyphs:[ ]*', "", line)
+                        line = re.sub('\n', "", line)
+                        fonts_path.append(line)
+
+                # conversion two list into dictionary
+                fonts_dict = dict(zip(fonts_name, fonts_path))
             file.close()
             try:
                 os.remove(file_font)
             except:
                 log.write_log("get_fonts_list: cannot remove file_font", "W")
 
-    if fonts_list is None or len(fonts_list) == 0:
-        fonts_list = ["Helvetica"]
-    return fonts_list
+    if fonts_dict is None or len(fonts_dict) == 0:
+        fonts_dict["Helvetica"] = ""
+
+    return fonts_dict
 
 
 def get_magick_version(gm_or_im):

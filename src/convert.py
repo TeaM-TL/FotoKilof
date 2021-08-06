@@ -35,6 +35,8 @@ Converters
 - gravity_outside - translate gravitation for adding text outside
 """
 
+import mswindows
+
 
 def convert_preview_crop_gravity(coordinates, x_max, y_max):
     """
@@ -117,9 +119,9 @@ def convert_text(entries):
     """ 2. Insert text into picture """
 
     if entries['text_on'] == 1:
-        size = " -pointsize " + entries['font_size']
-        font = " -font '" + entries['font'] + "'"
-        color = " -fill \"" + entries['text_color'] + "\""
+        size = ' -pointsize ' + entries['font_size']
+        font = ' -font "' + entries['font'] + '"'
+        color = ' -fill "' + entries['text_color'] + '"'
 
         if entries['text_inout'] == 0:
             # inside
