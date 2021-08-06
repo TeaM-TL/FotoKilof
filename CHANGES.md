@@ -3,6 +3,8 @@
 
 ## 2021
 
+3.7.1 fonts works properly on Windows, fied missing pillow dependency
+
 3.7.0 new layout, tools selection has own row instead column
 
 3.6.1 better recognize new version ImageMagick under Windows
