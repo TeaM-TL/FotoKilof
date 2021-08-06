@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="FotoKilof",
-    version="3.7.0",
+    version="3.7.1",
     author="Tomasz Łuczak",
     author_email="tlu@team-tl.pl",
     description="Nice gui for ImageMagick",
@@ -22,7 +22,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    install_requires=['tkcolorpicker'],
+    install_requires=['pillow','tkcolorpicker'],
     entry_points = {
         "gui_scripts": [
             "fotokilof = src:__main__",
@@ -30,3 +30,4 @@ setuptools.setup(
     },
     include_package_data=True,
 )
+
