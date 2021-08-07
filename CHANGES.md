@@ -3,13 +3,13 @@
 
 ## 2021
 
-3.7.1 fonts works properly on Windows, fied missing pillow dependency
+3.7.1 fonts works properly on Windows, fixed missing pillow dependency
 
 3.7.0 new layout, tools selection has own row instead column
 
 3.6.1 better recognize new version ImageMagick under Windows
 
-3.6.0 faster under Windows (result preview by Pillow), result is copied into clipboard (only Windows)
+3.6.0 faster under Windows (result preview by Pillow), result is copied into clipboard (only Windows), removed progressbar
 
 3.5.9 fixed execute all for png files
 
