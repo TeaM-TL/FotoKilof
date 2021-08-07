@@ -138,7 +138,6 @@ def magick_command(command):
 def get_fonts_dict(gm_or_im):
     """ get available font dict (name: path) from imagemagick """
 
-    fonts_list = None
     file_font = os.path.join(tempfile.gettempdir(),
                              "fotokilof_" + os.getlogin() + "_fonts_list")
     command = " -list font > "

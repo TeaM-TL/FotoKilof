@@ -35,9 +35,6 @@ Converters
 - gravity_outside - translate gravitation for adding text outside
 """
 
-import mswindows
-
-
 def convert_preview_crop_gravity(coordinates, x_max, y_max):
     """
     convert corrdinates from crop3:

@@ -84,7 +84,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.7.1"
+VERSION = "3.7.2"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -183,15 +183,13 @@ def preview_orig_button():
 def preview_new_button():
     """ preview new picture """
 
-    file_show = os.path.join(os.path.dirname(file_in_path.get()),
-                             work_dir.get(),
-                             work_sub_dir.get(),
-                             os.path.basename(file_in_path.get()))
-
-    try:
-        magick.display_image(file_show, GM_or_IM)
-    except:
-        log.write_log("No new picture to preview", "W")
+    # to define file_out
+    file_out = magick.pre_magick(file_in_path.get(),
+                                 os.path.join(work_dir.get(),
+                                 work_sub_dir.get()),
+                                 co_apply_type.get())
+    if os.path.isfile(file_out):
+        magick.display_image(file_out, GM_or_IM)
 
 
 def extension_from_file():
@@ -683,6 +681,7 @@ def open_file():
 
 
 def open_file_last_key(event):
+    """ call open_file_last from bind"""
     open_file_last()
 
 
@@ -708,6 +707,7 @@ def open_file_last():
 
 
 def open_file_next_key(event):
+    """ call open_file_next from bind"""
     open_file_next()
 
 
@@ -736,6 +736,7 @@ def open_file_next():
 
 
 def open_file_first_key(event):
+    """ call open_file_first from bind"""
     open_file_first()
 
 
@@ -761,6 +762,7 @@ def open_file_first():
 
 
 def open_file_prev_key(event):
+    """ call open_file_prev from bind"""
     open_file_prev()
 
 
