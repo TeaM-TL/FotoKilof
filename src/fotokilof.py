@@ -84,7 +84,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.7.2"
+VERSION = "3.7.3"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -822,12 +822,11 @@ def open_screenshot():
 def color_choose_border():
     """ Border color selection """
     color = askcolor(img_border_color.get())
-    if color[1] is None:
-        img_border_color.set("#000000")
-    else:
-        img_border_color.set(color[1])
-        l_border.configure(bg=img_border_color.get())
-
+    #if color[1] is None:
+    #    img_border_color.set("#000000")
+    #else:
+    img_border_color.set(color[1])
+    l_border.configure(bg=img_border_color.get())
 
 def color_choose_box_active():
     """ Activate background color """
@@ -845,7 +844,8 @@ def color_choose_box():
             img_text_box_color.set("#FFFFFF")
         else:
             img_text_box_color.set(color[1])
-            l_text_font_selected.configure(bg=img_text_box_color.get())
+    #l_text_font_selected.configure(bg=img_text_box_color.get())
+    style.configure("Color.TEntry", fieldbackground=img_text_box_color.get())
 
 
 def color_choose():
@@ -855,7 +855,8 @@ def color_choose():
         img_text_color.set("#FFFFFF")
     else:
         img_text_color.set(color[1])
-    l_text_font_selected.configure(fg=img_text_color.get())
+    #l_text_font_selected.configure(fg=img_text_color.get())
+    style.configure("Color.TEntry", foreground=img_text_color.get())
 
 
 def ini_read_wraper():
@@ -1693,30 +1694,41 @@ frame_text.grid(row=4, column=1, columnspan=2,
 ###
 frame_text_text = ttk.Frame(frame_text)
 
-e_text = ttk.Entry(frame_text_text, width=60)
+e_text = ttk.Entry(frame_text_text, width=55, style='Color.TEntry')
 frame_text_text.grid(row=1, column=1, columnspan=5, sticky=(W, E))
 e_text.grid(row=1, column=2, sticky=W, padx=5)
-# cb_text_on.grid(row=1, column=3, sticky=W, padx=5)
+
 ###
 frame_text_xy = ttk.Frame(frame_text)
 rb_text_in = ttk.Radiobutton(frame_text_xy, text=_("Inside"),
                              variable=img_text_inout, value="0")
 rb_text_out = ttk.Radiobutton(frame_text_xy, text=_("Outside"),
                               variable=img_text_inout, value="1")
-l_text_xy = ttk.Label(frame_text_xy, text=_("Offset (dx,dy)\n"))
+cb_text_box = ttk.Checkbutton(frame_text_xy, text=_("Background"),
+                              variable=img_text_box,
+                              onvalue="1", offvalue="0",
+                              command=color_choose_box_active)
+l_text_xy_l = ttk.Label(frame_text_xy, text=_("Offset"))
+l_text_xy_x = ttk.Label(frame_text_xy, text=_("dx"))
+l_text_xy_y = ttk.Label(frame_text_xy, text=_("dy"))
 e_text_x = ttk.Entry(frame_text_xy, width=3,
                      validate="key", validatecommand=(validation, '%S'))
 e_text_y = ttk.Entry(frame_text_xy, width=3,
                      validate="key", validatecommand=(validation, '%S'))
 
 frame_text_xy.grid(row=2, column=1, padx=5, pady=2, sticky=(W, N))
-rb_text_in.grid(row=1, column=1, sticky=W, padx=5, pady=1)
+rb_text_in.grid(row=1,  column=1, sticky=W, padx=5, pady=1)
 rb_text_out.grid(row=2, column=1, sticky=W, padx=5, pady=1)
-l_text_xy.grid(row=3, column=1, sticky=W, padx=5, pady=1)
-e_text_x.grid(row=3, column=2, sticky=(W, N), padx=5, pady=1)
-e_text_y.grid(row=3, column=3, sticky=(W, N), padx=5, pady=1)
+cb_text_box.grid(row=3, column=1, sticky=W, padx=5, pady=1)
+
+l_text_xy_l.grid(row=1, column=3, columnspa=2, sticky=W, padx=5, pady=1)
+l_text_xy_x.grid(row=2, column=3, sticky=W, padx=5, pady=1)
+l_text_xy_y.grid(row=2, column=4, sticky=W, padx=5, pady=1)
+e_text_x.grid(row=3, column=3, sticky=(W, N), padx=5, pady=1)
+e_text_y.grid(row=3, column=4, sticky=(W, N), padx=5, pady=1)
+
 ###
-frame_text_gravity = ttk.Frame(frame_text)
+frame_text_gravity = ttk.Frame(frame_text_xy)
 rb_text_NW = ttk.Radiobutton(frame_text_gravity, text="NW",
                              variable=img_text_gravity, value="NW")
 rb_text_N = ttk.Radiobutton(frame_text_gravity, text="N",
@@ -1735,7 +1747,7 @@ rb_text_S = ttk.Radiobutton(frame_text_gravity, text="S",
                             variable=img_text_gravity, value="S")
 rb_text_SE = ttk.Radiobutton(frame_text_gravity, text="SE",
                              variable=img_text_gravity, value="SE")
-frame_text_gravity.grid(row=2, column=2, columnspan=3, pady=2, sticky=(W, N))
+frame_text_gravity.grid(row=1, column=2, rowspan=3, padx=25, pady=2, sticky=(W, N))
 rb_text_NW.grid(row=1, column=1, sticky=W, pady=1)
 rb_text_N.grid(row=1, column=2, pady=1)
 rb_text_NE.grid(row=1, column=3, sticky=W, pady=1)
@@ -1748,31 +1760,28 @@ rb_text_SE.grid(row=3, column=3, sticky=W, pady=1)
 
 ###
 frame_text_font = ttk.Frame(frame_text)
-co_text_font = ttk.Combobox(frame_text_font, width=25,
+co_text_font = ttk.Combobox(frame_text_font, width=35,
                             textvariable=img_text_font)
 co_text_font.configure(state='readonly')
 e_text_size = ttk.Entry(frame_text_font, width=3,
                         validate="key", validatecommand=(validation, '%S'))
-b_text_color = ttk.Button(frame_text, text=_("Font color"),
+l_text_color = ttk.Label(frame_text_xy, text=_("Color"))
+b_text_color = ttk.Button(frame_text_xy, text=_("Font"),
                           command=color_choose)
-cb_text_box = ttk.Checkbutton(frame_text_font, text=_("Background"),
-                              variable=img_text_box,
-                              onvalue="1", offvalue="0",
-                              command=color_choose_box_active)
-b_text_box_color = ttk.Button(frame_text, text=_("Background color"),
+b_text_box_color = ttk.Button(frame_text_xy, text=_("Background"),
                               command=color_choose_box)
-b_text_run = ttk.Button(frame_text, text=_("Execute"),
+b_text_run = ttk.Button(frame_text_font, text=_("Execute"),
                         style="Brown.TButton", command=convert_text_button)
 l_text_font_selected = Label(frame_text, width=20, textvariable=img_text_font)
 
-l_text_font_selected.grid(row=3, column=1, sticky=(W, E), padx=5)
-b_text_color.grid(row=3, column=3, sticky=(W, E), padx=5, pady=5)
-b_text_box_color.grid(row=3, column=4, sticky=(W, E), padx=5, pady=5)
+#l_text_font_selected.grid(row=3, column=1, sticky=(W, E), padx=5)
+l_text_color.grid(row=1, column=5, sticky=(W, E), padx=5, pady=1)
+b_text_color.grid(row=2, column=5, sticky=(W, E), padx=5, pady=1)
+b_text_box_color.grid(row=3, column=5, sticky=(W, E), padx=5, pady=1)
 frame_text_font.grid(row=4, column=1, columnspan=4, sticky=(W, E))
 co_text_font.grid(row=1, column=1, sticky=(W, E), padx=5)
 e_text_size.grid(row=1, column=2, sticky=W, padx=5)
-cb_text_box.grid(row=1, column=3, sticky=W, padx=5)
-b_text_run.grid(row=4, column=4, sticky=(W, E), padx=5, pady=5)
+b_text_run.grid(row=1, column=3, sticky=(E), padx=5, pady=5)
 
 ###########################
 # Rotate

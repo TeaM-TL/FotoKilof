@@ -3,6 +3,10 @@
 
 ## 2021
 
+3.7.3 add text tool - reorganized layout
+
+3.7.2 bugfix preview on Linux
+
 3.7.1 fonts works properly on Windows, fixed missing pillow dependency
 
 3.7.0 new layout, tools selection has own row instead column
