@@ -108,7 +108,10 @@ def list_of_images(cwd):
 
     list_of_files = os.listdir(cwd)
     file_list = []
-    patterns = ("*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.png", "*.PNG", "*.tif", "*.TIF", "*.tiff", "*.TIFF")
+    patterns = ("*.JPG", "*.JPEG", "*.PNG", "*.TIF", "*.TIFF")
+    if mswindows.windows() == 0:
+        patterns = patterns + ("*.jpg", "*.jpeg", "*.png", "*.tif", "*.tiff")
+
     for pattern in patterns:
         for file in list_of_files:
             if fnmatch.fnmatch(file, pattern):
