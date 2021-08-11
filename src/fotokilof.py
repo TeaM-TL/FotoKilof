@@ -27,6 +27,17 @@ THE SOFTWARE.
 nice GUI for ImageMagick command common used (by me)
 """
 
+from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow
+from tkinter.scrolledtext import ScrolledText
+from tkinter import filedialog, messagebox
+from tkinter import TclError, StringVar, IntVar
+from tkinter import N, S, W, E, END, DISABLED, NORMAL
+try:
+    from tkcolorpicker import askcolor
+except:
+    from tkinter.colorchooser import askcolor
+
+# standard modules
 import configparser
 import datetime
 import gettext
@@ -34,21 +45,6 @@ import os
 import re
 import sys
 import tempfile
-
-from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow
-from tkinter.scrolledtext import ScrolledText
-from tkinter import filedialog, messagebox
-from tkinter import TclError, StringVar, IntVar
-from tkinter import N, S, W, E, END, DISABLED, NORMAL
-
-try:
-    from tkcolorpicker import askcolor
-except:
-    from tkinter.colorchooser import askcolor
-
-import mswindows
-if mswindows.windows() == 1:
-    from PIL import ImageGrab
 
 # my modules
 import convert
@@ -58,6 +54,12 @@ import ini_read
 import log
 import magick
 import preview
+
+
+import mswindows
+if mswindows.windows() == 1:
+    from PIL import ImageGrab
+
 
 # Start logging
 log.write_log('Start', "M", "w", 1)
@@ -828,13 +830,6 @@ def color_choose_border():
     img_border_color.set(color[1])
     l_border.configure(bg=img_border_color.get())
 
-def color_choose_box_active():
-    """ Activate background color """
-    if img_text_box.get() == 0:
-        l_text_font_selected.configure(bg="#000000")
-    else:
-        l_text_font_selected.configure(bg=img_text_box_color.get())
-
 
 def color_choose_box():
     """ Background color selection """
@@ -844,8 +839,7 @@ def color_choose_box():
             img_text_box_color.set("#FFFFFF")
         else:
             img_text_box_color.set(color[1])
-    #l_text_font_selected.configure(bg=img_text_box_color.get())
-    style.configure("Color.TEntry", fieldbackground=img_text_box_color.get())
+    color_choose_set()
 
 
 def color_choose():
@@ -855,7 +849,15 @@ def color_choose():
         img_text_color.set("#FFFFFF")
     else:
         img_text_color.set(color[1])
-    #l_text_font_selected.configure(fg=img_text_color.get())
+    color_choose_set()
+
+
+def color_choose_set():
+    """ Set color text: foreground and background"""
+    if img_text_box.get() == 0:
+        style.configure("Color.TEntry", fieldbackground="#FFFFFF")
+    else:
+        style.configure("Color.TEntry", fieldbackground=img_text_box_color.get())
     style.configure("Color.TEntry", foreground=img_text_color.get())
 
 
@@ -896,8 +898,6 @@ def ini_read_wraper():
     e_text_x.insert(0, ini_entries['text_x'])
     e_text_y.delete(0, "end")
     e_text_y.insert(0, ini_entries['text_y'])
-    l_text_font_selected.configure(fg=ini_entries['text_color'])
-    l_text_font_selected.configure(bg=ini_entries['text_box_color'])
 
     ini_entries = ini_read.ini_read_rotate(FILE_INI)
     img_rotate_on.set(ini_entries['img_rotate_on'])
@@ -1707,7 +1707,7 @@ rb_text_out = ttk.Radiobutton(frame_text_xy, text=_("Outside"),
 cb_text_box = ttk.Checkbutton(frame_text_xy, text=_("Background"),
                               variable=img_text_box,
                               onvalue="1", offvalue="0",
-                              command=color_choose_box_active)
+                              command=color_choose_set)
 l_text_xy_l = ttk.Label(frame_text_xy, text=_("Offset"))
 l_text_xy_x = ttk.Label(frame_text_xy, text=_("dx"))
 l_text_xy_y = ttk.Label(frame_text_xy, text=_("dy"))
@@ -1772,9 +1772,7 @@ b_text_box_color = ttk.Button(frame_text_xy, text=_("Background"),
                               command=color_choose_box)
 b_text_run = ttk.Button(frame_text_font, text=_("Execute"),
                         style="Brown.TButton", command=convert_text_button)
-l_text_font_selected = Label(frame_text, width=20, textvariable=img_text_font)
 
-#l_text_font_selected.grid(row=3, column=1, sticky=(W, E), padx=5)
 l_text_color.grid(row=1, column=5, sticky=(W, E), padx=5, pady=1)
 b_text_color.grid(row=2, column=5, sticky=(W, E), padx=5, pady=1)
 b_text_box_color.grid(row=3, column=5, sticky=(W, E), padx=5, pady=1)
@@ -2144,6 +2142,7 @@ if GM_or_IM is not None:
     ini_read_wraper()  # Loading from config file
     tools_set()
     l_border.configure(bg=img_border_color.get())
+    color_choose_set()
     if os.path.isfile(file_in_path.get()):
         root.title(window_title + file_in_path.get())
         # Load preview picture

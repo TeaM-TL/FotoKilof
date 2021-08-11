@@ -3,6 +3,8 @@
 
 ## 2021
 
+3.7.4 fixed: duplicate mass conversion on Windows, display text colors, better code
+
 3.7.3 add text tool - reorganized layout
 
 3.7.2 bugfix preview on Linux
