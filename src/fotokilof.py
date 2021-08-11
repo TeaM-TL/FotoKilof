@@ -1692,43 +1692,39 @@ frame_text = ttk.Labelframe(frame_first_col, text=_("Add text"),
 frame_text.grid(row=4, column=1, columnspan=2,
                 sticky=(N, W, E, S), padx=5, pady=1)
 ###
-frame_text_text = ttk.Frame(frame_text)
-
-e_text = ttk.Entry(frame_text_text, width=55, style='Color.TEntry')
-frame_text_text.grid(row=1, column=1, columnspan=5, sticky=(W, E))
-e_text.grid(row=1, column=2, sticky=W, padx=5)
+e_text = ttk.Entry(frame_text, width=55, style='Color.TEntry')
+#frame_text_text.grid(row=1, column=1, columnspan=5, sticky=(W, E))
+e_text.grid(row=1, column=1, columnspan=5, sticky=W, padx=5)
 
 ###
-frame_text_xy = ttk.Frame(frame_text)
-rb_text_in = ttk.Radiobutton(frame_text_xy, text=_("Inside"),
+rb_text_in = ttk.Radiobutton(frame_text, text=_("Inside"),
                              variable=img_text_inout, value="0")
-rb_text_out = ttk.Radiobutton(frame_text_xy, text=_("Outside"),
+rb_text_out = ttk.Radiobutton(frame_text, text=_("Outside"),
                               variable=img_text_inout, value="1")
-cb_text_box = ttk.Checkbutton(frame_text_xy, text=_("Background"),
+cb_text_box = ttk.Checkbutton(frame_text, text=_("Background"),
                               variable=img_text_box,
                               onvalue="1", offvalue="0",
                               command=color_choose_set)
-l_text_xy_l = ttk.Label(frame_text_xy, text=_("Offset"))
-l_text_xy_x = ttk.Label(frame_text_xy, text=_("dx"))
-l_text_xy_y = ttk.Label(frame_text_xy, text=_("dy"))
-e_text_x = ttk.Entry(frame_text_xy, width=3,
+l_text_xy_l = ttk.Label(frame_text, text=_("Offset"))
+l_text_xy_x = ttk.Label(frame_text, text=_("dx"))
+l_text_xy_y = ttk.Label(frame_text, text=_("dy"))
+e_text_x = ttk.Entry(frame_text, width=3,
                      validate="key", validatecommand=(validation, '%S'))
-e_text_y = ttk.Entry(frame_text_xy, width=3,
+e_text_y = ttk.Entry(frame_text, width=3,
                      validate="key", validatecommand=(validation, '%S'))
 
-frame_text_xy.grid(row=2, column=1, padx=5, pady=2, sticky=(W, N))
-rb_text_in.grid(row=1,  column=1, sticky=W, padx=5, pady=1)
-rb_text_out.grid(row=2, column=1, sticky=W, padx=5, pady=1)
-cb_text_box.grid(row=3, column=1, sticky=W, padx=5, pady=1)
+rb_text_in.grid(row=2,  column=1, sticky=W, padx=5, pady=1)
+rb_text_out.grid(row=3, column=1, sticky=W, padx=5, pady=1)
+cb_text_box.grid(row=4, column=1, sticky=W, padx=5, pady=1)
 
-l_text_xy_l.grid(row=1, column=3, columnspa=2, sticky=W, padx=5, pady=1)
-l_text_xy_x.grid(row=2, column=3, sticky=W, padx=5, pady=1)
-l_text_xy_y.grid(row=2, column=4, sticky=W, padx=5, pady=1)
-e_text_x.grid(row=3, column=3, sticky=(W, N), padx=5, pady=1)
-e_text_y.grid(row=3, column=4, sticky=(W, N), padx=5, pady=1)
+l_text_xy_l.grid(row=2, column=3, columnspa=2, sticky=W, padx=5, pady=1)
+l_text_xy_x.grid(row=3, column=3, sticky=W, padx=5, pady=1)
+l_text_xy_y.grid(row=3, column=4, sticky=W, padx=5, pady=1)
+e_text_x.grid(row=4, column=3, sticky=(W, N), padx=5, pady=1)
+e_text_y.grid(row=4, column=4, sticky=(W, N), padx=5, pady=1)
 
 ###
-frame_text_gravity = ttk.Frame(frame_text_xy)
+frame_text_gravity = ttk.Frame(frame_text)
 rb_text_NW = ttk.Radiobutton(frame_text_gravity, text="NW",
                              variable=img_text_gravity, value="NW")
 rb_text_N = ttk.Radiobutton(frame_text_gravity, text="N",
@@ -1747,7 +1743,7 @@ rb_text_S = ttk.Radiobutton(frame_text_gravity, text="S",
                             variable=img_text_gravity, value="S")
 rb_text_SE = ttk.Radiobutton(frame_text_gravity, text="SE",
                              variable=img_text_gravity, value="SE")
-frame_text_gravity.grid(row=1, column=2, rowspan=3, padx=25, pady=2, sticky=(W, N))
+frame_text_gravity.grid(row=2, column=2, rowspan=3,  padx=25, pady=2, sticky=(W, N))
 rb_text_NW.grid(row=1, column=1, sticky=W, pady=1)
 rb_text_N.grid(row=1, column=2, pady=1)
 rb_text_NE.grid(row=1, column=3, sticky=W, pady=1)
@@ -1759,27 +1755,25 @@ rb_text_S.grid(row=3, column=2, pady=1)
 rb_text_SE.grid(row=3, column=3, sticky=W, pady=1)
 
 ###
-frame_text_font = ttk.Frame(frame_text)
-co_text_font = ttk.Combobox(frame_text_font, width=35,
+co_text_font = ttk.Combobox(frame_text, width=35,
                             textvariable=img_text_font)
 co_text_font.configure(state='readonly')
-e_text_size = ttk.Entry(frame_text_font, width=3,
+e_text_size = ttk.Entry(frame_text, width=3,
                         validate="key", validatecommand=(validation, '%S'))
-l_text_color = ttk.Label(frame_text_xy, text=_("Color"))
-b_text_color = ttk.Button(frame_text_xy, text=_("Font"),
+l_text_color = ttk.Label(frame_text, text=_("Color"))
+b_text_color = ttk.Button(frame_text, text=_("Font"),
                           command=color_choose)
-b_text_box_color = ttk.Button(frame_text_xy, text=_("Background"),
+b_text_box_color = ttk.Button(frame_text, text=_("Background"),
                               command=color_choose_box)
-b_text_run = ttk.Button(frame_text_font, text=_("Execute"),
+b_text_run = ttk.Button(frame_text, text=_("Execute"),
                         style="Brown.TButton", command=convert_text_button)
 
-l_text_color.grid(row=1, column=5, sticky=(W, E), padx=5, pady=1)
-b_text_color.grid(row=2, column=5, sticky=(W, E), padx=5, pady=1)
-b_text_box_color.grid(row=3, column=5, sticky=(W, E), padx=5, pady=1)
-frame_text_font.grid(row=4, column=1, columnspan=4, sticky=(W, E))
-co_text_font.grid(row=1, column=1, sticky=(W, E), padx=5)
-e_text_size.grid(row=1, column=2, sticky=W, padx=5)
-b_text_run.grid(row=1, column=3, sticky=(E), padx=5, pady=5)
+l_text_color.grid(row=2, column=5, sticky=(W, E), padx=5, pady=1)
+b_text_color.grid(row=3, column=5, sticky=(W, E), padx=5, pady=1)
+b_text_box_color.grid(row=4, column=5, sticky=(W, E), padx=5, pady=1)
+co_text_font.grid(row=5, column=1, columnspan=3, sticky=(W, E), padx=5)
+e_text_size.grid(row=5, column=4, sticky=W, padx=5)
+b_text_run.grid(row=5, column=5, sticky=(E), padx=5, pady=5)
 
 ###########################
 # Rotate
