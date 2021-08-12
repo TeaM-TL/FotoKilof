@@ -53,13 +53,15 @@ import gui
 import ini_read
 import log
 import magick
+import mswindows
 import preview
 
-
-import mswindows
 if mswindows.windows() == 1:
     from PIL import ImageGrab
 
+version = {}
+with open("__version.py") as fp:
+    exec(fp.read(), version)
 
 # Start logging
 log.write_log('Start', "M", "w", 1)
@@ -1076,7 +1078,7 @@ def help_info(event):
         # file.close
     except:
         log.write_log("help_info: error during loading license file", "W")
-        message = "Copyright 2019-2021 Tomasz Łuczak under MIT license"
+        message = "Copyright " + version['__copyright__'] + " " + version['__author__'] + " under MIT license"
 
     messagebox.showinfo(title=_("License"), message=message)
 
@@ -1375,9 +1377,6 @@ try:
     root.tk.call('set', '::tk::dialog::file::showHiddenVar', '0')
 except:
     pass
-
-root.title("Tomasz Łuczak : FotoKilof : " + str(VERSION) + " : " +
-           str(datetime.date.today()))
 
 style = ttk.Style()
 theme_list = style.theme_names()  # read available themes
@@ -2203,7 +2202,7 @@ GM_or_IM = GM_or_IM_data[0]
 GM_or_IM_name = GM_or_IM_data[1]
 GM_or_IM_version = magick.get_magick_version(GM_or_IM)
 Python_version = re.findall('^\\d[.]\\d+[.]\\d+', sys.version)
-window_title = "Tomasz Łuczak : FotoKilof - " + str(VERSION) + " : " + GM_or_IM_version + " : " + Python_version[0] + " | "
+window_title = version['__author__'] + " : " + version['__name__'] + " : " + version['__version__'] + " : " + GM_or_IM_version + " : " + Python_version[0] + " | "
 root.title(window_title)
 if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts

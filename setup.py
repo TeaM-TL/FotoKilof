@@ -3,16 +3,19 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+pkg_vars = {}
+with open("src/__version.py") as fp:
+    exec(fp.read(), pkg_vars)
 setuptools.setup(
-    name="FotoKilof",
-    version="3.7.5",
-    author="Tomasz Łuczak",
-    author_email="tlu@team-tl.pl",
-    description="Nice gui for ImageMagick",
-    keywords='GUI ImageMagick',
+    name=pkg_vars['__name__'],
+    version=pkg_vars['__version__'],
+    author=pkg_vars['__author__'],
+    author_email=pkg_vars['__email__'],
+    description=pkg_vars['__description__'],
+    keywords=pkg_vars['__keywords__'],
+    url=pkg_vars['__url__'],
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/TeaM-TL/FotoKilof",
     packages=setuptools.find_packages(),
     license="MIT",
     classifiers=[
