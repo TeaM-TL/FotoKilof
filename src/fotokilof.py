@@ -1095,37 +1095,41 @@ def win_deleted():
 
 def mouse_crop_NW(event):
     """ Left-Upper corner """
-    x_preview = event.x
-    y_preview = event.y
 
-    xy_max = common.mouse_crop_calculation(file_in_path.get(),
-                                           int(co_preview_selector_orig.get()),
-                                           GM_or_IM)
-    width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
-    height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
-    e1_crop_1.delete(0, "end")
-    e1_crop_1.insert(0, width)
-    e2_crop_1.delete(0, "end")
-    e2_crop_1.insert(0, height)
+    if img_crop_on.get() == 1:
+        x_preview = event.x
+        y_preview = event.y
 
-    preview_orig()
+        xy_max = common.mouse_crop_calculation(file_in_path.get(),
+                                               int(co_preview_selector_orig.get()),
+                                               GM_or_IM)
+        width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
+        height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
+        e1_crop_1.delete(0, "end")
+        e1_crop_1.insert(0, width)
+        e2_crop_1.delete(0, "end")
+        e2_crop_1.insert(0, height)
+
+        preview_orig()
 
 
 def mouse_crop_SE(event):
     """ Right-Lower corner """
-    x_preview = event.x
-    y_preview = event.y
-    xy_max = common.mouse_crop_calculation(file_in_path.get(),
-                                           int(co_preview_selector_orig.get()),
-                                           GM_or_IM)
-    width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
-    height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
-    e3_crop_1.delete(0, "end")
-    e3_crop_1.insert(0, width)
-    e4_crop_1.delete(0, "end")
-    e4_crop_1.insert(0, height)
 
-    preview_orig()
+    if img_crop_on.get() == 1:
+        x_preview = event.x
+        y_preview = event.y
+        xy_max = common.mouse_crop_calculation(file_in_path.get(),
+                                               int(co_preview_selector_orig.get()),
+                                               GM_or_IM)
+        width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
+        height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
+        e3_crop_1.delete(0, "end")
+        e3_crop_1.insert(0, width)
+        e4_crop_1.delete(0, "end")
+        e4_crop_1.insert(0, height)
+
+        preview_orig()
 
 
 def preview_orig_refresh(event):

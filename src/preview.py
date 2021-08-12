@@ -131,10 +131,11 @@ def preview_pillow(file_in, size, coord):
     image_resized = image.resize((width_resize, height_resize))
     if len(coord) == 4 :
         draw = ImageDraw.Draw(image_resized)
-        draw.line((coord[0],coord[1], coord[0], coord[3]), fill=128)
-        draw.line((coord[2],coord[1], coord[2], coord[3]), fill=128)
-        draw.line((coord[0],coord[1], coord[2], coord[1]), fill=128)
-        draw.line((coord[0],coord[3], coord[2], coord[3]), fill=128)
+        left_up = (coord[0],coord[1])
+        left_dn = (coord[0], coord[3])
+        right_up = (coord[2],coord[1])
+        right_dn = (coord[2], coord[3])
+        draw.line([left_up, left_dn, right_dn, right_up, left_up], fill=128)
 
     if image.mode != 'RGB':
         image = image.convert('RGB')
