@@ -145,7 +145,8 @@ def preview_new(file_out):
 
     if co_preview_selector_new.get() != "none":
         preview_info = preview.preview_pillow(file_out,
-                                                int(co_preview_selector_new.get()))
+                                              int(co_preview_selector_new.get()),
+                                              "")
 
         try:
             l_preview_new.configure(text=preview_info['width'] + "x" \
@@ -1107,6 +1108,8 @@ def mouse_crop_NW(event):
     e2_crop_1.delete(0, "end")
     e2_crop_1.insert(0, height)
 
+    preview_orig()
+
 
 def mouse_crop_SE(event):
     """ Right-Lower corner """
@@ -1121,6 +1124,8 @@ def mouse_crop_SE(event):
     e3_crop_1.insert(0, width)
     e4_crop_1.delete(0, "end")
     e4_crop_1.insert(0, height)
+
+    preview_orig()
 
 
 def preview_orig_refresh(event):
@@ -1171,16 +1176,24 @@ def preview_orig():
             x1 = int(x1 * ratio_X)
             y1 = int(y1 * ratio_Y)
 
-            x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
-            command = " -fill none  -draw \"stroke '#FFFF00' rectangle " \
-                + x0y0x1y1 + "\" "
+#            x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
+#            command = " -fill none  -draw \"stroke '#FFFF00' rectangle " \
+#                + x0y0x1y1 + "\" "
+            crop_rectangle = (x0, y0, x1, y1)
         else:
-            command = " "
+ #           command = " "
+            crop_rectangle = (" ")
+# it works with every pictures
+#        preview_picture = preview.preview_convert(file_in_path.get(),
+#                                              command,
+#                                              int(co_preview_selector_orig.get()),
+#                                              GM_or_IM)
 
-        preview_picture = preview.preview_convert(file_in_path.get(),
-                                              command,
+# it can has problem with RGBA png/gif files
+        preview_picture = preview.preview_pillow(file_in_path.get(),
                                               int(co_preview_selector_orig.get()),
-                                              GM_or_IM)
+                                              crop_rectangle)
+
         try:
             pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
             l_preview_orig_pi.configure(image=pi_preview_orig)
@@ -1231,10 +1244,20 @@ def preview_logo_clear():
 
 def tools_set_event(event):
     """tool set for event fot theme selector"""
-    tools_set()
+    tools_set(1)
 
 
-def tools_set():
+def tools_set_on():
+    """tool set for event fot theme selector and preview original"""
+    tools_set(1)
+
+
+def tools_set_off():
+    """tool set for event fot theme selector and no preview original"""
+    tools_set(0)
+
+
+def tools_set(preview_on):
     """ wybór narzędzi do wyświetlenia """
 
     if img_custom_on.get() == 1:
@@ -1295,6 +1318,8 @@ def tools_set():
         frame_logo.grid()
 
     style.theme_use(co_theme_selector.get())
+    if preview_on:
+        preview_orig()
 
 
 def crop_tool_hide_show():
@@ -1336,6 +1361,7 @@ def crop_tool_hide_show():
         e4_crop_3.grid()
         frame_crop_gravity.grid()
 
+    preview_orig()
 
 def text_tool_hide_show():
     """hide not necessary things, or show if the are needed"""
@@ -1534,46 +1560,46 @@ frame_tools_set.grid(row=1, column=1, padx=5, pady=2, sticky=(W, E))
 cb_resize = ttk.Checkbutton(frame_tools_set, text=_("Scaling/Resize"),
                             variable=img_resize_on,
                             offvalue="0", onvalue="1",
-                            command=tools_set)
+                            command=tools_set_off)
 cb_crop = ttk.Checkbutton(frame_tools_set, text=_("Crop"),
                           variable=img_crop_on,
                           offvalue="0", onvalue="1",
-                          command=tools_set)
+                          command=tools_set_on)
 cb_text = ttk.Checkbutton(frame_tools_set, text=_("Text"),
                           variable=img_text_on,
                           onvalue="1", offvalue="0",
-                          command=tools_set)
+                          command=tools_set_off)
 cb_rotate = ttk.Checkbutton(frame_tools_set, text=_("Rotate"),
                             variable=img_rotate_on,
                             offvalue="0", onvalue="1",
-                            command=tools_set)
+                            command=tools_set_off)
 cb_border = ttk.Checkbutton(frame_tools_set, text=_("Border"),
                             variable=img_border_on,
                             offvalue="0", onvalue="1",
-                            command=tools_set)
+                            command=tools_set_off)
 cb_bw = ttk.Checkbutton(frame_tools_set, text=_("Black&white"),
                         variable=img_bw_on, offvalue="0",
-                        command=tools_set)
+                        command=tools_set_off)
 cb_normalize = ttk.Checkbutton(frame_tools_set, text=_("Colors normalize"),
                                variable=img_normalize_on,
                                offvalue="0", onvalue="1",
-                               command=tools_set)
+                               command=tools_set_off)
 cb_contrast = ttk.Checkbutton(frame_tools_set, text=_("Contrast"),
                               variable=img_contrast_on,
                               offvalue="0", onvalue="1",
-                              command=tools_set)
+                              command=tools_set_off)
 cb_logo = ttk.Checkbutton(frame_tools_set, text=_("Logo"),
                           variable=img_logo_on,
                           offvalue="0", onvalue="1",
-                          command=tools_set)
+                          command=tools_set_off)
 cb_custom = ttk.Checkbutton(frame_tools_set, text=_("Custom"),
                             variable=img_custom_on,
                             offvalue="0", onvalue="1",
-                            command=tools_set)
+                            command=tools_set_off)
 cb_histograms = ttk.Checkbutton(frame_tools_set, text=_("Histograms"),
                                 variable=img_histograms_on,
                                 offvalue="0", onvalue="1",
-                                command=tools_set)
+                                command=tools_set_off)
 
 l_theme_selector = ttk.Label(frame_tools_set, text=_("Theme:"))
 co_theme_selector = ttk.Combobox(frame_tools_set,
@@ -1688,23 +1714,32 @@ e4_crop_3 = ttk.Entry(frame_crop, width=4,
 
 frame_crop_gravity = ttk.Frame(frame_crop)
 rb_crop_NW = ttk.Radiobutton(frame_crop_gravity, text="NW",
-                             variable=img_crop_gravity, value="NW")
+                             variable=img_crop_gravity, value="NW",
+                             command=preview_orig)
 rb_crop_N = ttk.Radiobutton(frame_crop_gravity, text="N",
-                            variable=img_crop_gravity, value="N")
+                            variable=img_crop_gravity, value="N",
+                             command=preview_orig)
 rb_crop_NE = ttk.Radiobutton(frame_crop_gravity, text="NE",
-                             variable=img_crop_gravity, value="NE")
+                             variable=img_crop_gravity, value="NE",
+                             command=preview_orig)
 rb_crop_W = ttk.Radiobutton(frame_crop_gravity, text="W",
-                            variable=img_crop_gravity, value="W")
+                            variable=img_crop_gravity, value="W",
+                             command=preview_orig)
 rb_crop_C = ttk.Radiobutton(frame_crop_gravity, text=_("Center"),
-                            variable=img_crop_gravity, value="C")
+                            variable=img_crop_gravity, value="C",
+                             command=preview_orig)
 rb_crop_E = ttk.Radiobutton(frame_crop_gravity, text="E",
-                            variable=img_crop_gravity, value="E")
+                            variable=img_crop_gravity, value="E",
+                             command=preview_orig)
 rb_crop_SW = ttk.Radiobutton(frame_crop_gravity, text="SW",
-                             variable=img_crop_gravity, value="SW")
+                             variable=img_crop_gravity, value="SW",
+                             command=preview_orig)
 rb_crop_S = ttk.Radiobutton(frame_crop_gravity, text="S",
-                            variable=img_crop_gravity, value="S")
+                            variable=img_crop_gravity, value="S",
+                             command=preview_orig)
 rb_crop_SE = ttk.Radiobutton(frame_crop_gravity, text="SE",
-                             variable=img_crop_gravity, value="SE")
+                             variable=img_crop_gravity, value="SE",
+                             command=preview_orig)
 frame_crop_buttons = ttk.Frame(frame_crop)
 
 b_crop_show = ttk.Button(frame_crop_buttons, text=_("Preview"),
@@ -2203,7 +2238,7 @@ root.title(window_title)
 if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file
-    tools_set()
+    tools_set(0)
     crop_tool_hide_show()
     color_choose_set()
     text_tool_hide_show()
@@ -2211,7 +2246,7 @@ if GM_or_IM is not None:
     if os.path.isfile(file_in_path.get()):
         root.title(window_title + file_in_path.get())
         # Load preview picture
-        preview_orig()
+#        preview_orig()
     if img_logo_on.get() == 1:
         if os.path.isfile(file_logo_path.get()):
             # Load preview logo

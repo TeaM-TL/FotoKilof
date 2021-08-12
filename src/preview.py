@@ -24,12 +24,13 @@ THE SOFTWARE.
 
 module contains function for generating preview and histogram:
 - preview_histogram
-- preview_convert
+- preview_convert - preview by ImageMagick - used for logo
+- preview_pillow - preview by Pillow - faster - used for preview original and result
 """
 
 import os
 import tempfile
-from PIL import Image
+from PIL import Image, ImageDraw
 
 import common
 import log
@@ -75,9 +76,6 @@ def preview_convert(file_in, command, size, gm_or_im):
     - width and height
     """
     try:
-        #image_size = magick.get_image_size(file_in, gm_or_im)
-        #width = str(image_size[0])
-        #height = str(image_size[1])
         image = Image.open(file_in)
         width, height = image.size
         filesize = common.humansize(os.path.getsize(file_in))
@@ -98,11 +96,12 @@ def preview_convert(file_in, command, size, gm_or_im):
     return result
 
 
-def preview_pillow(file_in, size):
+def preview_pillow(file_in, size, coord):
     """
     preview generation
     file_in - fullname image file
     size - required size of image
+    coord - coordinates for crop
     --
     return:
     - filename - path to PPM file
@@ -130,6 +129,13 @@ def preview_pillow(file_in, size):
         result = None
 
     image_resized = image.resize((width_resize, height_resize))
+    if len(coord) == 4 :
+        print(str(coord))
+        draw = ImageDraw.Draw(image_resized)
+        draw.line((coord[0],coord[1], coord[0], coord[3]), fill=128)
+        draw.line((coord[2],coord[1], coord[2], coord[3]), fill=128)
+        draw.line((coord[0],coord[1], coord[2], coord[1]), fill=128)
+        draw.line((coord[0],coord[3], coord[2], coord[3]), fill=128)
 
     if image.mode != 'RGB':
         image = image.convert('RGB')
