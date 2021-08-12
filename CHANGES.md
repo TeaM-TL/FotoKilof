@@ -3,6 +3,10 @@
 
 ## 2021
 
+3.7.6 more intuitive preview original with crop
+
+3.7.5 more intuitive, less confusing, hide not neccessary widgets
+
 3.7.4 fixed: duplicate mass conversion on Windows, display text colors, better code
 
 3.7.3 add text tool - reorganized layout
