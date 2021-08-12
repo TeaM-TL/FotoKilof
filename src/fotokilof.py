@@ -1299,6 +1299,46 @@ def tools_set():
     style.theme_use(co_theme_selector.get())
 
 
+def crop_tool_hide_show():
+    """hide not necessary things, or show if the are needed"""
+    if img_crop.get() == 1:
+        f_clickL_crop.grid()
+        f_clickR_crop.grid()
+        e1_crop_2.grid_remove()
+        e2_crop_2.grid_remove()
+        e3_crop_2.grid_remove()
+        e4_crop_2.grid_remove()
+        e1_crop_3.grid_remove()
+        e2_crop_3.grid_remove()
+        e3_crop_3.grid_remove()
+        e4_crop_3.grid_remove()
+        frame_crop_gravity.grid_remove()
+    elif img_crop.get() == 2:
+        f_clickL_crop.grid_remove()
+        f_clickR_crop.grid_remove()
+        e1_crop_2.grid()
+        e2_crop_2.grid()
+        e3_crop_2.grid()
+        e4_crop_2.grid()
+        e1_crop_3.grid_remove()
+        e2_crop_3.grid_remove()
+        e3_crop_3.grid_remove()
+        e4_crop_3.grid_remove()
+        frame_crop_gravity.grid_remove()
+    elif img_crop.get() == 3:
+        f_clickL_crop.grid_remove()
+        f_clickR_crop.grid_remove()
+        e1_crop_2.grid_remove()
+        e2_crop_2.grid_remove()
+        e3_crop_2.grid_remove()
+        e4_crop_2.grid_remove()
+        e1_crop_3.grid()
+        e2_crop_3.grid()
+        e3_crop_3.grid()
+        e4_crop_3.grid()
+        frame_crop_gravity.grid()
+
+
 def text_tool_hide_show():
     """hide not necessary things, or show if the are needed"""
     if img_text_inout.get() == 0:
@@ -1612,22 +1652,24 @@ frame_crop.grid(row=3, column=1, columnspan=2,
                 sticky=(N, W, E, S), padx=5, pady=1)
 ###
 rb1_crop = ttk.Radiobutton(frame_crop, variable=img_crop, value="1",
-                           text=_("Coordinates (x1, y1) and (x2, y2)"))
-f_clickL_crop = ttk.Labelframe(frame_crop, text=_("Left Upper corner"))
-l_clickL_crop = ttk.Label(f_clickL_crop, text=_("Click left"))
+                           text=_("Coordinates (x1, y1) and (x2, y2)"),
+                           command=crop_tool_hide_show)
+f_clickL_crop = ttk.Frame(frame_crop)
+l_clickL_crop = ttk.Label(f_clickL_crop, text=_("Left Upper\ncorner\nClick left"))
 e1_crop_1 = ttk.Entry(f_clickL_crop, width=4,
                       validate="key", validatecommand=(validation, '%S'))
 e2_crop_1 = ttk.Entry(f_clickL_crop, width=4,
                       validate="key", validatecommand=(validation, '%S'))
-f_clickR_crop = ttk.Labelframe(frame_crop, text=_("Right lower corner"))
-l_clickR_crop = ttk.Label(f_clickR_crop, text=_("Click right"))
+f_clickR_crop = ttk.Frame(frame_crop)
+l_clickR_crop = ttk.Label(f_clickR_crop, text=_("Right lower\ncorner\nClick right"))
 e3_crop_1 = ttk.Entry(f_clickR_crop, width=4,
                       validate="key", validatecommand=(validation, '%S'))
 e4_crop_1 = ttk.Entry(f_clickR_crop, width=4,
                       validate="key", validatecommand=(validation, '%S'))
 
 rb2_crop = ttk.Radiobutton(frame_crop, variable=img_crop, value="2",
-                           text=_("Origin (x1,y1) and dimensions (X, Y)"))
+                           text=_("Origin (x1,y1) and dimensions (X, Y)"),
+                           command=crop_tool_hide_show)
 e1_crop_2 = ttk.Entry(frame_crop, width=4,
                       validate="key", validatecommand=(validation, '%S'))
 e2_crop_2 = ttk.Entry(frame_crop, width=4,
@@ -1638,7 +1680,8 @@ e4_crop_2 = ttk.Entry(frame_crop, width=4,
                       validate="key", validatecommand=(validation, '%S'))
 
 rb3_crop = ttk.Radiobutton(frame_crop, variable=img_crop, value="3",
-                           text=_("Offset (dx,dy), dimensions (X, Y)\nand gravity"))
+                           text=_("Offset (dx,dy), dimensions (X, Y)\nand gravity"),
+                           command=crop_tool_hide_show)
 e1_crop_3 = ttk.Entry(frame_crop, width=4,
                       validate="key", validatecommand=(validation, '%S'))
 e2_crop_3 = ttk.Entry(frame_crop, width=4,
@@ -1677,15 +1720,15 @@ b_crop_run = ttk.Button(frame_crop, text=_("Execute"),
                         style="Brown.TButton",
                         command=convert_crop_button)
 
-f_clickL_crop.grid(row=1, column=2, rowspan=2, columnspan=2, padx=5)
-f_clickR_crop.grid(row=1, column=4, rowspan=2, columnspan=2)
-l_clickL_crop.grid(row=1, column=1, columnspan=2, sticky=(W, E))
-l_clickR_crop.grid(row=1, column=1, columnspan=2, sticky=(W, E))
 rb1_crop.grid(row=2, column=1, sticky=W, padx=5, pady=5)
-e1_crop_1.grid(row=2, column=1, sticky=W, padx=5, pady=5)
-e2_crop_1.grid(row=2, column=2, sticky=W, padx=5, pady=5)
-e3_crop_1.grid(row=2, column=1, sticky=W, padx=5, pady=5)
-e4_crop_1.grid(row=2, column=2, sticky=W, padx=5, pady=5)
+f_clickL_crop.grid(row=1, column=2, rowspan=4, columnspan=2, padx=5, sticky=N)
+f_clickR_crop.grid(row=1, column=4, rowspan=4, columnspan=2, padx=5, sticky=N)
+e1_crop_1.grid(row=1, column=1, sticky=W, padx=5, pady=5)
+e2_crop_1.grid(row=1, column=2, sticky=W, padx=5, pady=5)
+e3_crop_1.grid(row=1, column=1, sticky=W, padx=5, pady=5)
+e4_crop_1.grid(row=1, column=2, sticky=W, padx=5, pady=5)
+l_clickL_crop.grid(row=2, column=1, columnspan=2, sticky=(W, E))
+l_clickR_crop.grid(row=2, column=1, columnspan=2, sticky=(W, E))
 rb2_crop.grid(row=3, column=1, sticky=W, padx=5, pady=5)
 e1_crop_2.grid(row=3, column=2, sticky=W, padx=10, pady=5)
 e2_crop_2.grid(row=3, column=3, sticky=W, padx=5, pady=5)
@@ -1696,7 +1739,7 @@ e1_crop_3.grid(row=4, column=2, sticky=W, padx=10, pady=1)
 e2_crop_3.grid(row=4, column=3, sticky=W, padx=5, pady=1)
 e3_crop_3.grid(row=4, column=4, sticky=W, padx=5, pady=1)
 e4_crop_3.grid(row=4, column=5, sticky=W, padx=5, pady=1)
-frame_crop_gravity.grid(row=5, column=4, columnspan=3)
+frame_crop_gravity.grid(row=2, column=2, rowspan=2, padx=5, columnspan=4, sticky=E)
 rb_crop_NW.grid(row=1, column=1, sticky=W, pady=1)
 rb_crop_N.grid(row=1, column=2, pady=1)
 rb_crop_NE.grid(row=1, column=3, sticky=W, pady=1)
@@ -1709,7 +1752,7 @@ rb_crop_SE.grid(row=3, column=3, sticky=W, pady=1)
 frame_crop_buttons.grid(row=5, column=1, sticky=(W, E))
 b_crop_read.grid(row=1, column=1, sticky=W, padx=15, pady=5)
 b_crop_show.grid(row=1, column=2, sticky=W, padx=5, pady=5)
-b_crop_run.grid(row=5, column=2, columnspan=2, sticky=W, padx=5, pady=5)
+b_crop_run.grid(row=5, column=4, columnspan=2, sticky=W, padx=5, pady=5)
 
 
 ###########################
@@ -2166,9 +2209,10 @@ if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file
     tools_set()
-    l_border.configure(bg=img_border_color.get())
+    crop_tool_hide_show()
     color_choose_set()
     text_tool_hide_show()
+    l_border.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
         root.title(window_title + file_in_path.get())
         # Load preview picture
