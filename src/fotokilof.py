@@ -86,7 +86,7 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.7.4"
+VERSION = "3.7.5"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -1231,6 +1231,11 @@ def preview_logo_clear():
     l_logo_preview.configure(text="")
 
 
+def tools_set_event(event):
+    """tool set for event fot theme selector"""
+    tools_set()
+
+
 def tools_set():
     """ wybór narzędzi do wyświetlenia """
 
@@ -1424,7 +1429,7 @@ b_file_select_next.grid(column=7, row=1, padx=5, pady=5, sticky=W)
 b_file_select_last.grid(column=8, row=1, padx=5, pady=5, sticky=W)
 
 ##########################
-# Apply all
+# Execute all
 ##########################
 frame_apply = ttk.LabelFrame(main_menu, text=_("Execute all"),
                              style="Fiolet.TLabelframe")
@@ -1478,43 +1483,52 @@ frame_tools_set.grid(row=1, column=1, padx=5, pady=2, sticky=(W, E))
 
 cb_resize = ttk.Checkbutton(frame_tools_set, text=_("Scaling/Resize"),
                             variable=img_resize_on,
-                            offvalue="0", onvalue="1")
+                            offvalue="0", onvalue="1",
+                            command=tools_set)
 cb_crop = ttk.Checkbutton(frame_tools_set, text=_("Crop"),
                           variable=img_crop_on,
-                          offvalue="0", onvalue="1")
+                          offvalue="0", onvalue="1",
+                          command=tools_set)
 cb_text = ttk.Checkbutton(frame_tools_set, text=_("Text"),
                           variable=img_text_on,
-                          onvalue="1", offvalue="0")
+                          onvalue="1", offvalue="0",
+                          command=tools_set)
 cb_rotate = ttk.Checkbutton(frame_tools_set, text=_("Rotate"),
                             variable=img_rotate_on,
-                            offvalue="0", onvalue="1")
+                            offvalue="0", onvalue="1",
+                            command=tools_set)
 cb_border = ttk.Checkbutton(frame_tools_set, text=_("Border"),
                             variable=img_border_on,
-                            offvalue="0", onvalue="1")
+                            offvalue="0", onvalue="1",
+                            command=tools_set)
 cb_bw = ttk.Checkbutton(frame_tools_set, text=_("Black&white"),
-                        variable=img_bw_on, offvalue="0")
+                        variable=img_bw_on, offvalue="0",
+                        command=tools_set)
 cb_normalize = ttk.Checkbutton(frame_tools_set, text=_("Colors normalize"),
                                variable=img_normalize_on,
-                               offvalue="0", onvalue="1")
+                               offvalue="0", onvalue="1",
+                               command=tools_set)
 cb_contrast = ttk.Checkbutton(frame_tools_set, text=_("Contrast"),
                               variable=img_contrast_on,
-                              offvalue="0", onvalue="1")
+                              offvalue="0", onvalue="1",
+                              command=tools_set)
 cb_logo = ttk.Checkbutton(frame_tools_set, text=_("Logo"),
                           variable=img_logo_on,
-                          offvalue="0", onvalue="1")
+                          offvalue="0", onvalue="1",
+                          command=tools_set)
 cb_custom = ttk.Checkbutton(frame_tools_set, text=_("Custom"),
                             variable=img_custom_on,
-                            offvalue="0", onvalue="1")
+                            offvalue="0", onvalue="1",
+                            command=tools_set)
 cb_histograms = ttk.Checkbutton(frame_tools_set, text=_("Histograms"),
                                 variable=img_histograms_on,
-                                offvalue="0", onvalue="1")
+                                offvalue="0", onvalue="1",
+                                command=tools_set)
 
 l_theme_selector = ttk.Label(frame_tools_set, text=_("Theme:"))
 co_theme_selector = ttk.Combobox(frame_tools_set,
                                  width=9, values=theme_list)
 co_theme_selector.configure(state='readonly')
-
-b_layout_set = ttk.Button(frame_tools_set, text=_("Apply"), command=tools_set)
 
 cb_resize.pack(padx=5, pady=1, anchor=W, side='left')
 cb_crop.pack(padx=5, pady=1, anchor=W, side='left')
@@ -1527,7 +1541,6 @@ cb_normalize.pack(padx=5, pady=1, anchor=W, side='left')
 cb_logo.pack(padx=5, pady=1, anchor=W, side='left')
 cb_custom.pack(padx=5, pady=1, anchor=W, side='left')
 cb_histograms.pack(padx=5, pady=1, anchor=W, side='left')
-b_layout_set.pack(padx=5, pady=1, anchor=W, side='left')
 l_theme_selector.pack(padx=5, pady=1, anchor=W, side='left')
 co_theme_selector.pack(padx=5, pady=1, anchor=W, side='left')
 
@@ -2106,6 +2119,7 @@ main.add(frame_third_col)
 # bind
 ###############################################################################
 # binding commands to widgets
+co_theme_selector.bind("<<ComboboxSelected>>", tools_set_event)
 co_preview_selector_orig.bind("<<ComboboxSelected>>", preview_orig_refresh)
 co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
