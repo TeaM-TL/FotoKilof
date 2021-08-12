@@ -1299,6 +1299,21 @@ def tools_set():
     style.theme_use(co_theme_selector.get())
 
 
+def text_tool_hide_show():
+    """hide not necessary things, or show if the are needed"""
+    if img_text_inout.get() == 0:
+        l_text_xy_l.grid()
+        l_text_xy_x.grid()
+        l_text_xy_y.grid()
+        e_text_x.grid()
+        e_text_y.grid()
+    else:
+        l_text_xy_l.grid_remove()
+        l_text_xy_x.grid_remove()
+        l_text_xy_y.grid_remove()
+        e_text_x.grid_remove()
+        e_text_y.grid_remove()
+
 ###############################################################################
 # GUI okno główne
 ###############################################################################
@@ -1711,9 +1726,11 @@ e_text.grid(row=1, column=1, columnspan=5, sticky=W, padx=5)
 
 ###
 rb_text_in = ttk.Radiobutton(frame_text, text=_("Inside"),
-                             variable=img_text_inout, value="0")
+                             variable=img_text_inout, value="0",
+                             command=text_tool_hide_show)
 rb_text_out = ttk.Radiobutton(frame_text, text=_("Outside"),
-                              variable=img_text_inout, value="1")
+                              variable=img_text_inout, value="1",
+                             command=text_tool_hide_show)
 cb_text_box = ttk.Checkbutton(frame_text, text=_("Background"),
                               variable=img_text_box,
                               onvalue="1", offvalue="0",
@@ -2151,6 +2168,7 @@ if GM_or_IM is not None:
     tools_set()
     l_border.configure(bg=img_border_color.get())
     color_choose_set()
+    text_tool_hide_show()
     if os.path.isfile(file_in_path.get()):
         root.title(window_title + file_in_path.get())
         # Load preview picture
