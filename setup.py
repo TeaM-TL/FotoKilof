@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 pkg_vars = {}
-with open("src/__version.py") as fp:
+with open("src/version.py") as fp:
     exec(fp.read(), pkg_vars)
 setuptools.setup(
     name=pkg_vars['__name__'],

@@ -55,13 +55,10 @@ import log
 import magick
 import mswindows
 import preview
+import version
 
 if mswindows.windows() == 1:
     from PIL import ImageGrab
-
-version = {}
-with open("__version.py") as fp:
-    exec(fp.read(), version)
 
 # Start logging
 log.write_log('Start', "M", "w", 1)
@@ -88,7 +85,6 @@ log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
-VERSION = "3.7.5"
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
@@ -1078,7 +1074,7 @@ def help_info(event):
         # file.close
     except:
         log.write_log("help_info: error during loading license file", "W")
-        message = "Copyright " + version['__copyright__'] + " " + version['__author__'] + " under MIT license"
+        message = "Copyright " + version.__copyright__ + " " + version.__author__ + " under MIT license"
 
     messagebox.showinfo(title=_("License"), message=message)
 
@@ -2202,7 +2198,7 @@ GM_or_IM = GM_or_IM_data[0]
 GM_or_IM_name = GM_or_IM_data[1]
 GM_or_IM_version = magick.get_magick_version(GM_or_IM)
 Python_version = re.findall('^\\d[.]\\d+[.]\\d+', sys.version)
-window_title = version['__author__'] + " : " + version['__name__'] + " : " + version['__version__'] + " : " + GM_or_IM_version + " : " + Python_version[0] + " | "
+window_title = version.__author__ + " : " + version.__name__ + " : " + version.__version__ + " : " + GM_or_IM_version + " : " + Python_version[0] + " | "
 root.title(window_title)
 if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts
