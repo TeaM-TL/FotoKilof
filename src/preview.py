@@ -130,7 +130,6 @@ def preview_pillow(file_in, size, coord):
 
     image_resized = image.resize((width_resize, height_resize))
     if len(coord) == 4 :
-        print(str(coord))
         draw = ImageDraw.Draw(image_resized)
         draw.line((coord[0],coord[1], coord[0], coord[3]), fill=128)
         draw.line((coord[2],coord[1], coord[2], coord[3]), fill=128)
