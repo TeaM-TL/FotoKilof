@@ -3,6 +3,8 @@
 
 ## 2021
 
+3.7.7 fixed crash on startup when last used image path does not exist anymore (#108)
+
 3.7.6 more intuitive preview original with crop
 
 3.7.5 more intuitive, less confusing, hide not neccessary widgets

@@ -1,4 +1,4 @@
-__version__ = "3.7.6"
+__version__ = "3.7.7"
 __author__ = "Tomasz Łuczak"
 __email__ = "tlu@team-tl.pl"
 __name__ = "FotoKilof"

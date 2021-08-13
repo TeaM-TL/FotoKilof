@@ -108,47 +108,59 @@ def preview_pillow(file_in, size, coord):
     - file size
     - width and height
     """
-    try:
-        image = Image.open(file_in)
-        width = image.width
-        height = image.height
-        filesize = common.humansize(os.path.getsize(file_in))
-        if width > height:
-            width_resize = int(size)
-            height_resize = int( height / width * size )
-        elif width < height:
-            height_resize = int(size)
-            width_resize = int( width / height * size )
+    if file_in is not None:
+        if os.path.isfile(file_in):
+            try:
+                image = Image.open(file_in)
+                width = image.width
+                height = image.height
+                filesize = common.humansize(os.path.getsize(file_in))
+                if width > height:
+                    width_resize = int(size)
+                    height_resize = int( height / width * size )
+                elif width < height:
+                    height_resize = int(size)
+                    width_resize = int( width / height * size )
+                else:
+                    width_resize = int(size)
+                    height_resize = int(size)
+            except:
+                log.write_log("Error in preview_pillow: image", "E")
+                result = None
+
+            try:
+                image_resized = image.resize((width_resize, height_resize))
+                if len(coord) == 4 :
+                    draw = ImageDraw.Draw(image_resized)
+                    left_up = (coord[0],coord[1])
+                    left_dn = (coord[0], coord[3])
+                    right_up = (coord[2],coord[1])
+                    right_dn = (coord[2], coord[3])
+                    draw.line([left_up, left_dn, right_dn, right_up, left_up], fill=128)
+            except:
+                log.write_log("Error in preview_pillow: resize and draw", "E")
+                result = None
+
+            try:
+                if image.mode != 'RGB':
+                    image = image.convert('RGB')
+
+                file_preview = os.path.join(tempfile.gettempdir(),
+                                            "fotokilof_" + os.getlogin() \
+                                            + "_preview.ppm")
+                image_resized.save(file_preview, "PPM")
+
+                result = {'filename': file_preview,
+                          'size': filesize,
+                          'width': str(width),
+                          'height': str(height)}
+            except:
+                log.write_log("Error in preview_pillow: preview", "E")
+                result = None
         else:
-            width_resize = int(size)
-            height_resize = int(size)
-
-
-    except:
-        log.write_log("Error in preview_pillow: return", "E")
+            result = None
+    else:
         result = None
-
-    image_resized = image.resize((width_resize, height_resize))
-    if len(coord) == 4 :
-        draw = ImageDraw.Draw(image_resized)
-        left_up = (coord[0],coord[1])
-        left_dn = (coord[0], coord[3])
-        right_up = (coord[2],coord[1])
-        right_dn = (coord[2], coord[3])
-        draw.line([left_up, left_dn, right_dn, right_up, left_up], fill=128)
-
-    if image.mode != 'RGB':
-        image = image.convert('RGB')
-
-    file_preview = os.path.join(tempfile.gettempdir(),
-                                    "fotokilof_" + os.getlogin() \
-                                    + "_preview.ppm")
-    image_resized.save(file_preview, "PPM")
-
-    result = {'filename': file_preview,
-              'size': filesize,
-              'width': str(width),
-              'height': str(height)}
 
     return result
 
