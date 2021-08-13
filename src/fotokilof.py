@@ -662,13 +662,21 @@ def open_file_logo():
 def open_file():
     """ open image for processing """
     directory = os.path.dirname(file_in_path.get())
+    if mswindows.windows() == 1:
+        filetypes = ((_("All graphics files"), ".JPG .JPEG .PNG .TIF .TIFF"),
+                     (_("JPG files"), ".JPG .JPEG"),
+                     (_("PNG files"), ".PNG"),
+                     (_("TIFF files"), ".TIF .TIFF"),
+                     (_("SVG files"), ".SVG"),
+                     (_("ALL types"), "*"))
+    else:
+        filetypes = ((_("All graphics files"), ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff"),
+                     (_("JPG files"), ".JPG .jpg .JPEG .jpeg"),
+                     (_("PNG files"), ".PNG .png"),
+                     (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
+                     (_("SVG files"), ".SVG .svg"),
+                     (_("ALL types"), "*"))
 
-    filetypes = ((_("All graphics files"), ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff"),
-                 (_("JPG files"), ".JPG .jpg .JPEG .jpeg"),
-                 (_("PNG files"), ".PNG .png"),
-                 (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
-                 (_("SVG files"), ".SVG .svg"),
-                 (_("ALL types"), "*"))
     result = filedialog.askopenfilename(initialdir=directory,
                                         filetypes=filetypes,
                                         title=_("Select picture for processing"))
