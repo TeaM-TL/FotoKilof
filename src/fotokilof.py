@@ -1385,12 +1385,19 @@ def text_tool_hide_show():
         l_text_xy_y.grid()
         e_text_x.grid()
         e_text_y.grid()
+        rb_text_W.grid()
+        rb_text_C.grid()
+        rb_text_E.grid()
     else:
         l_text_xy_l.grid_remove()
         l_text_xy_x.grid_remove()
         l_text_xy_y.grid_remove()
         e_text_x.grid_remove()
         e_text_y.grid_remove()
+        rb_text_W.grid_remove()
+        rb_text_C.grid_remove()
+        rb_text_E.grid_remove()
+
 
 ###############################################################################
 # GUI okno główne
