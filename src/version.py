@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-__version__ = "3.7.7"
+__version__ = "3.7.8"
 __author__ = "Tomasz Łuczak"
 __email__ = "tlu@team-tl.pl"
 __name__ = "FotoKilof"

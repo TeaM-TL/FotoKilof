@@ -42,6 +42,7 @@ import configparser
 import datetime
 import gettext
 import os
+import platform
 import re
 import sys
 import tempfile
@@ -1151,50 +1152,51 @@ def preview_orig():
     and add crop rectangle
     """
     if co_preview_selector_orig.get() != "none":
-        if img_crop_on.get() == 1:
-            # draw crop rectangle on preview
-            xy_max = common.mouse_crop_calculation(file_in_path.get(),
-                                               int(co_preview_selector_orig.get()),
-                                               GM_or_IM)
-            if img_crop.get() == 1:
-                x0 = int(e1_crop_1.get())
-                y0 = int(e2_crop_1.get())
-                x1 = int(e3_crop_1.get())
-                y1 = int(e4_crop_1.get())
-                # do_nothing = 0
-            elif img_crop.get() == 2:
-                x0 = int(e1_crop_2.get())
-                y0 = int(e2_crop_2.get())
-                x1 = x0 + int(e3_crop_2.get())
-                y1 = y0 + int(e4_crop_2.get())
-                # do_nothing = 0
-            elif img_crop.get() == 3:
-                coord_for_crop = (int(e1_crop_3.get()), int(e2_crop_3.get()),
-                              int(e3_crop_3.get()), int(e4_crop_3.get()),
-                              img_crop_gravity.get())
-                coord = convert.convert_preview_crop_gravity(coord_for_crop,
-                                                         xy_max['x_orig'],
-                                                         xy_max['y_orig'])
-                x0 = coord[0]
-                y0 = coord[1]
-                x1 = coord[2]
-                y1 = coord[3]
-                # do_nothing = 0
+        if os.path.isfile(file_in_path.get()):
+            if img_crop_on.get() == 1:
+                # draw crop rectangle on preview
+                xy_max = common.mouse_crop_calculation(file_in_path.get(),
+                                                   int(co_preview_selector_orig.get()),
+                                                   GM_or_IM)
+                if img_crop.get() == 1:
+                    x0 = int(e1_crop_1.get())
+                    y0 = int(e2_crop_1.get())
+                    x1 = int(e3_crop_1.get())
+                    y1 = int(e4_crop_1.get())
+                    # do_nothing = 0
+                elif img_crop.get() == 2:
+                    x0 = int(e1_crop_2.get())
+                    y0 = int(e2_crop_2.get())
+                    x1 = x0 + int(e3_crop_2.get())
+                    y1 = y0 + int(e4_crop_2.get())
+                    # do_nothing = 0
+                elif img_crop.get() == 3:
+                    coord_for_crop = (int(e1_crop_3.get()), int(e2_crop_3.get()),
+                                  int(e3_crop_3.get()), int(e4_crop_3.get()),
+                                  img_crop_gravity.get())
+                    coord = convert.convert_preview_crop_gravity(coord_for_crop,
+                                                             xy_max['x_orig'],
+                                                             xy_max['y_orig'])
+                    x0 = coord[0]
+                    y0 = coord[1]
+                    x1 = coord[2]
+                    y1 = coord[3]
+                    # do_nothing = 0
 
-            ratio_X = xy_max['x_max'] / xy_max['x_orig']
-            ratio_Y = xy_max['y_max'] / xy_max['y_orig']
-            x0 = int(x0 * ratio_X)
-            y0 = int(y0 * ratio_Y)
-            x1 = int(x1 * ratio_X)
-            y1 = int(y1 * ratio_Y)
+                ratio_X = xy_max['x_max'] / xy_max['x_orig']
+                ratio_Y = xy_max['y_max'] / xy_max['y_orig']
+                x0 = int(x0 * ratio_X)
+                y0 = int(y0 * ratio_Y)
+                x1 = int(x1 * ratio_X)
+                y1 = int(y1 * ratio_Y)
 
 #            x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
 #            command = " -fill none  -draw \"stroke '#FFFF00' rectangle " \
 #                + x0y0x1y1 + "\" "
-            crop_rectangle = (x0, y0, x1, y1)
-        else:
- #           command = " "
-            crop_rectangle = (" ")
+                crop_rectangle = (x0, y0, x1, y1)
+            else:
+ #               command = " "
+                crop_rectangle = (" ")
 # it works with every pictures
 #        preview_picture = preview.preview_convert(file_in_path.get(),
 #                                              command,
@@ -1202,29 +1204,29 @@ def preview_orig():
 #                                              GM_or_IM)
 
 # it can has problem with RGBA png/gif files
-        preview_picture = preview.preview_pillow(file_in_path.get(),
-                                              int(co_preview_selector_orig.get()),
-                                              crop_rectangle)
+            preview_picture = preview.preview_pillow(file_in_path.get(),
+                                                  int(co_preview_selector_orig.get()),
+                                                  crop_rectangle)
 
-        try:
-            pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
-            l_preview_orig_pi.configure(image=pi_preview_orig)
-        except:
-            log.write_log("preview_orig: Cannot load preview", "E")
+            try:
+                pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
+                l_preview_orig_pi.configure(image=pi_preview_orig)
+            except:
+                log.write_log("preview_orig: Cannot load preview", "E")
 
-        try:
-            l_preview_orig.configure(text=preview_picture['width'] + "x" \
-                                 + preview_picture['height'] \
-                                 + " - " \
-                                 + preview_picture['size'])
-        except:
-            log.write_log("preview_orig: Cannot load image size", "E")
+            try:
+                l_preview_orig.configure(text=preview_picture['width'] + "x" \
+                                     + preview_picture['height'] \
+                                     + " - " \
+                                     + preview_picture['size'])
+            except:
+                log.write_log("preview_orig: Cannot load image size", "E")
 
-        if img_histograms_on.get() == 1:
-            pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
-            l_histogram_orig.configure(image=pi_histogram_orig)
-    else:
-        preview_orig_clear()
+            if img_histograms_on.get() == 1:
+                pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
+                l_histogram_orig.configure(image=pi_histogram_orig)
+        else:
+            preview_orig_clear()
 
 
 def preview_logo():
@@ -1694,7 +1696,7 @@ e1_crop_1 = ttk.Entry(f_clickL_crop, width=4,
 e2_crop_1 = ttk.Entry(f_clickL_crop, width=4,
                       validate="key", validatecommand=(validation, '%S'))
 f_clickR_crop = ttk.Frame(frame_crop)
-l_clickR_crop = ttk.Label(f_clickR_crop, text=_("Right lower\ncorner\nClick right"))
+l_clickR_crop = ttk.Label(f_clickR_crop, text=_("Right Lower\ncorner\nClick right"))
 e3_crop_1 = ttk.Entry(f_clickR_crop, width=4,
                       validate="key", validatecommand=(validation, '%S'))
 e4_crop_1 = ttk.Entry(f_clickR_crop, width=4,
@@ -2226,7 +2228,10 @@ co_preview_selector_orig.bind("<<ComboboxSelected>>", preview_orig_refresh)
 co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
-l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
+if platform.system() == "Darwin":
+    l_preview_orig_pi.bind("<Button-2>", mouse_crop_SE)
+else:
+    l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
 root.bind("<F1>", help_info)
 root.protocol("WM_DELETE_WINDOW", win_deleted)
 
@@ -2251,9 +2256,9 @@ if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file
     tools_set(0)
-    crop_tool_hide_show()
     color_choose_set()
     text_tool_hide_show()
+    crop_tool_hide_show()
     l_border.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
         root.title(window_title + file_in_path.get())
