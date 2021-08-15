@@ -99,10 +99,9 @@ preview_size_list = (300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 900, 1000
 ##########################
 
 
-def print_command(cmd, cmd_magick):
+def print_command(cmd):
     """ print command in custom window """
     t_custom.insert(END, cmd + " ")
-    # co_custom_command.current(magick_commands.index(cmd_magick))
 
 
 def convert_custom_clear():
@@ -270,18 +269,18 @@ def apply_all_convert(out_file, write_command):
     if text_separate == 0:
         cmd = cmd + " " + cmd_text
         if write_command == 1:
-            print_command(cmd, cmd_magick)
+            print_command(cmd)
         result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
         result2 = "OK"
     else:
         # because text gravity which makes problem with crop gravity
         # we have to force second run of conversion
         if write_command == 1:
-            print_command(cmd, cmd_magick)
+            print_command(cmd)
         result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
         cmd_magick = GM_or_IM + "mogrify"
         if write_command == 1:
-            print_command(cmd_text, cmd_magick)
+            print_command(cmd_text)
         result2 = magick.magick(cmd_text, "", out_file, cmd_magick)
 
     if img_logo_on.get() == 1:
@@ -299,7 +298,7 @@ def apply_all_convert(out_file, write_command):
         cmd = cmd1 + cmd2
         cmd_magick = GM_or_IM + "composite"
         if write_command == 1:
-            print_command(cmd, cmd_magick)
+            print_command(cmd)
 
         result3 = magick.magick(cmd, "", out_file, cmd_magick)
     else:
@@ -378,7 +377,7 @@ def convert_custom_button():
                                  work_dir.get(),
                                  co_apply_type.get())
     cmd = t_custom.get('1.0', 'end-1c')
-    cmd_magick = GM_or_IM + co_custom_command.get()
+    cmd_magick = GM_or_IM + "convert"
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -397,7 +396,7 @@ def convert_contrast_button():
                                    e1_contrast.get(),
                                    e2_contrast.get())
     cmd_magick = GM_or_IM + "convert"
-    print_command(cmd, cmd_magick)
+    print_command(cmd)
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -413,7 +412,7 @@ def convert_bw_button():
                                  co_apply_type.get())
     cmd = convert.convert_bw(img_bw.get(), e_bw_sepia.get())
     cmd_magick = GM_or_IM + "convert"
-    print_command(cmd, cmd_magick)
+    print_command(cmd)
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -430,7 +429,7 @@ def convert_normalize_button():
     cmd = convert.convert_normalize(img_normalize.get(),
                                     co_normalize_channel.get())
     cmd_magick = GM_or_IM + "convert"
-    print_command(cmd, cmd_magick)
+    print_command(cmd)
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -446,7 +445,7 @@ def convert_rotate_button():
                                  co_apply_type.get())
     cmd = convert.convert_rotate(img_rotate.get())
     cmd_magick = GM_or_IM + "convert"
-    print_command(cmd, cmd_magick)
+    print_command(cmd)
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -469,7 +468,7 @@ def convert_resize_button():
                                               work_sub_dir.get()),
                                  co_apply_type.get())
     cmd_magick = GM_or_IM + "convert"
-    print_command(cmd, cmd_magick)
+    print_command(cmd)
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -488,7 +487,7 @@ def convert_border_button():
                                  img_border_color.get(),
                                  img_border_on.get())
     cmd_magick = GM_or_IM + "convert"
-    print_command(cmd, cmd_magick)
+    print_command(cmd)
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -506,7 +505,7 @@ def convert_crop_button():
                                img_crop_gravity.get(),
                                convert_crop_entries())
     cmd_magick = GM_or_IM + "convert"
-    print_command(cmd, cmd_magick)
+    print_command(cmd)
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -528,7 +527,7 @@ def convert_logo_button():
           + " " + common.spacja(file_logo_path.get()) \
           + " " + common.spacja(file_in_path.get()) + " "
     cmd_magick = GM_or_IM + "composite"
-    print_command(cmd, cmd_magick)
+    print_command(cmd)
     result = magick.magick(cmd, "", out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -544,7 +543,7 @@ def convert_text_button():
                                  co_apply_type.get())
     cmd = convert.convert_text(convert_text_entries())
     cmd_magick = GM_or_IM + "convert"
-    print_command(cmd, cmd_magick)
+    print_command(cmd)
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -2133,17 +2132,6 @@ t_custom = ScrolledText(frame_custom, state=NORMAL,
 t_custom.pack(expand=1, fill='both', padx=5, pady=5)
 b_custom_run.pack(side='right', padx=5, pady=5)
 b_custom_clear.pack(side='right', padx=5, pady=5)
-
-### temporary off, later will be enabled
-l_custom_command = ttk.Label(frame_custom, text=_("Command:"))
-co_custom_command = ttk.Combobox(frame_custom, width=9,
-                                 values=magick_commands)
-co_custom_command.current(1)
-co_custom_command.configure(state='readonly')
-
-# l_custom_command.grid(row=2, column=1, padx=5, pady=5, sticky=E)
-# co_custom_command.grid(row=2, column=2, padx=5, pady=5, sticky=W)
-
 
 #####################################################
 # Second column
