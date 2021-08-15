@@ -42,6 +42,7 @@ import configparser
 import datetime
 import gettext
 import os
+from PIL import Image, ImageDraw
 import platform
 import re
 import sys
@@ -601,35 +602,39 @@ def font_selected(event):
 
 def crop_read():
     """ Wczytanie rozmiarów z obrazka do wycinka """
-    img = magick.get_image_size(file_in_path.get(), GM_or_IM)
-    width = img[0]
-    height = img[1]
+    if file_in_path.get() is not None:
+        if os.path.isfile(file_in_path.get()):
+            # for JPG, PNG, TIF
+            image = Image.open(file_in_path.get())
+            # for others should be used: magick.get_image_size()
+            width = image.width
+            height = image.height
 
-    e1_crop_1.delete(0, "end")
-    e1_crop_1.insert(0, "0")
-    e2_crop_1.delete(0, "end")
-    e2_crop_1.insert(0, "0")
-    e3_crop_1.delete(0, "end")
-    e3_crop_1.insert(0, width)
-    e4_crop_1.delete(0, "end")
-    e4_crop_1.insert(0, height)
-    e1_crop_2.delete(0, "end")
-    e1_crop_2.insert(0, "0")
-    e2_crop_2.delete(0, "end")
-    e2_crop_2.insert(0, "0")
-    e3_crop_2.delete(0, "end")
-    e3_crop_2.insert(0, width)
-    e4_crop_2.delete(0, "end")
-    e4_crop_2.insert(0, height)
-    e1_crop_3.delete(0, "end")
-    e1_crop_3.insert(0, "0")
-    e2_crop_3.delete(0, "end")
-    e2_crop_3.insert(0, "0")
-    e3_crop_3.delete(0, "end")
-    e3_crop_3.insert(0, width)
-    e4_crop_3.delete(0, "end")
-    e4_crop_3.insert(0, height)
-    img_crop_gravity.set("C")
+            e1_crop_1.delete(0, "end")
+            e1_crop_1.insert(0, "0")
+            e2_crop_1.delete(0, "end")
+            e2_crop_1.insert(0, "0")
+            e3_crop_1.delete(0, "end")
+            e3_crop_1.insert(0, width)
+            e4_crop_1.delete(0, "end")
+            e4_crop_1.insert(0, height)
+            e1_crop_2.delete(0, "end")
+            e1_crop_2.insert(0, "0")
+            e2_crop_2.delete(0, "end")
+            e2_crop_2.insert(0, "0")
+            e3_crop_2.delete(0, "end")
+            e3_crop_2.insert(0, width)
+            e4_crop_2.delete(0, "end")
+            e4_crop_2.insert(0, height)
+            e1_crop_3.delete(0, "end")
+            e1_crop_3.insert(0, "0")
+            e2_crop_3.delete(0, "end")
+            e2_crop_3.insert(0, "0")
+            e3_crop_3.delete(0, "end")
+            e3_crop_3.insert(0, width)
+            e4_crop_3.delete(0, "end")
+            e4_crop_3.insert(0, height)
+            img_crop_gravity.set("C")
 
 
 def open_file_logo():
