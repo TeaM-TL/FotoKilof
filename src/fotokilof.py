@@ -42,7 +42,6 @@ import configparser
 import datetime
 import gettext
 import os
-from PIL import Image, ImageDraw
 import platform
 import re
 import sys
@@ -604,11 +603,9 @@ def crop_read():
     """ Wczytanie rozmiarów z obrazka do wycinka """
     if file_in_path.get() is not None:
         if os.path.isfile(file_in_path.get()):
-            # for JPG, PNG, TIF
-            image = Image.open(file_in_path.get())
-            # for others should be used: magick.get_image_size()
-            width = image.width
-            height = image.height
+            image_size = magick.get_image_size(file_in_path.get(), GM_or_IM)
+            width = image_size[0]
+            height = image_size[1]
 
             e1_crop_1.delete(0, "end")
             e1_crop_1.insert(0, "0")

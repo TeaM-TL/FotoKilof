@@ -37,6 +37,7 @@ module to work with *Magick:
 """
 
 import os
+from PIL import Image
 import re
 import shutil
 import tempfile
@@ -284,29 +285,37 @@ def get_image_size(file_in, gm_or_im):
 
     width = 1
     height = 1
-    size = ""
-    file_info = common.spacja(os.path.join(tempfile.gettempdir(),
-                                           "fotokilof_" + os.getlogin() \
-                                           + "_image_info"))
 
-    command = ' -format "%w\\n%h\\n%b" '
-    command = command + common.spacja(file_in) + ' > '
-    result = magick(command, "", file_info, gm_or_im + "identify")
-    if result is not None:
-        try:
-            file = open(file_info, "r")
-        except:
-            log.write_log("get_image_size: cannot read file_info", "W")
-        else:
-            width = int(file.readline())
-            height = int(file.readline())
-            size = file.readline()
-            file.close()
-            try:
-                os.remove(file_info)
-            except:
-                log.write_log("get_image_size: cannot remove image_info", "W")
-    return (width, height, size)
+    if file_in is not None:
+        if os.path.isfile(file_in):
+            # for JPG, PNG, TIF
+            image = Image.open(file_in)
+            width = image.width
+            height = image.height
+
+# For others file types use identify
+#    file_info = common.spacja(os.path.join(tempfile.gettempdir(),
+#                                           "fotokilof_" + os.getlogin() \
+#                                           + "_image_info"))
+
+#    command = ' -format "%w\\n%h\\n%b" '
+#    command = command + common.spacja(file_in) + ' > '
+#    result = magick(command, "", file_info, gm_or_im + "identify")
+#    if result is not None:
+#        try:
+#            file = open(file_info, "r")
+#        except:
+#            log.write_log("get_image_size: cannot read file_info", "W")
+#        else:
+#            width = int(file.readline())
+#            height = int(file.readline())
+#            size = file.readline()
+#            file.close()
+#            try:
+#                os.remove(file_info)
+#            except:
+#                log.write_log("get_image_size: cannot remove image_info", "W")
+    return (width, height)
 
 
 def display_image(file_in, gm_or_im):
