@@ -42,11 +42,10 @@ import configparser
 import datetime
 import gettext
 import os
-from PIL import Image
 import platform
-import re
 import sys
 import tempfile
+from PIL import Image
 
 # my modules
 import convert
@@ -59,14 +58,12 @@ import mswindows
 import preview
 import version
 
-if mswindows.windows() == 1:
-    from PIL import ImageGrab
-
 # Start logging
 log.write_log('Start', "M", "w", 1)
 
-# set locale for Windows
+# set locale and clipboard for Windows
 if mswindows.windows() == 1:
+    from PIL import ImageGrab
     import locale
     if os.getenv('LANG') is None:
         lang, enc = locale.getdefaultlocale()
@@ -604,9 +601,9 @@ def crop_read():
     """ Wczytanie rozmiarów z obrazka do wycinka """
     if file_in_path.get() is not None:
         if os.path.isfile(file_in_path.get()):
-            image_size = magick.get_image_size(file_in_path.get(), GM_or_IM)
-            width = image_size[0]
-            height = image_size[1]
+            image_size_xy = magick.get_image_size(file_in_path.get(), GM_or_IM)
+            width = image_size_xy[0]
+            height = image_size_xy[1]
 
             e1_crop_1.delete(0, "end")
             e1_crop_1.insert(0, "0")
@@ -2253,7 +2250,7 @@ GM_or_IM_data = magick.check_magick()
 GM_or_IM = GM_or_IM_data[0]
 GM_or_IM_version = GM_or_IM_data[1]
 Python_version = 'Py:' + platform.python_version()
-window_title = version.__author__ + " : " + version.__name__ + " : " + version.__version__ + " : " + GM_or_IM_version + " : " + Python_version + " | "
+window_title = version.__author__ + " : " + version.__appname__ + ": " + version.__version__ + " : " + GM_or_IM_version + " : " + Python_version + " | "
 root.title(window_title)
 if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts

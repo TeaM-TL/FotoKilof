@@ -37,10 +37,10 @@ module to work with *Magick:
 """
 
 import os
-from PIL import Image
 import re
 import shutil
 import tempfile
+from PIL import Image
 
 import common
 import log
@@ -139,6 +139,7 @@ def magick_command(command):
 def get_fonts_dict(gm_or_im):
     """ get available font dict (name: path) from imagemagick """
 
+    fonts_dict = {}
     file_font = os.path.join(tempfile.gettempdir(),
                              "fotokilof_" + os.getlogin() + "_fonts_list")
     command = " -list font > "

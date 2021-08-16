@@ -33,7 +33,6 @@ import fnmatch
 import os
 import re
 
-import magick
 import mswindows
 
 
