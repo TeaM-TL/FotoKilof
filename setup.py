@@ -7,7 +7,7 @@ pkg_vars = {}
 with open("src/version.py") as fp:
     exec(fp.read(), pkg_vars)
 setuptools.setup(
-    name=pkg_vars['__name__'],
+    name=pkg_vars['__appname__'],
     version=pkg_vars['__version__'],
     author=pkg_vars['__author__'],
     author_email=pkg_vars['__email__'],
