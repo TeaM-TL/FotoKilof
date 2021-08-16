@@ -51,12 +51,10 @@ def humansize(nbytes):
     return '%s %s' % (value, suffixes[i])
 
 
-def mouse_crop_calculation(file_in, size, gm_or_im):
+def mouse_crop_calculation(width, height, size):
     """ recalculation pixels from previev original image """
-    # global file_in_path
-    image_size = magick.get_image_size(file_in, gm_or_im)
-    x_orig = image_size[0]
-    y_orig = image_size[1]
+    x_orig = width
+    y_orig = height
 
     # x_max, y_max - wymiary podglądu, znamy max czyli PREVIEW
     if x_orig > y_orig:

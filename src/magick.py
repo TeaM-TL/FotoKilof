@@ -276,7 +276,7 @@ def check_graphicsmagick(suffix):
     return result
 
 
-def get_image_size(file_in, gm_or_im):
+def get_image_size(file_in):
     """
     identify width and height of picture
     input: file name
@@ -300,7 +300,7 @@ def get_image_size(file_in, gm_or_im):
 
 #    command = ' -format "%w\\n%h\\n%b" '
 #    command = command + common.spacja(file_in) + ' > '
-#    result = magick(command, "", file_info, gm_or_im + "identify")
+#    result = magick(command, "", file_info, GM_or_IM + "identify")
 #    if result is not None:
 #        try:
 #            file = open(file_info, "r")

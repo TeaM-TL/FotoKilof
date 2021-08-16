@@ -42,6 +42,7 @@ import configparser
 import datetime
 import gettext
 import os
+from PIL import Image
 import platform
 import re
 import sys
@@ -686,6 +687,9 @@ def open_file():
         extension_from_file()
         file_in_path.set(result)
         root.title(window_title + file_in_path.get())
+        image = Image.open(file_in_path.get())
+        file_in_width.set(image.width)
+        file_in_height.set(image.height)
         preview_orig()
     else:
         preview_orig_clear()
@@ -1110,9 +1114,9 @@ def mouse_crop_NW(event):
         x_preview = event.x
         y_preview = event.y
 
-        xy_max = common.mouse_crop_calculation(file_in_path.get(),
-                                               int(co_preview_selector_orig.get()),
-                                               GM_or_IM)
+        xy_max = common.mouse_crop_calculation(file_in_width.get(),
+                                               file_in_width.get(),
+                                               int(co_preview_selector_orig.get()))
         width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
         height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
         e1_crop_1.delete(0, "end")
@@ -1129,9 +1133,9 @@ def mouse_crop_SE(event):
     if img_crop_on.get() == 1:
         x_preview = event.x
         y_preview = event.y
-        xy_max = common.mouse_crop_calculation(file_in_path.get(),
-                                               int(co_preview_selector_orig.get()),
-                                               GM_or_IM)
+        xy_max = common.mouse_crop_calculation(file_in_width.get(),
+                                               file_in_width.get(),
+                                               int(co_preview_selector_orig.get()))
         width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
         height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
         e3_crop_1.delete(0, "end")
@@ -1156,9 +1160,9 @@ def preview_orig():
         if os.path.isfile(file_in_path.get()):
             if img_crop_on.get() == 1:
                 # draw crop rectangle on preview
-                xy_max = common.mouse_crop_calculation(file_in_path.get(),
-                                                   int(co_preview_selector_orig.get()),
-                                                   GM_or_IM)
+                xy_max = common.mouse_crop_calculation(file_in_width.get(),
+                                               file_in_width.get(),
+                                               int(co_preview_selector_orig.get()))
                 if img_crop.get() == 1:
                     x0 = int(e1_crop_1.get())
                     y0 = int(e2_crop_1.get())
@@ -1439,6 +1443,9 @@ work_sub_dir = StringVar()  # subdir for resized pictures
 work_sub_dir.set("")  # default none
 file_dir_selector = IntVar()
 file_in_path = StringVar()  # fullpath original picture
+file_in_width = IntVar() # width original picture
+file_in_height = IntVar() # height original picture
+file_in_size = IntVar() # size original picture (bytes)
 img_histograms_on = IntVar()
 img_logo_on = IntVar()  # Logo
 file_logo_path = StringVar()  # fullpath logo file
@@ -2255,12 +2262,13 @@ if GM_or_IM is not None:
     tools_set(0)
     color_choose_set()
     text_tool_hide_show()
-    crop_tool_hide_show()
     l_border.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
         root.title(window_title + file_in_path.get())
-        # Load preview picture
-#        preview_orig()
+        image_size =  magick.get_image_size(file_in_path.get())
+        file_in_width.set(image_size[0])
+        file_in_height.set(image_size[1])
+        crop_tool_hide_show()
     if img_logo_on.get() == 1:
         if os.path.isfile(file_logo_path.get()):
             # Load preview logo
