@@ -2251,10 +2251,9 @@ root.bind("<End>", open_file_last_key)
 # check if [Image|Graphics]Magick is available
 GM_or_IM_data = magick.check_magick()
 GM_or_IM = GM_or_IM_data[0]
-GM_or_IM_name = GM_or_IM_data[1]
-GM_or_IM_version = magick.get_magick_version(GM_or_IM)
-Python_version = re.findall('^\\d[.]\\d+[.]\\d+', sys.version)
-window_title = version.__author__ + " : " + version.__name__ + " : " + version.__version__ + " : " + GM_or_IM_version + " : " + Python_version[0] + " | "
+GM_or_IM_version = GM_or_IM_data[1]
+Python_version = 'Py:' + platform.python_version()
+window_title = version.__author__ + " : " + version.__name__ + " : " + version.__version__ + " : " + GM_or_IM_version + " : " + Python_version + " | "
 root.title(window_title)
 if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts

@@ -217,7 +217,7 @@ def get_magick_version(gm_or_im):
 
 def check_magick():
     """
-    What is available: ImageMagick, Graphick Magick or none
+    What is available: ImageMagick, Graphick Magick or none, and version
     """
     if mswindows.windows() == 1:
         suffix = ".exe"
@@ -226,17 +226,18 @@ def check_magick():
     if check_imagemagick(suffix) is not None:
         version = "IM"
         if mswindows.windows() == 1:
-            result = "magick "
+            result_gm = "magick "
         else:
-            result = ""
+            result_gm = ""
     elif check_graphicsmagick(suffix) is not None:
         version = "GM"
-        result = "gm "
+        result_gm = "gm "
     else:
         version = ""
-        result = None
+        result_gm = None
 
-    return (result, version)
+    version = version + ':' + get_magick_version(result_gm)
+    return (result_gm, version)
 
 
 def check_imagemagick(suffix):
