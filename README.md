@@ -31,7 +31,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - processing JPG, PNG, SVG and TIFF images,
  - processing picture in the fly, originals are safe,
  - processing single file or whole directory,
- - take screenshot (Linux) or get picture from clipboard (Windows) and use it as source picture,
+ - take screenshot (Linux) or get picture from clipboard (Windows and MacOS) and use it as source picture,
  - after processing results is copied into clipboard (Windows),
  - display selected tools,
  - tools selection,
@@ -92,7 +92,7 @@ But the best way is to install:
 - fresh Python3 (remember to add path into `%PATH%` environment variable during installation)
 - install from PyPi:
 ```
-python -m pip install fotokilof
+python -m pip install pywin32 fotokilof
 ```
 
 To make life easier, package `fotokilof-windows-x64.zip` contains ImageMagick binaries.
@@ -111,5 +111,6 @@ But binaries can be old, because recommended way is via PyPi.
  - Afif Hendrawan - Indonesian translation,
  - Sebastian Hiebl - python packaging,
  - Matt Sephton - ideas for packing gui,
- - emsspree - update german translation, jpeg
+ - emsspree - update german translation, jpeg,
+ - Olm - testing on Windows.
 
