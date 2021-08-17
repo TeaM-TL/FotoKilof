@@ -45,7 +45,7 @@ import os
 import platform
 import sys
 import tempfile
-from PIL import Image
+from PIL import Image, ImageGrab
 
 # my modules
 import convert
@@ -63,7 +63,6 @@ log.write_log('Start', "M", "w", 1)
 
 # set locale and clipboard for Windows
 if mswindows.windows() == 1:
-    from PIL import ImageGrab
     import locale
     if os.getenv('LANG') is None:
         lang, enc = locale.getdefaultlocale()
@@ -601,7 +600,7 @@ def crop_read():
     """ Wczytanie rozmiarów z obrazka do wycinka """
     if file_in_path.get() is not None:
         if os.path.isfile(file_in_path.get()):
-            image_size_xy = magick.get_image_size(file_in_path.get(), GM_or_IM)
+            image_size_xy = magick.get_image_size(file_in_path.get())
             width = image_size_xy[0]
             height = image_size_xy[1]
 
@@ -816,7 +815,7 @@ def open_screenshot():
 
     filename = now.strftime("%F_%H-%M-%S_%f") + ".png"
     out_file = os.path.join(today_dir, filename)
-    if mswindows.windows() == 1:
+    if mswindows.windows() or mswindows.macos():
         screenshot = ImageGrab.grabclipboard()
         try:
             screenshot.save(out_file, 'PNG')
@@ -1509,7 +1508,7 @@ b_file_select = ttk.Button(frame_file_select, text=_("File selection"),
 
 b_file_select_screenshot = ttk.Button(frame_file_select, text=_("Screenshot"),
                                  command=open_screenshot)
-if mswindows.windows() == 1:
+if mswindows.windows() or mswindows.macos():
     b_file_select_screenshot.configure(text=_("Clipboard"))
 
 b_file_select_first = ttk.Button(frame_file_select, text=_("First"),
@@ -2229,7 +2228,7 @@ co_preview_selector_orig.bind("<<ComboboxSelected>>", preview_orig_refresh)
 co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
-if platform.system() == "Darwin":
+if mswindows.macos():
     l_preview_orig_pi.bind("<Button-2>", mouse_crop_SE)
 else:
     l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
