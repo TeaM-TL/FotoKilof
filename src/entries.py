@@ -30,15 +30,15 @@ module contains function for parsing GUI entries and INI entries:
 import re
 
 
-def parse_list(entry, valid, default):
+def parse_list(entry, range, default):
     """
     parsing entries
     entry - value to check
-    valid - valid range
+    range - valid range
     default - value if entry is invalid
     return - entry or default if entry is out of range
     """
-    if entry in valid:
+    if entry in range:
         result = entry
     else:
         result = default

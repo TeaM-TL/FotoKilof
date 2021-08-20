@@ -123,7 +123,10 @@ def convert_text(entries):
         if entries['text_inout'] == 0:
             # inside
             outside = ""
-            gravitation = " -gravity " + gravity(entries['gravitation'])
+            if gravity(entries['gravitation']) == "0":
+                gravitation = ""
+            else:
+                gravitation = " -gravity " + gravity(entries['gravitation'])
             text = " -draw \"text " + entries['dx'] + "," + entries['dy'] \
                 + " '" + entries['text'] + "'\" "
             if entries['box'] == 0:
@@ -297,6 +300,8 @@ def gravity(gravitation):
         result = "South"
     if gravitation == "SE":
         result = "Southeast"
+    if gravitation == "0":
+        result = "0"
 
     return result
 

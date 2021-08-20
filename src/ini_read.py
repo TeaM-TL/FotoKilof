@@ -178,6 +178,12 @@ def ini_read_text(file_ini, fonts_dict):
     dict_return['img_text_gravity'] = entries.parse_list(text_gravity, ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
 
     try:
+        text_gravity_onoff = config.getint('Text', 'gravity_onoff')
+    except:
+        text_gravity_onoff = "1"
+    dict_return['img_text_gravity_onoff'] = entries.parse_list(text_gravity_onoff, (0, 1), 1)
+
+    try:
         text_font = config.get('Text', 'font')
     except:
         text_font = "Helvetica"

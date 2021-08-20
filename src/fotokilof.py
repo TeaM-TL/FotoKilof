@@ -572,7 +572,10 @@ def convert_text_entries():
     dict_return['text'] = e_text.get()
     dict_return['dx'] = e_text_x.get()
     dict_return['dy'] = e_text_y.get()
-    dict_return['gravitation'] = img_text_gravity.get()
+    if img_text_gravity_onoff.get():
+        dict_return['gravitation'] = img_text_gravity.get()
+    else:
+        dict_return['gravitation'] = "0"
     if mswindows.windows() == 1:
         dict_return['font'] = img_text_font_dict[img_text_font.get()]
     else:
@@ -897,6 +900,7 @@ def ini_read_wraper():
     img_text_font.set(ini_entries['text_font'])
     img_text_color.set(ini_entries['text_color'])
     img_text_gravity.set(ini_entries['img_text_gravity'])
+    img_text_gravity_onoff.set(ini_entries['img_text_gravity_onoff'])
     img_text_box.set(ini_entries['text_box'])
     img_text_box_color.set(ini_entries['text_box_color'])
     e_text.delete(0, "end")
@@ -1009,6 +1013,7 @@ def ini_save():
     config.set('Text', 'inout', str(img_text_inout.get()))
     config.set('Text', 'text', e_text.get())
     config.set('Text', 'gravity', img_text_gravity.get())
+    config.set('Text', 'gravity_onoff', str(img_text_gravity_onoff.get()))
     config.set('Text', 'font', img_text_font.get())
     config.set('Text', 'size', e_text_size.get())
     config.set('Text', 'color', img_text_color.get())
@@ -1106,21 +1111,28 @@ def win_deleted():
 def mouse_crop_NW(event):
     """ Left-Upper corner """
 
-    if img_crop_on.get() == 1:
-        x_preview = event.x
-        y_preview = event.y
+    x_preview = event.x
+    y_preview = event.y
 
-        xy_max = common.mouse_crop_calculation(file_in_width.get(),
-                                               file_in_width.get(),
-                                               int(co_preview_selector_orig.get()))
-        width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
-        height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
+    xy_max = common.mouse_crop_calculation(file_in_width.get(),
+                                           file_in_width.get(),
+                                           int(co_preview_selector_orig.get()))
+    width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
+    height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
+
+    if img_crop_on.get() == 1:
         e1_crop_1.delete(0, "end")
         e1_crop_1.insert(0, width)
         e2_crop_1.delete(0, "end")
         e2_crop_1.insert(0, height)
 
         preview_orig()
+
+    if img_text_on.get() and not img_text_gravity_onoff.get():
+        e_text_x.delete(0, "end")
+        e_text_x.insert(0, width)
+        e_text_y.delete(0, "end")
+        e_text_y.insert(0, height)
 
 
 def mouse_crop_SE(event):
@@ -1872,9 +1884,9 @@ cb_text_gravity = ttk.Checkbutton(frame_text, text=_("Gravity"),
 #l_text_xy_l = ttk.Label(frame_text, text=_("Offset"))
 l_text_xy_x = ttk.Label(frame_text, text=_("dx"))
 l_text_xy_y = ttk.Label(frame_text, text=_("dy"))
-e_text_x = ttk.Entry(frame_text, width=3,
+e_text_x = ttk.Entry(frame_text, width=4,
                      validate="key", validatecommand=(validation, '%S'))
-e_text_y = ttk.Entry(frame_text, width=3,
+e_text_y = ttk.Entry(frame_text, width=4,
                      validate="key", validatecommand=(validation, '%S'))
 
 rb_text_in.grid(row=2,  column=1, sticky=W, padx=5, pady=1)
