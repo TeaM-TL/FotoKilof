@@ -1380,24 +1380,55 @@ def crop_tool_hide_show():
 
 def text_tool_hide_show():
     """hide not necessary things, or show if the are needed"""
-    if img_text_inout.get() == 0:
-        l_text_xy_l.grid()
-        l_text_xy_x.grid()
-        l_text_xy_y.grid()
-        e_text_x.grid()
-        e_text_y.grid()
-        rb_text_W.grid()
-        rb_text_C.grid()
-        rb_text_E.grid()
-    else:
-        l_text_xy_l.grid_remove()
+    if img_text_inout.get():
+        # Outside
         l_text_xy_x.grid_remove()
         l_text_xy_y.grid_remove()
         e_text_x.grid_remove()
         e_text_y.grid_remove()
+        rb_text_NW.grid()
+        rb_text_N.grid()
+        rb_text_NE.grid()
         rb_text_W.grid_remove()
         rb_text_C.grid_remove()
         rb_text_E.grid_remove()
+        rb_text_SW.grid()
+        rb_text_S.grid()
+        rb_text_SE.grid()
+        cb_text_gravity.grid_remove()
+    else:
+        # Inside
+        l_text_xy_x.grid()
+        l_text_xy_y.grid()
+        e_text_x.grid()
+        e_text_y.grid()
+        cb_text_gravity.grid()
+        if img_text_gravity_onoff.get():
+            # Gravity on
+            rb_text_NW.grid()
+            rb_text_N.grid()
+            rb_text_NE.grid()
+            rb_text_W.grid()
+            rb_text_C.grid()
+            rb_text_E.grid()
+            rb_text_SW.grid()
+            rb_text_S.grid()
+            rb_text_SE.grid()
+            l_text_xy_x.configure(text=_("dx"))
+            l_text_xy_y.configure(text=_("dy"))
+        else:
+            # Gravity off
+            rb_text_NW.grid_remove()
+            rb_text_N.grid_remove()
+            rb_text_NE.grid_remove()
+            rb_text_W.grid_remove()
+            rb_text_C.grid_remove()
+            rb_text_E.grid_remove()
+            rb_text_SW.grid_remove()
+            rb_text_S.grid_remove()
+            rb_text_SE.grid_remove()
+            l_text_xy_x.configure(text=_("x"))
+            l_text_xy_y.configure(text=_("y"))
 
 
 ###############################################################################
@@ -1450,6 +1481,7 @@ img_resize_on = IntVar()  # Resize
 img_resize = IntVar()  # (1, 2, 3, 4, 5)
 img_text_on = IntVar()  # Text
 img_text_gravity = StringVar()
+img_text_gravity_onoff = IntVar()
 img_text_font = StringVar()
 img_text_font_dict = {}  # dict with available fonts, from fonts()
 img_text_color = StringVar()
@@ -1833,7 +1865,11 @@ cb_text_box = ttk.Checkbutton(frame_text, text=_("Background"),
                               variable=img_text_box,
                               onvalue="1", offvalue="0",
                               command=color_choose_set)
-l_text_xy_l = ttk.Label(frame_text, text=_("Offset"))
+cb_text_gravity = ttk.Checkbutton(frame_text, text=_("Gravity"),
+                              variable=img_text_gravity_onoff,
+                              onvalue="1", offvalue="0",
+                              command=text_tool_hide_show)
+#l_text_xy_l = ttk.Label(frame_text, text=_("Offset"))
 l_text_xy_x = ttk.Label(frame_text, text=_("dx"))
 l_text_xy_y = ttk.Label(frame_text, text=_("dy"))
 e_text_x = ttk.Entry(frame_text, width=3,
@@ -1844,8 +1880,8 @@ e_text_y = ttk.Entry(frame_text, width=3,
 rb_text_in.grid(row=2,  column=1, sticky=W, padx=5, pady=1)
 rb_text_out.grid(row=3, column=1, sticky=W, padx=5, pady=1)
 cb_text_box.grid(row=4, column=1, sticky=W, padx=5, pady=1)
+cb_text_gravity.grid(row=2, column=3, columnspan=2, sticky=W, pady=1)
 
-l_text_xy_l.grid(row=2, column=3, columnspa=2, sticky=W, padx=5, pady=1)
 l_text_xy_x.grid(row=3, column=3, sticky=W, padx=5, pady=1)
 l_text_xy_y.grid(row=3, column=4, sticky=W, padx=5, pady=1)
 e_text_x.grid(row=4, column=3, sticky=(W, N), padx=5, pady=1)

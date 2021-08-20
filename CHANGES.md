@@ -3,6 +3,12 @@
 
 ## 2021
 
+3.8.0 text tool: gravity on/off, point out position
+
+3.7.10 small improvements
+
+3.7.9 faster preview
+
 3.7.8 fixed: right mouse button for crop, crash when crop was active
 
 3.7.7 fixed crash on startup when last used image path does not exist anymore (#108)
