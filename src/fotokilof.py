@@ -686,9 +686,9 @@ def open_file():
         extension_from_file()
         file_in_path.set(result)
         root.title(window_title + file_in_path.get())
-        image = Image.open(file_in_path.get())
-        file_in_width.set(image.width)
-        file_in_height.set(image.height)
+        image_size =  magick.get_image_size(file_in_path.get())
+        file_in_width.set(image_size[0])
+        file_in_height.set(image_size[1])
         preview_orig()
     else:
         preview_orig_clear()
@@ -713,6 +713,9 @@ def open_file_last():
                 try:
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     root.title(window_title + file_in_path.get())
+                    image_size =  magick.get_image_size(file_in_path.get())
+                    file_in_width.set(image_size[0])
+                    file_in_height.set(image_size[1])
                     preview_orig()
                     extension_from_file()
                     preview_new_refresh("none")
@@ -739,6 +742,9 @@ def open_file_next():
                 try:
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     root.title(window_title + file_in_path.get())
+                    image_size =  magick.get_image_size(file_in_path.get())
+                    file_in_width.set(image_size[0])
+                    file_in_height.set(image_size[1])
                     preview_orig()
                     extension_from_file()
                 except:
@@ -768,6 +774,9 @@ def open_file_first():
                 try:
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     root.title(window_title + file_in_path.get())
+                    image_size =  magick.get_image_size(file_in_path.get())
+                    file_in_width.set(image_size[0])
+                    file_in_height.set(image_size[1])
                     preview_orig()
                     extension_from_file()
                     preview_new_refresh("none")
@@ -794,15 +803,14 @@ def open_file_prev():
                 try:
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     root.title(window_title + file_in_path.get())
+                    image_size =  magick.get_image_size(file_in_path.get())
+                    file_in_width.set(image_size[0])
+                    file_in_height.set(image_size[1])
                     preview_orig()
+                    extension_from_file()
+                    preview_new_refresh("none")
                 except:
                     log.write_log("Error in open_file_first", "E")
-
-                directory = os.path.dirname(file_in_path.get())
-                file_in_path.set(os.path.join(directory, filename))
-                preview_orig()
-                extension_from_file()
-                preview_new_refresh("none")
 
 
 def open_screenshot():
