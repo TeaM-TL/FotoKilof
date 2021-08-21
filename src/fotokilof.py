@@ -1121,11 +1121,16 @@ def mouse_crop_NW(event):
     height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
 
     if img_crop_on.get() == 1:
-        e1_crop_1.delete(0, "end")
-        e1_crop_1.insert(0, width)
-        e2_crop_1.delete(0, "end")
-        e2_crop_1.insert(0, height)
-
+        if img_crop.get() == 1:
+            e1_crop_1.delete(0, "end")
+            e1_crop_1.insert(0, width)
+            e2_crop_1.delete(0, "end")
+            e2_crop_1.insert(0, height)
+        elif img_crop.get() == 2:
+            e1_crop_2.delete(0, "end")
+            e1_crop_2.insert(0, width)
+            e2_crop_2.delete(0, "end")
+            e2_crop_2.insert(0, height)
         preview_orig()
 
     if img_text_on.get() and not img_text_gravity_onoff.get():
@@ -1169,7 +1174,7 @@ def preview_orig():
             if img_crop_on.get() == 1:
                 # draw crop rectangle on preview
                 xy_max = common.mouse_crop_calculation(file_in_width.get(),
-                                               file_in_width.get(),
+                                               file_in_height.get(),
                                                int(co_preview_selector_orig.get()))
                 if img_crop.get() == 1:
                     x0 = int(e1_crop_1.get())
