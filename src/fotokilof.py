@@ -2144,10 +2144,10 @@ frame_mirror = ttk.LabelFrame(frame_first_col, text=_("Mirror"),
                               style="Fiolet.TLabelframe")
 frame_mirror.grid(row=8, column=2, sticky=(N, E, S), padx=5, pady=1)
 
-cb_mirror_flip = ttk.Checkbutton(frame_mirror, text="Flip",
+cb_mirror_flip = ttk.Checkbutton(frame_mirror, text=_("Flip"),
                                  variable=img_mirror_flip,
                                  offvalue="0", onvalue="1")
-cb_mirror_flop = ttk.Checkbutton(frame_mirror, text="Flop",
+cb_mirror_flop = ttk.Checkbutton(frame_mirror, text=_("Flop"),
                                  variable=img_mirror_flop,
                                  offvalue="0", onvalue="1")
 b_mirror_run = ttk.Button(frame_mirror, text=_("Execute"),
