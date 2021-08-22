@@ -30,6 +30,7 @@ Converters
 - convert_contrast - modify contrast
 - convert_normalize - normalize levels
 - convert_rotate - rotate picture
+- convert_mirror - mirroring picture
 - convert_pip - picture in picture, for inserting logo
 - gravity - translate eg. NS to Northsouth as Tk expect
 - gravity_outside - translate gravitation for adding text outside
@@ -271,6 +272,20 @@ def convert_rotate(rotate):
     else:
         command = ""
     return command + " "
+
+
+def convert_mirror(flip, flop):
+    """ 10. Mirror: flip or flop """
+
+    if flip:
+        command_flip = "-flip "
+    else:
+        command_flip = ""
+    if flop:
+        command_flop = "-flop "
+    else:
+        command_flop = ""
+    return command_flip + command_flop + " "
 
 
 def convert_pip(gravitation, width, height, offset_dx, offset_dy):

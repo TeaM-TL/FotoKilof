@@ -120,8 +120,8 @@ def ini_read_resize(file_ini):
     try:
         resize_on = config.getint('Resize', 'on')
     except:
-        resize_on = "1"
-    dict_return['img_resize_on'] = entries.parse_list(resize_on, (0, 1), 1)
+        resize_on = "0"
+    dict_return['img_resize_on'] = entries.parse_list(resize_on, (0, 1), 0)
 
     try:
         resize = config.getint('Resize', 'resize')
@@ -156,8 +156,8 @@ def ini_read_text(file_ini, fonts_dict):
     try:
         text_on = config.getint('Text', 'on')
     except:
-        text_on = "1"
-    dict_return['img_text_on'] = entries.parse_list(text_on, (0, 1), 1)
+        text_on = "0"
+    dict_return['img_text_on'] = entries.parse_list(text_on, (0, 1), 0)
 
     try:
         text_inout = config.getint('Text', 'inout')
@@ -241,8 +241,8 @@ def ini_read_rotate(file_ini):
     try:
         rotate_on = config.getint('Rotate', 'on')
     except:
-        rotate_on = "1"
-    dict_return['img_rotate_on'] = entries.parse_list(rotate_on, (0, 1), 1)
+        rotate_on = "0"
+    dict_return['img_rotate_on'] = entries.parse_list(rotate_on, (0, 1), 0)
 
     try:
         rotate = config.getint('Rotate', 'rotate')
@@ -367,7 +367,7 @@ def ini_read_border(file_ini):
     try:
         border_on = config.getint('Border', 'on')
     except:
-        border_on = "1"
+        border_on = "0"
     dict_return['img_border_on'] = entries.parse_list(border_on, (0, 1), 0)
 
     try:
@@ -397,8 +397,8 @@ def ini_read_color(file_ini):
     try:
         color_on = config.getint('Color', 'on')
     except:
-        color_on = "1"
-    dict_return['color_on'] = entries.parse_list(color_on, (0, 1), 1)
+        color_on = "0"
+    dict_return['color_on'] = entries.parse_list(color_on, (0, 1), 0)
 
     try:
         black_white = config.getint('Color', 'black-white')
@@ -539,6 +539,36 @@ def ini_read_logo(file_ini):
     except:
         logo_dy = "5"
     dict_return['logo_dy'] = logo_dy
+
+    return dict_return
+
+
+def ini_read_mirror(file_ini):
+    """ Rotate configuration """
+
+    # słownik wyjściowy
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
+
+    try:
+        mirror_on = config.getint('Mirror', 'on')
+    except:
+        mirror_on = "0"
+    dict_return['img_mirror_on'] = entries.parse_list(mirror_on, (0, 1), 0)
+
+    try:
+        flip = config.getint('Mirror', 'flip')
+    except:
+        flip = "0"
+    dict_return['img_mirror_flip'] = entries.parse_list(flip, (0, 1), 0)
+
+    try:
+        flop = config.getint('Mirror', 'flop')
+    except:
+        flop = "0"
+    dict_return['img_mirror_flop'] = entries.parse_list(flop, (0, 1), 0)
 
     return dict_return
 

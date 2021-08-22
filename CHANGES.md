@@ -3,6 +3,8 @@
 
 ## 2021
 
+3.8.3 mirroring picture
+
 3.8.2 bugfix and code clean for text gravity
 
 3.8.1 bugfix crop and text position calculation

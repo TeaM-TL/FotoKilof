@@ -253,6 +253,10 @@ def apply_all_convert(out_file, write_command):
         previous_command = 1
         cmd = cmd + " " + convert.convert_rotate(img_rotate.get())
 
+    if img_mirror_on.get() > 0:
+        previous_command = 1
+        cmd = cmd + " " + convert.convert_mirror(img_mirror_flip.get(),img_mirror_flop.get())
+
     if img_border_on.get() == 1:
         previous_command = 1
         border = int(e_border.get())
@@ -441,6 +445,22 @@ def convert_rotate_button():
                                  work_dir.get(),
                                  co_apply_type.get())
     cmd = convert.convert_rotate(img_rotate.get())
+    cmd_magick = GM_or_IM + "convert"
+    print_command(cmd)
+    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
+    if result == "OK":
+        preview_new(out_file)
+    progress_files.set(_("done"))
+
+
+def convert_mirror_button():
+    """ mirror button """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
+    cmd = convert.convert_mirror(img_mirror_flip.get(), img_mirror_flop.get())
     cmd_magick = GM_or_IM + "convert"
     print_command(cmd)
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
@@ -994,6 +1014,11 @@ def ini_read_wraper():
     e_logo_dy.delete(0, "end")
     e_logo_dy.insert(0, ini_entries['logo_dy'])
 
+    ini_entries = ini_read.ini_read_mirror(FILE_INI)
+    img_mirror_on.set(ini_entries['img_mirror_on'])
+    img_mirror_flip.set(ini_entries['img_mirror_flip'])
+    img_mirror_flop.set(ini_entries['img_mirror_flop'])
+
 
 def ini_save():
     """ Write variables into config file INI """
@@ -1064,6 +1089,10 @@ def ini_save():
     config.set('Contrast', 'selection', co_contrast_selection.get())
     config.set('Contrast', 'contrast_stretch_1', e1_contrast.get())
     config.set('Contrast', 'contrast_stretch_2', e2_contrast.get())
+    config.add_section('Mirror')
+    config.set('Mirror', 'on', str(img_mirror_on.get()))
+    config.set('Mirror', 'flip', str(img_mirror_flip.get()))
+    config.set('Mirror', 'flop', str(img_mirror_flop.get()))
     config.add_section('Logo')
     config.set('Logo', 'on', str(img_logo_on.get()))
     config.set('Logo', 'logo', file_logo_path.get())
@@ -1350,6 +1379,11 @@ def tools_set(preview_on):
     else:
         frame_normalize.grid()
 
+    if img_mirror_on.get() == 0:
+        frame_mirror.grid_remove()
+    else:
+        frame_mirror.grid()
+
     if img_logo_on.get() == 0:
         frame_logo.grid_remove()
     else:
@@ -1525,6 +1559,9 @@ img_bw_on = IntVar()  # Black-white
 img_bw = IntVar()
 img_contrast_on = IntVar()  # Contrast
 img_contrast = IntVar()  # (1, 2)
+img_mirror_on = IntVar()  # Mirror
+img_mirror_flip = IntVar()  # (0, 1)
+img_mirror_flop = IntVar()  # (0, 1)
 contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
 img_custom_on = IntVar()  # Custom
 progress_var = IntVar()  # progressbar
@@ -1668,6 +1705,10 @@ cb_contrast = ttk.Checkbutton(frame_tools_set, text=_("Contrast"),
                               variable=img_contrast_on,
                               offvalue="0", onvalue="1",
                               command=tools_set_off)
+cb_mirror = ttk.Checkbutton(frame_tools_set, text=_("Mirror"),
+                              variable=img_mirror_on,
+                              offvalue="0", onvalue="1",
+                              command=tools_set_off)
 cb_logo = ttk.Checkbutton(frame_tools_set, text=_("Logo"),
                           variable=img_logo_on,
                           offvalue="0", onvalue="1",
@@ -1694,6 +1735,7 @@ cb_border.pack(padx=5, pady=1, anchor=W, side='left')
 cb_bw.pack(padx=5, pady=1, anchor=W, side='left')
 cb_contrast.pack(padx=5, pady=1, anchor=W, side='left')
 cb_normalize.pack(padx=5, pady=1, anchor=W, side='left')
+cb_mirror.pack(padx=5, pady=1, anchor=W, side='left')
 cb_logo.pack(padx=5, pady=1, anchor=W, side='left')
 cb_custom.pack(padx=5, pady=1, anchor=W, side='left')
 cb_histograms.pack(padx=5, pady=1, anchor=W, side='left')
@@ -1965,7 +2007,7 @@ b_text_run.grid(row=5, column=5, sticky=(E), padx=5, pady=5)
 ###########################
 # Rotate
 ###########################
-frame_rotate = ttk.Labelframe(frame_first_col, text=_("Rotate"),
+frame_rotate = ttk.LabelFrame(frame_first_col, text=_("Rotate"),
                               style="Fiolet.TLabelframe")
 frame_rotate.grid(row=5, column=1, sticky=(N, W, E, S), padx=5, pady=1)
 ###
@@ -2030,14 +2072,14 @@ rb2_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 e_bw_sepia.grid(row=1, column=2, padx=5, pady=5, sticky=E)
 l_bw_sepia.grid(row=1, column=3, padx=5, pady=5, sticky=W)
 rb1_bw.grid(row=2, column=1, padx=5, pady=0, sticky=W)
-b_bw_run.grid(row=3, column=2, columnspan=2, padx=5, pady=5, sticky=E)
+b_bw_run.grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky=E)
 
 ########################
 # Contrast
 #########################
 frame_contrast = ttk.Labelframe(frame_first_col, text=_("Contrast"),
                                 style="Fiolet.TLabelframe")
-frame_contrast.grid(row=7, column=1, sticky=(N, W, E, S), padx=5, pady=1)
+frame_contrast.grid(row=7, column=1, rowspan=2, sticky=(N, W, E, S), padx=5, pady=1)
 ###
 rb1_contrast = ttk.Radiobutton(frame_contrast, text=_("Stretch"),
                                variable=img_contrast, value="1")
@@ -2092,14 +2134,36 @@ rb1_normalize.grid(row=1, column=1, padx=5, pady=0, sticky=W)
 l_normalize_channel.grid(row=1, column=2, padx=5, pady=4, sticky=E)
 co_normalize_channel.grid(row=1, column=3, padx=5, pady=4, sticky=E)
 rb2_normalize.grid(row=2, column=1, padx=5, pady=4, sticky=W)
-b_normalize_run.grid(row=3, column=2, columnspan=2, padx=5, pady=4, sticky=E)
+b_normalize_run.grid(row=2, column=2, columnspan=2, padx=5, pady=4, sticky=E)
+
+
+###########################
+# Mirror
+###########################
+frame_mirror = ttk.LabelFrame(frame_first_col, text=_("Mirror"),
+                              style="Fiolet.TLabelframe")
+frame_mirror.grid(row=8, column=2, sticky=(N, E, S), padx=5, pady=1)
+
+cb_mirror_flip = ttk.Checkbutton(frame_mirror, text="Flip",
+                                 variable=img_mirror_flip,
+                                 offvalue="0", onvalue="1")
+cb_mirror_flop = ttk.Checkbutton(frame_mirror, text="Flop",
+                                 variable=img_mirror_flop,
+                                 offvalue="0", onvalue="1")
+b_mirror_run = ttk.Button(frame_mirror, text=_("Execute"),
+                          style="Brown.TButton",
+                          command=convert_mirror_button)
+
+cb_mirror_flip.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+cb_mirror_flop.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
+b_mirror_run.grid(row=1, column=5, sticky=E, padx=5, pady=5)
 
 ###########################
 # Logo
 ###########################
-frame_logo = ttk.Labelframe(frame_first_col, text=_("Logo"),
+frame_logo = ttk.LabelFrame(frame_first_col, text=_("Logo"),
                             style="Fiolet.TLabelframe")
-frame_logo.grid(row=10, column=1, columnspan=2,
+frame_logo.grid(row=11, column=1, columnspan=2,
                 sticky=(N, W, E, S), padx=5, pady=1)
 
 b_logo_select = ttk.Button(frame_logo, text=_("File selection"),
