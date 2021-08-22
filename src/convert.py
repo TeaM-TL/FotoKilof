@@ -123,8 +123,8 @@ def convert_text(entries):
         if entries['text_inout'] == 0:
             # inside
             outside = ""
-            if gravity(entries['gravitation']) == "0":
-                gravitation = ""
+            if entries['gravitation_onoff'] == 0:
+                gravitation = " "
             else:
                 gravitation = " -gravity " + gravity(entries['gravitation'])
             text = " -draw \"text " + entries['dx'] + "," + entries['dy'] \
@@ -135,13 +135,16 @@ def convert_text(entries):
                 box = " -box \"" + entries['box_color'] + "\""
         else:
             # outside
-            gravitations = gravity_outside(entries['gravitation'])
-            gravitation = " -gravity " + gravitations['horizontal']
+            gravitation = " -gravity " + gravity(entries['gravitation'])
             text = " label:\"" + entries['text'] + "\" "
-            if gravitations['vertical'] == "top":
+            # position
+            if entries['gravitation'] == "NW" or entries['gravitation'] == "N" or entries['gravitation'] == "NE":
+                # top
                 outside = "+swap -append "
             else:
+                # bottom
                 outside = "-append "
+            # background
             if entries['box'] == 0:
                 box = ""
             else:
@@ -305,39 +308,5 @@ def gravity(gravitation):
 
     return result
 
-
-def gravity_outside(gravitation):
-    """ translate gavitation name for adding text outside"""
-
-    dict_return = {}
-    if gravitation == "N":
-        dict_return['vertical'] = "top"
-        dict_return['horizontal'] = "Center"
-    if gravitation == "NW":
-        dict_return['vertical'] = "top"
-        dict_return['horizontal'] = "West"
-    if gravitation == "NE":
-        dict_return['vertical'] = "top"
-        dict_return['horizontal'] = "East"
-    if gravitation == "W":
-        dict_return['vertical'] = "top"
-        dict_return['horizontal'] = "West"
-    if gravitation == "C":
-        dict_return['vertical'] = "top"
-        dict_return['horizontal'] = "Center"
-    if gravitation == "E":
-        dict_return['vertical'] = "top"
-        dict_return['horizontal'] = "East"
-    if gravitation == "SW":
-        dict_return['vertical'] = "bottom"
-        dict_return['horizontal'] = "West"
-    if gravitation == "S":
-        dict_return['vertical'] = "bottom"
-        dict_return['horizontal'] = "Center"
-    if gravitation == "SE":
-        dict_return['vertical'] = "bottom"
-        dict_return['horizontal'] = "East"
-
-    return dict_return
 
 # EOF

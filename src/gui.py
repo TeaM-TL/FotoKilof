@@ -35,6 +35,7 @@ def copy_to_clipboard(file_in):
     """
     Copy results into clipboard
     https://stackoverflow.com/questions/34322132/copy-image-to-clipboard
+    Copy to clipboard works for Windows only
     """
     if mswindows.windows() == 1:
         image = Image.open(file_in)
@@ -49,11 +50,10 @@ def copy_to_clipboard(file_in):
         win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
         win32clipboard.CloseClipboard()
 
-     #Copy to clipboard works for Windows only
-
 
 def only_numbers(char):
     """  Validation entry widgets: only digits """
     return char.isdigit()
+
 
 # EOF

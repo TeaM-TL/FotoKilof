@@ -45,7 +45,7 @@ import os
 import platform
 import sys
 import tempfile
-from PIL import Image, ImageGrab
+from PIL import ImageGrab
 
 # my modules
 import convert
@@ -572,10 +572,8 @@ def convert_text_entries():
     dict_return['text'] = e_text.get()
     dict_return['dx'] = e_text_x.get()
     dict_return['dy'] = e_text_y.get()
-    if img_text_gravity_onoff.get():
-        dict_return['gravitation'] = img_text_gravity.get()
-    else:
-        dict_return['gravitation'] = "0"
+    dict_return['gravitation'] = img_text_gravity.get()
+    dict_return['gravitation_onoff'] = img_text_gravity_onoff.get()
     if mswindows.windows() == 1:
         dict_return['font'] = img_text_font_dict[img_text_font.get()]
     else:
@@ -2321,9 +2319,9 @@ if GM_or_IM is not None:
     l_border.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
         root.title(window_title + file_in_path.get())
-        image_size =  magick.get_image_size(file_in_path.get())
-        file_in_width.set(image_size[0])
-        file_in_height.set(image_size[1])
+        image_dimension =  magick.get_image_size(file_in_path.get())
+        file_in_width.set(image_dimension[0])
+        file_in_height.set(image_dimension[1])
         crop_tool_hide_show()
     if img_logo_on.get() == 1:
         if os.path.isfile(file_logo_path.get()):
