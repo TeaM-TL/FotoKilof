@@ -20,6 +20,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - text annotation, inside or outside of picture (mems generator),
  - border around picture,
  - rotation,
+ - mirroring (verticl or horizontal)
  - black-white or sepia,
  - contrast increase/decrease or normalize or histogram stretching,
  - color auto-level or equalize,
@@ -42,7 +43,10 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
    - two corners (upper left and lower right),
    - upper left corner and width plus height,
    - gravity, width plus height plus offset,
- - text: color, font and size selection,
+ - text: color, font and size selection, background
+ - text position:
+   - outside: top/bottom, left/center/right
+   - inside: by gravity or by position
  - customized sepia,
  - equalize by channel,
  - contrast between -3 and +3,
@@ -75,7 +79,7 @@ fotokilof
 
 ### As package
 
-Packages are build from tim to time. The best way is use from PyPi as described above
+Packages are build from time to time. The best way is use from PyPi as described above
 
 #### Download 
 In [Release](https://github.com/TeaM-TL/FotoKilof/releases) you can find current binary version for Windows (8.1 and newer) and Linux
