@@ -2,21 +2,25 @@
 
 # FotoKilof
 
-------
+---
+
 [TOC]
 
+---
+
 ## Wprowadzenie
-Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick dla przetwarzania obrazków. Umożliwia użycie innych poleceń programów *convert*, *mogrify* i *compose*.
+Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick dla przetwarzania obrazków.
 
 ### Konwersje
  - skalowanie z zachowaniem proporcji,
  - wycinek - trzy metody zaznaczania obszaru,
- - dodanie tekstu do obrazka, wewnątrz i na zewnątrz (generator memów)
+ - dodanie tekstu do obrazka, wewnątrz i na zewnątrz (generator memów),
  - ramka wokół obrazka,
  - obrót,
  - czarno-biały albo sepia,
  - zmiana kontrastu, normalizacja i rozciąganie kontrastu,
- - normalizacja koloru: auto-level lub wyrównanie histogramu
+ - normalizacja koloru: auto-level lub wyrównanie histogramu,
+ - odbicie lustrzane: w poziomie i w pionie,
  - dodanie własnego logo do obrazka.
 
 ### Funkcje
@@ -24,7 +28,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
  - konwersja obrazków do formatu JPG, PNG i TIF,
  - przetwarzanie tylko kopii obrazków, oryginały są bezpieczne,
  - przetwarzanie jednego pliku jak i całego katalogu,
- - wykonywanie zrzutu ekranu,
+ - wykonywanie zrzutu ekranu (Linux) lub pobieranie ze schowka (Windows, MacOS)
  - wyświetlanie tylko aktywnych narzędzi,
  - wybór narzędzi przetwarzania,
  - podgląd oryginału i wyniku przetwarzania,
@@ -34,7 +38,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
      - współrzędne dwóch przeciwległych narożników (lewy-góry i prawy-dolny),
      - współrzędne lewego-górnego narożnika oraz szerokości i wysokości wycinka,
      - szerokość i wysokość wycinka, grawitacja i odsunięcie od kierunku grawitacji,
- - wybór koloru, fontu i wielkości dodawanego tekstu,
+ - wybór koloru, fontu i wielkości dodawanego tekstu oraz pozycji (bezwzględne lub grawitacja),
  - predefiniowane kąty obrotu: 90, 180 i 270 lub własne,
  - regulowana sepia,
  - wyrównanie (*Equalize*) także dla pojedynczego kanału,
@@ -47,6 +51,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
  - można korzystać z innych poleceń ImageMagick np. *-gaussian-blur*,
  - logowanie konwersji i komunikatów wewnętrznych,
  - częściowe wsparcie dla GraphicsMagick.
+ - szybka nawigacja klawiszami <Home>, <End>, <PgUp>, <PgDn>
 
 ### Zrzuty ekranu
 
@@ -55,55 +60,62 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
 
 ![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof1.png)
 
+![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof2.png)
+
 #### Mac OSX
 ![Screenshot MacOS](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_macos.png)
 
 #### Windows
 ![Screenshot Windows](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_windows.png)
 
+---
+
 ## Jak używać
 
 ### Podstawowe operacje
  - Wybierz plik obrazka, niezależnie czy chcesz przetwarzać pojedynczy plik czy cały katalog.
- - Przyciski *Poprzedni* i *Następny* otwierają kolejny lub poprzedni obrazek w katalogu.
- - Przyciski *Pierwszy* i *Ostatni* otwierają pierwszy lub ostatni obrazek w katalogu.
- - Przycisk *Zapisz* zapisuje bieżące ustawienia do pliku konfiguracyjnego *.fotokilof.ini*.
- - Przycisk *Wczytaj* odczytuje ustawienia z pliku konfiguracyjnego *.fotokilof.ini*.
- - Plik konfiguracyjny *.fotokilof.ini* zapisywany jest w katalogu użytkownika.
- - Po zapisaniu konfiguracji, przy ponownym otwarciu, program odczyta konfigurację.
+ - Przyciski *Poprzedni*, *Następny*, *Pierwszy* i *Ostatni* (lub klawisze <PgUp>,  <PgDn>, <Home>, <End>) nawigują pomiędzy obrazkami w bieżącym katalogu.
  - Przyciski *Podgląd* otwierają obrazek w domyślnej przeglądarce.
- - Program zamykamy poleceniem *Alt-F4* lub ikoną.
-
-### Zrzuty ekranu
-
-- Wybierz przycisk *Zrzut ekranu*.
-- Kliknij w okno, którego obraz chcesz przechwycić.
-- Można zmiast kliknięcia, kliknąć i przytrzymać lewy klawsz myszy, by zaznaczyć obszar.
-- Obraz pojawi się w oknie podglądu FotoKilofa.
-- Zrzut ekranu jest automatycznie zapisywany w katalogu *$TMP/%Y-%m-%D*, np. /tmp/2020-12-26.
-- Po przetworzeniu obraz wynikowy zapisywany jest w podkatalogu *FotoKilof*.
 
 ### Przetwarzanie pojedynczego polecenia
  - Zaznacz typ konwersji w panelu *Narzędzia*, np. *Obrót*.
- - Kliknij *Zapisz*.
  - W widgecie *Obrót* wybierz kąt, np. *90*.
  - Kliknij *Wykonaj*.
- - Zobacz podgląd.
 
 ### Przetwarzanie wielu poleceń
  - Zaznacz typy konwersji w panelu *Narzędzia*, np. *Obrót*, *Ramka*.
- - Kliknij *Zapisz*.
- - W widgecie *Obrót* wybierz kąt, np. *180*, a widgecie *Ramka* wybierz ulubiony kolor za pomocą przycisku *Kolor* i wpisz szerokość ramki np.*25*.
+ - W widgecie *Obrót* wybierz kąt, np. *180*,
+ - w widgecie *Ramka* wybierz ulubiony kolor za pomocą przycisku *Kolor* i wpisz szerokość ramki np.*25*.
  - Kliknij *Wykonaj wszystko*.
- - Zobacz podgląd.
 
 ### Przetwarzanie wszystkich plików w katalogu
  - Wybierz jeden z plików w katalogu.
  - Poćwicz na nim konwersje, jak w punkcie powyżej.
  - Zaznacz *Folder*, a następnie,
  - kliknij *Wykonaj wszystko*.
- - W oknie podglądu zostanie wyświetlony podgląd ostatniego z przetwarzanych obrazków.
- - Pod paskiem postępu zostanie wyświetlony numer pliku i jego nazwa oraz liczba wszystkich plików, które będą przetwarzane.
+
+### Zrzuty ekranu
+
+#### Linux
+- Wybierz przycisk *Zrzut ekranu*.
+- Kliknij w okno, którego obraz chcesz przechwycić.
+- Można zmiast kliknięcia, kliknąć i przytrzymać lewy klawsz myszy, by zaznaczyć obszar.
+
+#### Windows, MacOS
+- Obraz pobierany jest ze schowka (może to być zrzut lub skopiowany obraz),
+- Kliknij *Schowek*, by pobrać obraz ze schowka
+
+#### Wspólne
+- Obraz pojawi się w oknie podglądu FotoKilofa.
+- Zrzut ekranu jest automatycznie zapisywany w katalogu *$TMP/%Y-%m-%D*, np. /tmp/2020-12-26.
+- Po przetworzeniu obraz wynikowy zapisywany jest w podkatalogu *FotoKilof*.
+
+### Konfiguracja
+ - Przycisk *Zapisz* zapisuje bieżące ustawienia do pliku konfiguracyjnego *~/.fotokilof.ini*.
+ - Przycisk *Wczytaj* odczytuje ustawienia z pliku konfiguracyjnego *~/.fotokilof.ini*.
+ - Po zapisaniu konfiguracji, przy ponownym otwarciu, program odczyta konfigurację.
+
+---
 
 ## Przetwarzania obrazu
 
@@ -133,6 +145,7 @@ Ponadto przycisk *Z obrazka* odczytuje rozmiar obrazka i wpisuje je do odpowiedn
 Możemy dodać własny tekst do obrazka, np. podpis czy komentarz.
 
 Tekst umieszczany jest *grawitacyjnie* na obrazku, czyli wybieramy kierunek ciążenia (W - zachód, S - południe itd.) oraz przesunięcie względem kierunku ciążenia.
+Można także podać bezwzględną pozycję tekstu na obrazku (np. wskazując lewym przyciskiem myszy).
 
 Ponadto można wybrać font (niekoniecznie pod Windows), wielkość i kolor tekstu. Można także po zaznaczeniu haczyka *Tło* wybrać kolor tła.
 
@@ -186,26 +199,15 @@ Jeśli chcemy, to program może wygenerować i wyświetlić histogramy obrazka p
 Wszystkie uruchamiane polecenia przetwarzania wpisywane są do pola *Własne polecenia*, gdzie możemy skomponować własny przepis przetwarzania obrazka. Np. podać inny niż predefiniowany kąt obrotu, czy ujemne przesunięcia dla grawitacji.
 Znając polecenia przetwarzania programu *ImageMagick* można w tym polu wpisywać te polecenia. Jeśli nastąpi błąd, to w oknie komunikatów, może zostać wyświetlony odpowiedni komunikat.
 
-### Jeden plik albo cały katalog
-
-W zależności od wyboru *Plik* albo *Folder*, przetwarzany będzie albo wybrany plik albo cały folder z wybranym plikiem.
-Do przetwarzania folderu musimy użyć przycisku *Zaaplikuj wszystko* i zaznaczyć przycisk *Folder*.
+---
 
 ## Instalacja
 
 ### Jako pakiet pypi
 
 ```
-python3 -m pip install fotokilof
-fotokilof
+python3 -m pip install --upgrade fotokilof
 ```
-
-### Z paczki zip
-
-- Rozpakuj plik *fotokilof.zip* do folderu, 
-- zrób skrót na pulpicie,
-- i uruchom.
-> Windows: W przyszłości będzie dostępny instalator, wygenerowany za pomocą NSIS.
 
 ### Wymagania
 
@@ -213,29 +215,10 @@ fotokilof
  - ImageMagick: https://imagemagick.org/ lub GraphicsMagick
  - Windows, Linux, MacOS X, BSD
 
-### Ze źródeł
-Tylko gdy uruchamiamy ze źródeł
-
-Python3 i moduły:
- - via pip:
-    - configparser,
-    - tkcolorpicker (nieobligatoryjny, wymaga PIL),
-    - PIL dla Windows do obsugi schowka,
- - via pakiety:
-     - tkinter,
- - powinny być w zestawie:
-     - datetime,
-     - fnmatch,
-     - gettext,
-     - glob,
-     - os,
-     - platform,
-     - re,
-     - shutil,
-     - tempfile.
-
 #### Uruchomienie
-`python3 fotokilof.py`
+`fotokilof`
+
+---
 
 ## Podziękowania
 
@@ -244,17 +227,24 @@ Python3 i moduły:
  - Bozhidar Kirev - bułgarskie tłumaczenie GUI,
  - Afif Hendrawan - indonezyjskie tłumaczenie GUI
  - Alexander Ignatov - bułgarskie tłumaczenie GUI,
- - Sebastian Hiebl - python packaging.
+ - Sebastian Hiebl - poprawne pakowanie,
+ - Matt Sephton - pomysł na pakowanie gui,
+ - emsspree - aktualizacja niemieckiego tłumaczenia, jpeg,
+ - Olm - testowanie pod Windows.
 
+---
 
 ## Licencja
 
 MIT License
 
-Copyright (c) 2019-2020 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2021 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
