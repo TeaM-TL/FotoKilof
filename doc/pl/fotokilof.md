@@ -51,7 +51,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
  - można korzystać z innych poleceń ImageMagick np. *-gaussian-blur*,
  - logowanie konwersji i komunikatów wewnętrznych,
  - częściowe wsparcie dla GraphicsMagick.
- - szybka nawigacja klawiszami <Home>, <End>, <PgUp>, <PgDn>
+ - szybka nawigacja klawiszami `<Home>`, `<End>`, `<PgUp>`, `<PgDn>`
 
 ### Zrzuty ekranu
 
@@ -74,7 +74,7 @@ Sympatyczny interfejs graficzny dla podstawowych poleceń programu ImageMagick d
 
 ### Podstawowe operacje
  - Wybierz plik obrazka, niezależnie czy chcesz przetwarzać pojedynczy plik czy cały katalog.
- - Przyciski *Poprzedni*, *Następny*, *Pierwszy* i *Ostatni* (lub klawisze <PgUp>,  <PgDn>, <Home>, <End>) nawigują pomiędzy obrazkami w bieżącym katalogu.
+ - Przyciski *Poprzedni*, *Następny*, *Pierwszy* i *Ostatni* (lub klawisze `<PgUp>`, ` <PgDn>`, `<Home>`, `<End>`) nawigują pomiędzy obrazkami w bieżącym katalogu.
  - Przyciski *Podgląd* otwierają obrazek w domyślnej przeglądarce.
 
 ### Przetwarzanie pojedynczego polecenia

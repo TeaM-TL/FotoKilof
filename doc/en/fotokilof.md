@@ -51,7 +51,7 @@ GUI for the common used ImageMagick functionality for processing pictures.
  - is possible to use other ImageMagick commands, eg. *-gaussian-blur*,
  - logging conversion and internal messages,
  - GraphickMagick is supported partialy.
- - fast navigation by <Home>, <End>, <PgUp>, <PgDn> keyboard
+ - fast navigation by `<Home>`, `<End>`, `<PgUp>`, `<PgDn>` keys.
 
 ### Screenshots
 
@@ -74,7 +74,7 @@ GUI for the common used ImageMagick functionality for processing pictures.
 
 ### Basic operations
  - Select image file,
- - Buttons *Previous*, *Next*, *First*, *End* (or keys <PgUp>,  <PgDn>, <Home>, <End>) will navigate between pictures in current directory,
+ - Buttons *Previous*, *Next*, *First*, *End* (or keys `<Home>`, `<End>`, `<PgUp>`, `<PgDn>`) will navigate between pictures in current directory,
  - Buttons *Preview* open picture in default browser
 
 ### Perform single conversion
