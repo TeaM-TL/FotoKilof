@@ -147,7 +147,7 @@ Możemy dodać własny tekst do obrazka, np. podpis czy komentarz.
 Tekst umieszczany jest *grawitacyjnie* na obrazku, czyli wybieramy kierunek ciążenia (W - zachód, S - południe itd.) oraz przesunięcie względem kierunku ciążenia.
 Można także podać bezwzględną pozycję tekstu na obrazku (np. wskazując lewym przyciskiem myszy).
 
-Ponadto można wybrać font (niekoniecznie pod Windows), wielkość i kolor tekstu. Można także po zaznaczeniu haczyka *Tło* wybrać kolor tła.
+Ponadto można wybrać font, wielkość i kolor tekstu. Można także po zaznaczeniu haczyka *Tło* wybrać kolor tła.
 
 ### Obrót
 
