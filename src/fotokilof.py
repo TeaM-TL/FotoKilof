@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=line-too-long
-# pylint: disable=invalid-name
 # pylint: disable=bare-except
+# pylint: disable=too-many-branches
+# pylint: disable=too-many-lines
+# pylint: disable=too-many-statements
+# pylint disable=invalid-name
 
 """
 Copyright (c) 2019-2021 Tomasz Łuczak, TeaM-TL
@@ -92,7 +94,8 @@ else:
     PREVIEW_NEW = 450
     PREVIEW_LOGO = 100
 
-preview_size_list = (300, 350, 400, 450, 500, 550, 600, 650, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 1920, 'none')
+preview_size_list = (300, 350, 400, 450, 500, 550, 600, 650, 700, 800,
+        900, 1000, 1200, 1400, 1600, 1800, 1920, 'none')
 ##########################
 
 
@@ -663,7 +666,8 @@ def open_file_logo():
                      (_("SVG files"), ".SVG"),
                      (_("ALL types"), "*"))
     else:
-        filetypes = ((_("All graphics files"), ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff"),
+        filetypes = ((_("All graphics files"),
+                    ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff"),
                      (_("JPG files"), ".JPG .jpg .JPEG .jpeg"),
                      (_("PNG files"), ".PNG .png"),
                      (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
@@ -690,7 +694,8 @@ def open_file():
                      (_("SVG files"), ".SVG"),
                      (_("ALL types"), "*"))
     else:
-        filetypes = ((_("All graphics files"), ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff"),
+        filetypes = ((_("All graphics files"),
+                    ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff"),
                      (_("JPG files"), ".JPG .jpg .JPEG .jpeg"),
                      (_("PNG files"), ".PNG .png"),
                      (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
@@ -1276,7 +1281,9 @@ def preview_orig():
                 log.write_log("preview_orig: Cannot load image size", "E")
 
             if img_histograms_on.get() == 1:
-                pi_histogram_orig.configure(file=preview.preview_histogram(file_in_path.get(), GM_or_IM))
+                pi_histogram_orig.configure(
+                        file=preview.preview_histogram(file_in_path.get(),
+                        GM_or_IM))
                 l_histogram_orig.configure(image=pi_histogram_orig)
         else:
             preview_orig_clear()
@@ -1554,7 +1561,9 @@ img_border_on = IntVar()  # Border
 img_border_color = StringVar()
 img_normalize_on = IntVar()  # Normalize
 img_normalize = IntVar()  #  (1,2,3)
-normalize_channels = ("None", "Red", "Green", "Blue", "Alpha", "Gray", "Cyan", "Magenta", "Yellow", "Black", "Opacity", "Index", "RGB", "RGBA", "CMYK", "CMYKA")
+normalize_channels = ("None", "Red", "Green", "Blue", "Alpha", "Gray",
+                      "Cyan", "Magenta", "Yellow", "Black", "Opacity",
+                      "Index", "RGB", "RGBA", "CMYK", "CMYKA")
 img_bw_on = IntVar()  # Black-white
 img_bw = IntVar()
 img_contrast_on = IntVar()  # Contrast

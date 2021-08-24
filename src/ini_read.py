@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=line-too-long
 # pylint: disable=bare-except
 
 """
@@ -175,7 +174,8 @@ def ini_read_text(file_ini, fonts_dict):
         text_gravity = config.get('Text', 'gravity')
     except:
         text_gravity = "SE"
-    dict_return['img_text_gravity'] = entries.parse_list(text_gravity, ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
+    dict_return['img_text_gravity'] = entries.parse_list(text_gravity,
+            ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
 
     try:
         text_gravity_onoff = config.getint('Text', 'gravity_onoff')
@@ -350,7 +350,8 @@ def ini_read_crop(file_ini):
         crop_gravity = config.getint('Crop', 'gravity')
     except:
         crop_gravity = "C"
-    dict_return['img_crop_gravity'] = entries.parse_list(crop_gravity, ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
+    dict_return['img_crop_gravity'] = entries.parse_list(crop_gravity,
+            ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
 
     return dict_return
 
@@ -514,7 +515,8 @@ def ini_read_logo(file_ini):
         logo_gravity = config.get('Logo', 'gravity')
     except:
         logo_gravity = "SE"
-    dict_return['img_logo_gravity'] = entries.parse_list(logo_gravity, ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
+    dict_return['img_logo_gravity'] = entries.parse_list(logo_gravity,
+            ("NW", "N", "NE", "W", "C", "E", "SW", "S", "SE"), "SE")
 
     try:
         logo_width = config.getint('Logo', 'width')

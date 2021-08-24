@@ -110,22 +110,23 @@ def preview_pillow(file_in, size, coord):
     """
     if file_in is not None:
         if os.path.isfile(file_in):
+            filesize = common.humansize(os.path.getsize(file_in))
+
             try:
                 image = Image.open(file_in)
                 width = image.width
                 height = image.height
-                filesize = common.humansize(os.path.getsize(file_in))
                 if width > height:
                     width_resize = int(size)
-                    height_resize = int( height / width * size )
+                    height_resize = int(height / width * size )
                 elif width < height:
                     height_resize = int(size)
-                    width_resize = int( width / height * size )
+                    width_resize = int(width / height * size )
                 else:
                     width_resize = int(size)
                     height_resize = int(size)
             except:
-                log.write_log("Error in preview_pillow: image", "E")
+                log.write_log("Error in preview_pillow: image width and height", "E")
                 result = None
 
             try:
@@ -155,7 +156,7 @@ def preview_pillow(file_in, size, coord):
                           'width': str(width),
                           'height': str(height)}
             except:
-                log.write_log("Error in preview_pillow: preview", "E")
+                log.write_log("Error in preview_pillow: make preview", "E")
                 result = None
         else:
             result = None
