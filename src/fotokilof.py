@@ -73,15 +73,11 @@ if mswindows.windows() == 1:
 localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
 if not os.path.isdir(localedir):
     localedir = os.path.join(os.getcwd(), 'locale')
-translate_info = str("Locale directory: " + localedir)
-log.write_log(translate_info, "M")
+log.write_log(str("Locale directory: " + localedir), "M")
 
 translate = gettext.translation('fotokilof', localedir, fallback=True)
 gettext.install('fotokilof', localedir)
 _ = translate.gettext
-
-translate_info = str(gettext.find('base', 'locales'))
-log.write_log(translate_info, "M")
 
 ###################
 # CONSTANTS
@@ -1122,12 +1118,10 @@ def help_info(event):
     # global PWD
     try:
         license_file = os.path.join(PWD, "LICENSE")
-        file = open(license_file, "r", encoding="utf8")
-
-        message = ""
-        for i in file:
-            message = message + i
-        # file.close
+        with open(license_file, "r", encoding="utf8") as licensef:
+            message = ""
+            for i in licensef:
+                message = message + i
     except:
         log.write_log("help_info: error during loading license file", "W")
         message = "Copyright " + version.__copyright__ + " " + version.__author__ + " under MIT license"
