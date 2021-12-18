@@ -118,3 +118,7 @@ But binaries can be old, because recommended way is via PyPi.
  - emsspree - update german translation, jpeg,
  - Olm - testing on Windows.
 
+---
+
+![Python powered](python-powered.png)
+
