@@ -263,6 +263,8 @@ def check_imagemagick(suffix):
                     result = None
             else:
                 result = None
+        else:
+            result = None
 
     return result
 
