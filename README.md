@@ -1,20 +1,25 @@
 # FotoKilof - GUI for ImageMagick
+
 GUI for the most used (by me) ImageMagick functionality for processing pictures. 
 
 ## Screenshots
 
 ### Linux
+
 ![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof.png)
 
 ![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof2.png)
 
 ### Mac OSX
+
 ![Screenshot MacOS](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_macos.png)
 
 ### Windows
+
 ![Screenshot Windows](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_windows.png)
 
 ## Graphics conversion
+
  - scaling/resize,
  - crop,
  - text annotation, inside or outside of picture (mems generator),
@@ -29,6 +34,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - format conversion into JPG, PNG, TIFF.
 
 ## Functionality:
+
  - processing JPG, PNG, SVG and TIFF images,
  - processing picture in the fly, originals are safe,
  - processing single file or whole directory,
@@ -60,51 +66,46 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - GraphickMagick is supported partialy.
 
 ## User manual
+
 - PDF: [English](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.pdf), [Polish](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/pl/fotokilof.pdf).
 - MD: [English](doc/en/fotokilof.md), [Polish](doc/pl/fotokilof.md).
 
-
 ## Available translations
+
 Available: English, Polish, German, Bulgarian and Indonesian.
 
-## Run
+## Install and run
 
-### As pypi package
+### Requirements
 
-Recommended option is get as PyPi package by PIP
-```
+- Windows, Linux, MacOS X, BSD,
+- FullHD screen for comfort work,
+- [ImageMagick](https://imagemagick.org/), remember to add path into `%PATH%` environment variable,
+- [Python](https://www.python.org/), remember to add path into `%PATH%` environment variable.
+
+### Install
+
+Install as PyPi package by PIP:
+```bash
 python3 -m pip install fotokilof
-fotokilof
 ```
 
-### As package
-
-Packages are build from time to time. The best way is use from PyPi as described above
-
-#### Download 
-In [Release](https://github.com/TeaM-TL/FotoKilof/releases) you can find current binary version for Windows (8.1 and newer) and Linux
-
-#### Run
- - unzip downloaded `fotokilof-*`
- - optionaly make shortcut on the desktop,
- - run fotokilof.
-
-#### Windows
-
-But the best way is to install:
-- fresh ImageMagick (remember to add path into `%PATH%` environment variable during installation)
-- fresh Python3 (remember to add path into `%PATH%` environment variable during installation)
-- install from PyPi:
-```
+for Windows:
+```bash
 python -m pip install pywin32 fotokilof
 ```
 
-To make life easier, package `fotokilof-windows-x64.zip` contains ImageMagick binaries.
-But binaries can be old, because recommended way is via PyPi.
+### Upgrade
 
-## Requirements
- - Windows, Linux, MacOS X, BSD,
- - FullHD screen for comfort work.
+```bash
+python3 -m pip install --upgrade fotokilof
+```
+
+### Run
+
+```bash
+fotokilof
+```
 
 ## Thanks
 
@@ -116,9 +117,9 @@ But binaries can be old, because recommended way is via PyPi.
  - Sebastian Hiebl - python packaging,
  - Matt Sephton - ideas for packing gui,
  - emsspree - update german translation, jpeg,
- - Olm - testing on Windows.
+ - Olm - testing on Windows,
+ - Carbene Hu - idea to fix issue
 
 ---
 
 ![Python powered](python-powered.png)
-
