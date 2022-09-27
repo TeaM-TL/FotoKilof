@@ -145,7 +145,7 @@ def get_fonts_dict(gm_or_im):
     result = magick(command, "", file_font, gm_or_im + "convert")
     if result is not None:
         try:
-            file = open(file_font, "r")
+            file = open(file_font, "r", encoding="utf-8")
         except:
             log.write_log("get_fonts_list: cannot read file_font", "E")
         else:
