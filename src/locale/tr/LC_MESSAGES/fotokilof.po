@@ -1,0 +1,375 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-08-22 23:55+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Mert Cobanov <mertcobanov@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: fotokilof.py:318 fotokilof.py:375 fotokilof.py:390 fotokilof.py:409
+#: fotokilof.py:425 fotokilof.py:442 fotokilof.py:458 fotokilof.py:474
+#: fotokilof.py:498 fotokilof.py:516 fotokilof.py:534 fotokilof.py:556
+msgid "İşleniyor"
+msgstr ""
+
+#: fotokilof.py:355
+msgid "of"
+msgstr ""
+
+#: fotokilof.py:366 fotokilof.py:385 fotokilof.py:404 fotokilof.py:420
+#: fotokilof.py:437 fotokilof.py:453 fotokilof.py:469 fotokilof.py:492
+#: fotokilof.py:511 fotokilof.py:529 fotokilof.py:551 fotokilof.py:567
+msgid "tamamlandı"
+msgstr ""
+
+#: fotokilof.py:659 fotokilof.py:666 fotokilof.py:686 fotokilof.py:693
+msgid "Tüm grafik dosyaları"
+msgstr ""
+
+#: fotokilof.py:660 fotokilof.py:667 fotokilof.py:687 fotokilof.py:694
+msgid "JPG dosyaları"
+msgstr ""
+
+#: fotokilof.py:661 fotokilof.py:668 fotokilof.py:688 fotokilof.py:695
+msgid "PNG dosyaları"
+msgstr ""
+
+#: fotokilof.py:662 fotokilof.py:669 fotokilof.py:689 fotokilof.py:696
+msgid "TIFF dosyaları"
+msgstr ""
+
+#: fotokilof.py:663 fotokilof.py:670 fotokilof.py:690 fotokilof.py:697
+msgid "SVG dosyaları"
+msgstr ""
+
+#: fotokilof.py:664 fotokilof.py:671 fotokilof.py:691 fotokilof.py:698
+msgid "Tüm türler"
+msgstr ""
+
+#: fotokilof.py:675
+msgid "Eklemek için logo resmi seçin"
+msgstr ""
+
+#: fotokilof.py:702
+msgid "İşlemek için logo resmi seçin"
+msgstr ""
+
+#: fotokilof.py:1130
+msgid "Lisans"
+msgstr ""
+
+#: fotokilof.py:1307
+msgid "Dosya seçilmedi"
+msgstr ""
+
+#: fotokilof.py:1474 fotokilof.py:1938
+msgid "dx"
+msgstr ""
+
+#: fotokilof.py:1475 fotokilof.py:1939
+msgid "dy"
+msgstr ""
+
+#: fotokilof.py:1487
+msgid "x"
+msgstr ""
+
+#: fotokilof.py:1488
+msgid "y"
+msgstr ""
+
+#: fotokilof.py:1594
+msgid "Görsel"
+msgstr ""
+
+#: fotokilof.py:1598 fotokilof.py:2169
+msgid "Dosya seçimi"
+msgstr ""
+
+#: fotokilof.py:1601
+msgid "Ekran görüntüsü"
+msgstr ""
+
+#: fotokilof.py:1604
+msgid "Pano"
+msgstr ""
+
+#: fotokilof.py:1606
+msgid "İlk"
+msgstr ""
+
+#: fotokilof.py:1608
+msgid "Önceki"
+msgstr ""
+
+#: fotokilof.py:1610
+msgid "Sonraki"
+msgstr ""
+
+#: fotokilof.py:1612
+msgid "Son"
+msgstr ""
+
+#: fotokilof.py:1627 fotokilof.py:1638
+msgid "Tümünü yürüt"
+msgstr ""
+
+#: fotokilof.py:1631
+msgid "Klasör"
+msgstr ""
+
+#: fotokilof.py:1633
+msgid "Dosya"
+msgstr ""
+
+#: fotokilof.py:1654
+msgid "Ayarlar"
+msgstr ""
+
+#: fotokilof.py:1658
+msgid "Kaydet"
+msgstr ""
+
+#: fotokilof.py:1659
+msgid "Yükle"
+msgstr ""
+
+#: fotokilof.py:1673
+msgid "Araçlar"
+msgstr ""
+
+#: fotokilof.py:1677
+msgid "Ölçekle/Boyutlandır"
+msgstr ""
+
+#: fotokilof.py:1681 fotokilof.py:1792
+msgid "Kırp"
+msgstr ""
+
+#: fotokilof.py:1685
+msgid "Yazı"
+msgstr ""
+
+#: fotokilof.py:1689 fotokilof.py:2010
+msgid "Döndür"
+msgstr ""
+
+#: fotokilof.py:1693 fotokilof.py:2035
+msgid "Çerçeve"
+msgstr ""
+
+#: fotokilof.py:1697
+msgid "Siyah&beyaz"
+msgstr ""
+
+#: fotokilof.py:1700
+msgid "Renk noramlleştir"
+msgstr ""
+
+#: fotokilof.py:1704 fotokilof.py:2080 fotokilof.py:2086
+msgid "Kontrast"
+msgstr ""
+
+#: fotokilof.py:1708 fotokilof.py:2143
+msgid "Yansıt"
+msgstr ""
+
+#: fotokilof.py:1712 fotokilof.py:2164
+msgid "Logo"
+msgstr ""
+
+#: fotokilof.py:1716
+msgid "Özel"
+msgstr ""
+
+#: fotokilof.py:1720
+msgid "Histogramlar"
+msgstr ""
+
+#: fotokilof.py:1725
+msgid "Tema:"
+msgstr ""
+
+#: fotokilof.py:1757
+msgid "Ölçekle/Boyutlandır"
+msgstr ""
+
+#: fotokilof.py:1762 fotokilof.py:2039
+msgid "Pikseller"
+msgstr ""
+
+#: fotokilof.py:1766
+msgid "Yüzde"
+msgstr ""
+
+#: fotokilof.py:1776 fotokilof.py:1871 fotokilof.py:1997 fotokilof.py:2022
+#: fotokilof.py:2044 fotokilof.py:2067 fotokilof.py:2098 fotokilof.py:2129
+#: fotokilof.py:2153 fotokilof.py:2172 fotokilof.py:2252
+msgid "Yürüt"
+msgstr ""
+
+#: fotokilof.py:1798
+msgid "Koordinatlar (x1, y1) ve (x2, y2)"
+msgstr ""
+
+#: fotokilof.py:1801
+msgid ""
+"Sol Üst\n"
+"Köşe\n"
+"Sol tıkla"
+msgstr ""
+
+#: fotokilof.py:1807
+msgid ""
+"Sağ Alt\n"
+"Köşe\n"
+"Sağ tıkla"
+msgstr ""
+
+#: fotokilof.py:1814
+msgid "Orijin (x1,y1) ve boyutlar (X, Y)"
+msgstr ""
+
+#: fotokilof.py:1826
+msgid ""
+"Offset (dx,dy), boyut (X, Y)\n"
+"ve yerçekimi"
+msgstr ""
+
+#: fotokilof.py:1850 fotokilof.py:1965 fotokilof.py:2212
+msgid "Merkez"
+msgstr ""
+
+#: fotokilof.py:1867 fotokilof.py:2277 fotokilof.py:2315
+msgid "Önizle"
+msgstr ""
+
+#: fotokilof.py:1869
+msgid "Resimden"
+msgstr ""
+
+#: fotokilof.py:1913
+msgid "Yazı ekle"
+msgstr ""
+
+#: fotokilof.py:1923
+msgid "İç"
+msgstr ""
+
+#: fotokilof.py:1926
+msgid "Dış"
+msgstr ""
+
+#: fotokilof.py:1929 fotokilof.py:1995
+msgid "Arkaplan"
+msgstr ""
+
+#: fotokilof.py:1933
+msgid "Yerçekimi"
+msgstr ""
+
+#: fotokilof.py:1992 fotokilof.py:2042
+msgid "Renk"
+msgstr ""
+
+#: fotokilof.py:1993
+msgid "Font"
+msgstr ""
+
+#: fotokilof.py:2056 fotokilof.py:2060
+msgid "Siyah-beyaz"
+msgstr ""
+
+#: fotokilof.py:2062
+msgid "Sepya"
+msgstr ""
+
+#: fotokilof.py:2084
+msgid "Germek"
+msgstr ""
+
+#: fotokilof.py:2091
+msgid "Normalleştir"
+msgstr ""
+
+#: fotokilof.py:2096
+msgid "Siyah"
+msgstr ""
+
+#: fotokilof.py:2097
+msgid "Beyaz"
+msgstr ""
+
+#: fotokilof.py:2115
+msgid "Renk normalleştirme"
+msgstr ""
+
+#: fotokilof.py:2119
+msgid "Dengele"
+msgstr ""
+
+#: fotokilof.py:2122
+msgid "OtoSeviye"
+msgstr ""
+
+#: fotokilof.py:2125
+msgid "Kanal:"
+msgstr ""
+
+#: fotokilof.py:2147
+msgid "Çevir"
+msgstr ""
+
+#: fotokilof.py:2150
+msgid "Flop"
+msgstr ""
+
+#: fotokilof.py:2183
+msgid ""
+"Genişlik\n"
+"Yükseklik"
+msgstr ""
+
+#: fotokilof.py:2184
+msgid ""
+"Offset\n"
+"(dx,dy)"
+msgstr ""
+
+#: fotokilof.py:2245
+msgid "Özel komut"
+msgstr ""
+
+#: fotokilof.py:2250
+msgid "Temizle"
+msgstr ""
+
+#: fotokilof.py:2272
+msgid "Orijinal"
+msgstr ""
+
+#: fotokilof.py:2294 fotokilof.py:2331
+msgid "Histogram"
+msgstr ""
+
+#: fotokilof.py:2311
+msgid "Sonuç"
+msgstr ""
+
+#: fotokilof.py:2397
+msgid "Hata"
+msgstr ""
+
+#: fotokilof.py:2398
+msgid "ImageMagick veya GraphicsMagick sisteminizde kurulu değil. Herhangi bir grafiği işlemek imkansızdır."
+msgstr ""
+
