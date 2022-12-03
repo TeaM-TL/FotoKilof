@@ -119,6 +119,7 @@ fotokilof
  - emsspree - update german translation, jpeg,
  - Olm - testing on Windows,
  - Carbene Hu - idea to fix issue
+ - Mert Cobanov - Turkish translation
 
 ---
 
