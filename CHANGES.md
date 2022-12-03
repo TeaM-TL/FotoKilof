@@ -3,7 +3,9 @@
 ## 2022
 
 3.8.6 added Turkish translations
+
 3.8.5 fix issue #118
+
 3.8.4 fix issue #123
 
 ## 2021
