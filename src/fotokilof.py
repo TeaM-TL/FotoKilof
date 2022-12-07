@@ -172,7 +172,7 @@ def preview_orig_button():
     # global file_in_path
 
     try:
-        magick.display_image(file_in_path.get(), GM_or_IM)
+        magick.display_image(file_in_path.get())
     except:
         log.write_log("No orig picture to preview", "W")
 
@@ -186,7 +186,7 @@ def preview_new_button():
                                  work_sub_dir.get()),
                                  co_apply_type.get())
     if os.path.isfile(file_out):
-        magick.display_image(file_out, GM_or_IM)
+        magick.display_image(file_out)
 
 
 def extension_from_file():

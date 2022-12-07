@@ -25,7 +25,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    install_requires=['pillow','tkcolorpicker'],
+    install_requires=['pillow','tkcolorpicker','wand'],
     entry_points = {
         "gui_scripts": [
             "fotokilof = src:__main__",

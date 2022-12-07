@@ -32,14 +32,15 @@ module to work with *Magick:
 - get_magick_version - get version of *Magick
 - check_magick - check what is available
 - check_imagemagick - checker for ImageMagick
-- check_graphickmagick - checker for GraphicsMagick
 """
 
 import os
 import re
 import shutil
 import tempfile
-from PIL import Image
+from wand.display import display
+from wand.image import Image
+from wand.version import fonts, MAGICK_VERSION, VERSION
 
 import common
 import log
@@ -135,6 +136,10 @@ def magick_command(command):
     return result
 
 
+def get_fonts_dict_new():
+    """ Wand """    
+    return fonts()
+
 def get_fonts_dict(gm_or_im):
     """ get available font dict (name: path) from imagemagick """
 
@@ -180,104 +185,27 @@ def get_fonts_dict(gm_or_im):
     if fonts_dict is None or len(fonts_dict) == 0:
         fonts_dict["Helvetica"] = ""
 
+#    print(fonts_dict)
     return fonts_dict
-
-
-def get_magick_version(gm_or_im):
-    """ get version of *Magick """
-
-    version = ""
-    if gm_or_im is None:
-        gm_or_im = ""
-
-    file_version = common.spacja(os.path.join(tempfile.gettempdir(),
-                                              "fotokilof_" + \
-                                              os.getlogin() + "_version"))
-
-    command = "-Version > "
-    result = magick(command, "", common.spacja(file_version),
-                    gm_or_im + "convert")
-    if result is not None:
-        try:
-            file = open(file_version, "r")
-        except:
-            log.write_log("get_magick_version: cannot read file_version", "W")
-        else:
-            version_object = re.search("\\d+[.]\\d+([.]\\d+)*", file.readline())
-            if version_object is not None:
-                version = version_object[0]
-            file.close()
-            try:
-                os.remove(file_version)
-            except:
-                log.write_log("get_magick_version: cannot remove file_version", "W")
-
-    return version
 
 
 def check_magick():
     """
     What is available: ImageMagick, Graphick Magick or none, and version
     """
-    if mswindows.windows() == 1:
-        suffix = ".exe"
-    else:
-        suffix = ""
-    if check_imagemagick(suffix) is not None:
-        version = "IM"
-        if mswindows.windows() == 1:
-            result_gm = "magick "
-        else:
-            result_gm = ""
-    elif check_graphicsmagick(suffix) is not None:
-        version = "GM"
-        result_gm = "gm "
-    else:
-        version = ""
-        result_gm = None
 
-    version = version + ':' + get_magick_version(result_gm)
-    return (result_gm, version)
+    version = MAGICK_VERSION
+    version = 'IM:' + version.split(' ')[1] + ' : Wand:' + VERSION
+    return ("", version)
 
 
-def check_imagemagick(suffix):
-    """ Check if ImageMagick is avaialble"""
+def check_imagemagick():
+    """
+    Check if ImageMagick is avaialble
+    """
 
-    if mswindows.windows() == 1:
-        if shutil.which('magick' + suffix):
-            result = "OK"
-        else:
-            result = None
-    else:
-        if shutil.which('convert'):
-            result = "OK"
-            if shutil.which('mogrify'):
-                result = "OK"
-                if shutil.which('composite'):
-                    result = "OK"
-                    if shutil.which('identify'):
-                        result = "OK"
-                    else:
-                        result = None
-                else:
-                    result = None
-            else:
-                result = None
-        else:
-            result = None
-
+    result = "OK"
     return result
-
-
-def check_graphicsmagick(suffix):
-    """ Check if GraphicsMagick is avaialble"""
-    if shutil.which('gm' + suffix):
-        result = "OK"
-    else:
-        result = None
-
-    return result
-
 
 def get_image_size(file_in):
     """
@@ -291,53 +219,20 @@ def get_image_size(file_in):
 
     if file_in is not None:
         if os.path.isfile(file_in):
-            # for JPG, PNG, TIF
-            image = Image.open(file_in)
-            width = image.width
-            height = image.height
-
-# For others file types use identify
-#    file_info = common.spacja(os.path.join(tempfile.gettempdir(),
-#                                           "fotokilof_" + os.getlogin() \
-#                                           + "_image_info"))
-
-#    command = ' -format "%w\\n%h\\n%b" '
-#    command = command + common.spacja(file_in) + ' > '
-#    result = magick(command, "", file_info, GM_or_IM + "identify")
-#    if result is not None:
-#        try:
-#            file = open(file_info, "r")
-#        except:
-#            log.write_log("get_image_size: cannot read file_info", "W")
-#        else:
-#            width = int(file.readline())
-#            height = int(file.readline())
-#            size = file.readline()
-#            file.close()
-#            try:
-#                os.remove(file_info)
-#            except:
-#                log.write_log("get_image_size: cannot remove image_info", "W")
+            with Image(filename=file_in) as image:
+                width = image.width
+                height = image.height
     return (width, height)
 
 
-def display_image(file_in, gm_or_im):
+def display_image(file_in):
     """ display image """
     file_in = common.spacja(file_in)
-    if mswindows.windows() == 1:
-        display = 'explorer'  # this is the best idea for Windows
-        ampersand = ''
-    else:
-        display = gm_or_im + "display"
-        ampersand = ' &'
-
-    command = magick_command(display)
-    command = command + " " + file_in + ampersand
-    log.write_log("Execute: " + command, "M")
     try:
-        os.system(command)
+        with Image(filename=file_in) as image:
+            display(image)
     except:
-        log.write_log(" Error in imagick: " + command, "E")
+        log.write_log(" Error display file: " + file_in, "E")
         result = None
     else:
         result = "OK"

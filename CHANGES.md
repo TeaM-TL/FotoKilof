@@ -2,6 +2,8 @@
 
 ## 2022
 
+4.0.0 use Wand-py instead PIL and magick, removed GraphicsMagick
+
 3.8.6 added Turkish translations
 
 3.8.5 fix issue #118

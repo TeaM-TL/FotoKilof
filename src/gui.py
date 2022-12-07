@@ -24,7 +24,8 @@ function for GUI
 """
 
 from io import BytesIO
-from PIL import Image
+from wand.image import Image
+#from PIL import Image
 
 import mswindows
 if mswindows.windows() == 1:
@@ -36,19 +37,24 @@ def copy_to_clipboard(file_in):
     Copy results into clipboard
     https://stackoverflow.com/questions/34322132/copy-image-to-clipboard
     Copy to clipboard works for Windows only
+
+    debug needed!
     """
     if mswindows.windows() == 1:
-        image = Image.open(file_in)
+        with Image(filename=file_in) as image:
+            with image.clone() as clone:
+                clone.format = 'bmp'
+                i.save(filename=output)
+#        image = Image.open(file_in)
+                output = BytesIO()
+#        image.convert("RGB").save(output, "BMP")
+                data = output.getvalue()[14:]
+                output.close()
 
-        output = BytesIO()
-        image.convert("RGB").save(output, "BMP")
-        data = output.getvalue()[14:]
-        output.close()
-
-        win32clipboard.OpenClipboard()
-        win32clipboard.EmptyClipboard()
-        win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
-        win32clipboard.CloseClipboard()
+                win32clipboard.OpenClipboard()
+                win32clipboard.EmptyClipboard()
+                win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
+                win32clipboard.CloseClipboard()
 
 
 def only_numbers(char):

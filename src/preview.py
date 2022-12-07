@@ -31,6 +31,7 @@ module contains function for generating preview and histogram:
 import os
 import tempfile
 from PIL import Image, ImageDraw
+#from wand import Image
 
 import common
 import log
@@ -61,6 +62,21 @@ def preview_histogram(file_in, gm_or_im):
         log.write_log("Error in convert_histogram: " + command, "E")
 
     return 'none'
+
+
+def preview_wand(file_in, command, size):
+    """
+    preview generation by Wand
+    file_in - fullname image file
+    command - additional command for imagemagick or space
+    dir_temp - fullname temporary directory
+    --
+    return:
+    - filename - path to PPM file
+    - file size
+    - width and height
+    """
+    # To Do
 
 
 def preview_convert(file_in, command, size, gm_or_im):
