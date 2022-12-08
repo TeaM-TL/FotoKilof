@@ -187,8 +187,7 @@ def ini_read_text(file_ini, fonts_dict):
         text_font = config.get('Text', 'font')
     except:
         text_font = "Helvetica"
-    fonts_list = list(fonts_dict.keys())
-    dict_return['text_font'] = entries.parse_list(text_font, fonts_list, "Helvetica")
+    dict_return['text_font'] = entries.parse_list(text_font, fonts_dict, "Helvetica")
 
     try:
         text_size = str(config.getint('Text', 'size'))

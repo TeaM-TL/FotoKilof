@@ -47,7 +47,8 @@ import os
 import platform
 import sys
 import tempfile
-from PIL import ImageGrab
+from wand.version import fonts as fontsList
+from wand.version import MAGICK_VERSION, VERSION
 
 # my modules
 import convert
@@ -65,6 +66,7 @@ log.write_log('Start', "M", "w", 1)
 
 # set locale and clipboard for Windows
 if mswindows.windows() == 1:
+    from PIL import ImageGrab
     import locale
     if os.getenv('LANG') is None:
         lang, enc = locale.getdefaultlocale()
@@ -605,11 +607,12 @@ def convert_text_entries():
 
 
 def fonts():
-    """ preparing font names for ImageMagick """
+    """ preparing font names for ImageMagick and load into listbox """
 
-    result = magick.get_fonts_dict(GM_or_IM)
-    co_text_font['values'] = list(result.keys())
+    result = fontsList()
+    co_text_font['values'] = result
     return result
+
 
 def font_selected(event):
     """ callback via bind for font selection """
@@ -2369,13 +2372,10 @@ root.bind("<End>", open_file_last_key)
 ##########################################
 # Run functions
 #
-
-# check if [Image|Graphics]Magick is available
-GM_or_IM_data = magick.check_magick()
-GM_or_IM = GM_or_IM_data[0]
-GM_or_IM_version = GM_or_IM_data[1]
+GM_or_IM = ""
+IM_version = 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
 Python_version = 'Py:' + platform.python_version()
-window_title = version.__author__ + " : " + version.__appname__ + ": " + version.__version__ + " : " + GM_or_IM_version + " : " + Python_version + " | "
+window_title = version.__author__ + " : " + version.__appname__ + ": " + version.__version__ + " : " + IM_version + " : " + Python_version + " | "
 root.title(window_title)
 if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts
