@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (c) 2019-2021 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2022 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@ THE SOFTWARE.
 Converters
 - convert_preview_crop_gravity - convert corrdinates from crop3
 - convert_border - add border to picture
-- convert_text - add text
 - convert_crop - crop picture
 - convert_resize - resize picture
 - convert_contrast - modify contrast
@@ -99,17 +98,6 @@ def convert_preview_crop_gravity(coordinates, x_max, y_max):
         x1 = x_max - 5
         y1 = y_max -5
     return (x0, y0, x1, y1)
-
-
-def convert_border(width, color, border_on):
-    """ 1. Add border """
-
-    if border_on > 0:
-        command = " -bordercolor \"" + color + "\"" + \
-                  " -border " + str(abs(int(width))) + " "
-    else:
-        command = ""
-    return command + " "
 
 
 def convert_text(entries):
@@ -276,23 +264,23 @@ def gravity(gravitation):
     """ translate gravitation name according to Tk specification"""
 
     if gravitation == "N":
-        result = "North"
+        result = "north"
     if gravitation == "NW":
-        result = "Northwest"
+        result = "north_west"
     if gravitation == "NE":
-        result = "Northeast"
+        result = "north_east"
     if gravitation == "W":
-        result = "West"
+        result = "west"
     if gravitation == "C":
-        result = "Center"
+        result = "center"
     if gravitation == "E":
-        result = "East"
+        result = "east"
     if gravitation == "SW":
-        result = "Southwest"
+        result = "south_west"
     if gravitation == "S":
-        result = "South"
+        result = "south"
     if gravitation == "SE":
-        result = "Southeast"
+        result = "south_east"
     if gravitation == "0":
         result = "0"
 

@@ -48,6 +48,8 @@ import platform
 import sys
 import tempfile
 from wand.color import Color
+from wand.drawing import Drawing
+from wand.font import Font
 from wand.image import Image
 from wand.version import fonts as fontsList
 from wand.version import MAGICK_VERSION, VERSION
@@ -562,16 +564,36 @@ def convert_text_button():
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
-    cmd = convert.convert_text(convert_text_entries())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    
+
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            if img_text_inout.get() == 0:
+            # inside
+                with Drawing() as draw:
+                    draw.fill_color = img_text_color.get()
+                    draw.font_family = img_text_font.get()
+                    draw.font_size = int(e_text_size.get())
+                    if img_text_gravity_onoff.get() == 0:
+                        draw.gravity = 'forget'
+                    else:
+                        draw.gravity = convert.gravity(img_text_gravity.get())
+                    if img_text_box.get():
+                        draw.text_under_color = img_text_box_color.get()
+                    draw.text(int(e_text_x.get()), int(e_text_y.get()), e_text.get())
+                    draw(clone)
+            
+            else:
+            # outside
+                #+swap -append
+                noc = None
+            clone.save(filename=out_file)        
+    
+    preview_new(out_file)
     progress_files.set(_("done"))
 
 def convert_crop_entries():
-    """ słownik ze zmiennymi dla funkcji convert_crop """
+    """ dictionary with values for convert_crop function """
     dict_return = {}
     dict_return['one_x1'] = e1_crop_1.get()
     dict_return['one_y1'] = e2_crop_1.get()
@@ -585,24 +607,6 @@ def convert_crop_entries():
     dict_return['three_dy'] = e2_crop_3.get()
     dict_return['three_width'] = e3_crop_3.get()
     dict_return['three_height'] = e4_crop_3.get()
-    return dict_return
-
-
-def convert_text_entries():
-    """ słownik ze zmiennymi dla funkcji convert_text """
-    dict_return = {}
-    dict_return['text_on'] = img_text_on.get()
-    dict_return['text_inout'] = img_text_inout.get()
-    dict_return['text'] = e_text.get()
-    dict_return['dx'] = e_text_x.get()
-    dict_return['dy'] = e_text_y.get()
-    dict_return['gravitation'] = img_text_gravity.get()
-    dict_return['gravitation_onoff'] = img_text_gravity_onoff.get()
-    dict_return['font'] = img_text_font.get()
-    dict_return['font_size'] = e_text_size.get()
-    dict_return['text_color'] = img_text_color.get()
-    dict_return['box'] = img_text_box.get()
-    dict_return['box_color'] = img_text_box_color.get()
     return dict_return
 
 
