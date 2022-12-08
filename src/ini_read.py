@@ -377,10 +377,16 @@ def ini_read_border(file_ini):
     dict_return['img_border_color'] = entries.parse_color(border_color, '#FFFFFF')
 
     try:
-        border = config.getint('Border', 'size')
+        border = config.getint('Border', 'size_x')
     except:
         border = "10"
-    dict_return['img_border_size'] = border
+    dict_return['img_border_size_x'] = border
+
+    try:
+        border = config.getint('Border', 'size_y')
+    except:
+        border = "10"
+    dict_return['img_border_size_y'] = border
 
     return dict_return
 

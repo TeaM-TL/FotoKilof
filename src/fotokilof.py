@@ -47,6 +47,7 @@ import os
 import platform
 import sys
 import tempfile
+from wand.color import Color
 from wand.image import Image
 from wand.version import fonts as fontsList
 from wand.version import MAGICK_VERSION, VERSION
@@ -70,8 +71,7 @@ if mswindows.windows() == 1:
     from PIL import ImageGrab
     import locale
     if os.getenv('LANG') is None:
-        lang, enc = locale.getdefaultlocale()
-        os.environ['LANG'] = lang
+        os.environ['LANG'] = locale.getlocale()[0]
 
 localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
 if not os.path.isdir(localedir):
@@ -231,7 +231,7 @@ def apply_all_convert(out_file, write_command):
         if img_border_on.get() == 0:
             border = 0
         else:
-            border = abs(int(e_border.get()))
+            border = abs(int(e_border_x.get()))
         previous_command = 1
 
         resize = convert.convert_resize(img_resize.get(),
@@ -261,8 +261,8 @@ def apply_all_convert(out_file, write_command):
 
     if img_border_on.get() == 1:
         previous_command = 1
-        border = int(e_border.get())
-        cmd = cmd + " " + convert.convert_border(e_border.get(),
+        border = int(e_border_x.get())
+        cmd = cmd + " " + convert.convert_border(e_border_x.get(),
                                                  img_border_color.get(),
                                                  border)
 
@@ -469,7 +469,7 @@ def convert_mirror_button():
                 do = 1
             if img_mirror_flop.get():
                 clone.flop()
-                do =1
+                do = 1
             if do:
                 clone.save(filename=out_file)
                 preview_new(out_file)
@@ -506,14 +506,12 @@ def convert_border_button():
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
-    cmd = convert.convert_border(e_border.get(),
-                                 img_border_color.get(),
-                                 img_border_on.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            clone.border(img_border_color.get(), int(e_border_x.get()), int(e_border_y.get()))
+            clone.save(filename=out_file)
+    
+    preview_new(out_file)
     progress_files.set(_("done"))
 
 
@@ -980,8 +978,10 @@ def ini_read_wraper():
     img_border_on.set(ini_entries['img_border_on'])
     img_border_color.set(ini_entries['img_border_color'])
     l_border.configure(bg=ini_entries['img_border_color'])
-    e_border.delete(0, "end")
-    e_border.insert(0, ini_entries['img_border_size'])
+    e_border_x.delete(0, "end")
+    e_border_x.insert(0, ini_entries['img_border_size_x'])
+    e_border_y.delete(0, "end")
+    e_border_y.insert(0, ini_entries['img_border_size_y'])
 
     ini_entries = ini_read.ini_read_color(FILE_INI)
     img_bw_on.set(ini_entries['color_on'])
@@ -1079,7 +1079,8 @@ def ini_save():
     config.add_section('Border')
     config.set('Border', 'on', str(img_border_on.get()))
     config.set('Border', 'color', img_border_color.get())
-    config.set('Border', 'size', e_border.get())
+    config.set('Border', 'size_x', e_border_x.get())
+    config.set('Border', 'size_y', e_border_y.get())
     config.add_section('Color')
     config.set('Color', 'on', str(img_bw_on.get()))
     config.set('Color', 'black-white', str(img_bw.get()))
@@ -1372,7 +1373,7 @@ def tools_set(preview_on):
     if img_bw_on.get() == 0:
         frame_bw.grid_remove()
     else:
-        frame_bw.grid()
+        frame_bw.grid(sticky=W)
 
     if img_contrast_on.get() == 0:
         frame_contrast.grid_remove()
@@ -1382,12 +1383,12 @@ def tools_set(preview_on):
     if img_normalize_on.get() == 0:
         frame_normalize.grid_remove()
     else:
-        frame_normalize.grid()
+        frame_normalize.grid(sticky=W)
 
     if img_mirror_on.get() == 0:
         frame_mirror.grid_remove()
     else:
-        frame_mirror.grid()
+        frame_mirror.grid(sticky=W)
 
     if img_logo_on.get() == 0:
         frame_logo.grid_remove()
@@ -2044,7 +2045,11 @@ frame_border = ttk.Labelframe(frame_first_col, text=_("Border"),
 frame_border.grid(row=6, column=1, sticky=(N, W, E, S), padx=5, pady=1)
 ###
 l_border = Label(frame_border, text=_("Pixels"))
-e_border = ttk.Entry(frame_border, width=3,
+l_border_x = Label(frame_border, text="WE")
+e_border_x = ttk.Entry(frame_border, width=3,
+                     validate="key", validatecommand=(validation, '%S'))
+l_border_y = Label(frame_border, text="NS")
+e_border_y = ttk.Entry(frame_border, width=3,
                      validate="key", validatecommand=(validation, '%S'))
 b_border_color = ttk.Button(frame_border, text=_("Color"),
                             command=color_choose_border)
@@ -2052,10 +2057,13 @@ b_border_run = ttk.Button(frame_border, text=_("Execute"),
                           style="Brown.TButton",
                           command=convert_border_button)
 
-l_border.grid(row=1, column=1, padx=5, pady=5)
-e_border.grid(row=1, column=2, padx=5, pady=5)
-b_border_color.grid(row=1, column=3, padx=5, pady=5)
-b_border_run.grid(row=1, column=4, padx=5, pady=5, sticky=E)
+l_border.grid(row=1, column=1, padx=5, pady=5, columnspan=4)
+l_border_x.grid(row=2, column=1, padx=5, pady=5)
+e_border_x.grid(row=2, column=2, padx=5, pady=5)
+l_border_y.grid(row=2, column=3, padx=5, pady=5)
+e_border_y.grid(row=2, column=4, padx=5, pady=5)
+b_border_color.grid(row=1, column=5, padx=5, pady=5)
+b_border_run.grid(row=2, column=5, padx=5, pady=5, sticky=E)
 
 ############################
 # Black-white
@@ -2079,7 +2087,7 @@ rb2_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 e_bw_sepia.grid(row=1, column=2, padx=5, pady=5, sticky=E)
 l_bw_sepia.grid(row=1, column=3, padx=5, pady=5, sticky=W)
 rb1_bw.grid(row=2, column=1, padx=5, pady=0, sticky=W)
-b_bw_run.grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky=E)
+b_bw_run.grid(row=3, column=1, columnspan=2, padx=5, pady=5, sticky=E)
 
 ########################
 # Contrast
@@ -2151,10 +2159,10 @@ frame_mirror = ttk.LabelFrame(frame_first_col, text=_("Mirror"),
                               style="Fiolet.TLabelframe")
 frame_mirror.grid(row=8, column=2, sticky=(N, E, S), padx=5, pady=1)
 
-cb_mirror_flip = ttk.Checkbutton(frame_mirror, text=_("Flip"),
+cb_mirror_flip = ttk.Checkbutton(frame_mirror, text="NS",
                                  variable=img_mirror_flip,
                                  offvalue="0", onvalue="1")
-cb_mirror_flop = ttk.Checkbutton(frame_mirror, text=_("Flop"),
+cb_mirror_flop = ttk.Checkbutton(frame_mirror, text="WE",
                                  variable=img_mirror_flop,
                                  offvalue="0", onvalue="1")
 b_mirror_run = ttk.Button(frame_mirror, text=_("Execute"),
