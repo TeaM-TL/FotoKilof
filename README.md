@@ -87,12 +87,12 @@ Available: English, Polish, German, Bulgarian and Indonesian.
 
 Install as PyPi package by PIP:
 ```bash
-python3 -m pip install fotokilof
+python3 -m pip install wand fotokilof
 ```
 
 for Windows:
 ```bash
-python -m pip install pywin32 fotokilof
+python -m pip install pywin32 wand fotokilof
 ```
 
 ### Upgrade
