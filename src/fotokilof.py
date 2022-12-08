@@ -47,6 +47,7 @@ import os
 import platform
 import sys
 import tempfile
+from wand.image import Image
 from wand.version import fonts as fontsList
 from wand.version import MAGICK_VERSION, VERSION
 
@@ -445,12 +446,11 @@ def convert_rotate_button():
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
-    cmd = convert.convert_rotate(img_rotate.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            clone.rotate(img_rotate.get())
+            clone.save(filename=out_file)
+    preview_new(out_file)
     progress_files.set(_("done"))
 
 
@@ -461,12 +461,18 @@ def convert_mirror_button():
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
-    cmd = convert.convert_mirror(img_mirror_flip.get(), img_mirror_flop.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            do = 0
+            if img_mirror_flip.get():
+                clone.flip()
+                do = 1
+            if img_mirror_flop.get():
+                clone.flop()
+                do =1
+            if do:
+                clone.save(filename=out_file)
+                preview_new(out_file)
     progress_files.set(_("done"))
 
 
@@ -474,7 +480,7 @@ def convert_resize_button():
     """ Resize button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    resize= convert.convert_resize(img_resize.get(),
+    resize = convert.convert_resize(img_resize.get(),
                                    e1_resize.get(),
                                    e2_resize.get(),
                                    '0')
@@ -491,7 +497,6 @@ def convert_resize_button():
     if result == "OK":
         preview_new(out_file)
     progress_files.set(_("done"))
-    #work_sub_dir.set("")  # reset subdir name for next processing
 
 
 def convert_border_button():
@@ -595,10 +600,7 @@ def convert_text_entries():
     dict_return['dy'] = e_text_y.get()
     dict_return['gravitation'] = img_text_gravity.get()
     dict_return['gravitation_onoff'] = img_text_gravity_onoff.get()
-    if mswindows.windows() == 1:
-        dict_return['font'] = img_text_font_dict[img_text_font.get()]
-    else:
-        dict_return['font'] = img_text_font.get()
+    dict_return['font'] = img_text_font.get()
     dict_return['font_size'] = e_text_size.get()
     dict_return['text_color'] = img_text_color.get()
     dict_return['box'] = img_text_box.get()
@@ -608,7 +610,6 @@ def convert_text_entries():
 
 def fonts():
     """ preparing font names for ImageMagick and load into listbox """
-
     result = fontsList()
     co_text_font['values'] = result
     return result

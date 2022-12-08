@@ -26,12 +26,8 @@ module to work with *Magick:
 - pre_magick - prepare output file for conversion
 - magick - picture conversion
 - magick_command - make [Graphics|Image]Magick independent
-- display_image - display picture
-- get_image_size - identify picture: width and height
-- get_fonts_dict - get available fonts dict
-- check_magick - check what is available
-- get_image_size - get size of image
-- display_image - display image
++ get_image_size - identify picture: width and height
++ display_image - display image
 """
 
 import os
@@ -117,12 +113,8 @@ def magick_command(command):
     """
     make [Graphics|Image]Magick independent
     command: it depends:
-    - ImageMagick:
       - Unix: convert, mogrify, composite
       - Windows: magick.exe convert, magick.exe mogrify, magick.exe composite
-    - GraphicsMagick:
-      - Unix: gm convert, gm mogrify, gm composite
-      - Windows: gm.exe convert, gm.exe mogrify, gm.exe composite
     """
     if mswindows.windows() == 1:
         suffix = ".exe "
