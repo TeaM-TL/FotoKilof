@@ -44,10 +44,8 @@ def copy_to_clipboard(file_in):
         with Image(filename=file_in) as image:
             with image.clone() as clone:
                 clone.format = 'bmp'
-                clone.save(filename=output)
-#        image = Image.open(file_in)
                 output = BytesIO()
-#        image.convert("RGB").save(output, "BMP")
+                clone.save(filename=output)
                 data = output.getvalue()[14:]
                 output.close()
 
