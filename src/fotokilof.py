@@ -572,7 +572,7 @@ def convert_text_button():
             # inside
                 with Drawing() as draw:
                     draw.fill_color = img_text_color.get()
-                    draw.font_family = img_text_font.get()
+                    draw.font = img_text_font.get()
                     draw.font_size = int(e_text_size.get())
                     if img_text_gravity_onoff.get() == 0:
                         draw.gravity = 'forget'
@@ -582,6 +582,7 @@ def convert_text_button():
                         draw.text_under_color = img_text_box_color.get()
                     draw.text(int(e_text_x.get()), int(e_text_y.get()), e_text.get())
                     draw(clone)
+                    #clone.annotate(e_text.get(), draw, int(e_text_x.get()), int(e_text_y.get())) #Windows
             
             else:
             # outside
