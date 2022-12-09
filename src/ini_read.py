@@ -249,6 +249,12 @@ def ini_read_rotate(file_ini):
         rotate = "90"
     dict_return['img_rotate'] = entries.parse_list(rotate, (0, 90, 180, 270), 0)
 
+    try:
+        border_color = config.get('Border', 'color')
+    except:
+        border_color = "#FFFFFF"
+    dict_return['img_rotate_color'] = entries.parse_color(border_color, '#FFFFFF')
+
     return dict_return
 
 

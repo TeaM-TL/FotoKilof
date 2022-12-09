@@ -448,9 +448,21 @@ def convert_rotate_button():
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
+    #print(str(img_rotate.get()))
+    if img_rotate.get() == 0:
+        if e_rotate_own.get() == '':
+            angle = 0
+            color = None
+        else:
+            angle = int(e_rotate_own.get())
+            color = img_rotate_color.get()
+    else:
+        angle = int(img_rotate.get())
+        color = None
+    print(angle)
     with Image(filename=file_in_path.get()) as image:
         with image.clone() as clone:
-            clone.rotate(img_rotate.get())
+            clone.rotate(angle, background=color)
             clone.save(filename=out_file)
     preview_new(out_file)
     progress_files.set(_("done"))
@@ -558,7 +570,7 @@ def convert_logo_button():
 
 
 def convert_text_button():
-    """ przycisk wstawiania tekstu """
+    """ add text """
     progress_files.set(_("Processing"))
     root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
@@ -869,14 +881,18 @@ def open_screenshot():
     preview_new_refresh("none")
 
 
+def color_choose_rotate():
+    """ color selection for rotate"""
+    color = askcolor(img_rotate_color.get())
+    img_rotate_color.set(color[1])
+    style.configure("Rotate.TEntry", fieldbackground=color[1])
+
+
 def color_choose_border():
     """ Border color selection """
     color = askcolor(img_border_color.get())
-    #if color[1] is None:
-    #    img_border_color.set("#000000")
-    #else:
     img_border_color.set(color[1])
-    l_border.configure(bg=img_border_color.get())
+    l_border.configure(bg=color[1])
 
 
 def color_choose_box():
@@ -907,6 +923,7 @@ def color_choose_set():
     else:
         style.configure("Color.TEntry", fieldbackground=img_text_box_color.get())
     style.configure("Color.TEntry", foreground=img_text_color.get())
+    style.configure("Rotate.TEntry", fieldbackground=img_rotate_color.get())
 
 
 def ini_read_wraper():
@@ -951,6 +968,7 @@ def ini_read_wraper():
     ini_entries = ini_read.ini_read_rotate(FILE_INI)
     img_rotate_on.set(ini_entries['img_rotate_on'])
     img_rotate.set(ini_entries['img_rotate'])
+    img_rotate_color.set(ini_entries['img_rotate_color'])
 
     ini_entries = ini_read.ini_read_crop(FILE_INI)
     img_crop_on.set(ini_entries['img_crop_on'])
@@ -1067,6 +1085,7 @@ def ini_save():
     config.add_section('Rotate')
     config.set('Rotate', 'on', str(img_rotate_on.get()))
     config.set('Rotate', 'rotate', str(img_rotate.get()))
+    config.set('Rotate', 'color', img_rotate_color.get())
     config.add_section('Crop')
     config.set('Crop', 'on', str(img_crop_on.get()))
     config.set('Crop', 'crop', str(img_crop.get()))
@@ -1529,8 +1548,10 @@ style.configure("Blue.TButton", foreground="blue")
 style.configure("Brown.TButton", foreground="#8B0000")
 style.configure("Blue.TLabelframe.Label", foreground="blue")
 style.configure("Fiolet.TLabelframe.Label", foreground="#800080")
+style.configure("Rotate.TEntry", fieldbackground="#FFFFFF")
+
 ##########################
-# Zmienne globalne
+# global variables
 
 FILE_INI = os.path.join(os.path.expanduser("~"), ".fotokilof.ini")
 PWD = os.getcwd()
@@ -1560,6 +1581,7 @@ img_text_box_color = StringVar()
 img_text_inout = IntVar()  # Text inside or outside picture
 img_rotate_on = IntVar()  # Rotate
 img_rotate = IntVar()
+img_rotate_color = StringVar()
 img_crop_on = IntVar()  # Crop
 img_crop = IntVar()  # (1, 2, 3)
 img_crop_gravity = StringVar()
@@ -1583,8 +1605,6 @@ progress_var = IntVar()  # progressbar
 progress_files = StringVar()
 file_extension = (".jpeg", ".jpg", ".png", ".tif")
 magick_commands = ("composite", "convert")
-#magick_commands = ("animate", "compare", "composite", "conjure", "convert",
-#                   "identify", "import", "mogrify", "montage", "stream")
 
 ######################################################################
 # Karty
@@ -2026,23 +2046,29 @@ frame_rotate = ttk.LabelFrame(frame_first_col, text=_("Rotate"),
                               style="Fiolet.TLabelframe")
 frame_rotate.grid(row=5, column=1, sticky=(N, W, E, S), padx=5, pady=1)
 ###
-rb_rotate_0 = ttk.Radiobutton(frame_rotate, text="0",
-                              variable=img_rotate, value="0")
 rb_rotate_90 = ttk.Radiobutton(frame_rotate, text="90",
                                variable=img_rotate, value="90")
 rb_rotate_180 = ttk.Radiobutton(frame_rotate, text="180",
                                 variable=img_rotate, value="180")
 rb_rotate_270 = ttk.Radiobutton(frame_rotate, text="270",
                                 variable=img_rotate, value="270")
+rb_rotate_own = ttk.Radiobutton(frame_rotate, text=_("Custom"),
+                                variable=img_rotate, value="0")
+e_rotate_own = ttk.Entry(frame_rotate, width=3, style='Rotate.TEntry',
+                     validate="key", validatecommand=(validation, '%S'))
+b_rotate_color = ttk.Button(frame_rotate, text=_("Color"),
+                          command=color_choose_rotate)
 b_rotate_run = ttk.Button(frame_rotate, text=_("Execute"),
                           style="Brown.TButton",
                           command=convert_rotate_button)
 
-rb_rotate_0.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
-rb_rotate_90.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
-rb_rotate_180.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
-rb_rotate_270.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
-b_rotate_run.grid(row=1, column=5, padx=5, pady=5)
+rb_rotate_90.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+rb_rotate_180.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
+rb_rotate_270.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
+rb_rotate_own.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
+e_rotate_own.grid(row=1, column=5, sticky=(N, W, E, S), padx=5, pady=5)
+b_rotate_color.grid(row=1, column=6, padx=5, pady=5)
+b_rotate_run.grid(row=1, column=7, padx=5, pady=5)
 
 ###########################
 # Border
@@ -2077,7 +2103,7 @@ b_border_run.grid(row=2, column=5, padx=5, pady=5, sticky=E)
 ############################
 frame_bw = ttk.LabelFrame(frame_first_col, text=_("Black-white"),
                           style="Fiolet.TLabelframe")
-frame_bw.grid(row=5, column=2, rowspan=2, sticky=(N, E, S), padx=5, pady=1)
+frame_bw.grid(row=6, column=2, rowspan=1, sticky=(N, E, S), padx=5, pady=1)
 ###
 rb1_bw = ttk.Radiobutton(frame_bw, text=_("Black-white"),
                          variable=img_bw, value="1")
@@ -2437,6 +2463,26 @@ else:
     b_file_select.configure(state=DISABLED)
     b_file_select_screenshot.configure(state=DISABLED)
     root.deiconify()
+
+# Testing 4.0.0
+img_resize_on.set(0)
+img_crop_on.set(0)
+img_normalize_on.set(0)
+img_bw_on.set(0)
+img_contrast_on.set(0)
+img_logo_on.set(0)
+img_custom_on.set(0)
+img_histograms_on.set(0)
+
+
+cb_resize.configure(state=DISABLED)
+cb_crop.configure(state=DISABLED)
+cb_normalize.configure(state=DISABLED)
+cb_bw.configure(state=DISABLED)
+cb_contrast.configure(state=DISABLED)
+cb_logo.configure(state=DISABLED)
+cb_custom.configure(state=DISABLED)
+cb_histograms.configure(state=DISABLED)
 
 root.mainloop()
 
