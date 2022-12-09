@@ -100,50 +100,6 @@ def convert_preview_crop_gravity(coordinates, x_max, y_max):
     return (x0, y0, x1, y1)
 
 
-def convert_text(entries):
-    """ 2. Insert text into picture """
-
-    if entries['text_on'] == 1:
-        size = ' -pointsize ' + entries['font_size']
-        font = ' -font "' + entries['font'] + '"'
-        color = ' -fill "' + entries['text_color'] + '"'
-
-        if entries['text_inout'] == 0:
-            # inside
-            outside = ""
-            if entries['gravitation_onoff'] == 0:
-                gravitation = " "
-            else:
-                gravitation = " -gravity " + gravity(entries['gravitation'])
-            text = " -draw \"text " + entries['dx'] + "," + entries['dy'] \
-                + " '" + entries['text'] + "'\" "
-            if entries['box'] == 0:
-                box = ""
-            else:
-                box = " -box \"" + entries['box_color'] + "\""
-        else:
-            # outside
-            gravitation = " -gravity " + gravity(entries['gravitation'])
-            text = " label:\"" + entries['text'] + "\" "
-            # position
-            if entries['gravitation'] == "NW" or entries['gravitation'] == "N" or entries['gravitation'] == "NE":
-                # top
-                outside = "+swap -append "
-            else:
-                # bottom
-                outside = "-append "
-            # background
-            if entries['box'] == 0:
-                box = ""
-            else:
-                box = " -background \"" + entries['box_color'] + "\""
-
-        command = box + color + size + gravitation + font + text + outside
-    else:
-        command = ""
-    return command + " "
-
-
 def convert_crop(crop, gravitation, entries):
     """ 3. Crop """
 

@@ -582,12 +582,14 @@ def convert_text_button():
                         draw.text_under_color = img_text_box_color.get()
                     draw.text(int(e_text_x.get()), int(e_text_y.get()), e_text.get())
                     draw(clone)
-                    #clone.annotate(e_text.get(), draw, int(e_text_x.get()), int(e_text_y.get())) #Windows
-            
             else:
-            # outside
-                #+swap -append
-                noc = None
+                # it has to be fixed
+                style = Font(img_text_font.get(), int(e_text_size.get()), img_text_color.get())
+                clone.font= style
+                if img_text_box.get():
+                    clone.label(e_text.get(), gravity=convert.gravity(img_text_gravity.get()), background_color=img_text_box_color.get())
+                else:
+                    clone.label(e_text.get(), gravity=convert.gravity(img_text_gravity.get()))
             clone.save(filename=out_file)        
     
     preview_new(out_file)
