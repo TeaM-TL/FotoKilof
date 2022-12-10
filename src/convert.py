@@ -23,13 +23,8 @@ THE SOFTWARE.
 
 Converters
 - convert_preview_crop_gravity - convert corrdinates from crop3
-- convert_crop - crop picture
-- convert_resize - resize picture
-- convert_contrast - modify contrast
-- convert_normalize - normalize levels
 - convert_pip - picture in picture, for inserting logo
-- gravity - translate eg. NS to Northsouth as Tk expect
-- gravity_outside - translate gravitation for adding text outside
+- gravity - translate eg. NS to Northsouth as Wand-py expect
 """
 
 def convert_preview_crop_gravity(coordinates, x_max, y_max):
@@ -96,25 +91,6 @@ def convert_preview_crop_gravity(coordinates, x_max, y_max):
         x1 = x_max - 5
         y1 = y_max -5
     return (x0, y0, x1, y1)
-
-
-def convert_crop(crop, gravitation, entries):
-    """ 3. Crop """
-
-    if crop == 1:
-        width = str(abs(int(entries['one_x2']) - int(entries['one_x1'])))
-        height = str(abs(int(entries['one_y2']) - int(entries['one_y1'])))
-        command = " -crop " + width + "x" + height \
-            + "+" + entries['one_x1'] + "+" + entries['one_y1']
-    if crop == 2:
-        command = " -crop " \
-            + entries['two_width'] + "x" + entries['two_height'] \
-            + "+" + entries['two_x1'] + "+" + entries['two_y1']
-    if crop == 3:
-        command = " -gravity " + gravity(gravitation) + " -crop " \
-            + entries['three_width'] + "x" + entries['three_height'] \
-            + "+" + entries['three_dx'] + "+" + entries['three_dy']
-    return command + " "
 
 
 def convert_pip(gravitation, width, height, offset_dx, offset_dy):
