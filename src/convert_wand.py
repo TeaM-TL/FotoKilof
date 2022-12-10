@@ -170,22 +170,19 @@ def resize(file_in, work_dir, extension, resize, pixel, percent, border):
 
     return file_out
 
-def normalize(file_in, work_dir, extension, normalize, channel)
+def normalize(file_in, work_dir, extension, normalize, channel):
     """ normalize levels of colors """
 
-    file_out = magick.pre_magick(file_in, os.path.join(work_dir, sub_dir), extension)
+    file_out = magick.pre_magick(file_in, work_dir, extension)
     with Image(filename=file_in) as image:
         with image.clone() as clone:
             if normalize == 1:
                 if channel != "None":
-                    command = "-channel " + channel + " -equalize"
+                    clone.normalize(channel=channel)
                 else:
-                    command = "-equalize"
+                    clone.normalize()
             elif normalize == 2:
-                command = "-auto-level"
-            else:
-                command = ""
-            clone.transform(crop='', resize=command)
+                clone.auto_level()
             clone.save(filename=file_out)
 
     return file_out
