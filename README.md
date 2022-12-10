@@ -1,5 +1,7 @@
 # FotoKilof - GUI for ImageMagick
 
+**old version, use newer**
+
 GUI for the most used (by me) ImageMagick functionality for processing pictures. 
 
 ## Screenshots
