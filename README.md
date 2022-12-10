@@ -80,7 +80,7 @@ Available: English, Polish, German, Bulgarian and Indonesian.
 
 - Windows, Linux, MacOS X, BSD,
 - FullHD screen for comfort work,
-- [ImageMagick](https://imagemagick.org/), remember to add path into `%PATH%` environment variable,
+- [ImageMagick](https://imagemagick.org/), remember to add path into `%PATH%` environment variable, enable install libraries!
 - [Python](https://www.python.org/), remember to add path into `%PATH%` environment variable.
 
 ### Install
