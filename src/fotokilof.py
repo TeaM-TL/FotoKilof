@@ -448,18 +448,15 @@ def convert_rotate_button():
     out_file = magick.pre_magick(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
-    #print(str(img_rotate.get()))
     if img_rotate.get() == 0:
-        if e_rotate_own.get() == '':
-            angle = 0
+        angle = common.empty(e_rotate_own.get())
+        if angle == 0:
             color = None
         else:
-            angle = int(e_rotate_own.get())
             color = img_rotate_color.get()
     else:
         angle = int(img_rotate.get())
         color = None
-    print(angle)
     with Image(filename=file_in_path.get()) as image:
         with image.clone() as clone:
             clone.rotate(angle, background=color)
@@ -522,7 +519,7 @@ def convert_border_button():
                                  co_apply_type.get())
     with Image(filename=file_in_path.get()) as image:
         with image.clone() as clone:
-            clone.border(img_border_color.get(), int(e_border_x.get()), int(e_border_y.get()))
+            clone.border(img_border_color.get(), common.empty(e_border_x.get()), common.empty(e_border_y.get()))
             clone.save(filename=out_file)
     
     preview_new(out_file)
@@ -585,18 +582,18 @@ def convert_text_button():
                 with Drawing() as draw:
                     draw.fill_color = img_text_color.get()
                     draw.font = img_text_font.get()
-                    draw.font_size = int(e_text_size.get())
+                    draw.font_size = common.empty(e_text_size.get())
                     if img_text_gravity_onoff.get() == 0:
                         draw.gravity = 'forget'
                     else:
                         draw.gravity = convert.gravity(img_text_gravity.get())
                     if img_text_box.get():
                         draw.text_under_color = img_text_box_color.get()
-                    draw.text(int(e_text_x.get()), int(e_text_y.get()), e_text.get())
+                    draw.text(common.empty(e_text_x.get()), common.empty(e_text_y.get()), e_text.get())
                     draw(clone)
             else:
                 # it has to be fixed
-                style = Font(img_text_font.get(), int(e_text_size.get()), img_text_color.get())
+                style = Font(img_text_font.get(), common.empty(e_text_size.get()), img_text_color.get())
                 clone.font= style
                 if img_text_box.get():
                     clone.label(e_text.get(), gravity=convert.gravity(img_text_gravity.get()), background_color=img_text_box_color.get())
@@ -968,6 +965,8 @@ def ini_read_wraper():
     ini_entries = ini_read.ini_read_rotate(FILE_INI)
     img_rotate_on.set(ini_entries['img_rotate_on'])
     img_rotate.set(ini_entries['img_rotate'])
+    e_rotate_own.delete(0, "end")
+    e_rotate_own.insert(0, ini_entries['img_rotate_own'])
     img_rotate_color.set(ini_entries['img_rotate_color'])
 
     ini_entries = ini_read.ini_read_crop(FILE_INI)
@@ -1085,6 +1084,7 @@ def ini_save():
     config.add_section('Rotate')
     config.set('Rotate', 'on', str(img_rotate_on.get()))
     config.set('Rotate', 'rotate', str(img_rotate.get()))
+    config.set('Rotate', 'own', e_rotate_own.get())
     config.set('Rotate', 'color', img_rotate_color.get())
     config.add_section('Crop')
     config.set('Crop', 'on', str(img_crop_on.get()))
@@ -1581,6 +1581,7 @@ img_text_box_color = StringVar()
 img_text_inout = IntVar()  # Text inside or outside picture
 img_rotate_on = IntVar()  # Rotate
 img_rotate = IntVar()
+img_rotate_own = IntVar()
 img_rotate_color = StringVar()
 img_crop_on = IntVar()  # Crop
 img_crop = IntVar()  # (1, 2, 3)

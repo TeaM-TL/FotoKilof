@@ -40,6 +40,7 @@ Every function read part of config file
 import configparser
 
 import entries
+import common
 
 
 def ini_read(file_ini, theme_list, preview_size_list):
@@ -187,7 +188,7 @@ def ini_read_text(file_ini, fonts_dict):
         text_font = config.get('Text', 'font')
     except:
         text_font = "Helvetica"
-    dict_return['text_font'] = entries.parse_list(text_font, fonts_dict, "Helvetica")
+    dict_return['text_font'] = entries.parse_list(text_font, fonts_dict, "Arial")
 
     try:
         text_size = str(config.getint('Text', 'size'))
@@ -250,10 +251,16 @@ def ini_read_rotate(file_ini):
     dict_return['img_rotate'] = entries.parse_list(rotate, (0, 90, 180, 270), 0)
 
     try:
-        border_color = config.get('Border', 'color')
+        rotate_own = config.getint('Rotate', 'own')
     except:
-        border_color = "#FFFFFF"
-    dict_return['img_rotate_color'] = entries.parse_color(border_color, '#FFFFFF')
+        rotate_own = "0"
+    dict_return['img_rotate_own'] = str(common.empty(rotate_own))
+
+    try:
+        rotate_color = config.get('Rotate', 'color')
+    except:
+        rotate_color = "#FFFFFF"
+    dict_return['img_rotate_color'] = entries.parse_color(rotate_color, '#FFFFFF')
 
     return dict_return
 
