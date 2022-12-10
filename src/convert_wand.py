@@ -24,11 +24,13 @@ THE SOFTWARE.
 Converters
 - rotate - rotate picture
 - mirror - mirroring picture
-- convert_border - add border to picture
+- border - add border to picture
+- text - add text into picture
+- bw - black and white or sepia
+- resize - resize picture
 
 - convert_preview_crop_gravity - convert corrdinates from crop3
 - convert_crop - crop picture
-- convert_resize - resize picture
 - convert_contrast - modify contrast
 - convert_normalize - normalize levels
 - convert_pip - picture in picture, for inserting logo
@@ -36,6 +38,7 @@ Converters
 - gravity_outside - translate gravitation for adding text outside
 """
 
+import os
 from wand.color import Color
 from wand.drawing import Drawing
 from wand.font import Font
@@ -62,7 +65,7 @@ def rotate(file_in, work_dir, extension, angle, color):
 
 
 def mirror(file_in, work_dir, extension, flip, flop):
-    """ mirror: flip and flop"""
+    """ mirror: flip and flop """
     file_out = magick.pre_magick(file_in, work_dir, extension)
     with Image(filename=file_in) as image:
         with image.clone() as clone:
@@ -75,7 +78,7 @@ def mirror(file_in, work_dir, extension, flip, flop):
 
 
 def border(file_in, work_dir, extension, color, x, y):
-    """ mirror: flip and flop"""
+    """ mirror: flip and flop """
     file_out = magick.pre_magick(file_in, work_dir, extension)
     with Image(filename=file_in) as image:
         with image.clone() as clone:
@@ -119,3 +122,50 @@ def text(file_in, work_dir, extension,
             clone.save(filename=file_out)
     return file_out
 
+
+def bw(file_in, work_dir, extension, bw, sepia):
+    """ black and white or sepia """
+    file_out = magick.pre_magick(file_in, work_dir, extension)
+    with Image(filename=file_in) as image:
+        with image.clone() as clone:
+            if bw == 1:
+                # black-white
+                clone.type = 'grayscale';
+            else:
+                # sepia
+                clone.sepia_tone(threshold=common.empty(sepia)/100)
+            clone.save(filename=file_out)
+    return file_out
+
+
+def resize(file_in, work_dir, extension, resize, pixel, percent, border):
+    """ resize picture """
+
+    border = 2 * abs(int(border))
+    if resize == 1:
+        command = pixel + "x" + pixel
+        sub_dir = pixel
+    elif resize == 2:
+        if percent > 100:
+            percent = 100
+        if percent == 0:
+            percent = 1
+        command = str(percent) + "%"
+        sub_dir = str(percent)
+    elif resize == 3:
+        command = str(1920 - border) + "x" + str(1080 - border)
+        sub_dir = "1920x1080"
+    elif resize == 4:
+        command = str(2048 - border) + "x" + str(1556 - border)
+        sub_dir = "2048x1556"
+    elif resize == 5:
+        command = str(4096 - border) + "x" + str(3112 - border)
+        sub_dir = "4096x3112"
+
+    file_out = magick.pre_magick(file_in, os.path.join(work_dir, sub_dir), extension)
+    with Image(filename=file_in) as image:
+        with image.clone() as clone:
+            clone.transform(crop='', resize=command)
+            clone.save(filename=file_out)
+
+    return file_out

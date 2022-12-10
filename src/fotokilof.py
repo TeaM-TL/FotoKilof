@@ -410,18 +410,13 @@ def convert_contrast_button():
 
 
 def convert_bw_button():
-    """ black-white or sepia button """
+    """ + black-white or sepia button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_bw(img_bw.get(), e_bw_sepia.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+
+    file_out = convert_wand.bw(file_in_path.get(), work_dir.get(), co_apply_type.get(),
+                                    img_bw.get(), e_bw_sepia.get())
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
@@ -443,7 +438,7 @@ def convert_normalize_button():
 
 
 def convert_rotate_button():
-    """ rotate button """
+    """ + Rotate button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
     if img_rotate.get() == 0:
@@ -463,7 +458,7 @@ def convert_rotate_button():
 
 
 def convert_mirror_button():
-    """ Mirror button """
+    """ + Mirror button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = convert_wand.mirror(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
@@ -474,30 +469,18 @@ def convert_mirror_button():
 
 
 def convert_resize_button():
-    """ Resize button """
+    """ + Resize button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    resize = convert.convert_resize(img_resize.get(),
-                                   e1_resize.get(),
-                                   e2_resize.get(),
-                                   '0')
-    cmd = resize['command']
-    work_sub_dir.set(resize['sub_dir'])
+    file_out = convert_wand.resize(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
+                                    img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), 0)
 
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 os.path.join(work_dir.get(),
-                                 work_sub_dir.get()),
-                                 co_apply_type.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def convert_border_button():
-    """ Border button """
+    """ + Border button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = convert_wand.border(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
@@ -548,7 +531,7 @@ def convert_logo_button():
 
 
 def convert_text_button():
-    """ add text """
+    """ + add text """
     progress_files.set(_("Processing"))
     root.update_idletasks()
 
@@ -2425,25 +2408,22 @@ else:
     b_file_select_screenshot.configure(state=DISABLED)
     root.deiconify()
 
+# -------------------------------------------------------
 # Testing 4.0.0
-img_resize_on.set(0)
 img_crop_on.set(0)
 img_normalize_on.set(0)
-img_bw_on.set(0)
 img_contrast_on.set(0)
 img_logo_on.set(0)
 img_custom_on.set(0)
 img_histograms_on.set(0)
 
-
-cb_resize.configure(state=DISABLED)
 cb_crop.configure(state=DISABLED)
-cb_normalize.configure(state=DISABLED)
-cb_bw.configure(state=DISABLED)
-cb_contrast.configure(state=DISABLED)
+#cb_normalize.configure(state=DISABLED)
+#cb_contrast.configure(state=DISABLED)
 cb_logo.configure(state=DISABLED)
 cb_custom.configure(state=DISABLED)
 cb_histograms.configure(state=DISABLED)
+# -------------------------------------------------------
 
 root.mainloop()
 

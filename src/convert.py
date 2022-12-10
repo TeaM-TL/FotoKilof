@@ -23,12 +23,10 @@ THE SOFTWARE.
 
 Converters
 - convert_preview_crop_gravity - convert corrdinates from crop3
-- convert_border - add border to picture
 - convert_crop - crop picture
 - convert_resize - resize picture
 - convert_contrast - modify contrast
 - convert_normalize - normalize levels
-- convert_mirror - mirroring picture
 - convert_pip - picture in picture, for inserting logo
 - gravity - translate eg. NS to Northsouth as Tk expect
 - gravity_outside - translate gravitation for adding text outside
@@ -116,49 +114,6 @@ def convert_crop(crop, gravitation, entries):
         command = " -gravity " + gravity(gravitation) + " -crop " \
             + entries['three_width'] + "x" + entries['three_height'] \
             + "+" + entries['three_dx'] + "+" + entries['three_dy']
-    return command + " "
-
-
-def convert_resize(resize, pixel, percent, border):
-    """ 4. Resize """
-
-    # słownik wyjściowy
-    dict_return = {}
-    border = 2 * abs(int(border))
-
-    if resize == 0:
-        command = ""
-        sub_dir = ""
-    if resize == 1:
-        command = "-resize " + pixel + "x" + pixel + " "
-        sub_dir = pixel
-    elif resize == 2:
-        command = "-resize " + percent + "% "
-        sub_dir = percent
-    elif resize == 3:
-        command = "-resize " + str(1920 - border) + "x" + str(1080 - border) + " "
-        sub_dir = "1920x1080"
-    elif resize == 4:
-        command = "-resize " + str(2048 - border) + "x" + str(1556 - border) + " "
-        sub_dir = "2048x1556"
-    elif resize == 5:
-        command = "-resize " + str(4096 - border) + "x" + str(3112 - border) + " "
-        sub_dir = "4096x3112"
-
-    dict_return['command'] = command
-    dict_return['sub_dir'] = sub_dir
-    return dict_return
-
-
-def convert_bw(black_white, sepia):
-    """ 5. black-white or  sepia """
-
-    if black_white == 1:
-        command = "-colorspace Gray"
-    elif black_white == 2:
-        command = "-sepia-tone " + str(int(sepia)) + "%"
-    else:
-        command = ""
     return command + " "
 
 
