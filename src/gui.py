@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Copyright (c) 2019-2021 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2022 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +36,8 @@ def copy_to_clipboard(file_in):
     Copy results into clipboard
     https://stackoverflow.com/questions/34322132/copy-image-to-clipboard
     Copy to clipboard works for Windows only
+
+    debug needed!
     """
     if mswindows.windows() == 1:
         image = Image.open(file_in)

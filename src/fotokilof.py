@@ -6,7 +6,7 @@
 # pylint disable=invalid-name
 
 """
-Copyright (c) 2019-2021 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2022 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,10 +47,16 @@ import os
 import platform
 import sys
 import tempfile
-from PIL import ImageGrab
+from wand.color import Color
+from wand.drawing import Drawing
+from wand.font import Font
+from wand.image import Image
+from wand.version import fonts as fontsList
+from wand.version import MAGICK_VERSION, VERSION
 
 # my modules
 import convert
+import convert_wand
 import common
 import gui
 import ini_read
@@ -65,10 +71,10 @@ log.write_log('Start', "M", "w", 1)
 
 # set locale and clipboard for Windows
 if mswindows.windows() == 1:
+    from PIL import ImageGrab
     import locale
     if os.getenv('LANG') is None:
-        lang, enc = locale.getdefaultlocale()
-        os.environ['LANG'] = lang
+        os.environ['LANG'] = locale.getlocale()[0]
 
 localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
 if not os.path.isdir(localedir):
@@ -172,7 +178,7 @@ def preview_orig_button():
     # global file_in_path
 
     try:
-        magick.display_image(file_in_path.get(), GM_or_IM)
+        magick.display_image(file_in_path.get())
     except:
         log.write_log("No orig picture to preview", "W")
 
@@ -186,7 +192,7 @@ def preview_new_button():
                                  work_sub_dir.get()),
                                  co_apply_type.get())
     if os.path.isfile(file_out):
-        magick.display_image(file_out, GM_or_IM)
+        magick.display_image(file_out)
 
 
 def extension_from_file():
@@ -199,167 +205,77 @@ def extension_from_file():
         log.write_log("extension_from_file: wrong extension", "W")
 
 
-def apply_all_convert(out_file, write_command):
-    """ apply all option together
-    write_command = 0 - nothing, 1 - write command into custom widget
-    """
-
-    cmd = ""
-    text_separate = 0  # all conversion in one run
-    previous_command = 0 # if were any command before pip
-
-    if img_normalize_on.get() == 1:
-        previous_command = 1
-        cmd = cmd + " " + convert.convert_normalize(img_normalize.get(),
-                                                    co_normalize_channel.get())
-
-    if img_contrast_on.get() == 1:
-        previous_command = 1
-        cmd = cmd + " " + convert.convert_contrast(img_contrast.get(),
-                                                   co_contrast_selection.get(),
-                                                   e1_contrast.get(),
-                                                   e2_contrast.get())
-
-    if img_bw_on.get() == 1:
-        previous_command = 1
-        cmd = cmd + " " + convert.convert_bw(img_bw.get(), e_bw_sepia.get())
-
-    if int(img_resize_on.get()) == 1:
-        if img_border_on.get() == 0:
-            border = 0
-        else:
-            border = abs(int(e_border.get()))
-        previous_command = 1
-
-        resize = convert.convert_resize(img_resize.get(),
-                                        e1_resize.get(),
-                                        e2_resize.get(),
-                                        border)
-        cmd = cmd + " " + resize['command']
-    else:
-        if int(img_crop_on.get()) == 1:
-            previous_command = 1
-            if img_text_inout.get() == 0:
-                text_separate = 1  # if crop - convert text in second run
-            else:
-                text_separate = 0  # crop + convert text run together
-
-            cmd = cmd + " " + convert.convert_crop(img_crop.get(),
-                                                   img_crop_gravity.get(),
-                                                   convert_crop_entries())
-
-    if img_rotate_on.get() > 0:
-        previous_command = 1
-        cmd = cmd + " " + convert.convert_rotate(img_rotate.get())
-
-    if img_mirror_on.get() > 0:
-        previous_command = 1
-        cmd = cmd + " " + convert.convert_mirror(img_mirror_flip.get(),img_mirror_flop.get())
-
-    if img_border_on.get() == 1:
-        previous_command = 1
-        border = int(e_border.get())
-        cmd = cmd + " " + convert.convert_border(e_border.get(),
-                                                 img_border_color.get(),
-                                                 border)
-
-    cmd_magick = GM_or_IM + "convert"
-    cmd_text = convert.convert_text(convert_text_entries())
-
-    if text_separate == 0:
-        cmd = cmd + " " + cmd_text
-        if write_command == 1:
-            print_command(cmd)
-        result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-        result2 = "OK"
-    else:
-        # because text gravity which makes problem with crop gravity
-        # we have to force second run of conversion
-        if write_command == 1:
-            print_command(cmd)
-        result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-        cmd_magick = GM_or_IM + "mogrify"
-        if write_command == 1:
-            print_command(cmd_text)
-        result2 = magick.magick(cmd_text, "", out_file, cmd_magick)
-
-    if img_logo_on.get() == 1:
-        cmd1 = convert.convert_pip(img_logo_gravity.get(),
-                                   e_logo_width.get(),
-                                   e_logo_height.get(),
-                                   e_logo_dx.get(),
-                                   e_logo_dy.get()) \
-                + " " + common.spacja(file_logo_path.get()) + " "
-
-        if previous_command == 0:
-            cmd2 = common.spacja(file_in_path.get())
-        else:
-            cmd2 = common.spacja(out_file) + " "
-        cmd = cmd1 + cmd2
-        cmd_magick = GM_or_IM + "composite"
-        if write_command == 1:
-            print_command(cmd)
-
-        result3 = magick.magick(cmd, "", out_file, cmd_magick)
-    else:
-        result3 = None
-
-    if result1 == "OK" or result2 == "OK" or result3 == "OK":
-        result = "OK"
-    else:
-        result = "None"
-    return result
-
-
 def apply_all_button():
     """ all option together, processing one file or whole directory """
     if os.path.isfile(file_in_path.get()):
         progress_files.set(_("Processing"))
         root.update_idletasks()
 
-        # work_sub_dir if will be resize
-        if int(img_resize_on.get()) == 1:
-            resize = convert.convert_resize(img_resize.get(),
-                                            e1_resize.get(),
-                                            e2_resize.get(),
-                                            0)
-            work_sub_dir.set(resize['sub_dir'])
+        # it needs to be fixed or removed
+        if img_border_on.get():
+            border_x = 0
+            border_y = 0
+            #border_x = e_border_x.get()
+            #border_y = e_border_y.get()
         else:
-            work_sub_dir.set("")
+            border_x = 0
+            border_y = 0
 
+        # single file or whode directory
+        i = 0
         if file_dir_selector.get() == 0:
-            out_file = magick.pre_magick(file_in_path.get(),
-                                         os.path.join(work_dir.get(),
-                                         work_sub_dir.get()),
-                                         co_apply_type.get())
-            result = apply_all_convert(out_file, 1)
-            if result == "OK":
-                preview_new(out_file)
+            files_list = [ file_in_path.get() ]
         else:
             dirname = os.path.dirname(file_in_path.get())
-            i = 0
             files_list_short = common.list_of_images(dirname)
             files_list = []
             for filename_short in files_list_short:
                 files_list.append(os.path.join(dirname, filename_short))
-            file_list_len = len(files_list)
-            for file_in in files_list:
-                file_in_path.set(os.path.realpath(file_in))
-                out_file = magick.pre_magick(os.path.realpath(file_in),
-                                             os.path.join(work_dir.get(),
-                                             work_sub_dir.get()),
-                                             co_apply_type.get())
-                result = apply_all_convert(out_file, 0)
-                i = i + 1
-                progress_files.set(str(i) + " " + _("of") + " " \
+        
+        file_list_len = len(files_list)
+        for file_in in files_list: 
+            if img_resize_on.get():
+                subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), border_x, border_y)
+                subdir = os.path.join(work_dir.get(), subdir_command[0])
+            else:
+                subdir = work_dir.get()
+            file_out = magick.pre_magick(file_in, subdir, co_apply_type.get())
+            with Image(filename=file_in) as image:
+                with image.clone() as clone:
+                    if img_crop_on.get():
+                        convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+                    if img_mirror_on.get():
+                        convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
+                    if img_bw_on.get():
+                        convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
+                    if img_contrast_on.get():
+                        convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
+                    if img_normalize_on.get():
+                        convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
+                    if img_border_on.get():
+                        convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
+                    if img_rotate_on.get():
+                        convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
+                    if img_text_on.get():
+                        convert_wand.text(clone, img_text_inout.get(),
+                                            img_text_color.get(), img_text_font.get(), e_text_size.get(),
+                                            img_text_gravity_onoff.get(), img_text_gravity.get(),
+                                            img_text_box.get(), img_text_box_color.get(),
+                                            e_text_x.get(), e_text_y.get(), e_text.get())
+                    if img_resize_on.get():
+                        convert_wand.resize(clone, subdir_command[1])
+                    clone.save(filename=file_out) 
+                    # progressbar
+                    i = i + 1
+                    progress_files.set(str(i) + " " + _("of") + " " \
                                    + str(file_list_len) + " : " \
                                    + os.path.basename(file_in))
-                progress_var.set(i)
-                root.update_idletasks()
+                    progress_var.set(i)
+                    root.update_idletasks()
 
+
+            preview_new(file_out)
             preview_orig()
-            if result == "OK":
-                preview_new(out_file)
 
         progress_var.set(0)
         progress_files.set(_("done"))
@@ -377,7 +293,7 @@ def convert_custom_button():
                                  work_dir.get(),
                                  co_apply_type.get())
     cmd = t_custom.get('1.0', 'end-1c')
-    cmd_magick = GM_or_IM + "convert"
+    cmd_magick = "magick convert"
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -385,21 +301,15 @@ def convert_custom_button():
 
 
 def convert_contrast_button():
-    """ przycisk zmiany kontrastu """
+    """ contrast button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_contrast(int(img_contrast.get()),
-                                   co_contrast_selection.get(),
-                                   e1_contrast.get(),
-                                   e2_contrast.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
+            clone.save(filename=file_out)
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
@@ -407,15 +317,12 @@ def convert_bw_button():
     """ black-white or sepia button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_bw(img_bw.get(), e_bw_sepia.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
+            clone.save(filename=file_out)
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
@@ -423,48 +330,38 @@ def convert_normalize_button():
     """ normalize button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_normalize(img_normalize.get(),
-                                    co_normalize_channel.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
+            clone.save(filename=file_out)
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def convert_rotate_button():
-    """ rotate button """
+    """ Rotate button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_rotate(img_rotate.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
+            clone.save(filename=file_out)
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def convert_mirror_button():
-    """ mirror button """
+    """ Mirror button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_mirror(img_mirror_flip.get(), img_mirror_flop.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
+            clone.save(filename=file_out)
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
@@ -472,152 +369,34 @@ def convert_resize_button():
     """ Resize button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    resize= convert.convert_resize(img_resize.get(),
-                                   e1_resize.get(),
-                                   e2_resize.get(),
-                                   '0')
-    cmd = resize['command']
-    work_sub_dir.set(resize['sub_dir'])
 
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 os.path.join(work_dir.get(),
-                                              work_sub_dir.get()),
-                                 co_apply_type.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), 0, 0)
+    file_out = magick.pre_magick(file_in_path.get(), os.path.join(work_dir.get(), subdir_command[0]), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.resize(clone, subdir_command[1])
+            clone.save(filename=file_out)
+
+    preview_new(file_out)
     progress_files.set(_("done"))
-    #work_sub_dir.set("")  # reset subdir name for next processing
 
 
 def convert_border_button():
     """ Border button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_border(e_border.get(),
-                                 img_border_color.get(),
-                                 img_border_on.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
+            clone.save(filename=file_out)
+
+    preview_new(file_out)
     progress_files.set(_("done"))
-
-
-def convert_crop_button():
-    """ Crop button """
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_crop(img_crop.get(),
-                               img_crop_gravity.get(),
-                               convert_crop_entries())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
-    progress_files.set(_("done"))
-
-
-def convert_logo_button():
-    """ Logo button """
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_pip(img_logo_gravity.get(),
-                              e_logo_width.get(),
-                              e_logo_height.get(),
-                              e_logo_dx.get(),
-                              e_logo_dy.get()) \
-          + " " + common.spacja(file_logo_path.get()) \
-          + " " + common.spacja(file_in_path.get()) + " "
-    cmd_magick = GM_or_IM + "composite"
-    print_command(cmd)
-    result = magick.magick(cmd, "", out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
-    progress_files.set(_("done"))
-
-
-def convert_text_button():
-    """ przycisk wstawiania tekstu """
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_text(convert_text_entries())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
-    progress_files.set(_("done"))
-
-def convert_crop_entries():
-    """ słownik ze zmiennymi dla funkcji convert_crop """
-    dict_return = {}
-    dict_return['one_x1'] = e1_crop_1.get()
-    dict_return['one_y1'] = e2_crop_1.get()
-    dict_return['one_x2'] = e3_crop_1.get()
-    dict_return['one_y2'] = e4_crop_1.get()
-    dict_return['two_x1'] = e1_crop_2.get()
-    dict_return['two_y1'] = e2_crop_2.get()
-    dict_return['two_width'] = e3_crop_2.get()
-    dict_return['two_height'] = e4_crop_2.get()
-    dict_return['three_dx'] = e1_crop_3.get()
-    dict_return['three_dy'] = e2_crop_3.get()
-    dict_return['three_width'] = e3_crop_3.get()
-    dict_return['three_height'] = e4_crop_3.get()
-    return dict_return
-
-
-def convert_text_entries():
-    """ słownik ze zmiennymi dla funkcji convert_text """
-    dict_return = {}
-    dict_return['text_on'] = img_text_on.get()
-    dict_return['text_inout'] = img_text_inout.get()
-    dict_return['text'] = e_text.get()
-    dict_return['dx'] = e_text_x.get()
-    dict_return['dy'] = e_text_y.get()
-    dict_return['gravitation'] = img_text_gravity.get()
-    dict_return['gravitation_onoff'] = img_text_gravity_onoff.get()
-    if mswindows.windows() == 1:
-        dict_return['font'] = img_text_font_dict[img_text_font.get()]
-    else:
-        dict_return['font'] = img_text_font.get()
-    dict_return['font_size'] = e_text_size.get()
-    dict_return['text_color'] = img_text_color.get()
-    dict_return['box'] = img_text_box.get()
-    dict_return['box_color'] = img_text_box_color.get()
-    return dict_return
-
-
-def fonts():
-    """ preparing font names for ImageMagick """
-
-    result = magick.get_fonts_dict(GM_or_IM)
-    co_text_font['values'] = list(result.keys())
-    return result
-
-def font_selected(event):
-    """ callback via bind for font selection """
-    img_text_font.set(co_text_font.get())
 
 
 def crop_read():
-    """ Wczytanie rozmiarów z obrazka do wycinka """
+    """ Read size of picture and load into crop widget """
     if file_in_path.get() is not None:
         if os.path.isfile(file_in_path.get()):
             image_size_xy = magick.get_image_size(file_in_path.get())
@@ -649,6 +428,86 @@ def crop_read():
             e4_crop_3.delete(0, "end")
             e4_crop_3.insert(0, height)
             img_crop_gravity.set("C")
+
+
+def convert_crop_entries():
+    """ dictionary with values for convert_crop function """
+    dict_return = {}
+    dict_return['one_x1'] = common.empty(e1_crop_1.get())
+    dict_return['one_y1'] = common.empty(e2_crop_1.get())
+    dict_return['one_x2'] = common.empty(e3_crop_1.get())
+    dict_return['one_y2'] = common.empty(e4_crop_1.get())
+    dict_return['two_x1'] = common.empty(e1_crop_2.get())
+    dict_return['two_y1'] = common.empty(e2_crop_2.get())
+    dict_return['two_width'] = common.empty(e3_crop_2.get())
+    dict_return['two_height'] = common.empty(e4_crop_2.get())
+    dict_return['three_dx'] = common.empty(e1_crop_3.get())
+    dict_return['three_dy'] = common.empty(e2_crop_3.get())
+    dict_return['three_width'] = common.empty(e3_crop_3.get())
+    dict_return['three_height'] = common.empty(e4_crop_3.get())
+    return dict_return
+
+
+def convert_crop_button():
+    """ Crop button """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+            clone.save(filename=file_out)
+    preview_new(file_out)
+    progress_files.set(_("done"))
+
+
+def convert_text_button():
+    """ add text """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.text(clone, img_text_inout.get(),
+                                    img_text_color.get(), img_text_font.get(), e_text_size.get(),
+                                    img_text_gravity_onoff.get(), img_text_gravity.get(),
+                                    img_text_box.get(), img_text_box_color.get(),
+                                    e_text_x.get(), e_text_y.get(), e_text.get())
+            clone.save(filename=file_out)
+    preview_new(file_out)
+    progress_files.set(_("done"))
+
+
+def fonts():
+    """ preparing font names for ImageMagick and load into listbox """
+    result = fontsList()
+    co_text_font['values'] = result
+    return result
+
+
+def font_selected(event):
+    """ callback via bind for font selection """
+    img_text_font.set(co_text_font.get())
+
+
+def convert_logo_button():
+    """ Logo button """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
+    cmd = convert.convert_pip(img_logo_gravity.get(),
+                              e_logo_width.get(), e_logo_height.get(),
+                              e_logo_dx.get(), e_logo_dy.get()) \
+          + " " + common.spacja(file_logo_path.get()) \
+          + " " + common.spacja(file_in_path.get()) + " "
+    cmd_magick = GM_or_IM + "composite"
+    print_command(cmd)
+    result = magick.magick(cmd, "", out_file, cmd_magick)
+    if result == "OK":
+        preview_new(out_file)
+    progress_files.set(_("done"))
 
 
 def open_file_logo():
@@ -860,14 +719,18 @@ def open_screenshot():
     preview_new_refresh("none")
 
 
+def color_choose_rotate():
+    """ color selection for rotate"""
+    color = askcolor(img_rotate_color.get())
+    img_rotate_color.set(color[1])
+    style.configure("Rotate.TEntry", fieldbackground=color[1])
+
+
 def color_choose_border():
     """ Border color selection """
     color = askcolor(img_border_color.get())
-    #if color[1] is None:
-    #    img_border_color.set("#000000")
-    #else:
     img_border_color.set(color[1])
-    l_border.configure(bg=img_border_color.get())
+    l_border.configure(bg=color[1])
 
 
 def color_choose_box():
@@ -898,6 +761,7 @@ def color_choose_set():
     else:
         style.configure("Color.TEntry", fieldbackground=img_text_box_color.get())
     style.configure("Color.TEntry", foreground=img_text_color.get())
+    style.configure("Rotate.TEntry", fieldbackground=img_rotate_color.get())
 
 
 def ini_read_wraper():
@@ -942,6 +806,9 @@ def ini_read_wraper():
     ini_entries = ini_read.ini_read_rotate(FILE_INI)
     img_rotate_on.set(ini_entries['img_rotate_on'])
     img_rotate.set(ini_entries['img_rotate'])
+    e_rotate_own.delete(0, "end")
+    e_rotate_own.insert(0, ini_entries['img_rotate_own'])
+    img_rotate_color.set(ini_entries['img_rotate_color'])
 
     ini_entries = ini_read.ini_read_crop(FILE_INI)
     img_crop_on.set(ini_entries['img_crop_on'])
@@ -976,8 +843,10 @@ def ini_read_wraper():
     img_border_on.set(ini_entries['img_border_on'])
     img_border_color.set(ini_entries['img_border_color'])
     l_border.configure(bg=ini_entries['img_border_color'])
-    e_border.delete(0, "end")
-    e_border.insert(0, ini_entries['img_border_size'])
+    e_border_x.delete(0, "end")
+    e_border_x.insert(0, ini_entries['img_border_size_x'])
+    e_border_y.delete(0, "end")
+    e_border_y.insert(0, ini_entries['img_border_size_y'])
 
     ini_entries = ini_read.ini_read_color(FILE_INI)
     img_bw_on.set(ini_entries['color_on'])
@@ -1056,6 +925,8 @@ def ini_save():
     config.add_section('Rotate')
     config.set('Rotate', 'on', str(img_rotate_on.get()))
     config.set('Rotate', 'rotate', str(img_rotate.get()))
+    config.set('Rotate', 'own', e_rotate_own.get())
+    config.set('Rotate', 'color', img_rotate_color.get())
     config.add_section('Crop')
     config.set('Crop', 'on', str(img_crop_on.get()))
     config.set('Crop', 'crop', str(img_crop.get()))
@@ -1075,7 +946,8 @@ def ini_save():
     config.add_section('Border')
     config.set('Border', 'on', str(img_border_on.get()))
     config.set('Border', 'color', img_border_color.get())
-    config.set('Border', 'size', e_border.get())
+    config.set('Border', 'size_x', e_border_x.get())
+    config.set('Border', 'size_y', e_border_y.get())
     config.add_section('Color')
     config.set('Color', 'on', str(img_bw_on.get()))
     config.set('Color', 'black-white', str(img_bw.get()))
@@ -1368,7 +1240,7 @@ def tools_set(preview_on):
     if img_bw_on.get() == 0:
         frame_bw.grid_remove()
     else:
-        frame_bw.grid()
+        frame_bw.grid(sticky=W)
 
     if img_contrast_on.get() == 0:
         frame_contrast.grid_remove()
@@ -1378,12 +1250,12 @@ def tools_set(preview_on):
     if img_normalize_on.get() == 0:
         frame_normalize.grid_remove()
     else:
-        frame_normalize.grid()
+        frame_normalize.grid(sticky=W)
 
     if img_mirror_on.get() == 0:
         frame_mirror.grid_remove()
     else:
-        frame_mirror.grid()
+        frame_mirror.grid(sticky=W)
 
     if img_logo_on.get() == 0:
         frame_logo.grid_remove()
@@ -1517,8 +1389,10 @@ style.configure("Blue.TButton", foreground="blue")
 style.configure("Brown.TButton", foreground="#8B0000")
 style.configure("Blue.TLabelframe.Label", foreground="blue")
 style.configure("Fiolet.TLabelframe.Label", foreground="#800080")
+style.configure("Rotate.TEntry", fieldbackground="#FFFFFF")
+
 ##########################
-# Zmienne globalne
+# global variables
 
 FILE_INI = os.path.join(os.path.expanduser("~"), ".fotokilof.ini")
 PWD = os.getcwd()
@@ -1548,6 +1422,8 @@ img_text_box_color = StringVar()
 img_text_inout = IntVar()  # Text inside or outside picture
 img_rotate_on = IntVar()  # Rotate
 img_rotate = IntVar()
+img_rotate_own = IntVar()
+img_rotate_color = StringVar()
 img_crop_on = IntVar()  # Crop
 img_crop = IntVar()  # (1, 2, 3)
 img_crop_gravity = StringVar()
@@ -1571,8 +1447,6 @@ progress_var = IntVar()  # progressbar
 progress_files = StringVar()
 file_extension = (".jpeg", ".jpg", ".png", ".tif")
 magick_commands = ("composite", "convert")
-#magick_commands = ("animate", "compare", "composite", "conjure", "convert",
-#                   "identify", "import", "mogrify", "montage", "stream")
 
 ######################################################################
 # Karty
@@ -2012,25 +1886,31 @@ b_text_run.grid(row=5, column=5, sticky=(E), padx=5, pady=5)
 ###########################
 frame_rotate = ttk.LabelFrame(frame_first_col, text=_("Rotate"),
                               style="Fiolet.TLabelframe")
-frame_rotate.grid(row=5, column=1, sticky=(N, W, E, S), padx=5, pady=1)
+frame_rotate.grid(row=5, column=1, columnspan=2, sticky=(N, W, E, S), padx=5, pady=1)
 ###
-rb_rotate_0 = ttk.Radiobutton(frame_rotate, text="0",
-                              variable=img_rotate, value="0")
 rb_rotate_90 = ttk.Radiobutton(frame_rotate, text="90",
                                variable=img_rotate, value="90")
 rb_rotate_180 = ttk.Radiobutton(frame_rotate, text="180",
                                 variable=img_rotate, value="180")
 rb_rotate_270 = ttk.Radiobutton(frame_rotate, text="270",
                                 variable=img_rotate, value="270")
+rb_rotate_own = ttk.Radiobutton(frame_rotate, text=_("Custom"),
+                                variable=img_rotate, value="0")
+e_rotate_own = ttk.Entry(frame_rotate, width=3, style='Rotate.TEntry',
+                     validate="key", validatecommand=(validation, '%S'))
+b_rotate_color = ttk.Button(frame_rotate, text=_("Color"),
+                          command=color_choose_rotate)
 b_rotate_run = ttk.Button(frame_rotate, text=_("Execute"),
                           style="Brown.TButton",
                           command=convert_rotate_button)
 
-rb_rotate_0.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
-rb_rotate_90.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
-rb_rotate_180.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
-rb_rotate_270.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
-b_rotate_run.grid(row=1, column=5, padx=5, pady=5)
+rb_rotate_90.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+rb_rotate_180.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
+rb_rotate_270.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
+rb_rotate_own.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
+e_rotate_own.grid(row=1, column=5, sticky=(N, W, E, S), padx=5, pady=5)
+b_rotate_color.grid(row=1, column=6, padx=5, pady=5)
+b_rotate_run.grid(row=1, column=7, padx=5, pady=5)
 
 ###########################
 # Border
@@ -2040,7 +1920,11 @@ frame_border = ttk.Labelframe(frame_first_col, text=_("Border"),
 frame_border.grid(row=6, column=1, sticky=(N, W, E, S), padx=5, pady=1)
 ###
 l_border = Label(frame_border, text=_("Pixels"))
-e_border = ttk.Entry(frame_border, width=3,
+l_border_x = Label(frame_border, text="WE")
+e_border_x = ttk.Entry(frame_border, width=3,
+                     validate="key", validatecommand=(validation, '%S'))
+l_border_y = Label(frame_border, text="NS")
+e_border_y = ttk.Entry(frame_border, width=3,
                      validate="key", validatecommand=(validation, '%S'))
 b_border_color = ttk.Button(frame_border, text=_("Color"),
                             command=color_choose_border)
@@ -2048,17 +1932,20 @@ b_border_run = ttk.Button(frame_border, text=_("Execute"),
                           style="Brown.TButton",
                           command=convert_border_button)
 
-l_border.grid(row=1, column=1, padx=5, pady=5)
-e_border.grid(row=1, column=2, padx=5, pady=5)
-b_border_color.grid(row=1, column=3, padx=5, pady=5)
-b_border_run.grid(row=1, column=4, padx=5, pady=5, sticky=E)
+l_border.grid(row=1, column=1, padx=5, pady=5, columnspan=4)
+l_border_x.grid(row=2, column=1, padx=5, pady=5)
+e_border_x.grid(row=2, column=2, padx=5, pady=5)
+l_border_y.grid(row=2, column=3, padx=5, pady=5)
+e_border_y.grid(row=2, column=4, padx=5, pady=5)
+b_border_color.grid(row=1, column=5, padx=5, pady=5)
+b_border_run.grid(row=2, column=5, padx=5, pady=5, sticky=E)
 
 ############################
 # Black-white
 ############################
 frame_bw = ttk.LabelFrame(frame_first_col, text=_("Black-white"),
                           style="Fiolet.TLabelframe")
-frame_bw.grid(row=5, column=2, rowspan=2, sticky=(N, E, S), padx=5, pady=1)
+frame_bw.grid(row=6, column=2, rowspan=1, sticky=(N, E, S), padx=5, pady=1)
 ###
 rb1_bw = ttk.Radiobutton(frame_bw, text=_("Black-white"),
                          variable=img_bw, value="1")
@@ -2082,7 +1969,7 @@ b_bw_run.grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky=E)
 #########################
 frame_contrast = ttk.Labelframe(frame_first_col, text=_("Contrast"),
                                 style="Fiolet.TLabelframe")
-frame_contrast.grid(row=7, column=1, rowspan=2, sticky=(N, W, E, S), padx=5, pady=1)
+frame_contrast.grid(row=7, column=1, sticky=(N, W, E, S), padx=5, pady=1)
 ###
 rb1_contrast = ttk.Radiobutton(frame_contrast, text=_("Stretch"),
                                variable=img_contrast, value="1")
@@ -2091,9 +1978,7 @@ rb2_contrast = ttk.Radiobutton(frame_contrast, text=_("Contrast"),
 co_contrast_selection = ttk.Combobox(frame_contrast, width=3,
                                      values=contrast_selection)
 co_contrast_selection.configure(state='readonly')
-rb3_contrast = ttk.Radiobutton(frame_contrast, text=_("Normalize"),
-                               variable=img_contrast,
-                               value="3")
+
 e1_contrast = ttk.Entry(frame_contrast, width=4)
 e2_contrast = ttk.Entry(frame_contrast, width=4)
 l1_contrast = ttk.Label(frame_contrast, text=_("Black"))
@@ -2109,8 +1994,7 @@ l2_contrast.grid(row=1, column=4, padx=5, pady=5, sticky=W)
 e2_contrast.grid(row=1, column=5, padx=5, pady=5, sticky=W)
 rb2_contrast.grid(row=2, column=1, padx=5, pady=5, sticky=W)
 co_contrast_selection.grid(row=2, column=2, padx=5, pady=5, sticky=W)
-rb3_contrast.grid(row=3, column=1, padx=5, pady=5, sticky=W)
-b_contrast_run.grid(row=3, column=3, padx=5, pady=5, columnspan=3, sticky=E)
+b_contrast_run.grid(row=2, column=3, padx=5, pady=5, columnspan=3, sticky=E)
 
 ############################
 # Color normalize
@@ -2145,12 +2029,12 @@ b_normalize_run.grid(row=2, column=2, columnspan=2, padx=5, pady=4, sticky=E)
 ###########################
 frame_mirror = ttk.LabelFrame(frame_first_col, text=_("Mirror"),
                               style="Fiolet.TLabelframe")
-frame_mirror.grid(row=8, column=2, sticky=(N, E, S), padx=5, pady=1)
+frame_mirror.grid(row=8, column=1, sticky=(N, E, S), padx=5, pady=1)
 
-cb_mirror_flip = ttk.Checkbutton(frame_mirror, text=_("Flip"),
+cb_mirror_flip = ttk.Checkbutton(frame_mirror, text="NS",
                                  variable=img_mirror_flip,
                                  offvalue="0", onvalue="1")
-cb_mirror_flop = ttk.Checkbutton(frame_mirror, text=_("Flop"),
+cb_mirror_flop = ttk.Checkbutton(frame_mirror, text="WE",
                                  variable=img_mirror_flop,
                                  offvalue="0", onvalue="1")
 b_mirror_run = ttk.Button(frame_mirror, text=_("Execute"),
@@ -2369,13 +2253,10 @@ root.bind("<End>", open_file_last_key)
 ##########################################
 # Run functions
 #
-
-# check if [Image|Graphics]Magick is available
-GM_or_IM_data = magick.check_magick()
-GM_or_IM = GM_or_IM_data[0]
-GM_or_IM_version = GM_or_IM_data[1]
+GM_or_IM = ""
+IM_version = 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
 Python_version = 'Py:' + platform.python_version()
-window_title = version.__author__ + " : " + version.__appname__ + ": " + version.__version__ + " : " + GM_or_IM_version + " : " + Python_version + " | "
+window_title = version.__author__ + " : " + version.__appname__ + ": " + version.__version__ + " : " + IM_version + " : " + Python_version + " | "
 root.title(window_title)
 if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts
@@ -2400,6 +2281,12 @@ else:
     messagebox.showerror(title=_("Error"),
                          message=_("ImageMagick nor GraphicsMagick are not installed in you system. Is impossile to process any graphics."))
     # disable processing buttons
+    img_crop_on.set(0)
+    img_normalize_on.set(0)
+    img_contrast_on.set(0)
+    img_logo_on.set(0)
+    img_custom_on.set(0)
+    img_histograms_on.set(0)
     b_logo_run.configure(state=DISABLED)
     b_resize_run.configure(state=DISABLED)
     b_crop_read.configure(state=DISABLED)
@@ -2421,6 +2308,14 @@ else:
     b_file_select.configure(state=DISABLED)
     b_file_select_screenshot.configure(state=DISABLED)
     root.deiconify()
+
+# -------------------------------------------------------
+# Lock in 4.0.0, will be unlocked in next releases
+img_logo_on.set(0)
+img_histograms_on.set(0)
+cb_logo.configure(state=DISABLED)
+cb_histograms.configure(state=DISABLED)
+# -------------------------------------------------------
 
 root.mainloop()
 

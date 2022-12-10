@@ -2,7 +2,7 @@
 # pylint: disable=bare-except
 
 """
-Copyright (c) 2019-2021 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2022 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,6 +40,7 @@ Every function read part of config file
 import configparser
 
 import entries
+import common
 
 
 def ini_read(file_ini, theme_list, preview_size_list):
@@ -187,8 +188,7 @@ def ini_read_text(file_ini, fonts_dict):
         text_font = config.get('Text', 'font')
     except:
         text_font = "Helvetica"
-    fonts_list = list(fonts_dict.keys())
-    dict_return['text_font'] = entries.parse_list(text_font, fonts_list, "Helvetica")
+    dict_return['text_font'] = entries.parse_list(text_font, fonts_dict, "Arial")
 
     try:
         text_size = str(config.getint('Text', 'size'))
@@ -249,6 +249,18 @@ def ini_read_rotate(file_ini):
     except:
         rotate = "90"
     dict_return['img_rotate'] = entries.parse_list(rotate, (0, 90, 180, 270), 0)
+
+    try:
+        rotate_own = config.getint('Rotate', 'own')
+    except:
+        rotate_own = "0"
+    dict_return['img_rotate_own'] = str(common.empty(rotate_own))
+
+    try:
+        rotate_color = config.get('Rotate', 'color')
+    except:
+        rotate_color = "#FFFFFF"
+    dict_return['img_rotate_color'] = entries.parse_color(rotate_color, '#FFFFFF')
 
     return dict_return
 
@@ -378,10 +390,16 @@ def ini_read_border(file_ini):
     dict_return['img_border_color'] = entries.parse_color(border_color, '#FFFFFF')
 
     try:
-        border = config.getint('Border', 'size')
+        border = config.getint('Border', 'size_x')
     except:
         border = "10"
-    dict_return['img_border_size'] = border
+    dict_return['img_border_size_x'] = border
+
+    try:
+        border = config.getint('Border', 'size_y')
+    except:
+        border = "10"
+    dict_return['img_border_size_y'] = border
 
     return dict_return
 

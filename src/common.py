@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 module contains common functions:
+- empty - convert empty string into O, no empty into int
 - humansize - converts B to kB or MB
 - mouse_crop_calculation - recalculation pixels from previev original image
 - spacja - escaping space and special char in pathname
@@ -34,6 +35,18 @@ import os
 import re
 
 import mswindows
+
+
+def empty(value):
+    """ 
+    convert empty string into 0 
+    non empty into int
+    """
+    if value == '':
+        result = 0
+    else:
+        result = int(value)
+    return result
 
 
 def humansize(nbytes):
