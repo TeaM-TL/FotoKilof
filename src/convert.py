@@ -147,21 +147,6 @@ def convert_contrast(contrast, contrast_selected, entry1, entry2):
     return command + " "
 
 
-def convert_normalize(normalize, channel):
-    """ 7. Normalize """
-
-    if normalize == 1:
-        if channel != "None":
-            command = "-channel " + channel + " -equalize"
-        else:
-            command = "-equalize"
-    elif normalize == 2:
-        command = "-auto-level"
-    else:
-        command = ""
-    return command + " "
-
-
 def convert_pip(gravitation, width, height, offset_dx, offset_dy):
     """ 9. Picture In Picture, eg. to add logo on image """
 

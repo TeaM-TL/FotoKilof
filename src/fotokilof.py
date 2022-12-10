@@ -391,7 +391,7 @@ def convert_custom_button():
 
 
 def convert_contrast_button():
-    """ przycisk zmiany kontrastu """
+    """ contrast button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
     out_file = magick.pre_magick(file_in_path.get(),
@@ -421,19 +421,13 @@ def convert_bw_button():
 
 
 def convert_normalize_button():
-    """ normalize button """
+    """ + normalize button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_normalize(img_normalize.get(),
-                                    co_normalize_channel.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+
+    file_out = convert_wand.normalize(file_in_path.get(), work_dir.get(), co_apply_type.get(),
+                                    img_normalize.get(), co_normalize_channel.get())
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 

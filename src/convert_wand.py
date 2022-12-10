@@ -28,11 +28,11 @@ Converters
 - text - add text into picture
 - bw - black and white or sepia
 - resize - resize picture
+- normalize - normalize levels
 
 - convert_preview_crop_gravity - convert corrdinates from crop3
 - convert_crop - crop picture
 - convert_contrast - modify contrast
-- convert_normalize - normalize levels
 - convert_pip - picture in picture, for inserting logo
 - gravity - translate eg. NS to Northsouth as Tk expect
 - gravity_outside - translate gravitation for adding text outside
@@ -165,6 +165,26 @@ def resize(file_in, work_dir, extension, resize, pixel, percent, border):
     file_out = magick.pre_magick(file_in, os.path.join(work_dir, sub_dir), extension)
     with Image(filename=file_in) as image:
         with image.clone() as clone:
+            clone.transform(crop='', resize=command)
+            clone.save(filename=file_out)
+
+    return file_out
+
+def normalize(file_in, work_dir, extension, normalize, channel)
+    """ normalize levels of colors """
+
+    file_out = magick.pre_magick(file_in, os.path.join(work_dir, sub_dir), extension)
+    with Image(filename=file_in) as image:
+        with image.clone() as clone:
+            if normalize == 1:
+                if channel != "None":
+                    command = "-channel " + channel + " -equalize"
+                else:
+                    command = "-equalize"
+            elif normalize == 2:
+                command = "-auto-level"
+            else:
+                command = ""
             clone.transform(crop='', resize=command)
             clone.save(filename=file_out)
 
