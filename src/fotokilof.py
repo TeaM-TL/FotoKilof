@@ -56,6 +56,7 @@ from wand.version import MAGICK_VERSION, VERSION
 
 # my modules
 import convert
+import convert_wand
 import common
 import gui
 import ini_read
@@ -445,9 +446,6 @@ def convert_rotate_button():
     """ rotate button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
     if img_rotate.get() == 0:
         angle = common.empty(e_rotate_own.get())
         if angle == 0:
@@ -457,33 +455,21 @@ def convert_rotate_button():
     else:
         angle = int(img_rotate.get())
         color = None
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            clone.rotate(angle, background=color)
-            clone.save(filename=out_file)
-    preview_new(out_file)
+
+    file_out = convert_wand.rotate(file_in_path.get(), work_dir.get(), co_apply_type.get(),
+                                    angle, color)
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def convert_mirror_button():
-    """ mirror button """
+    """ Mirror button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            do = 0
-            if img_mirror_flip.get():
-                clone.flip()
-                do = 1
-            if img_mirror_flop.get():
-                clone.flop()
-                do = 1
-            if do:
-                clone.save(filename=out_file)
-                preview_new(out_file)
+    file_out = convert_wand.mirror(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
+                                    img_mirror_flip.get(), img_mirror_flop.get())
+
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
@@ -500,7 +486,7 @@ def convert_resize_button():
 
     out_file = magick.pre_magick(file_in_path.get(),
                                  os.path.join(work_dir.get(),
-                                              work_sub_dir.get()),
+                                 work_sub_dir.get()),
                                  co_apply_type.get())
     cmd_magick = GM_or_IM + "convert"
     print_command(cmd)
@@ -514,15 +500,10 @@ def convert_border_button():
     """ Border button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            clone.border(img_border_color.get(), common.empty(e_border_x.get()), common.empty(e_border_y.get()))
-            clone.save(filename=out_file)
-    
-    preview_new(out_file)
+    file_out = convert_wand.border(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
+                                    img_border_color.get(), e_border_x.get(), e_border_y.get())
+
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
