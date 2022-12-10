@@ -2404,14 +2404,9 @@ else:
 # Testing 4.0.0
 img_crop_on.set(0)
 img_logo_on.set(0)
-img_custom_on.set(0)
 img_histograms_on.set(0)
 
-cb_crop.configure(state=DISABLED)
-#cb_normalize.configure(state=DISABLED)
-#cb_contrast.configure(state=DISABLED)
 cb_logo.configure(state=DISABLED)
-cb_custom.configure(state=DISABLED)
 cb_histograms.configure(state=DISABLED)
 # -------------------------------------------------------
 
