@@ -29,10 +29,10 @@ Converters
 - bw - black and white or sepia
 - resize - resize picture
 - normalize - normalize levels
+- contrast - modify contrast
 
-- convert_preview_crop_gravity - convert corrdinates from crop3
 - convert_crop - crop picture
-- convert_contrast - modify contrast
+- convert_preview_crop_gravity - convert corrdinates from crop3
 - convert_pip - picture in picture, for inserting logo
 - gravity - translate eg. NS to Northsouth as Tk expect
 - gravity_outside - translate gravitation for adding text outside
@@ -45,7 +45,6 @@ from wand.font import Font
 from wand.image import Image
 from wand.version import fonts as fontsList
 from wand.version import MAGICK_VERSION, VERSION
-
 
 # my modules
 import common
@@ -170,6 +169,7 @@ def resize(file_in, work_dir, extension, resize, pixel, percent, border):
 
     return file_out
 
+
 def normalize(file_in, work_dir, extension, normalize, channel):
     """ normalize levels of colors """
 
@@ -182,6 +182,25 @@ def normalize(file_in, work_dir, extension, normalize, channel):
                 else:
                     clone.normalize()
             elif normalize == 2:
+                clone.auto_level()
+            clone.save(filename=file_out)
+
+    return file_out
+
+
+def contrast(file_in, work_dir, extension, selection, contrast, black, white):
+    """ normalize levels of colors """
+
+    file_out = magick.pre_magick(file_in, work_dir, extension)
+    with Image(filename=file_in) as image:
+        with image.clone() as clone:
+            if int(selection) == 1:
+                    if float(black) > 1:
+                        black = 0
+                    if float(white) > 1:
+                        white = None
+                    clone.contrast_stretch(black_point=float(black), white_point=float(white))
+            else:
                 clone.auto_level()
             clone.save(filename=file_out)
 

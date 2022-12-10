@@ -391,21 +391,16 @@ def convert_custom_button():
 
 
 def convert_contrast_button():
-    """ contrast button """
+    """ + contrast button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_contrast(int(img_contrast.get()),
-                                   co_contrast_selection.get(),
-                                   e1_contrast.get(),
-                                   e2_contrast.get())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+
+    file_out = convert_wand.contrast(file_in_path.get(), work_dir.get(), co_apply_type.get(),
+                                    img_contrast.get(), 
+                                    co_contrast_selection.get(),
+                                    e1_contrast.get(),
+                                    e2_contrast.get())
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
@@ -1982,7 +1977,7 @@ b_text_run.grid(row=5, column=5, sticky=(E), padx=5, pady=5)
 ###########################
 frame_rotate = ttk.LabelFrame(frame_first_col, text=_("Rotate"),
                               style="Fiolet.TLabelframe")
-frame_rotate.grid(row=5, column=1, sticky=(N, W, E, S), padx=5, pady=1)
+frame_rotate.grid(row=5, column=1, columnspan=2, sticky=(N, W, E, S), padx=5, pady=1)
 ###
 rb_rotate_90 = ttk.Radiobutton(frame_rotate, text="90",
                                variable=img_rotate, value="90")
@@ -2058,14 +2053,14 @@ rb2_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 e_bw_sepia.grid(row=1, column=2, padx=5, pady=5, sticky=E)
 l_bw_sepia.grid(row=1, column=3, padx=5, pady=5, sticky=W)
 rb1_bw.grid(row=2, column=1, padx=5, pady=0, sticky=W)
-b_bw_run.grid(row=3, column=1, columnspan=2, padx=5, pady=5, sticky=E)
+b_bw_run.grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky=E)
 
 ########################
 # Contrast
 #########################
 frame_contrast = ttk.Labelframe(frame_first_col, text=_("Contrast"),
                                 style="Fiolet.TLabelframe")
-frame_contrast.grid(row=7, column=1, rowspan=2, sticky=(N, W, E, S), padx=5, pady=1)
+frame_contrast.grid(row=7, column=1, sticky=(N, W, E, S), padx=5, pady=1)
 ###
 rb1_contrast = ttk.Radiobutton(frame_contrast, text=_("Stretch"),
                                variable=img_contrast, value="1")
@@ -2074,9 +2069,7 @@ rb2_contrast = ttk.Radiobutton(frame_contrast, text=_("Contrast"),
 co_contrast_selection = ttk.Combobox(frame_contrast, width=3,
                                      values=contrast_selection)
 co_contrast_selection.configure(state='readonly')
-rb3_contrast = ttk.Radiobutton(frame_contrast, text=_("Normalize"),
-                               variable=img_contrast,
-                               value="3")
+
 e1_contrast = ttk.Entry(frame_contrast, width=4)
 e2_contrast = ttk.Entry(frame_contrast, width=4)
 l1_contrast = ttk.Label(frame_contrast, text=_("Black"))
@@ -2092,8 +2085,7 @@ l2_contrast.grid(row=1, column=4, padx=5, pady=5, sticky=W)
 e2_contrast.grid(row=1, column=5, padx=5, pady=5, sticky=W)
 rb2_contrast.grid(row=2, column=1, padx=5, pady=5, sticky=W)
 co_contrast_selection.grid(row=2, column=2, padx=5, pady=5, sticky=W)
-rb3_contrast.grid(row=3, column=1, padx=5, pady=5, sticky=W)
-b_contrast_run.grid(row=3, column=3, padx=5, pady=5, columnspan=3, sticky=E)
+b_contrast_run.grid(row=2, column=3, padx=5, pady=5, columnspan=3, sticky=E)
 
 ############################
 # Color normalize
@@ -2128,7 +2120,7 @@ b_normalize_run.grid(row=2, column=2, columnspan=2, padx=5, pady=4, sticky=E)
 ###########################
 frame_mirror = ttk.LabelFrame(frame_first_col, text=_("Mirror"),
                               style="Fiolet.TLabelframe")
-frame_mirror.grid(row=8, column=2, sticky=(N, E, S), padx=5, pady=1)
+frame_mirror.grid(row=8, column=1, sticky=(N, E, S), padx=5, pady=1)
 
 cb_mirror_flip = ttk.Checkbutton(frame_mirror, text="NS",
                                  variable=img_mirror_flip,
@@ -2380,6 +2372,12 @@ else:
     messagebox.showerror(title=_("Error"),
                          message=_("ImageMagick nor GraphicsMagick are not installed in you system. Is impossile to process any graphics."))
     # disable processing buttons
+    img_crop_on.set(0)
+    img_normalize_on.set(0)
+    img_contrast_on.set(0)
+    img_logo_on.set(0)
+    img_custom_on.set(0)
+    img_histograms_on.set(0)
     b_logo_run.configure(state=DISABLED)
     b_resize_run.configure(state=DISABLED)
     b_crop_read.configure(state=DISABLED)
@@ -2405,8 +2403,6 @@ else:
 # -------------------------------------------------------
 # Testing 4.0.0
 img_crop_on.set(0)
-img_normalize_on.set(0)
-img_contrast_on.set(0)
 img_logo_on.set(0)
 img_custom_on.set(0)
 img_histograms_on.set(0)
