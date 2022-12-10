@@ -391,43 +391,46 @@ def convert_custom_button():
 
 
 def convert_contrast_button():
-    """ + contrast button """
+    """ contrast button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-
-    file_out = convert_wand.contrast(file_in_path.get(), work_dir.get(), co_apply_type.get(),
-                                    img_contrast.get(), 
-                                    co_contrast_selection.get(),
-                                    e1_contrast.get(),
-                                    e2_contrast.get())
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
+            clone.save(filename=file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def convert_bw_button():
-    """ + black-white or sepia button """
+    """ black-white or sepia button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-
-    file_out = convert_wand.bw(file_in_path.get(), work_dir.get(), co_apply_type.get(),
-                                    img_bw.get(), e_bw_sepia.get())
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
+            clone.save(filename=file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def convert_normalize_button():
-    """ + normalize button """
+    """ normalize button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-
-    file_out = convert_wand.normalize(file_in_path.get(), work_dir.get(), co_apply_type.get(),
-                                    img_normalize.get(), co_normalize_channel.get())
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
+            clone.save(filename=file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def convert_rotate_button():
-    """ + Rotate button """
+    """ Rotate button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
@@ -440,40 +443,50 @@ def convert_rotate_button():
 
 
 def convert_mirror_button():
-    """ + Mirror button """
+    """ Mirror button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = convert_wand.mirror(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
-                                    img_mirror_flip.get(), img_mirror_flop.get())
-
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
+            clone.save(filename=file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def convert_resize_button():
-    """ + Resize button """
+    """ Resize button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = convert_wand.resize(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
-                                    img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), 0)
+
+    subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), 0)
+    file_out = magick.pre_magick(file_in_path.get(), os.path.join(work_dir.get(), subdir_command[0]), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.resize(clone, subdir_command[1])
+            clone.save(filename=file_out)
 
     preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def convert_border_button():
-    """ + Border button """
+    """ Border button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = convert_wand.border(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
-                                    img_border_color.get(), e_border_x.get(), e_border_y.get())
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
+            clone.save(filename=file_out)
 
     preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def crop_read():
-    """ Wczytanie rozmiarów z obrazka do wycinka """
+    """ Read size of picture and load into crop widget """
     if file_in_path.get() is not None:
         if os.path.isfile(file_in_path.get()):
             image_size_xy = magick.get_image_size(file_in_path.get())
@@ -508,7 +521,7 @@ def crop_read():
 
 
 def convert_crop_entries():
-    """ + dictionary with values for convert_crop function """
+    """ dictionary with values for convert_crop function """
     dict_return = {}
     dict_return['one_x1'] = common.empty(e1_crop_1.get())
     dict_return['one_y1'] = common.empty(e2_crop_1.get())
@@ -526,35 +539,37 @@ def convert_crop_entries():
 
 
 def convert_crop_button():
-    """ + Crop button """
+    """ Crop button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-
-    file_out = convert_wand.crop(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
-                                    img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+            clone.save(filename=file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def convert_text_button():
-    """ + add text """
+    """ add text """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-
-    file_out = convert_wand.text(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
-                                    img_text_inout.get(),
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.text(clone, img_text_inout.get(),
                                     img_text_color.get(), img_text_font.get(), e_text_size.get(),
                                     img_text_gravity_onoff.get(), img_text_gravity.get(),
                                     img_text_box.get(), img_text_box_color.get(),
-                                    e_text_x.get(), e_text_y.get(), 
-                                    e_text.get())
-
+                                    e_text_x.get(), e_text_y.get(), e_text.get())
+            clone.save(filename=file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def fonts():
-    """ + preparing font names for ImageMagick and load into listbox """
+    """ preparing font names for ImageMagick and load into listbox """
     result = fontsList()
     co_text_font['values'] = result
     return result
