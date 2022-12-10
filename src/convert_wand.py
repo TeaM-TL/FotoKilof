@@ -46,6 +46,7 @@ from wand.version import MAGICK_VERSION, VERSION
 
 # my modules
 import common
+import convert
 import magick
 import mswindows
 
@@ -83,8 +84,38 @@ def border(file_in, work_dir, extension, color, x, y):
     return file_out
 
 
-def wand():
-    """
-    convert by oe shot if is possible
-    """
-    nic = None
+def text(file_in, work_dir, extension, 
+            in_out, text_color, font, text_size, 
+            gravity_onoff, gravity, 
+            box, box_color,
+            text_x, text_y, text):
+    """ add text into picture """
+
+    file_out = magick.pre_magick(file_in, work_dir, extension)
+    with Image(filename=file_in) as image:
+        with image.clone() as clone:
+            if in_out == 0:
+            # inside
+                with Drawing() as draw:
+                    draw.fill_color = text_color
+                    draw.font = font
+                    draw.font_size = common.empty(text_size)
+                    if gravity_onoff == 0:
+                        draw.gravity = 'forget'
+                    else:
+                        draw.gravity = convert.gravity(gravity)
+                    if box:
+                        draw.text_under_color = box_color
+                    draw.text(common.empty(text_x), common.empty(text_y), text)
+                    draw(clone)
+            else:
+                # it has to be fixed
+                style = Font(font, common.empty(text_size), text_color)
+                clone.font = style
+                if box:
+                    clone.label(text, gravity=convert.gravity(gravity), background_color=box_color)
+                else:
+                    clone.label(text, gravity=convert.gravity(gravity))
+            clone.save(filename=file_out)
+    return file_out
+
