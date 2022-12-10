@@ -53,14 +53,16 @@ import magick
 import mswindows
 
 
-def rotate(file_in, work_dir, extension, angle, color):
+def rotate(clone, angle, color, own):
     """ rotate """
-    file_out = magick.pre_magick(file_in, work_dir, extension)
-    with Image(filename=file_in) as image:
-        with image.clone() as clone:
-            clone.rotate(angle, background=color)
-            clone.save(filename=file_out)
-    return file_out
+    if angle == 0:
+        angle = common.empty(own)
+        if angle == 0:
+            color = None
+    else:
+        angle = angle
+        color = None
+    clone.rotate(angle, background=color)
 
 
 def mirror(file_in, work_dir, extension, flip, flop):
@@ -72,7 +74,7 @@ def mirror(file_in, work_dir, extension, flip, flop):
                 clone.flip()
             if flop:
                 clone.flop()
-            clone.save(filename=file_out)
+            
     return file_out
 
 
@@ -212,20 +214,32 @@ def crop(file_in, work_dir, extension, crop, gravitation, entries):
     crop picture 
     entries are as dictionary
     """
-
+    image_size = magick.get_image_size(file_in)
     file_out = magick.pre_magick(file_in, work_dir, extension)
     with Image(filename=file_in) as image:
         with image.clone() as clone:
             if crop == 1:
-                clone.crop(left=entries['one_x1'], top=entries['one_y1'], 
+                if (entries['one_x1'] < entries['one_x2']) and (entries['one_y1'] < entries['one_y2']):
+                    if entries['one_x2'] > image_size[0]:
+                        entries['one_x2'] = image_size[0]
+                    if entries['one_y2'] > image_size[1]:
+                        entries['one_y2'] = image_size[1]
+                    #print(crop, entries['one_x1'], entries['one_y1'], entries['one_x2'], entries['one_y2'])
+                    clone.crop(left=entries['one_x1'], top=entries['one_y1'], 
                             right=entries['one_x2'], bottom=entries['one_y2'])
             if crop == 2:
-                clone.crop(left=entries['two_x1'], top=entries['two_y1'], 
-                            width=entries['two_width'], height=entries['two_height'])
+                if (entries['two_width'] > 0) and (entries['two_height'] > 0):
+                    #print(crop, entries['two_x1'], entries['two_y1'], entries['two_width'], entries['two_height'])
+                    clone.crop(left=entries['two_x1'], top=entries['two_y1'], 
+                                width=entries['two_width'], height=entries['two_height'])
             if crop == 3:
-                clone.crop(left=entries['three_dx'], top=entries['three_dy'], 
-                            width=entries['three_width'], height=entries['three_height'], 
-                            gravity=convert.gravity(gravitation))
+                if (entries['three_width'] > 0) and (entries['three_height'] > 0):
+                    #print(crop, entries['three_dx'], entries['three_dy'], entries['three_width'], entries['three_height'], convert.gravity(gravitation))
+                    clone.crop(left=entries['three_dx'], top=entries['three_dy'], 
+                                width=entries['three_width'], height=entries['three_height'], 
+                                gravity=convert.gravity(gravitation))
             clone.save(filename=file_out)
 
     return file_out
+
+# EOF

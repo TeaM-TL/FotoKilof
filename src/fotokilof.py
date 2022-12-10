@@ -430,18 +430,11 @@ def convert_rotate_button():
     """ + Rotate button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    if img_rotate.get() == 0:
-        angle = common.empty(e_rotate_own.get())
-        if angle == 0:
-            color = None
-        else:
-            color = img_rotate_color.get()
-    else:
-        angle = int(img_rotate.get())
-        color = None
-
-    file_out = convert_wand.rotate(file_in_path.get(), work_dir.get(), co_apply_type.get(),
-                                    angle, color)
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
+            clone.save(filename=file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -479,86 +472,6 @@ def convert_border_button():
     progress_files.set(_("done"))
 
 
-def convert_crop_entries():
-    """ + dictionary with values for convert_crop function """
-    dict_return = {}
-    dict_return['one_x1'] = int(e1_crop_1.get())
-    dict_return['one_y1'] = int(e2_crop_1.get())
-    dict_return['one_x2'] = int(e3_crop_1.get())
-    dict_return['one_y2'] = int(e4_crop_1.get())
-    dict_return['two_x1'] = int(e1_crop_2.get())
-    dict_return['two_y1'] = int(e2_crop_2.get())
-    dict_return['two_width'] = int(e3_crop_2.get())
-    dict_return['two_height'] = int(e4_crop_2.get())
-    dict_return['three_dx'] = int(e1_crop_3.get())
-    dict_return['three_dy'] = int(e2_crop_3.get())
-    dict_return['three_width'] = int(e3_crop_3.get())
-    dict_return['three_height'] = int(e4_crop_3.get())
-    return dict_return
-
-
-def convert_crop_button():
-    """ + Crop button """
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-
-    file_out = convert_wand.crop(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
-                                    img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
-    preview_new(file_out)
-    progress_files.set(_("done"))
-
-
-def convert_logo_button():
-    """ Logo button """
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_pip(img_logo_gravity.get(),
-                              e_logo_width.get(),
-                              e_logo_height.get(),
-                              e_logo_dx.get(),
-                              e_logo_dy.get()) \
-          + " " + common.spacja(file_logo_path.get()) \
-          + " " + common.spacja(file_in_path.get()) + " "
-    cmd_magick = GM_or_IM + "composite"
-    print_command(cmd)
-    result = magick.magick(cmd, "", out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
-    progress_files.set(_("done"))
-
-
-def convert_text_button():
-    """ + add text """
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-
-    file_out = convert_wand.text(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
-                                    img_text_inout.get(),
-                                    img_text_color.get(), img_text_font.get(), e_text_size.get(),
-                                    img_text_gravity_onoff.get(), img_text_gravity.get(),
-                                    img_text_box.get(), img_text_box_color.get(),
-                                    e_text_x.get(), e_text_y.get(), 
-                                    e_text.get())
-
-    preview_new(file_out)
-    progress_files.set(_("done"))
-
-
-def fonts():
-    """ preparing font names for ImageMagick and load into listbox """
-    result = fontsList()
-    co_text_font['values'] = result
-    return result
-
-
-def font_selected(event):
-    """ callback via bind for font selection """
-    img_text_font.set(co_text_font.get())
-
-
 def crop_read():
     """ Wczytanie rozmiarów z obrazka do wycinka """
     if file_in_path.get() is not None:
@@ -592,6 +505,84 @@ def crop_read():
             e4_crop_3.delete(0, "end")
             e4_crop_3.insert(0, height)
             img_crop_gravity.set("C")
+
+
+def convert_crop_entries():
+    """ + dictionary with values for convert_crop function """
+    dict_return = {}
+    dict_return['one_x1'] = common.empty(e1_crop_1.get())
+    dict_return['one_y1'] = common.empty(e2_crop_1.get())
+    dict_return['one_x2'] = common.empty(e3_crop_1.get())
+    dict_return['one_y2'] = common.empty(e4_crop_1.get())
+    dict_return['two_x1'] = common.empty(e1_crop_2.get())
+    dict_return['two_y1'] = common.empty(e2_crop_2.get())
+    dict_return['two_width'] = common.empty(e3_crop_2.get())
+    dict_return['two_height'] = common.empty(e4_crop_2.get())
+    dict_return['three_dx'] = common.empty(e1_crop_3.get())
+    dict_return['three_dy'] = common.empty(e2_crop_3.get())
+    dict_return['three_width'] = common.empty(e3_crop_3.get())
+    dict_return['three_height'] = common.empty(e4_crop_3.get())
+    return dict_return
+
+
+def convert_crop_button():
+    """ + Crop button """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+
+    file_out = convert_wand.crop(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
+                                    img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+    preview_new(file_out)
+    progress_files.set(_("done"))
+
+
+def convert_text_button():
+    """ + add text """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+
+    file_out = convert_wand.text(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
+                                    img_text_inout.get(),
+                                    img_text_color.get(), img_text_font.get(), e_text_size.get(),
+                                    img_text_gravity_onoff.get(), img_text_gravity.get(),
+                                    img_text_box.get(), img_text_box_color.get(),
+                                    e_text_x.get(), e_text_y.get(), 
+                                    e_text.get())
+
+    preview_new(file_out)
+    progress_files.set(_("done"))
+
+
+def fonts():
+    """ + preparing font names for ImageMagick and load into listbox """
+    result = fontsList()
+    co_text_font['values'] = result
+    return result
+
+
+def font_selected(event):
+    """ callback via bind for font selection """
+    img_text_font.set(co_text_font.get())
+
+
+def convert_logo_button():
+    """ Logo button """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+    out_file = magick.pre_magick(file_in_path.get(),
+                                 work_dir.get(),
+                                 co_apply_type.get())
+    cmd = convert.convert_pip(img_logo_gravity.get(),
+                              e_logo_width.get(), e_logo_height.get(),
+                              e_logo_dx.get(), e_logo_dy.get()) \
+          + " " + common.spacja(file_logo_path.get()) \
+          + " " + common.spacja(file_in_path.get()) + " "
+    cmd_magick = GM_or_IM + "composite"
+    print_command(cmd)
+    result = magick.magick(cmd, "", out_file, cmd_magick)
+    if result == "OK":
+        preview_new(out_file)
+    progress_files.set(_("done"))
 
 
 def open_file_logo():
