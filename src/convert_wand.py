@@ -117,9 +117,10 @@ def bw(clone, bw, sepia):
         clone.sepia_tone(threshold=common.empty(sepia)/100)
 
 
-def resize_subdir(resize, pixel, percent, border):
+def resize_subdir(resize, pixel, percent, border_x, border_y):
     """ prepare name for subdir and command for resize """
-    border = 2 * abs(int(border))
+    border_x = 2 * abs(int(border_x))
+    border_y = 2 * abs(int(border_y))
     if resize == 1:
         command = pixel + "x" + pixel
         sub_dir = pixel
@@ -131,13 +132,13 @@ def resize_subdir(resize, pixel, percent, border):
         command = str(percent) + "%"
         sub_dir = str(percent)
     elif resize == 3:
-        command = str(1920 - border) + "x" + str(1080 - border)
+        command = str(1920 - border_x) + "x" + str(1080 - border_y)
         sub_dir = "1920x1080"
     elif resize == 4:
-        command = str(2048 - border) + "x" + str(1556 - border)
+        command = str(2048 - border_x) + "x" + str(1556 - border_y)
         sub_dir = "2048x1556"
     elif resize == 5:
-        command = str(4096 - border) + "x" + str(3112 - border)
+        command = str(4096 - border_x) + "x" + str(3112 - border_y)
         sub_dir = "4096x3112"
     return (sub_dir, command)
 

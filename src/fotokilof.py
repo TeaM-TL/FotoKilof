@@ -205,142 +205,52 @@ def extension_from_file():
         log.write_log("extension_from_file: wrong extension", "W")
 
 
-def apply_all_convert(out_file, write_command):
-    """ apply all option together
-    write_command = 0 - nothing, 1 - write command into custom widget
-    """
-
-    cmd = ""
-    text_separate = 0  # all conversion in one run
-    previous_command = 0 # if were any command before pip
-
-    if img_normalize_on.get() == 1:
-        previous_command = 1
-        cmd = cmd + " " + convert.convert_normalize(img_normalize.get(),
-                                                    co_normalize_channel.get())
-
-    if img_contrast_on.get() == 1:
-        previous_command = 1
-        cmd = cmd + " " + convert.convert_contrast(img_contrast.get(),
-                                                   co_contrast_selection.get(),
-                                                   e1_contrast.get(),
-                                                   e2_contrast.get())
-
-    if img_bw_on.get() == 1:
-        previous_command = 1
-        cmd = cmd + " " + convert.convert_bw(img_bw.get(), e_bw_sepia.get())
-
-    if int(img_resize_on.get()) == 1:
-        if img_border_on.get() == 0:
-            border = 0
-        else:
-            border = abs(int(e_border_x.get()))
-        previous_command = 1
-
-        resize = convert.convert_resize(img_resize.get(),
-                                        e1_resize.get(),
-                                        e2_resize.get(),
-                                        border)
-        cmd = cmd + " " + resize['command']
-    else:
-        if int(img_crop_on.get()) == 1:
-            previous_command = 1
-            if img_text_inout.get() == 0:
-                text_separate = 1  # if crop - convert text in second run
-            else:
-                text_separate = 0  # crop + convert text run together
-
-            cmd = cmd + " " + convert.convert_crop(img_crop.get(),
-                                                   img_crop_gravity.get(),
-                                                   convert_crop_entries())
-
-    if img_rotate_on.get() > 0:
-        previous_command = 1
-        cmd = cmd + " " + convert.convert_rotate(img_rotate.get())
-
-    if img_mirror_on.get() > 0:
-        previous_command = 1
-        cmd = cmd + " " + convert.convert_mirror(img_mirror_flip.get(),img_mirror_flop.get())
-
-    if img_border_on.get() == 1:
-        previous_command = 1
-        border = int(e_border_x.get())
-        cmd = cmd + " " + convert.convert_border(e_border_x.get(),
-                                                 img_border_color.get(),
-                                                 border)
-
-    cmd_magick = GM_or_IM + "convert"
-    cmd_text = convert.convert_text(convert_text_entries())
-
-    if text_separate == 0:
-        cmd = cmd + " " + cmd_text
-        if write_command == 1:
-            print_command(cmd)
-        result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-        result2 = "OK"
-    else:
-        # because text gravity which makes problem with crop gravity
-        # we have to force second run of conversion
-        if write_command == 1:
-            print_command(cmd)
-        result1 = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-        cmd_magick = GM_or_IM + "mogrify"
-        if write_command == 1:
-            print_command(cmd_text)
-        result2 = magick.magick(cmd_text, "", out_file, cmd_magick)
-
-    if img_logo_on.get() == 1:
-        cmd1 = convert.convert_pip(img_logo_gravity.get(),
-                                   e_logo_width.get(),
-                                   e_logo_height.get(),
-                                   e_logo_dx.get(),
-                                   e_logo_dy.get()) \
-                + " " + common.spacja(file_logo_path.get()) + " "
-
-        if previous_command == 0:
-            cmd2 = common.spacja(file_in_path.get())
-        else:
-            cmd2 = common.spacja(out_file) + " "
-        cmd = cmd1 + cmd2
-        cmd_magick = GM_or_IM + "composite"
-        if write_command == 1:
-            print_command(cmd)
-
-        result3 = magick.magick(cmd, "", out_file, cmd_magick)
-    else:
-        result3 = None
-
-    if result1 == "OK" or result2 == "OK" or result3 == "OK":
-        result = "OK"
-    else:
-        result = "None"
-    return result
-
-
 def apply_all_button():
     """ all option together, processing one file or whole directory """
     if os.path.isfile(file_in_path.get()):
         progress_files.set(_("Processing"))
         root.update_idletasks()
 
-        # work_sub_dir if will be resize
-        if int(img_resize_on.get()) == 1:
-            resize = convert.convert_resize(img_resize.get(),
-                                            e1_resize.get(),
-                                            e2_resize.get(),
-                                            0)
-            work_sub_dir.set(resize['sub_dir'])
-        else:
-            work_sub_dir.set("")
-
         if file_dir_selector.get() == 0:
-            out_file = magick.pre_magick(file_in_path.get(),
-                                         os.path.join(work_dir.get(),
-                                         work_sub_dir.get()),
-                                         co_apply_type.get())
-            result = apply_all_convert(out_file, 1)
-            if result == "OK":
-                preview_new(out_file)
+            if img_border_on.get():
+                border_x = 0
+                border_y = 0
+                #border_x = e_border_x.get()
+                #border_y = e_border_y.get()
+            else:
+                border_x = 0
+                border_y = 0
+
+            subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), border_x, border_y)
+            file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+            with Image(filename=file_in_path.get()) as image:
+                with image.clone() as clone:
+                    if img_crop_on.get():
+                        convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+                    if img_mirror_on.get():
+                        convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
+                    if img_bw_on.get():
+                        convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
+                    if img_contrast_on.get():
+                        convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
+                    if img_normalize_on.get():
+                        convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
+                    if img_border_on.get():
+                        convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
+                    if img_rotate_on.get():
+                        convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
+                    if img_text_on.get():
+                        convert_wand.text(clone, img_text_inout.get(),
+                                            img_text_color.get(), img_text_font.get(), e_text_size.get(),
+                                            img_text_gravity_onoff.get(), img_text_gravity.get(),
+                                            img_text_box.get(), img_text_box_color.get(),
+                                            e_text_x.get(), e_text_y.get(), e_text.get())
+                    if img_resize_on.get():
+                        convert_wand.resize(clone, subdir_command[1])
+                    clone.save(filename=file_out) 
+
+
+            preview_new(file_out)
         else:
             dirname = os.path.dirname(file_in_path.get())
             i = 0
@@ -460,7 +370,7 @@ def convert_resize_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
 
-    subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), 0)
+    subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), 0, 0)
     file_out = magick.pre_magick(file_in_path.get(), os.path.join(work_dir.get(), subdir_command[0]), co_apply_type.get())
     with Image(filename=file_in_path.get()) as image:
         with image.clone() as clone:
