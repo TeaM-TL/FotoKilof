@@ -211,19 +211,36 @@ def apply_all_button():
         progress_files.set(_("Processing"))
         root.update_idletasks()
 
-        if file_dir_selector.get() == 0:
-            if img_border_on.get():
-                border_x = 0
-                border_y = 0
-                #border_x = e_border_x.get()
-                #border_y = e_border_y.get()
-            else:
-                border_x = 0
-                border_y = 0
+        # it needs to be fixed or removed
+        if img_border_on.get():
+            border_x = 0
+            border_y = 0
+            #border_x = e_border_x.get()
+            #border_y = e_border_y.get()
+        else:
+            border_x = 0
+            border_y = 0
 
-            subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), border_x, border_y)
-            file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
-            with Image(filename=file_in_path.get()) as image:
+        # single file or whode directory
+        i = 0
+        if file_dir_selector.get() == 0:
+            files_list = [ file_in_path.get() ]
+        else:
+            dirname = os.path.dirname(file_in_path.get())
+            files_list_short = common.list_of_images(dirname)
+            files_list = []
+            for filename_short in files_list_short:
+                files_list.append(os.path.join(dirname, filename_short))
+        
+        file_list_len = len(files_list)
+        for file_in in files_list: 
+            if img_resize_on.get():
+                subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), border_x, border_y)
+                subdir = os.path.join(work_dir.get(), subdir_command[0])
+            else:
+                subdir = work_dir.get()
+            file_out = magick.pre_magick(file_in, subdir, co_apply_type.get())
+            with Image(filename=file_in) as image:
                 with image.clone() as clone:
                     if img_crop_on.get():
                         convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
@@ -248,34 +265,17 @@ def apply_all_button():
                     if img_resize_on.get():
                         convert_wand.resize(clone, subdir_command[1])
                     clone.save(filename=file_out) 
+                    # progressbar
+                    i = i + 1
+                    progress_files.set(str(i) + " " + _("of") + " " \
+                                   + str(file_list_len) + " : " \
+                                   + os.path.basename(file_in))
+                    progress_var.set(i)
+                    root.update_idletasks()
 
 
             preview_new(file_out)
-        else:
-            dirname = os.path.dirname(file_in_path.get())
-            i = 0
-            files_list_short = common.list_of_images(dirname)
-            files_list = []
-            for filename_short in files_list_short:
-                files_list.append(os.path.join(dirname, filename_short))
-            file_list_len = len(files_list)
-            for file_in in files_list:
-                file_in_path.set(os.path.realpath(file_in))
-                out_file = magick.pre_magick(os.path.realpath(file_in),
-                                             os.path.join(work_dir.get(),
-                                             work_sub_dir.get()),
-                                             co_apply_type.get())
-                result = apply_all_convert(out_file, 0)
-                i = i + 1
-                progress_files.set(str(i) + " " + _("of") + " " \
-                                   + str(file_list_len) + " : " \
-                                   + os.path.basename(file_in))
-                progress_var.set(i)
-                root.update_idletasks()
-
             preview_orig()
-            if result == "OK":
-                preview_new(out_file)
 
         progress_var.set(0)
         progress_files.set(_("done"))
