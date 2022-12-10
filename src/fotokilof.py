@@ -383,7 +383,7 @@ def convert_custom_button():
                                  work_dir.get(),
                                  co_apply_type.get())
     cmd = t_custom.get('1.0', 'end-1c')
-    cmd_magick = GM_or_IM + "convert"
+    cmd_magick = "magick convert"
     result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
     if result == "OK":
         preview_new(out_file)
@@ -479,21 +479,32 @@ def convert_border_button():
     progress_files.set(_("done"))
 
 
+def convert_crop_entries():
+    """ + dictionary with values for convert_crop function """
+    dict_return = {}
+    dict_return['one_x1'] = int(e1_crop_1.get())
+    dict_return['one_y1'] = int(e2_crop_1.get())
+    dict_return['one_x2'] = int(e3_crop_1.get())
+    dict_return['one_y2'] = int(e4_crop_1.get())
+    dict_return['two_x1'] = int(e1_crop_2.get())
+    dict_return['two_y1'] = int(e2_crop_2.get())
+    dict_return['two_width'] = int(e3_crop_2.get())
+    dict_return['two_height'] = int(e4_crop_2.get())
+    dict_return['three_dx'] = int(e1_crop_3.get())
+    dict_return['three_dy'] = int(e2_crop_3.get())
+    dict_return['three_width'] = int(e3_crop_3.get())
+    dict_return['three_height'] = int(e4_crop_3.get())
+    return dict_return
+
+
 def convert_crop_button():
-    """ Crop button """
+    """ + Crop button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_crop(img_crop.get(),
-                               img_crop_gravity.get(),
-                               convert_crop_entries())
-    cmd_magick = GM_or_IM + "convert"
-    print_command(cmd)
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+
+    file_out = convert_wand.crop(file_in_path.get(), work_dir.get(), co_apply_type.get(), 
+                                    img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
@@ -534,24 +545,6 @@ def convert_text_button():
 
     preview_new(file_out)
     progress_files.set(_("done"))
-
-
-def convert_crop_entries():
-    """ dictionary with values for convert_crop function """
-    dict_return = {}
-    dict_return['one_x1'] = e1_crop_1.get()
-    dict_return['one_y1'] = e2_crop_1.get()
-    dict_return['one_x2'] = e3_crop_1.get()
-    dict_return['one_y2'] = e4_crop_1.get()
-    dict_return['two_x1'] = e1_crop_2.get()
-    dict_return['two_y1'] = e2_crop_2.get()
-    dict_return['two_width'] = e3_crop_2.get()
-    dict_return['two_height'] = e4_crop_2.get()
-    dict_return['three_dx'] = e1_crop_3.get()
-    dict_return['three_dy'] = e2_crop_3.get()
-    dict_return['three_width'] = e3_crop_3.get()
-    dict_return['three_height'] = e4_crop_3.get()
-    return dict_return
 
 
 def fonts():
@@ -2401,11 +2394,9 @@ else:
     root.deiconify()
 
 # -------------------------------------------------------
-# Testing 4.0.0
-img_crop_on.set(0)
+# Lock in 4.0.0, will be unlocked in next releases
 img_logo_on.set(0)
 img_histograms_on.set(0)
-
 cb_logo.configure(state=DISABLED)
 cb_histograms.configure(state=DISABLED)
 # -------------------------------------------------------

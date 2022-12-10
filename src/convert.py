@@ -117,36 +117,6 @@ def convert_crop(crop, gravitation, entries):
     return command + " "
 
 
-def convert_contrast(contrast, contrast_selected, entry1, entry2):
-    """ 6. Contrast """
-
-    command = ""
-    if contrast == 1:
-        command = "-contrast-stretch " + entry1 + "x" + entry2 + "%"
-    elif contrast == 2:
-        if contrast_selected == "+3":
-            command = "+contrast +contrast +contrast"
-        elif contrast_selected == "+2":
-            command = "+contrast +contrast"
-        elif contrast_selected == "+1":
-            command = "+contrast"
-        elif contrast_selected == "0":
-            command = ""
-        elif contrast_selected == "-1":
-            command = "-contrast"
-        elif contrast_selected == "-2":
-            command = "-contrast -contrast"
-        elif contrast_selected == "-3":
-            command = "-contrast -contrast -contrast"
-        else:
-            command = ""
-    elif contrast == 3:
-        command = "-normalize"
-    else:
-        command = ""
-    return command + " "
-
-
 def convert_pip(gravitation, width, height, offset_dx, offset_dy):
     """ 9. Picture In Picture, eg. to add logo on image """
 

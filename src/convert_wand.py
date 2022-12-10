@@ -30,8 +30,8 @@ Converters
 - resize - resize picture
 - normalize - normalize levels
 - contrast - modify contrast
+- crop - crop picture
 
-- convert_crop - crop picture
 - convert_preview_crop_gravity - convert corrdinates from crop3
 - convert_pip - picture in picture, for inserting logo
 - gravity - translate eg. NS to Northsouth as Tk expect
@@ -202,6 +202,30 @@ def contrast(file_in, work_dir, extension, selection, contrast, black, white):
                     clone.contrast_stretch(black_point=float(black), white_point=float(white))
             else:
                 clone.auto_level()
+            clone.save(filename=file_out)
+
+    return file_out
+
+
+def crop(file_in, work_dir, extension, crop, gravitation, entries):
+    """ 
+    crop picture 
+    entries are as dictionary
+    """
+
+    file_out = magick.pre_magick(file_in, work_dir, extension)
+    with Image(filename=file_in) as image:
+        with image.clone() as clone:
+            if crop == 1:
+                clone.crop(left=entries['one_x1'], top=entries['one_y1'], 
+                            right=entries['one_x2'], bottom=entries['one_y2'])
+            if crop == 2:
+                clone.crop(left=entries['two_x1'], top=entries['two_y1'], 
+                            width=entries['two_width'], height=entries['two_height'])
+            if crop == 3:
+                clone.crop(left=entries['three_dx'], top=entries['three_dy'], 
+                            width=entries['three_width'], height=entries['three_height'], 
+                            gravity=convert.gravity(gravitation))
             clone.save(filename=file_out)
 
     return file_out
