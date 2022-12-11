@@ -16,7 +16,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 
 ### Windows
 
-![Screenshot Windows](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_windows.png)
+![Screenshot Windows](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_windows11.png)
 
 ## Graphics conversion
 
