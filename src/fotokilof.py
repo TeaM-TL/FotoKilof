@@ -2047,13 +2047,13 @@ b_logo_run.grid(row=1, column=3, pady=5, sticky=E)
 frame_logo_xy = ttk.Frame(frame_logo)
 l_logo_XxY = ttk.Label(frame_logo_xy, text=_("Width\nHeight"))
 l_logo_dxdy = ttk.Label(frame_logo_xy, text=_("Offset\n(dx,dy)"))
-e_logo_width = ttk.Entry(frame_logo_xy, width=3,
+e_logo_width = ttk.Entry(frame_logo_xy, width=4,
                          validate="key", validatecommand=(validation, '%S'))
-e_logo_height = ttk.Entry(frame_logo_xy, width=3,
+e_logo_height = ttk.Entry(frame_logo_xy, width=4,
                           validate="key", validatecommand=(validation, '%S'))
-e_logo_dx = ttk.Entry(frame_logo_xy, width=3,
+e_logo_dx = ttk.Entry(frame_logo_xy, width=4,
                       validate="key", validatecommand=(validation, '%S'))
-e_logo_dy = ttk.Entry(frame_logo_xy, width=3,
+e_logo_dy = ttk.Entry(frame_logo_xy, width=4,
                       validate="key", validatecommand=(validation, '%S'))
 
 frame_logo_xy.grid(row=2, column=2, padx=5, pady=5)
@@ -2064,36 +2064,38 @@ l_logo_dxdy.grid(row=1, column=2, sticky=W, padx=5)
 e_logo_dx.grid(row=2, column=2, sticky=W, padx=5)
 e_logo_dy.grid(row=3, column=2, sticky=W, padx=5)
 
+# Wand-py has o gravity for inserting picture
+# it will be implemented later
 ###
-frame_logo_gravity = ttk.Frame(frame_logo)
-rb_logo_NW = ttk.Radiobutton(frame_logo_gravity, text="NW",
-                             variable=img_logo_gravity, value="NW")
-rb_logo_N = ttk.Radiobutton(frame_logo_gravity, text="N",
-                            variable=img_logo_gravity, value="N")
-rb_logo_NE = ttk.Radiobutton(frame_logo_gravity, text="NE",
-                             variable=img_logo_gravity, value="NE")
-rb_logo_W = ttk.Radiobutton(frame_logo_gravity, text="W",
-                            variable=img_logo_gravity, value="W")
-rb_logo_C = ttk.Radiobutton(frame_logo_gravity, text=_("Center"),
-                            variable=img_logo_gravity, value="C")
-rb_logo_E = ttk.Radiobutton(frame_logo_gravity, text="E",
-                            variable=img_logo_gravity, value="E")
-rb_logo_SW = ttk.Radiobutton(frame_logo_gravity, text="SW",
-                             variable=img_logo_gravity, value="SW")
-rb_logo_S = ttk.Radiobutton(frame_logo_gravity, text="S",
-                            variable=img_logo_gravity, value="S")
-rb_logo_SE = ttk.Radiobutton(frame_logo_gravity, text="SE",
-                             variable=img_logo_gravity, value="SE")
-frame_logo_gravity.grid(row=2, column=3, sticky=E)
-rb_logo_NW.grid(row=1, column=1, sticky=W, pady=1)
-rb_logo_N.grid(row=1, column=2, pady=1)
-rb_logo_NE.grid(row=1, column=3, sticky=W, pady=1)
-rb_logo_W.grid(row=2, column=1, sticky=W, pady=1)
-rb_logo_C.grid(row=2, column=2, pady=1)
-rb_logo_E.grid(row=2, column=3, sticky=W, pady=1)
-rb_logo_SW.grid(row=3, column=1, sticky=W, pady=1)
-rb_logo_S.grid(row=3, column=2, pady=1)
-rb_logo_SE.grid(row=3, column=3, sticky=W, pady=1)
+#frame_logo_gravity = ttk.Frame(frame_logo)
+#rb_logo_NW = ttk.Radiobutton(frame_logo_gravity, text="NW",
+#                             variable=img_logo_gravity, value="NW")
+#rb_logo_N = ttk.Radiobutton(frame_logo_gravity, text="N",
+#                            variable=img_logo_gravity, value="N")
+#rb_logo_NE = ttk.Radiobutton(frame_logo_gravity, text="NE",
+#                             variable=img_logo_gravity, value="NE")
+#rb_logo_W = ttk.Radiobutton(frame_logo_gravity, text="W",
+#                            variable=img_logo_gravity, value="W")
+#rb_logo_C = ttk.Radiobutton(frame_logo_gravity, text=_("Center"),
+#                            variable=img_logo_gravity, value="C")
+#rb_logo_E = ttk.Radiobutton(frame_logo_gravity, text="E",
+#                            variable=img_logo_gravity, value="E")
+#rb_logo_SW = ttk.Radiobutton(frame_logo_gravity, text="SW",
+#                             variable=img_logo_gravity, value="SW")
+#rb_logo_S = ttk.Radiobutton(frame_logo_gravity, text="S",
+#                            variable=img_logo_gravity, value="S")
+#rb_logo_SE = ttk.Radiobutton(frame_logo_gravity, text="SE",
+#                             variable=img_logo_gravity, value="SE")
+#frame_logo_gravity.grid(row=2, column=3, sticky=E)
+#rb_logo_NW.grid(row=1, column=1, sticky=W, pady=1)
+#rb_logo_N.grid(row=1, column=2, pady=1)
+#rb_logo_NE.grid(row=1, column=3, sticky=W, pady=1)
+#rb_logo_W.grid(row=2, column=1, sticky=W, pady=1)
+#rb_logo_C.grid(row=2, column=2, pady=1)
+#rb_logo_E.grid(row=2, column=3, sticky=W, pady=1)
+#rb_logo_SW.grid(row=3, column=1, sticky=W, pady=1)
+#rb_logo_S.grid(row=3, column=2, pady=1)
+#rb_logo_SE.grid(row=3, column=3, sticky=W, pady=1)
 
 ###
 frame_logo_preview = ttk.Frame(frame_logo)
