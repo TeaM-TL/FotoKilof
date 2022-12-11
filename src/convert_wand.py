@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Converters
+- pip - picture in picture, for inserting logo
 - rotate - rotate picture
 - mirror - mirroring picture
 - border - add border to picture
@@ -31,22 +32,27 @@ Converters
 - normalize - normalize levels
 - contrast - modify contrast
 - crop - crop picture
-
-- convert_preview_crop_gravity - convert corrdinates from crop3
-- convert_pip - picture in picture, for inserting logo
-- gravity - translate eg. NS to Northsouth as Tk expect
-- gravity_outside - translate gravitation for adding text outside
 """
 
 from wand.color import Color
 from wand.drawing import Drawing
 from wand.font import Font
-from wand.image import Image
+from wand.image import Image, COMPOSITE_OPERATORS
 
 # my modules
 import common
 import convert
 import magick
+
+
+def pip(clone, logo, width, height, offset_dx, offset_dy):
+    """ put picture on picture """
+    if len(logo):
+        with Image(filename=logo) as logo:
+            with Drawing() as draw:
+                draw.composite(operator='over', left=common.empty(offset_dx), top=common.empty(offset_dy),
+                                width=common.empty(width), height=common.empty(height), image=logo)
+                draw(clone)
 
 
 def rotate(clone, angle, color, own):
@@ -90,7 +96,7 @@ def text(clone, in_out,
                 if gravity_onoff == 0:
                     draw.gravity = 'forget'
                 else:
-                    draw.gravity = convert.gravity(gravity)
+                    draw.gravity = str(convert.gravitation(gravity))
                 if box:
                     draw.text_under_color = box_color
                 draw.text(common.empty(text_x), common.empty(text_y), text)
@@ -100,9 +106,9 @@ def text(clone, in_out,
             style = Font(font, common.empty(text_size), text_color)
             clone.font = style
             if box:
-                clone.label(text, gravity=convert.gravity(gravity), background_color=box_color)
+                clone.label(text, gravity=convert.gravitation(gravity), background_color=box_color)
             else:
-                clone.label(text, gravity=convert.gravity(gravity))
+                clone.label(text, gravity=convert.gravitation(gravity))
 
 
 def bw(clone, bw, sepia):
@@ -167,7 +173,7 @@ def contrast(clone, selection, contrast, black, white):
         clone.auto_level()
 
 
-def crop(file_in, clone, crop, gravitation, entries):
+def crop(file_in, clone, crop, gravity, entries):
     """ 
     crop picture 
     entries are as dictionary
@@ -180,20 +186,17 @@ def crop(file_in, clone, crop, gravitation, entries):
                 entries['one_x2'] = image_size[0]
             if entries['one_y2'] > image_size[1]:
                 entries['one_y2'] = image_size[1]
-            #print(crop, entries['one_x1'], entries['one_y1'], entries['one_x2'], entries['one_y2'])
             clone.crop(left=entries['one_x1'], top=entries['one_y1'], 
                     right=entries['one_x2'], bottom=entries['one_y2'])
     if crop == 2:
         if (entries['two_width'] > 0) and (entries['two_height'] > 0):
-            #print(crop, entries['two_x1'], entries['two_y1'], entries['two_width'], entries['two_height'])
             clone.crop(left=entries['two_x1'], top=entries['two_y1'], 
                         width=entries['two_width'], height=entries['two_height'])
     if crop == 3:
         if (entries['three_width'] > 0) and (entries['three_height'] > 0):
-            #print(crop, entries['three_dx'], entries['three_dy'], entries['three_width'], entries['three_height'], convert.gravity(gravitation))
             clone.crop(left=entries['three_dx'], top=entries['three_dy'], 
                         width=entries['three_width'], height=entries['three_height'], 
-                        gravity=convert.gravity(gravitation))
+                        gravity=convert.gravitation(gravity))
             
 
 # EOF

@@ -22,12 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Converters
-- convert_preview_crop_gravity - convert corrdinates from crop3
-- convert_pip - picture in picture, for inserting logo
+- preview_crop_gravity - convert corrdinates from crop3
 - gravity - translate eg. NS to Northsouth as Wand-py expect
 """
 
-def convert_preview_crop_gravity(coordinates, x_max, y_max):
+def preview_crop_gravity(coordinates, x_max, y_max):
     """
     convert corrdinates from crop3:
     offset_x, offset_y, width, height, gravitation
@@ -93,17 +92,8 @@ def convert_preview_crop_gravity(coordinates, x_max, y_max):
     return (x0, y0, x1, y1)
 
 
-def convert_pip(gravitation, width, height, offset_dx, offset_dy):
-    """ 9. Picture In Picture, eg. to add logo on image """
-
-    command = "-gravity " + gravity(gravitation) \
-        + " -geometry " + width + "x" + height \
-        + "+" + offset_dx + "+" + offset_dy
-    return command + " "
-
-
-def gravity(gravitation):
-    """ translate gravitation name according to Tk specification"""
+def gravitation(gravitation):
+    """ translate gravitation name from Tk to Wand-py specification"""
 
     if gravitation == "N":
         result = "north"

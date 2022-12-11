@@ -254,6 +254,10 @@ def apply_all_button():
                                             e_text_x.get(), e_text_y.get(), e_text.get())
                     if img_resize_on.get():
                         convert_wand.resize(clone, subdir_command[1])
+                    if img_logo_on.get():
+                        convert_wand.pip(clone, file_logo_path.get(),
+                            e_logo_width.get(), e_logo_height.get(),
+                            e_logo_dx.get(), e_logo_dy.get())
                     clone.save(filename=file_out) 
                     # progressbar
                     i = i + 1
@@ -484,19 +488,14 @@ def convert_logo_button():
     """ Logo button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
-                                 work_dir.get(),
-                                 co_apply_type.get())
-    cmd = convert.convert_pip(img_logo_gravity.get(),
-                              e_logo_width.get(), e_logo_height.get(),
-                              e_logo_dx.get(), e_logo_dy.get()) \
-          + " " + common.spacja(file_logo_path.get()) \
-          + " " + common.spacja(file_in_path.get()) + " "
-    cmd_magick = GM_or_IM + "composite"
-    print_command(cmd)
-    result = magick.magick(cmd, "", out_file, cmd_magick)
-    if result == "OK":
-        preview_new(out_file)
+    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    with Image(filename=file_in_path.get()) as image:
+        with image.clone() as clone:
+            convert_wand.pip(clone, file_logo_path.get(),
+                            e_logo_width.get(), e_logo_height.get(),
+                            e_logo_dx.get(), e_logo_dy.get())
+            clone.save(filename=file_out)
+    preview_new(file_out)
     progress_files.set(_("done"))
 
 
@@ -1088,14 +1087,13 @@ def preview_orig():
                     coord_for_crop = (int(e1_crop_3.get()), int(e2_crop_3.get()),
                                   int(e3_crop_3.get()), int(e4_crop_3.get()),
                                   img_crop_gravity.get())
-                    coord = convert.convert_preview_crop_gravity(coord_for_crop,
+                    coord = convert.preview_crop_gravity(coord_for_crop,
                                                              xy_max['x_orig'],
                                                              xy_max['y_orig'])
                     x0 = coord[0]
                     y0 = coord[1]
                     x1 = coord[2]
                     y1 = coord[3]
-                    # do_nothing = 0
 
                 ratio_X = xy_max['x_max'] / xy_max['x_orig']
                 ratio_Y = xy_max['y_max'] / xy_max['y_orig']
@@ -1104,20 +1102,10 @@ def preview_orig():
                 x1 = int(x1 * ratio_X)
                 y1 = int(y1 * ratio_Y)
 
-#            x0y0x1y1 = str(x0) + "," + str(y0) + " " + str(x1) + "," + str(y1)
-#            command = " -fill none  -draw \"stroke '#FFFF00' rectangle " \
-#                + x0y0x1y1 + "\" "
                 crop_rectangle = (x0, y0, x1, y1)
             else:
- #               command = " "
                 crop_rectangle = (" ")
-# it works with every pictures
-#        preview_picture = preview.preview_convert(file_in_path.get(),
-#                                              command,
-#                                              int(co_preview_selector_orig.get()),
-#                                              GM_or_IM)
 
-# it can has problem with RGBA png/gif files
             preview_picture = preview.preview_pillow(file_in_path.get(),
                                                   int(co_preview_selector_orig.get()),
                                                   crop_rectangle)
@@ -2301,9 +2289,7 @@ else:
 
 # -------------------------------------------------------
 # Lock in 4.0.0, will be unlocked in next releases
-img_logo_on.set(0)
 img_histograms_on.set(0)
-cb_logo.configure(state=DISABLED)
 cb_histograms.configure(state=DISABLED)
 # -------------------------------------------------------
 
