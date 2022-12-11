@@ -42,14 +42,11 @@ from wand.color import Color
 from wand.drawing import Drawing
 from wand.font import Font
 from wand.image import Image
-from wand.version import fonts as fontsList
-from wand.version import MAGICK_VERSION, VERSION
 
 # my modules
 import common
 import convert
 import magick
-import mswindows
 
 
 def rotate(clone, angle, color, own):
@@ -83,28 +80,29 @@ def text(clone, in_out,
             box, box_color,
             text_x, text_y, text):
     """ add text into picture """
-    if in_out == 0:
-    # inside
-        with Drawing() as draw:
-            draw.fill_color = text_color
-            draw.font = font
-            draw.font_size = common.empty(text_size)
-            if gravity_onoff == 0:
-                draw.gravity = 'forget'
-            else:
-                draw.gravity = convert.gravity(gravity)
-            if box:
-                draw.text_under_color = box_color
-            draw.text(common.empty(text_x), common.empty(text_y), text)
-            draw(clone)
-    else:
-        # it has to be fixed
-        style = Font(font, common.empty(text_size), text_color)
-        clone.font = style
-        if box:
-            clone.label(text, gravity=convert.gravity(gravity), background_color=box_color)
+    if len(text) > 0:
+        if in_out == 0:
+        # inside
+            with Drawing() as draw:
+                draw.fill_color = text_color
+                draw.font = font
+                draw.font_size = common.empty(text_size)
+                if gravity_onoff == 0:
+                    draw.gravity = 'forget'
+                else:
+                    draw.gravity = convert.gravity(gravity)
+                if box:
+                    draw.text_under_color = box_color
+                draw.text(common.empty(text_x), common.empty(text_y), text)
+                draw(clone)
         else:
-            clone.label(text, gravity=convert.gravity(gravity))
+            # it has to be fixed
+            style = Font(font, common.empty(text_size), text_color)
+            clone.font = style
+            if box:
+                clone.label(text, gravity=convert.gravity(gravity), background_color=box_color)
+            else:
+                clone.label(text, gravity=convert.gravity(gravity))
 
 
 def bw(clone, bw, sepia):
@@ -117,10 +115,8 @@ def bw(clone, bw, sepia):
         clone.sepia_tone(threshold=common.empty(sepia)/100)
 
 
-def resize_subdir(resize, pixel, percent, border_x, border_y):
+def resize_subdir(resize, pixel, percent):
     """ prepare name for subdir and command for resize """
-    border_x = 2 * abs(int(border_x))
-    border_y = 2 * abs(int(border_y))
     if resize == 1:
         command = pixel + "x" + pixel
         sub_dir = pixel
@@ -132,13 +128,13 @@ def resize_subdir(resize, pixel, percent, border_x, border_y):
         command = str(percent) + "%"
         sub_dir = str(percent)
     elif resize == 3:
-        command = str(1920 - border_x) + "x" + str(1080 - border_y)
+        command = '1920x1080'
         sub_dir = "1920x1080"
     elif resize == 4:
-        command = str(2048 - border_x) + "x" + str(1556 - border_y)
+        command = "2048x1556"
         sub_dir = "2048x1556"
     elif resize == 5:
-        command = str(4096 - border_x) + "x" + str(3112 - border_y)
+        command = "4096x3112"
         sub_dir = "4096x3112"
     return (sub_dir, command)
 

@@ -2,7 +2,9 @@
 
 ## 2022
 
-4.0.0 use Wand-py instead PIL (almost) or execute magick as process, removed GraphicsMagick
+4.0.1 small code polishing
+
+4.0.0 use Wand-py instead PIL (almost) or execute magick as process, removed GraphicsMagick, works under Windows 11
 
 3.8.6 added Turkish translations
 

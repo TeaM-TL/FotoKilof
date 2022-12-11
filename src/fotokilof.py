@@ -211,16 +211,6 @@ def apply_all_button():
         progress_files.set(_("Processing"))
         root.update_idletasks()
 
-        # it needs to be fixed or removed
-        if img_border_on.get():
-            border_x = 0
-            border_y = 0
-            #border_x = e_border_x.get()
-            #border_y = e_border_y.get()
-        else:
-            border_x = 0
-            border_y = 0
-
         # single file or whode directory
         i = 0
         if file_dir_selector.get() == 0:
@@ -235,7 +225,7 @@ def apply_all_button():
         file_list_len = len(files_list)
         for file_in in files_list: 
             if img_resize_on.get():
-                subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), border_x, border_y)
+                subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
                 subdir = os.path.join(work_dir.get(), subdir_command[0])
             else:
                 subdir = work_dir.get()
@@ -370,7 +360,7 @@ def convert_resize_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
 
-    subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()), 0, 0)
+    subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
     file_out = magick.pre_magick(file_in_path.get(), os.path.join(work_dir.get(), subdir_command[0]), co_apply_type.get())
     with Image(filename=file_in_path.get()) as image:
         with image.clone() as clone:
