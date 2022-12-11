@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 pkg_vars = {}
-with open("src/version.py") as fp:
+with open("fotokilof/version.py") as fp:
     exec(fp.read(), pkg_vars)
 setuptools.setup(
     name=pkg_vars['__appname__'],
@@ -28,7 +28,7 @@ setuptools.setup(
     install_requires=['pillow','tkcolorpicker','wand'],
     entry_points = {
         "gui_scripts": [
-            "fotokilof = src:__main__",
+            "fotokilof = fotokilof:__main__",
         ]
     },
     include_package_data=True,

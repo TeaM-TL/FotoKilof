@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 CWD=`pwd`
-INITPY="src/__init__.py"
-MAINPY="src/fotokilof.py"
-MAIN__PY="src/__main__.py"
+INITPY="fotokilof/__init__.py"
+MAINPY="fotokilof/fotokilof.py"
+MAIN__PY="fotokilof/__main__.py"
 
 echo "- PyPI ---"
 

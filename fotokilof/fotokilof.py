@@ -217,16 +217,16 @@ def apply_all_button():
                 files_list.append(os.path.join(dirname, filename_short))
         
         file_list_len = len(files_list)
-        for file_in in files_list: 
+        for file_in in files_list:
             if img_resize_on.get():
                 subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
                 subdir = os.path.join(work_dir.get(), subdir_command[0])
             else:
                 subdir = work_dir.get()
             file_out = magick.pre_magick(file_in, subdir, co_apply_type.get())
-            clone = convert_wand.make_clone(file_in_path.get())
+            clone = convert_wand.make_clone(file_in)
             if img_crop_on.get():
-                convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+                convert_wand.crop(clone, clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
             if img_mirror_on.get():
                 convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
             if img_bw_on.get():
