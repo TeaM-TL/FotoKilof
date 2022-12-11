@@ -25,6 +25,7 @@ function for GUI
 
 from io import BytesIO
 from PIL import Image
+#from wand import Image
 
 import mswindows
 if mswindows.windows() == 1:

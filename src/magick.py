@@ -26,8 +26,8 @@ module to work with *Magick:
 - pre_magick - prepare output file for conversion
 - magick - picture conversion
 - magick_command - make [Graphics|Image]Magick independent
-+ get_image_size - identify picture: width and height
-+ display_image - display image
+- get_image_size - identify picture: width and height
+- display_image - display image
 """
 
 import os

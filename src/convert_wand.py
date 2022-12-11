@@ -22,6 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Converters
+- font_list - get list of available fonts
+- magick_wand_version - info about versions of IM ag Wand
+- make_clone - open origal picture and make clone for processing
+- save_close_clone - save clone into file and close clone
 - pip - picture in picture, for inserting logo
 - rotate - rotate picture
 - mirror - mirroring picture
@@ -38,11 +42,35 @@ from wand.color import Color
 from wand.drawing import Drawing
 from wand.font import Font
 from wand.image import Image, COMPOSITE_OPERATORS
+from wand.version import fonts as fontsList
+from wand.version import MAGICK_VERSION, VERSION
 
 # my modules
 import common
 import convert
 import magick
+
+
+def fonts_list():
+    """ list of available fonts """
+    return fontsList()
+
+
+def magick_wand_version():
+    """ version of ImageMagick and Wand-py """
+    return 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
+
+
+def make_clone(file_in):
+    """ open picture and make clone for processing """
+    with Image(filename=file_in) as image:
+        clone = image.clone()
+        return clone
+
+def save_close_clone(clone, file_out):
+    """ save and close clone after processing """
+    clone.save(filename=file_out) 
+    clone.close()
 
 
 def pip(clone, logo, width, height, offset_dx, offset_dy):

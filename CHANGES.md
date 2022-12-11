@@ -2,6 +2,8 @@
 
 ## 2022
 
+4.0.3 some code improvement, PIL only for Windows for clipboard handle
+
 4.0.2 pip works again
 
 4.0.1 small code polishing

@@ -47,12 +47,6 @@ import os
 import platform
 import sys
 import tempfile
-from wand.color import Color
-from wand.drawing import Drawing
-from wand.font import Font
-from wand.image import Image
-from wand.version import fonts as fontsList
-from wand.version import MAGICK_VERSION, VERSION
 
 # my modules
 import convert
@@ -146,7 +140,7 @@ def preview_new(file_out):
     """ generowanie podglądu wynikowego """
 
     if co_preview_selector_new.get() != "none":
-        preview_info = preview.preview_pillow(file_out,
+        preview_info = preview.preview_wand(file_out,
                                               int(co_preview_selector_new.get()),
                                               "")
 
@@ -230,42 +224,41 @@ def apply_all_button():
             else:
                 subdir = work_dir.get()
             file_out = magick.pre_magick(file_in, subdir, co_apply_type.get())
-            with Image(filename=file_in) as image:
-                with image.clone() as clone:
-                    if img_crop_on.get():
-                        convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
-                    if img_mirror_on.get():
-                        convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
-                    if img_bw_on.get():
-                        convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
-                    if img_contrast_on.get():
-                        convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
-                    if img_normalize_on.get():
-                        convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
-                    if img_border_on.get():
-                        convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
-                    if img_rotate_on.get():
-                        convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
-                    if img_text_on.get():
-                        convert_wand.text(clone, img_text_inout.get(),
-                                            img_text_color.get(), img_text_font.get(), e_text_size.get(),
-                                            img_text_gravity_onoff.get(), img_text_gravity.get(),
-                                            img_text_box.get(), img_text_box_color.get(),
-                                            e_text_x.get(), e_text_y.get(), e_text.get())
-                    if img_resize_on.get():
-                        convert_wand.resize(clone, subdir_command[1])
-                    if img_logo_on.get():
-                        convert_wand.pip(clone, file_logo_path.get(),
-                            e_logo_width.get(), e_logo_height.get(),
-                            e_logo_dx.get(), e_logo_dy.get())
-                    clone.save(filename=file_out) 
-                    # progressbar
-                    i = i + 1
-                    progress_files.set(str(i) + " " + _("of") + " " \
-                                   + str(file_list_len) + " : " \
-                                   + os.path.basename(file_in))
-                    progress_var.set(i)
-                    root.update_idletasks()
+            clone = convert_wand.make_clone(file_in_path.get())
+            if img_crop_on.get():
+                convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+            if img_mirror_on.get():
+                convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
+            if img_bw_on.get():
+                convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
+            if img_contrast_on.get():
+                convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
+            if img_normalize_on.get():
+                convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
+            if img_border_on.get():
+                convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
+            if img_rotate_on.get():
+                convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
+            if img_text_on.get():
+                convert_wand.text(clone, img_text_inout.get(),
+                                    img_text_color.get(), img_text_font.get(), e_text_size.get(),
+                                    img_text_gravity_onoff.get(), img_text_gravity.get(),
+                                    img_text_box.get(), img_text_box_color.get(),
+                                    e_text_x.get(), e_text_y.get(), e_text.get())
+            if img_resize_on.get():
+                convert_wand.resize(clone, subdir_command[1])
+            if img_logo_on.get():
+                convert_wand.pip(clone, file_logo_path.get(),
+                    e_logo_width.get(), e_logo_height.get(),
+                    e_logo_dx.get(), e_logo_dy.get())
+            convert_wand.save_close_clone(clone, file_out) 
+            # progressbar
+            i = i + 1
+            progress_files.set(str(i) + " " + _("of") + " " \
+                            + str(file_list_len) + " : " \
+                            + os.path.basename(file_in))
+            progress_var.set(i)
+            root.update_idletasks()
 
 
             preview_new(file_out)
@@ -299,10 +292,9 @@ def convert_contrast_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
-            clone.save(filename=file_out)
+    clone = convert_wand.make_clone(file_in_path.get())
+    convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
+    convert_wand.save_close_clone(clone, file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -312,10 +304,9 @@ def convert_bw_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
-            clone.save(filename=file_out)
+    clone = convert_wand.make_clone(file_in_path.get())
+    convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
+    convert_wand.save_close_clone(clone, file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -325,10 +316,9 @@ def convert_normalize_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
-            clone.save(filename=file_out)
+    clone = convert_wand.make_clone(file_in_path.get())
+    convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
+    convert_wand.save_close_clone(clone, file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -338,10 +328,9 @@ def convert_rotate_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
-            clone.save(filename=file_out)
+    clone = convert_wand.make_clone(file_in_path.get())
+    convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
+    convert_wand.save_close_clone(clone, file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -351,10 +340,9 @@ def convert_mirror_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
-            clone.save(filename=file_out)
+    clone = convert_wand.make_clone(file_in_path.get())
+    convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
+    convert_wand.save_close_clone(clone, file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -366,11 +354,9 @@ def convert_resize_button():
 
     subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
     file_out = magick.pre_magick(file_in_path.get(), os.path.join(work_dir.get(), subdir_command[0]), co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            convert_wand.resize(clone, subdir_command[1])
-            clone.save(filename=file_out)
-
+    clone = convert_wand.make_clone(file_in_path.get())
+    convert_wand.resize(clone, subdir_command[1])
+    convert_wand.save_close_clone(clone, file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -380,11 +366,9 @@ def convert_border_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
-            clone.save(filename=file_out)
-
+    clone = convert_wand.make_clone(file_in_path.get())
+    convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
+    convert_wand.save_close_clone(clone, file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -447,10 +431,9 @@ def convert_crop_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
-            clone.save(filename=file_out)
+    clone = convert_wand.make_clone(file_in_path.get())
+    convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+    convert_wand.save_close_clone(clone, file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -460,21 +443,20 @@ def convert_text_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            convert_wand.text(clone, img_text_inout.get(),
+    clone = convert_wand.make_clone(file_in_path.get())
+    convert_wand.text(clone, img_text_inout.get(),
                                     img_text_color.get(), img_text_font.get(), e_text_size.get(),
                                     img_text_gravity_onoff.get(), img_text_gravity.get(),
                                     img_text_box.get(), img_text_box_color.get(),
                                     e_text_x.get(), e_text_y.get(), e_text.get())
-            clone.save(filename=file_out)
+    convert_wand.save_close_clone(clone, file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
 
 def fonts():
     """ preparing font names for ImageMagick and load into listbox """
-    result = fontsList()
+    result = convert_wand.fonts_list()
     co_text_font['values'] = result
     return result
 
@@ -489,12 +471,11 @@ def convert_logo_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
-    with Image(filename=file_in_path.get()) as image:
-        with image.clone() as clone:
-            convert_wand.pip(clone, file_logo_path.get(),
+    clone = convert_wand.make_clone(file_in_path.get())
+    convert_wand.pip(clone, file_logo_path.get(),
                             e_logo_width.get(), e_logo_height.get(),
                             e_logo_dx.get(), e_logo_dy.get())
-            clone.save(filename=file_out)
+    convert_wand.save_close_clone(clone, file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -1106,7 +1087,7 @@ def preview_orig():
             else:
                 crop_rectangle = (" ")
 
-            preview_picture = preview.preview_pillow(file_in_path.get(),
+            preview_picture = preview.preview_wand(file_in_path.get(),
                                                   int(co_preview_selector_orig.get()),
                                                   crop_rectangle)
 
@@ -1137,11 +1118,7 @@ def preview_logo():
     """ generating logo preview """
     if os.path.isfile(file_logo_path.get()):
         l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
-
-        preview_info = preview.preview_convert(file_logo_path.get(), " ", PREVIEW_LOGO, GM_or_IM)
-        # because PIL has problem with coversion RGBA->RGB,
-        # is impossible to use command as below :-(
-#        preview_info = preview.preview_pillow(file_logo_path.get(), PREVIEW_LOGO)
+        preview_info = preview.preview_wand(file_logo_path.get(), PREVIEW_LOGO, "")
 
         try:
             pi_logo_preview.configure(file=preview_info['filename'])
@@ -2234,7 +2211,7 @@ root.bind("<End>", open_file_last_key)
 # Run functions
 #
 GM_or_IM = ""
-IM_version = 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
+IM_version = convert_wand.magick_wand_version()
 Python_version = 'Py:' + platform.python_version()
 window_title = version.__author__ + " : " + version.__appname__ + ": " + version.__version__ + " : " + IM_version + " : " + Python_version + " | "
 root.title(window_title)
