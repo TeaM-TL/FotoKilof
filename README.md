@@ -6,9 +6,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 
 ### Linux
 
-![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof.png)
-
-![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof2.png)
+![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof1.png)
 
 ### Mac OSX
 
@@ -16,7 +14,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 
 ### Windows
 
-![Screenshot Windows](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_windows11.png)
+![Screenshot Windows](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_windows.png)
 
 ## Graphics conversion
 
