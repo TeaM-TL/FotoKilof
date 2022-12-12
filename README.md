@@ -6,7 +6,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 
 ### Linux
 
-![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof1.png)
+![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_linux.png)
 
 ### Mac OSX
 
