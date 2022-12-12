@@ -22,9 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Converters
-- preview_crop_gravity - convert corrdinates from crop3
+- preview_crop_gravity - convert coordinates for crop3 and logo position
 - gravity - translate eg. NS to Northsouth as Wand-py expect
 """
+
 
 def preview_crop_gravity(coordinates, x_max, y_max):
     """
@@ -60,10 +61,10 @@ def preview_crop_gravity(coordinates, x_max, y_max):
         x1 = x0 + width
         y1 = y_max/2 + height/2
     elif gravitation == "C":
-        x0 = x_max/2 - width/2
-        y0 = y_max/2 - height/2
-        x1 = x_max/2 + width/2
-        y1 = y_max/2 + height/2
+        x0 = x_max/2 - width/2 + offset_x
+        y0 = y_max/2 - height/2 + offset_y
+        x1 = x_max/2 + width/2 + offset_x
+        y1 = y_max/2 + height/2 + offset_y
     elif gravitation == "E":
         x0 = x_max - width - offset_x
         y0 = y_max/2 - height/2

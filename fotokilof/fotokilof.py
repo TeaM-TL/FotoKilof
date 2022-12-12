@@ -126,12 +126,8 @@ def preview_new_refresh(event):
     """ callback after selection of size preview"""
 
     # to define file_out
-    file_out = magick.pre_magick(file_in_path.get(),
-                                 os.path.join(work_dir.get(),
-                                 work_sub_dir.get()),
-                                 co_apply_type.get())
-    if os.path.isfile(file_out):
-        preview_new(file_out)
+    if os.path.isfile(path_to_file_out()):
+        preview_new(path_to_file_out())
     else:
         preview_new_clear()
 
@@ -181,12 +177,8 @@ def preview_new_button():
     """ preview new picture """
 
     # to define file_out
-    file_out = magick.pre_magick(file_in_path.get(),
-                                 os.path.join(work_dir.get(),
-                                 work_sub_dir.get()),
-                                 co_apply_type.get())
-    if os.path.isfile(file_out):
-        magick.display_image(file_out)
+    if os.path.isfile(path_to_file_out()):
+        magick.display_image(path_to_file_out())
 
 
 def extension_from_file():
@@ -197,6 +189,12 @@ def extension_from_file():
         co_apply_type.current(file_extension.index(extension))
     except:
         log.write_log("extension_from_file: wrong extension", "W")
+
+
+def path_to_file_out():
+    """ create filename of out file """
+    filename = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    return filename
 
 
 def apply_all_button():
@@ -218,15 +216,9 @@ def apply_all_button():
         
         file_list_len = len(files_list)
         for file_in in files_list:
-            if img_resize_on.get():
-                subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
-                subdir = os.path.join(work_dir.get(), subdir_command[0])
-            else:
-                subdir = work_dir.get()
-            file_out = magick.pre_magick(file_in, subdir, co_apply_type.get())
             clone = convert_wand.make_clone(file_in)
             if img_crop_on.get():
-                convert_wand.crop(clone, clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+                convert_wand.crop(file_in, clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
             if img_mirror_on.get():
                 convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
             if img_bw_on.get():
@@ -239,30 +231,42 @@ def apply_all_button():
                 convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
             if img_rotate_on.get():
                 convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
+            if img_resize_on.get():
+                #  subdir for results if resize
+                subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
+                subdir = os.path.join(work_dir.get(), subdir_command[0])
+                convert_wand.resize(clone, subdir_command[1])
+            else:
+                # standard subdir for result picture
+                subdir = work_dir.get()
             if img_text_on.get():
                 convert_wand.text(clone, img_text_inout.get(),
                                     img_text_color.get(), img_text_font.get(), e_text_size.get(),
                                     img_text_gravity_onoff.get(), img_text_gravity.get(),
                                     img_text_box.get(), img_text_box_color.get(),
                                     e_text_x.get(), e_text_y.get(), e_text.get())
-            if img_resize_on.get():
-                convert_wand.resize(clone, subdir_command[1])
             if img_logo_on.get():
-                convert_wand.pip(clone, file_logo_path.get(),
-                    e_logo_width.get(), e_logo_height.get(),
-                    e_logo_dx.get(), e_logo_dy.get())
-            convert_wand.save_close_clone(clone, file_out) 
+                coordinates = (common.empty(e_logo_dx.get()), common.empty(e_logo_dy.get()), 
+                                common.empty(e_logo_width.get()), common.empty(e_logo_height.get()),
+                                img_logo_gravity.get())
+                height = clone.height
+                width = clone.width
+                convert_wand.pip(clone, file_logo_path.get(), coordinates, width, height)
+
+            file_out = magick.pre_magick(file_in, subdir, co_apply_type.get())
+            convert_wand.save_close_clone(clone, file_out)
+            preview_new(file_out)
             # progressbar
             i = i + 1
             progress_files.set(str(i) + " " + _("of") + " " \
                             + str(file_list_len) + " : " \
                             + os.path.basename(file_in))
+            
             progress_var.set(i)
             root.update_idletasks()
 
-
-            preview_new(file_out)
-            preview_orig()
+        file_in_path.set(file_in)
+        preview_orig()
 
         progress_var.set(0)
         progress_files.set(_("done"))
@@ -291,11 +295,10 @@ def convert_contrast_button():
     """ contrast button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
-    convert_wand.save_close_clone(clone, file_out)
-    preview_new(file_out)
+    convert_wand.save_close_clone(clone, path_to_file_out())
+    preview_new(path_to_file_out())
     progress_files.set(_("done"))
 
 
@@ -303,11 +306,10 @@ def convert_bw_button():
     """ black-white or sepia button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
-    convert_wand.save_close_clone(clone, file_out)
-    preview_new(file_out)
+    convert_wand.save_close_clone(clone, path_to_file_out())
+    preview_new(path_to_file_out())
     progress_files.set(_("done"))
 
 
@@ -315,11 +317,10 @@ def convert_normalize_button():
     """ normalize button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
-    convert_wand.save_close_clone(clone, file_out)
-    preview_new(file_out)
+    convert_wand.save_close_clone(clone, path_to_file_out())
+    preview_new(path_to_file_out())
     progress_files.set(_("done"))
 
 
@@ -327,11 +328,10 @@ def convert_rotate_button():
     """ Rotate button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
-    convert_wand.save_close_clone(clone, file_out)
-    preview_new(file_out)
+    convert_wand.save_close_clone(clone, path_to_file_out())
+    preview_new(path_to_file_out())
     progress_files.set(_("done"))
 
 
@@ -339,11 +339,10 @@ def convert_mirror_button():
     """ Mirror button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
-    convert_wand.save_close_clone(clone, file_out)
-    preview_new(file_out)
+    convert_wand.save_close_clone(clone, path_to_file_out())
+    preview_new(path_to_file_out())
     progress_files.set(_("done"))
 
 
@@ -365,11 +364,10 @@ def convert_border_button():
     """ Border button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
-    convert_wand.save_close_clone(clone, file_out)
-    preview_new(file_out)
+    convert_wand.save_close_clone(clone, path_to_file_out())
+    preview_new(path_to_file_out())
     progress_files.set(_("done"))
 
 
@@ -430,11 +428,10 @@ def convert_crop_button():
     """ Crop button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
-    convert_wand.save_close_clone(clone, file_out)
-    preview_new(file_out)
+    convert_wand.save_close_clone(clone, path_to_file_out())
+    preview_new(path_to_file_out())
     progress_files.set(_("done"))
 
 
@@ -442,15 +439,14 @@ def convert_text_button():
     """ add text """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.text(clone, img_text_inout.get(),
                                     img_text_color.get(), img_text_font.get(), e_text_size.get(),
                                     img_text_gravity_onoff.get(), img_text_gravity.get(),
                                     img_text_box.get(), img_text_box_color.get(),
                                     e_text_x.get(), e_text_y.get(), e_text.get())
-    convert_wand.save_close_clone(clone, file_out)
-    preview_new(file_out)
+    convert_wand.save_close_clone(clone, path_to_file_out())
+    preview_new(path_to_file_out())
     progress_files.set(_("done"))
 
 
@@ -470,13 +466,13 @@ def convert_logo_button():
     """ Logo button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    file_out = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+    coordinates = (common.empty(e_logo_dx.get()), common.empty(e_logo_dy.get()), 
+                    common.empty(e_logo_width.get()), common.empty(e_logo_height.get()),
+                    img_logo_gravity.get())
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.pip(clone, file_logo_path.get(),
-                            e_logo_width.get(), e_logo_height.get(),
-                            e_logo_dx.get(), e_logo_dy.get())
-    convert_wand.save_close_clone(clone, file_out)
-    preview_new(file_out)
+    convert_wand.pip(clone, file_logo_path.get(), coordinates, clone.width, clone.height )
+    convert_wand.save_close_clone(clone, path_to_file_out())
+    preview_new(path_to_file_out())
     progress_files.set(_("done"))
 
 
@@ -991,7 +987,7 @@ def mouse_crop_NW(event):
     y_preview = event.y
 
     xy_max = common.mouse_crop_calculation(file_in_width.get(),
-                                           file_in_width.get(),
+                                           file_in_height.get(),
                                            int(co_preview_selector_orig.get()))
     width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
     height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
@@ -1023,7 +1019,7 @@ def mouse_crop_SE(event):
         x_preview = event.x
         y_preview = event.y
         xy_max = common.mouse_crop_calculation(file_in_width.get(),
-                                               file_in_width.get(),
+                                               file_in_height.get(),
                                                int(co_preview_selector_orig.get()))
         width = int(x_preview*xy_max['x_orig']/xy_max['x_max'])
         height = int(y_preview*xy_max['y_orig']/xy_max['y_max'])
@@ -1065,9 +1061,9 @@ def preview_orig():
                     y1 = y0 + int(e4_crop_2.get())
                     # do_nothing = 0
                 elif img_crop.get() == 3:
-                    coord_for_crop = (int(e1_crop_3.get()), int(e2_crop_3.get()),
-                                  int(e3_crop_3.get()), int(e4_crop_3.get()),
-                                  img_crop_gravity.get())
+                    coord_for_crop = (common.empty(e1_crop_3.get()), common.empty(e2_crop_3.get()),
+                                        common.empty(e3_crop_3.get()), common.empty(e4_crop_3.get()),
+                                        img_crop_gravity.get())
                     coord = convert.preview_crop_gravity(coord_for_crop,
                                                              xy_max['x_orig'],
                                                              xy_max['y_orig'])
@@ -2044,35 +2040,35 @@ e_logo_dy.grid(row=3, column=2, sticky=W, padx=5)
 # Wand-py has o gravity for inserting picture
 # it will be implemented later
 ###
-#frame_logo_gravity = ttk.Frame(frame_logo)
-#rb_logo_NW = ttk.Radiobutton(frame_logo_gravity, text="NW",
-#                             variable=img_logo_gravity, value="NW")
-#rb_logo_N = ttk.Radiobutton(frame_logo_gravity, text="N",
-#                            variable=img_logo_gravity, value="N")
-#rb_logo_NE = ttk.Radiobutton(frame_logo_gravity, text="NE",
-#                             variable=img_logo_gravity, value="NE")
-#rb_logo_W = ttk.Radiobutton(frame_logo_gravity, text="W",
-#                            variable=img_logo_gravity, value="W")
-#rb_logo_C = ttk.Radiobutton(frame_logo_gravity, text=_("Center"),
-#                            variable=img_logo_gravity, value="C")
-#rb_logo_E = ttk.Radiobutton(frame_logo_gravity, text="E",
-#                            variable=img_logo_gravity, value="E")
-#rb_logo_SW = ttk.Radiobutton(frame_logo_gravity, text="SW",
-#                             variable=img_logo_gravity, value="SW")
-#rb_logo_S = ttk.Radiobutton(frame_logo_gravity, text="S",
-#                            variable=img_logo_gravity, value="S")
-#rb_logo_SE = ttk.Radiobutton(frame_logo_gravity, text="SE",
-#                             variable=img_logo_gravity, value="SE")
-#frame_logo_gravity.grid(row=2, column=3, sticky=E)
-#rb_logo_NW.grid(row=1, column=1, sticky=W, pady=1)
-#rb_logo_N.grid(row=1, column=2, pady=1)
-#rb_logo_NE.grid(row=1, column=3, sticky=W, pady=1)
-#rb_logo_W.grid(row=2, column=1, sticky=W, pady=1)
-#rb_logo_C.grid(row=2, column=2, pady=1)
-#rb_logo_E.grid(row=2, column=3, sticky=W, pady=1)
-#rb_logo_SW.grid(row=3, column=1, sticky=W, pady=1)
-#rb_logo_S.grid(row=3, column=2, pady=1)
-#rb_logo_SE.grid(row=3, column=3, sticky=W, pady=1)
+frame_logo_gravity = ttk.Frame(frame_logo)
+rb_logo_NW = ttk.Radiobutton(frame_logo_gravity, text="NW",
+                             variable=img_logo_gravity, value="NW")
+rb_logo_N = ttk.Radiobutton(frame_logo_gravity, text="N",
+                            variable=img_logo_gravity, value="N")
+rb_logo_NE = ttk.Radiobutton(frame_logo_gravity, text="NE",
+                             variable=img_logo_gravity, value="NE")
+rb_logo_W = ttk.Radiobutton(frame_logo_gravity, text="W",
+                            variable=img_logo_gravity, value="W")
+rb_logo_C = ttk.Radiobutton(frame_logo_gravity, text=_("Center"),
+                            variable=img_logo_gravity, value="C")
+rb_logo_E = ttk.Radiobutton(frame_logo_gravity, text="E",
+                            variable=img_logo_gravity, value="E")
+rb_logo_SW = ttk.Radiobutton(frame_logo_gravity, text="SW",
+                             variable=img_logo_gravity, value="SW")
+rb_logo_S = ttk.Radiobutton(frame_logo_gravity, text="S",
+                            variable=img_logo_gravity, value="S")
+rb_logo_SE = ttk.Radiobutton(frame_logo_gravity, text="SE",
+                             variable=img_logo_gravity, value="SE")
+frame_logo_gravity.grid(row=2, column=3, sticky=E)
+rb_logo_NW.grid(row=1, column=1, sticky=W, pady=1)
+rb_logo_N.grid(row=1, column=2, pady=1)
+rb_logo_NE.grid(row=1, column=3, sticky=W, pady=1)
+rb_logo_W.grid(row=2, column=1, sticky=W, pady=1)
+rb_logo_C.grid(row=2, column=2, pady=1)
+rb_logo_E.grid(row=2, column=3, sticky=W, pady=1)
+rb_logo_SW.grid(row=3, column=1, sticky=W, pady=1)
+rb_logo_S.grid(row=3, column=2, pady=1)
+rb_logo_SE.grid(row=3, column=3, sticky=W, pady=1)
 
 ###
 frame_logo_preview = ttk.Frame(frame_logo)

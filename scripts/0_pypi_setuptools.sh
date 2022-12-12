@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+rm -rf ../build/*
+rm -rf ../fotokilof/__pycache__
 CWD=`pwd`
 INITPY="fotokilof/__init__.py"
 MAINPY="fotokilof/fotokilof.py"

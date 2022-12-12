@@ -57,9 +57,32 @@ def pre_magick(file_in, destination, extension):
             if os.path.isdir(out_dir) is False:
                 try:
                     os.mkdir(out_dir)
+                except FileExistsError:
+                    log.write_log("pre_imagick: FileExistsError" + out_dir, "E")
+                except FileNotFoundError:
+                    try:
+                        os.mkdir(os.path.dirname(out_dir))
+                    except FileNotFoundError:
+                        log.write_log("pre_imagick: Cannot make directory for output pictures" + os.path.dirname(out_dir), "E")
+                        result = None
+                    except:
+                        log.write_log("pre_imagick: other problem to create" + os.path.dirname(out_dir), "E")
+                        result = None
+                    if result == "OK":
+                        try:
+                            os.mkdir(out_dir)
+                        except FileExistsError:
+                            log.write_log("pre_imagick: FileExistsError" + out_dir, "E")
+                        except FileNotFoundError:
+                            log.write_log("pre_imagick: FileExistsError" + os.path.dirname(out_dir), "E")
+                            result = None
+                        except:
+                            log.write_log("pre_imagick: other problem to create" + out_dir, "E")
+                            result = None
                 except:
-                    log.write_log("pre_imagick: Cannot make directory for output pictures", "E")
+                    log.write_log("pre_imagick: other problem to create" + out_dir, "E")
                     result = None
+
         else:
             result = None
     else:

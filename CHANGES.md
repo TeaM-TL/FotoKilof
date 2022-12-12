@@ -2,6 +2,8 @@
 
 ## 2022
 
+4.0.5 added gravity for logo, fixed resize conversion if FOtokilof parent dire doesn't exists
+
 4.0.4 fix processing whole directory, fix directory name
 
 4.0.3 some code improvement, PIL only for Windows for clipboard handle

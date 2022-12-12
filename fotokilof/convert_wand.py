@@ -73,13 +73,21 @@ def save_close_clone(clone, file_out):
     clone.close()
 
 
-def pip(clone, logo, width, height, offset_dx, offset_dy):
-    """ put picture on picture """
+def pip(clone, logo, logo_data, image_height, image_width):
+    """ put picture on picture
+    clone - clone of image for processing
+    logo - filename of logo
+    logo_data = offset_x, offset_y, width, height, gravitation
+    original image size: image_height, image_width
+    """
     if len(logo):
         with Image(filename=logo) as logo:
             with Drawing() as draw:
-                draw.composite(operator='over', left=common.empty(offset_dx), top=common.empty(offset_dy),
-                                width=common.empty(width), height=common.empty(height), image=logo)
+                position = convert.preview_crop_gravity(logo_data, image_height, image_width)
+                draw.composite(operator='over', 
+                                left=common.empty(position[0]), top=common.empty(position[1]),
+                                width=common.empty(logo_data[2]), height=common.empty(logo_data[3]),
+                                image=logo)
                 draw(clone)
 
 
