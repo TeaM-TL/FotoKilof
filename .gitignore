@@ -1,1 +1,4 @@
-src/locale/**/*.mo
+fotokilof/locale/**/*.mo
+dist/*
+build/*
+.directory

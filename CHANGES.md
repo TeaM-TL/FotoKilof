@@ -2,7 +2,7 @@
 
 ## 2022
 
-4.0.5 added gravity for logo, fixed resize conversion if FOtokilof parent dire doesn't exists
+4.0.5 added gravity for logo, fixed resize conversion if FotoKilof parent directory doesn't exists
 
 4.0.4 fix processing whole directory, fix directory name
 
