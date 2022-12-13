@@ -55,13 +55,10 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - equalize by channel,
  - contrast between -3 and +3,
  - customized contrast stretching,
- - histograms of original and result pictures,
+ - logo position by gravity, size and offset,
+ - histograms of original and result pictures (temporary disabled),
  - fast file navigation: First, Prev, Next, Last,
- - own command editor,
- - own command can be composed from executed commands,
- - is possible to use other ImageMagick commands, eg. *-gaussian-blur* etc.,
- - logging conversion,
- - GraphickMagick is supported partialy.
+ - is possible to use other ImageMagick commands, eg. *-gaussian-blur* etc. in command editor.
 
 ## User manual
 
