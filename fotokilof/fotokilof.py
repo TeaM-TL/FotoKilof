@@ -34,6 +34,7 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog, messagebox
 from tkinter import TclError, StringVar, IntVar
 from tkinter import N, S, W, E, END, DISABLED, NORMAL
+from idlelib.tooltip import Hovertip
 try:
     from tkcolorpicker import askcolor
 except:
@@ -240,7 +241,7 @@ def apply_all_button():
                 # standard subdir for result picture
                 subdir = work_dir.get()
             if img_text_on.get():
-                convert_wand.text(clone, img_text_inout.get(),
+                convert_wand.text(clone, img_text_inout.get(), e_text_angle.get(),
                                     img_text_color.get(), img_text_font.get(), e_text_size.get(),
                                     img_text_gravity_onoff.get(), img_text_gravity.get(),
                                     img_text_box.get(), img_text_box_color.get(),
@@ -440,7 +441,7 @@ def convert_text_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.text(clone, img_text_inout.get(),
+    convert_wand.text(clone, img_text_inout.get(), e_text_angle.get(),
                                     img_text_color.get(), img_text_font.get(), e_text_size.get(),
                                     img_text_gravity_onoff.get(), img_text_gravity.get(),
                                     img_text_box.get(), img_text_box_color.get(),
@@ -1817,6 +1818,8 @@ co_text_font = ttk.Combobox(frame_text, width=35,
 co_text_font.configure(state='readonly')
 e_text_size = ttk.Entry(frame_text, width=3,
                         validate="key", validatecommand=(validation, '%S'))
+e_text_angle = ttk.Entry(frame_text, width=3,
+                        validate="key", validatecommand=(validation, '%S'))
 l_text_color = ttk.Label(frame_text, text=_("Color"))
 b_text_color = ttk.Button(frame_text, text=_("Font"),
                           command=color_choose)
@@ -1828,8 +1831,9 @@ b_text_run = ttk.Button(frame_text, text=_("Execute"),
 l_text_color.grid(row=2, column=5, sticky=(W, E), padx=5, pady=1)
 b_text_color.grid(row=3, column=5, sticky=(W, E), padx=5, pady=1)
 b_text_box_color.grid(row=4, column=5, sticky=(W, E), padx=5, pady=1)
-co_text_font.grid(row=5, column=1, columnspan=3, sticky=(W, E), padx=5)
-e_text_size.grid(row=5, column=4, sticky=W, padx=5)
+co_text_font.grid(row=5, column=1, columnspan=2, sticky=(W, E), padx=5)
+e_text_size.grid(row=5, column=3, sticky=W, padx=5)
+e_text_angle.grid(row=5, column=4, sticky=W, padx=5)
 b_text_run.grid(row=5, column=5, sticky=(E), padx=5, pady=5)
 
 ###########################
@@ -2203,6 +2207,11 @@ root.bind("<Next>", open_file_next_key)
 root.bind("<Home>", open_file_first_key)
 root.bind("<End>", open_file_last_key)
 
+###############################################################################
+# toolTips
+###############################################################################
+Hovertip(e_text_size,_("Text size"))
+Hovertip(e_text_angle,_("Angle"))
 ##########################################
 # Run functions
 #

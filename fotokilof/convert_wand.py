@@ -116,7 +116,7 @@ def border(clone, color, x, y):
     clone.border(color, common.empty(x), common.empty(y))
 
 
-def text(clone, in_out, 
+def text(clone, in_out, angle,
             text_color, font, text_size, 
             gravity_onoff, gravity, 
             box, box_color,
@@ -135,8 +135,13 @@ def text(clone, in_out,
                     draw.gravity = str(convert.gravitation(gravity))
                 if box:
                     draw.text_under_color = box_color
-                draw.text(common.empty(text_x), common.empty(text_y), text)
-                draw(clone)
+                #draw.text(common.empty(text_x), common.empty(text_y), text)
+                #draw(clone)
+                #clone.annotate(text, draw, left=20, baseline=50, angle=angle)
+                clone.annotate(text, draw, angle=common.empty(angle), 
+                        left=common.empty(text_x), baseline=common.empty(text_y))
+
+                
         else:
             # it has to be fixed
             style = Font(font, common.empty(text_size), text_color)
