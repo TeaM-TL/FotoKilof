@@ -2,6 +2,8 @@
 
 ## 2022
 
+4.0.7 fixed preview for resized picture
+
 4.0.6 added rotation of text, tooltips
 
 4.0.5 added gravity for logo, fixed resize conversion if FotoKilof parent directory doesn't exists

@@ -116,13 +116,15 @@ def border(clone, color, x, y):
     clone.border(color, common.empty(x), common.empty(y))
 
 
-def text(clone, in_out, angle,
+def text(clone, in_out, own, angle,
             text_color, font, text_size, 
             gravity_onoff, gravity, 
             box, box_color,
             text_x, text_y, text):
     """ add text into picture """
     if len(text) > 0:
+        if angle == -1:
+            angle = common.empty(own)
         if in_out == 0:
         # inside
             with Drawing() as draw:
@@ -140,8 +142,6 @@ def text(clone, in_out, angle,
                 #clone.annotate(text, draw, left=20, baseline=50, angle=angle)
                 clone.annotate(text, draw, angle=common.empty(angle), 
                         left=common.empty(text_x), baseline=common.empty(text_y))
-
-                
         else:
             # it has to be fixed
             style = Font(font, common.empty(text_size), text_color)

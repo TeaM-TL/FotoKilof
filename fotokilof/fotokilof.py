@@ -127,8 +127,8 @@ def preview_new_refresh(event):
     """ callback after selection of size preview"""
 
     # to define file_out
-    if os.path.isfile(path_to_file_out()):
-        preview_new(path_to_file_out())
+    if os.path.isfile(path_to_file_out(resized.get())):
+        preview_new(path_to_file_out(resized.get()))
     else:
         preview_new_clear()
 
@@ -178,8 +178,8 @@ def preview_new_button():
     """ preview new picture """
 
     # to define file_out
-    if os.path.isfile(path_to_file_out()):
-        magick.display_image(path_to_file_out())
+    if os.path.isfile(path_to_file_out(resized.get())):
+        magick.display_image(path_to_file_out(resized.get()))
 
 
 def extension_from_file():
@@ -192,9 +192,18 @@ def extension_from_file():
         log.write_log("extension_from_file: wrong extension", "W")
 
 
-def path_to_file_out():
+def path_to_file_out(resize):
     """ create filename of out file """
-    filename = magick.pre_magick(file_in_path.get(), work_dir.get(), co_apply_type.get())
+
+    if resize:
+        subdir = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
+        workdir = os.path.join(work_dir.get(), subdir[0])
+        resized.set(1)
+    else:
+        workdir = work_dir.get()
+        resized.set(0)
+
+    filename = magick.pre_magick(file_in_path.get(), workdir, co_apply_type.get())
     return filename
 
 
@@ -237,11 +246,13 @@ def apply_all_button():
                 subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
                 subdir = os.path.join(work_dir.get(), subdir_command[0])
                 convert_wand.resize(clone, subdir_command[1])
+                resized.set(1)
             else:
+                resized.set(0)
                 # standard subdir for result picture
                 subdir = work_dir.get()
             if img_text_on.get():
-                convert_wand.text(clone, img_text_inout.get(), e_text_angle.get(),
+                convert_wand.text(clone, img_text_inout.get(), e_text_angle.get(), img_text_rotate.get(),
                                     img_text_color.get(), img_text_font.get(), e_text_size.get(),
                                     img_text_gravity_onoff.get(), img_text_gravity.get(),
                                     img_text_box.get(), img_text_box_color.get(),
@@ -298,8 +309,8 @@ def convert_contrast_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
-    convert_wand.save_close_clone(clone, path_to_file_out())
-    preview_new(path_to_file_out())
+    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
 
@@ -309,8 +320,8 @@ def convert_bw_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
-    convert_wand.save_close_clone(clone, path_to_file_out())
-    preview_new(path_to_file_out())
+    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
 
@@ -320,8 +331,8 @@ def convert_normalize_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
-    convert_wand.save_close_clone(clone, path_to_file_out())
-    preview_new(path_to_file_out())
+    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
 
@@ -331,8 +342,8 @@ def convert_rotate_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
-    convert_wand.save_close_clone(clone, path_to_file_out())
-    preview_new(path_to_file_out())
+    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
 
@@ -342,8 +353,8 @@ def convert_mirror_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
-    convert_wand.save_close_clone(clone, path_to_file_out())
-    preview_new(path_to_file_out())
+    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
 
@@ -352,10 +363,10 @@ def convert_resize_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
 
-    subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
-    file_out = magick.pre_magick(file_in_path.get(), os.path.join(work_dir.get(), subdir_command[0]), co_apply_type.get())
+    resize_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
+    file_out = path_to_file_out(1)
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.resize(clone, subdir_command[1])
+    convert_wand.resize(clone, resize_command[1])
     convert_wand.save_close_clone(clone, file_out)
     preview_new(file_out)
     progress_files.set(_("done"))
@@ -367,8 +378,8 @@ def convert_border_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
-    convert_wand.save_close_clone(clone, path_to_file_out())
-    preview_new(path_to_file_out())
+    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
 
@@ -431,8 +442,8 @@ def convert_crop_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
-    convert_wand.save_close_clone(clone, path_to_file_out())
-    preview_new(path_to_file_out())
+    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
 
@@ -441,13 +452,13 @@ def convert_text_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.text(clone, img_text_inout.get(), e_text_angle.get(),
+    convert_wand.text(clone, img_text_inout.get(), e_text_angle.get(), img_text_rotate.get(),
                                     img_text_color.get(), img_text_font.get(), e_text_size.get(),
                                     img_text_gravity_onoff.get(), img_text_gravity.get(),
                                     img_text_box.get(), img_text_box_color.get(),
                                     e_text_x.get(), e_text_y.get(), e_text.get())
-    convert_wand.save_close_clone(clone, path_to_file_out())
-    preview_new(path_to_file_out())
+    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
 
@@ -472,8 +483,8 @@ def convert_logo_button():
                     img_logo_gravity.get())
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.pip(clone, file_logo_path.get(), coordinates, clone.width, clone.height )
-    convert_wand.save_close_clone(clone, path_to_file_out())
-    preview_new(path_to_file_out())
+    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
 
@@ -761,6 +772,7 @@ def ini_read_wraper():
     img_text_gravity_onoff.set(ini_entries['img_text_gravity_onoff'])
     img_text_box.set(ini_entries['text_box'])
     img_text_box_color.set(ini_entries['text_box_color'])
+    img_text_rotate.set(ini_entries['text_rotate'])
     e_text.delete(0, "end")
     e_text.insert(0, ini_entries['text_text'])
     e_text_size.delete(0, "end")
@@ -769,6 +781,8 @@ def ini_read_wraper():
     e_text_x.insert(0, ini_entries['text_x'])
     e_text_y.delete(0, "end")
     e_text_y.insert(0, ini_entries['text_y'])
+    e_text_angle.delete(0, "end")
+    e_text_angle.insert(0, ini_entries['text_rotate_own'])
 
     ini_entries = ini_read.ini_read_rotate(FILE_INI)
     img_rotate_on.set(ini_entries['img_rotate_on'])
@@ -889,6 +903,8 @@ def ini_save():
     config.set('Text', 'box_color', img_text_box_color.get())
     config.set('Text', 'x', e_text_x.get())
     config.set('Text', 'y', e_text_y.get())
+    config.set('Text', 'text_rotate', str(img_text_rotate.get()))
+    config.set('Text', 'text_rotate_own', e_text_angle.get())
     config.add_section('Rotate')
     config.set('Rotate', 'on', str(img_rotate_on.get()))
     config.set('Rotate', 'rotate', str(img_rotate.get()))
@@ -1363,6 +1379,7 @@ file_logo_path = StringVar()  # fullpath logo file
 img_logo_gravity = StringVar()
 img_resize_on = IntVar()  # Resize
 img_resize = IntVar()  # (1, 2, 3, 4, 5)
+resized = IntVar() # for proper display
 img_text_on = IntVar()  # Text
 img_text_gravity = StringVar()
 img_text_gravity_onoff = IntVar()
@@ -1372,6 +1389,7 @@ img_text_color = StringVar()
 img_text_box = IntVar()
 img_text_box_color = StringVar()
 img_text_inout = IntVar()  # Text inside or outside picture
+img_text_rotate =IntVar()
 img_rotate_on = IntVar()  # Rotate
 img_rotate = IntVar()
 img_rotate_own = IntVar()
@@ -1818,11 +1836,10 @@ co_text_font = ttk.Combobox(frame_text, width=35,
 co_text_font.configure(state='readonly')
 e_text_size = ttk.Entry(frame_text, width=3,
                         validate="key", validatecommand=(validation, '%S'))
-e_text_angle = ttk.Entry(frame_text, width=3,
-                        validate="key", validatecommand=(validation, '%S'))
 l_text_color = ttk.Label(frame_text, text=_("Color"))
 b_text_color = ttk.Button(frame_text, text=_("Font"),
                           command=color_choose)
+l_text_heght = ttk.Label(frame_text, text=_("Height"))
 b_text_box_color = ttk.Button(frame_text, text=_("Background"),
                               command=color_choose_box)
 b_text_run = ttk.Button(frame_text, text=_("Execute"),
@@ -1832,9 +1849,30 @@ l_text_color.grid(row=2, column=5, sticky=(W, E), padx=5, pady=1)
 b_text_color.grid(row=3, column=5, sticky=(W, E), padx=5, pady=1)
 b_text_box_color.grid(row=4, column=5, sticky=(W, E), padx=5, pady=1)
 co_text_font.grid(row=5, column=1, columnspan=2, sticky=(W, E), padx=5)
-e_text_size.grid(row=5, column=3, sticky=W, padx=5)
-e_text_angle.grid(row=5, column=4, sticky=W, padx=5)
-b_text_run.grid(row=5, column=5, sticky=(E), padx=5, pady=5)
+l_text_heght.grid(row=5, column=3, sticky=W, padx=5)
+e_text_size.grid(row=5, column=4, sticky=W, padx=5)
+b_text_run.grid(row=5, column=5, sticky=(E), padx=5, pady=1)
+
+frame_text_rotate = ttk.Frame(frame_text)
+rb_text_rotate_0 = ttk.Radiobutton(frame_text_rotate, text="0",
+                               variable=img_text_rotate, value="0")
+rb_text_rotate_90 = ttk.Radiobutton(frame_text_rotate, text="90",
+                               variable=img_text_rotate, value="90")
+rb_text_rotate_180 = ttk.Radiobutton(frame_text_rotate, text="180",
+                                variable=img_text_rotate, value="180")
+rb_text_rotate_270 = ttk.Radiobutton(frame_text_rotate, text="270",
+                                variable=img_text_rotate, value="270")
+rb_text_rotate_own = ttk.Radiobutton(frame_text_rotate, text=_("Custom"),
+                                variable=img_text_rotate, value="-1")
+e_text_angle = ttk.Entry(frame_text_rotate, width=3,
+                        validate="key", validatecommand=(validation, '%S'))
+rb_text_rotate_0.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+rb_text_rotate_90.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
+rb_text_rotate_180.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
+rb_text_rotate_270.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
+rb_text_rotate_own.grid(row=1, column=5, sticky=(N, W, E, S), padx=5, pady=5)
+e_text_angle.grid(row=1, column=6, sticky=(N, W, E, S), padx=5, pady=5)
+frame_text_rotate.grid(row=6, column=1, columnspan=6, sticky=W, padx=5)
 
 ###########################
 # Rotate
@@ -2212,7 +2250,7 @@ root.bind("<End>", open_file_last_key)
 ###############################################################################
 # Text
 Hovertip(e_text_size, _("Text size"))
-Hovertip(e_text_angle, _("Angle"))
+Hovertip(e_text_angle, _("Angle of text"))
 Hovertip(co_text_font, _("Font"))
 Hovertip(rb_text_in, _("Put text on picture"))
 Hovertip(rb_text_out, _("Put text outside picture, above or below"))

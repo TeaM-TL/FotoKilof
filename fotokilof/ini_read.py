@@ -226,6 +226,18 @@ def ini_read_text(file_ini, fonts_dict):
         text_box_color = "#000000"
     dict_return['text_box_color'] = entries.parse_color(text_box_color, '#000000')
 
+    try:
+        text_rotate = config.getint('Text', 'text_rotate')
+    except:
+        text_rotate = "0"
+    dict_return['text_rotate'] = entries.parse_list(text_rotate, (-1, 0, 90, 180, 270), 0)
+
+    try:
+        rotate_own = config.getint('Text', 'text_rotate_own')
+    except:
+        rotate_own = "0"
+    dict_return['text_rotate_own'] = str(common.empty(rotate_own))
+
     return dict_return
 
 
