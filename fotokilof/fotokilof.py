@@ -2210,8 +2210,19 @@ root.bind("<End>", open_file_last_key)
 ###############################################################################
 # toolTips
 ###############################################################################
-Hovertip(e_text_size,_("Text size"))
-Hovertip(e_text_angle,_("Angle"))
+# Text
+Hovertip(e_text_size, _("Text size"))
+Hovertip(e_text_angle, _("Angle"))
+Hovertip(co_text_font, _("Font"))
+Hovertip(rb_text_in, _("Put text on picture"))
+Hovertip(rb_text_out, _("Put text outside picture, above or below"))
+Hovertip(cb_text_gravity, _("Use gravity for putting text or Absolute position"))
+Hovertip(cb_text_box, _("Use background for text"))
+Hovertip(e_text_x, _("Offset from gravity or absolute position"))
+Hovertip(e_text_y, _("Offset from gravity or absolute position"))
+# Mirror
+Hovertip(cb_mirror_flip, _("Mirror top-bottom"))
+Hovertip(cb_mirror_flop, _("Mirror left-right"))
 ##########################################
 # Run functions
 #
