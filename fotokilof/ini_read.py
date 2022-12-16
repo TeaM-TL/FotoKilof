@@ -72,6 +72,12 @@ def ini_read(file_ini, theme_list, preview_size_list):
     dict_return['file_dir_selector'] = entries.parse_list(file_dir_select, (0, 1), 0)
 
     try:
+        exif = config.getint('Konfiguracja', 'exif')
+    except:
+        exif = "0"
+    dict_return['img_exif_on'] = entries.parse_list(exif, (0, 1), 0)
+
+    try:
         histograms = config.getint('Konfiguracja', 'histograms')
     except:
         histograms = "0"

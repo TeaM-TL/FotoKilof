@@ -67,8 +67,10 @@ def make_clone(file_in):
         clone = image.clone()
         return clone
 
-def save_close_clone(clone, file_out):
+def save_close_clone(clone, file_out, exif):
     """ save and close clone after processing """
+    if not exif:
+        clone.strip()
     clone.save(filename=file_out) 
     clone.close()
 

@@ -103,7 +103,7 @@ def preview_wand(file_in, size, coord):
             file_preview = os.path.join(tempfile.gettempdir(),
                                             "fotokilof_" + os.getlogin() \
                                             + "_preview.ppm")
-            convert_wand.save_close_clone(clone, file_preview)
+            convert_wand.save_close_clone(clone, file_preview, 0)
             result = {'filename': file_preview,
                           'size': filesize,
                           'width': str(width),

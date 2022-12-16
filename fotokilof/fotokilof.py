@@ -266,7 +266,7 @@ def apply_all_button():
                 convert_wand.pip(clone, file_logo_path.get(), coordinates, width, height)
 
             file_out = magick.pre_magick(file_in, subdir, co_apply_type.get())
-            convert_wand.save_close_clone(clone, file_out)
+            convert_wand.save_close_clone(clone, file_out, img_exif_on.get())
             preview_new(file_out)
             # progressbar
             i = i + 1
@@ -309,7 +309,7 @@ def convert_contrast_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
     preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -320,7 +320,7 @@ def convert_bw_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
     preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -342,7 +342,7 @@ def convert_rotate_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
     preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -367,7 +367,7 @@ def convert_resize_button():
     file_out = path_to_file_out(1)
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.resize(clone, resize_command[1])
-    convert_wand.save_close_clone(clone, file_out)
+    convert_wand.save_close_clone(clone, file_out, img_exif_on.get())
     preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -378,7 +378,7 @@ def convert_border_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
     preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -442,7 +442,7 @@ def convert_crop_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
-    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
     preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -457,7 +457,7 @@ def convert_text_button():
                                     img_text_gravity_onoff.get(), img_text_gravity.get(),
                                     img_text_box.get(), img_text_box_color.get(),
                                     e_text_x.get(), e_text_y.get(), e_text.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
     preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -483,7 +483,7 @@ def convert_logo_button():
                     img_logo_gravity.get())
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.pip(clone, file_logo_path.get(), coordinates, clone.width, clone.height )
-    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
     preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -749,6 +749,7 @@ def ini_read_wraper():
     file_in_path.set(ini_entries['file_in_path'])
     file_dir_selector.set(ini_entries['file_dir_selector'])
     work_dir.set(ini_entries['work_dir'])
+    img_exif_on.set(ini_entries['img_exif_on'])
     img_histograms_on.set(ini_entries['img_histograms_on'])
     co_theme_selector.current(theme_list.index(ini_entries['theme']))
     co_preview_selector_orig.current(preview_size_list.index(ini_entries['preview_orig']))
@@ -880,6 +881,7 @@ def ini_save():
     config.set('Konfiguracja', 'path', file_in_path.get())
     config.set('Konfiguracja', 'work_dir', work_dir.get())
     config.set('Konfiguracja', 'file_dir', str(file_dir_selector.get()))
+    config.set('Konfiguracja', 'exif', str(img_exif_on.get()))
     config.set('Konfiguracja', 'histograms', str(img_histograms_on.get()))
     config.set('Konfiguracja', 'theme', co_theme_selector.get())
     config.set('Konfiguracja', 'preview_orig', co_preview_selector_orig.get())
@@ -1413,6 +1415,7 @@ img_mirror_flip = IntVar()  # (0, 1)
 img_mirror_flop = IntVar()  # (0, 1)
 contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
 img_custom_on = IntVar()  # Custom
+img_exif_on = IntVar()
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
 file_extension = (".jpeg", ".jpg", ".png", ".tif")
@@ -1564,6 +1567,10 @@ cb_custom = ttk.Checkbutton(frame_tools_set, text=_("Custom"),
                             variable=img_custom_on,
                             offvalue="0", onvalue="1",
                             command=tools_set_off)
+cb_exif = ttk.Checkbutton(frame_tools_set, text=_("EXIF"),
+                                variable=img_exif_on,
+                                offvalue="0", onvalue="1",
+                                command=tools_set_off)
 cb_histograms = ttk.Checkbutton(frame_tools_set, text=_("Histograms"),
                                 variable=img_histograms_on,
                                 offvalue="0", onvalue="1",
@@ -1585,7 +1592,8 @@ cb_normalize.pack(padx=5, pady=1, anchor=W, side='left')
 cb_mirror.pack(padx=5, pady=1, anchor=W, side='left')
 cb_logo.pack(padx=5, pady=1, anchor=W, side='left')
 cb_custom.pack(padx=5, pady=1, anchor=W, side='left')
-cb_histograms.pack(padx=5, pady=1, anchor=W, side='left')
+cb_exif.pack(padx=5, pady=1, anchor=W, side='left')
+#cb_histograms.pack(padx=5, pady=1, anchor=W, side='left')
 l_theme_selector.pack(padx=5, pady=1, anchor=W, side='left')
 co_theme_selector.pack(padx=5, pady=1, anchor=W, side='left')
 
@@ -2249,6 +2257,7 @@ root.bind("<End>", open_file_last_key)
 # toolTips
 ###############################################################################
 # Text
+Hovertip(cb_exif, _("If ON keep EXIF data\nif OFF EXIF data will be removed"))
 Hovertip(e_text_size, _("Text size"))
 Hovertip(e_text_angle, _("Angle of text"))
 Hovertip(co_text_font, _("Font"))

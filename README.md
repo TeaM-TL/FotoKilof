@@ -27,7 +27,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - black-white or sepia,
  - contrast increase/decrease or normalize or histogram stretching,
  - color auto-level or equalize,
- - adding logo image o picture,
+ - adding logo image on picture,
  - file formats: JPG, PNG, TIFF, SVG
  - format conversion into JPG, PNG, TIFF.
 
@@ -47,10 +47,11 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
    - two corners (upper left and lower right),
    - upper left corner and width plus height,
    - gravity, width plus height plus offset,
- - text: color, font and size selection, background
+ - text: color, font and size selection, background, rotation,
  - text position:
    - outside: top/bottom, left/center/right
    - inside: by gravity or by position
+   - rotation
  - customized sepia,
  - equalize by channel,
  - contrast between -3 and +3,
@@ -58,7 +59,26 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - logo position by gravity, size and offset,
  - histograms of original and result pictures (temporary disabled),
  - fast file navigation: First, Prev, Next, Last,
- - is possible to use other ImageMagick commands, eg. *-gaussian-blur* etc. in command editor.
+ - is possible to use other ImageMagick commands, eg. *-gaussian-blur* etc. In command editor - doesn't work under Windows11
+
+## Processing
+
+Is possible to run one conversion or all selected conversion.
+Processing order for all selected conversion:
+
+- crop,
+- mirror,
+- black-white/sepia,
+- contrast,
+- color normalize,
+- border,
+- rotate,
+- resize,
+- text,
+- logo.
+
+Processed is always on clone of picture in memory. Originals are not touched.
+
 
 ## User manual
 
@@ -67,7 +87,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 
 ## Available translations
 
-Available: English, Polish, German, Bulgarian and Indonesian.
+Available: Bulgarian, English, German, Indonesian, Polish and Turkish.
 
 ## Install and run
 
@@ -76,7 +96,7 @@ Available: English, Polish, German, Bulgarian and Indonesian.
 - Windows, Linux, MacOS X, BSD,
 - FullHD screen for comfort work,
 - [ImageMagick](https://imagemagick.org/), remember to add path into `%PATH%` environment variable, enable install libraries!
-- [Python](https://www.python.org/), remember to add path into `%PATH%` environment variable.
+- [Python3](https://www.python.org/), remember to add path into `%PATH%` environment variable.
 
 ### Install
 
