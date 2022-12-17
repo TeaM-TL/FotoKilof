@@ -145,13 +145,21 @@ def text(clone, in_out, own, angle,
                 clone.annotate(text, draw, angle=common.empty(angle), 
                         left=common.empty(text_x), baseline=common.empty(text_y))
         else:
-            # it has to be fixed
-            style = Font(font, common.empty(text_size), text_color)
-            clone.font = style
+        # outside bottom
             if box:
-                clone.label(text, gravity=convert.gravitation(gravity), background_color=box_color)
+                backgroud_color = box_color
             else:
-                clone.label(text, gravity=convert.gravitation(gravity))
+                backgroud_color = "#FFFFFF"
+            with Image(width=clone.width, height=int(text_size), background=backgroud_color) as canvas:
+                with Drawing() as draw:
+                    draw.fill_color = text_color
+                    draw.font = font
+                    draw.font_size = common.empty(text_size)
+                    draw.gravity = str(convert.gravitation(gravity))
+                    draw.text(x=0, y=common.empty(text_size), body=text)
+                    canvas.annotate(text, draw)
+                clone.sequence.append(canvas)
+                clone.concat(stacked=True) 
 
 
 def bw(clone, bw, sepia):

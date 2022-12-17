@@ -2,6 +2,8 @@
 
 ## 2022
 
+4.0.9 fixed added text outside
+
 4.0.8 added EXIF strip/keep
 
 4.0.7 fixed preview for resized picture

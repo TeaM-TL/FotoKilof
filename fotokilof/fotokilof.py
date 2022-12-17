@@ -1286,16 +1286,17 @@ def text_tool_hide_show():
         l_text_xy_y.grid_remove()
         e_text_x.grid_remove()
         e_text_y.grid_remove()
-        rb_text_NW.grid()
-        rb_text_N.grid()
-        rb_text_NE.grid()
-        rb_text_W.grid_remove()
-        rb_text_C.grid_remove()
-        rb_text_E.grid_remove()
-        rb_text_SW.grid()
-        rb_text_S.grid()
-        rb_text_SE.grid()
+        rb_text_NW.grid_remove()
+        rb_text_N.grid_remove()
+        rb_text_NE.grid_remove()
+        rb_text_W.grid()
+        rb_text_C.grid()
+        rb_text_E.grid()
+        rb_text_SW.grid_remove()
+        rb_text_S.grid_remove()
+        rb_text_SE.grid_remove()
         cb_text_gravity.grid_remove()
+        frame_text_rotate.grid_remove()
     else:
         # Inside
         l_text_xy_x.grid()
@@ -1329,6 +1330,7 @@ def text_tool_hide_show():
             rb_text_SE.grid_remove()
             l_text_xy_x.configure(text=_("x"))
             l_text_xy_y.configure(text=_("y"))
+        frame_text_rotate.grid()
 
 
 ###############################################################################
@@ -1797,8 +1799,8 @@ e_text_x = ttk.Entry(frame_text, width=4,
 e_text_y = ttk.Entry(frame_text, width=4,
                      validate="key", validatecommand=(validation, '%S'))
 
-rb_text_in.grid(row=2,  column=1, sticky=W, padx=5, pady=1)
-rb_text_out.grid(row=3, column=1, sticky=W, padx=5, pady=1)
+rb_text_out.grid(row=2, column=1, sticky=W, padx=5, pady=1)
+rb_text_in.grid(row=3,  column=1, sticky=W, padx=5, pady=1)
 cb_text_box.grid(row=4, column=1, sticky=W, padx=5, pady=1)
 cb_text_gravity.grid(row=2, column=3, columnspan=2, sticky=W, pady=1)
 
