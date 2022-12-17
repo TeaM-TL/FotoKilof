@@ -509,7 +509,7 @@ def ini_read_contrast(file_ini, contrast_selection_valid_list):
         contrast_selection = "0"
     dict_return['contrast_selection'] = entries.parse_list(contrast_selection,
                                                            contrast_selection_valid_list,
-                                                           "0")
+                                                           "+1")
 
     try:
         contrast_stretch_1 = float(config.get('Contrast', 'stretch1'))

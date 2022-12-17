@@ -213,7 +213,7 @@ def apply_all_button():
         progress_files.set(_("Processing"))
         root.update_idletasks()
 
-        # single file or whode directory
+        # single file or whole directory
         i = 0
         if file_dir_selector.get() == 0:
             files_list = [ file_in_path.get() ]
@@ -331,7 +331,7 @@ def convert_normalize_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
     preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -353,7 +353,7 @@ def convert_mirror_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0))
+    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
     preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -1415,7 +1415,7 @@ img_contrast = IntVar()  # (1, 2)
 img_mirror_on = IntVar()  # Mirror
 img_mirror_flip = IntVar()  # (0, 1)
 img_mirror_flop = IntVar()  # (0, 1)
-contrast_selection = ("+3", "+2", "+1", "0", "-1", "-2", "-3")
+contrast_selection = ("+5", "+4", "+3", "+2", "+1", "-1", "-2", "-3", "-4", "-5")
 img_custom_on = IntVar()  # Custom
 img_exif_on = IntVar()
 progress_var = IntVar()  # progressbar

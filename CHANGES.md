@@ -2,7 +2,7 @@
 
 ## 2022
 
-4.0.9 fixed added text outside
+4.0.9 fixed: text outside, contrast
 
 4.0.8 added EXIF strip/keep
 

@@ -212,16 +212,24 @@ def normalize(clone, normalize, channel):
         clone.auto_level()
 
 
-def contrast(clone, selection, contrast, black, white):
+def contrast(clone, contrast, selection, black, white):
     """ normalize levels of colors """
-    if int(selection) == 1:
+    if int(contrast) == 1:
             if float(black) > 1:
                 black = 0
             if float(white) > 1:
                 white = None
             clone.contrast_stretch(black_point=float(black), white_point=float(white))
     else:
-        clone.auto_level()
+        if int(selection) != 0:
+            if int(selection) > 0:
+                sharpen = True
+            else:
+                sharpen = False
+            iteration = 0
+            while iteration < abs(int(selection)):
+                iteration += 1
+                clone.contrast(sharpen=sharpen)
 
 
 def crop(file_in, clone, crop, gravity, entries):
