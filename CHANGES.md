@@ -2,6 +2,8 @@
 
 ## 2022
 
+4.1.0 better handling text outside, better resize, fixed screenshot under MacOS, much more tooltips, better code of text
+
 4.0.9 fixed: text outside, contrast
 
 4.0.8 added EXIF strip/keep

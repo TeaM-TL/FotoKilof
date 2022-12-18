@@ -136,10 +136,16 @@ def ini_read_resize(file_ini):
     dict_return['img_resize'] = entries.parse_list(resize, (1, 2, 3, 4, 5), 3)
 
     try:
-        resize_size_pixel = config.getint('Resize', 'size_pixel')
+        resize_size_pixel_x = config.getint('Resize', 'size_pixel_x')
     except:
-        resize_size_pixel = "1024"
-    dict_return['resize_size_pixel'] = resize_size_pixel
+        resize_size_pixel_x = "1024"
+    dict_return['resize_size_pixel_x'] = resize_size_pixel_x
+
+    try:
+        resize_size_pixel_y = config.getint('Resize', 'size_pixel_y')
+    except:
+        resize_size_pixel_y = "1024"
+    dict_return['resize_size_pixel_y'] = resize_size_pixel_y
 
     try:
         resize_size_percent = config.getint('Resize', 'size_percent')

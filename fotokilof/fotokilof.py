@@ -64,9 +64,10 @@ import version
 # Start logging
 log.write_log('Start', "M", "w", 1)
 
-# set locale and clipboard for Windows
-if mswindows.windows() == 1:
+if mswindows.windows() or mswindows.macos():
     from PIL import ImageGrab
+# set locale and clipboard for Windows
+if mswindows.windows():
     import locale
     if os.getenv('LANG') is None:
         os.environ['LANG'] = locale.getlocale()[0]
@@ -196,7 +197,9 @@ def path_to_file_out(resize):
     """ create filename of out file """
 
     if resize:
-        subdir = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
+        subdir = convert_wand.resize_subdir(img_resize.get(), 
+                                            common.empty(e1_resize_x.get()), common.empty(e1_resize_y.get()), 
+                                            common.empty(e2_resize.get()))
         workdir = os.path.join(work_dir.get(), subdir[0])
         resized.set(1)
     else:
@@ -243,7 +246,7 @@ def apply_all_button():
                 convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
             if img_resize_on.get():
                 #  subdir for results if resize
-                subdir_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
+                subdir_command = convert_wand.resize_subdir(img_resize.get(), common.empty(e1_resize_x.get()), common.empty(e1_resize_y.get()), common.empty(e2_resize.get()))
                 subdir = os.path.join(work_dir.get(), subdir_command[0])
                 convert_wand.resize(clone, subdir_command[1])
                 resized.set(1)
@@ -363,7 +366,7 @@ def convert_resize_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
 
-    resize_command = convert_wand.resize_subdir(img_resize.get(), e1_resize.get(), common.empty(e2_resize.get()))
+    resize_command = convert_wand.resize_subdir(img_resize.get(), common.empty(e1_resize_x.get()), common.empty(e1_resize_y.get()), common.empty(e2_resize.get()))
     file_out = path_to_file_out(1)
     clone = convert_wand.make_clone(file_in_path.get())
     convert_wand.resize(clone, resize_command[1])
@@ -759,8 +762,10 @@ def ini_read_wraper():
     ini_entries = ini_read.ini_read_resize(FILE_INI)
     img_resize_on.set(ini_entries['img_resize_on'])
     img_resize.set(ini_entries['img_resize'])
-    e1_resize.delete(0, "end")
-    e1_resize.insert(0, ini_entries['resize_size_pixel'])
+    e1_resize_x.delete(0, "end")
+    e1_resize_x.insert(0, ini_entries['resize_size_pixel_x'])
+    e1_resize_y.delete(0, "end")
+    e1_resize_y.insert(0, ini_entries['resize_size_pixel_y'])
     e2_resize.delete(0, "end")
     e2_resize.insert(0, ini_entries['resize_size_percent'])
 
@@ -890,7 +895,8 @@ def ini_save():
     config.add_section('Resize')
     config.set('Resize', 'on', str(img_resize_on.get()))
     config.set('Resize', 'resize', str(img_resize.get()))
-    config.set('Resize', 'size_pixel', e1_resize.get())
+    config.set('Resize', 'size_pixel_x', e1_resize_x.get())
+    config.set('Resize', 'size_pixel_y', e1_resize_y.get())
     config.set('Resize', 'size_percent', e2_resize.get())
     config.add_section('Text')
     config.set('Text', 'on', str(img_text_on.get()))
@@ -1334,7 +1340,7 @@ def text_tool_hide_show():
 
 
 ###############################################################################
-# GUI okno główne
+# GUI main window
 ###############################################################################
 
 root = Tk()
@@ -1424,7 +1430,7 @@ file_extension = (".jpeg", ".jpg", ".png", ".tif")
 magick_commands = ("composite", "convert")
 
 ######################################################################
-# Karty
+# Tabs
 ######################################################################
 main_menu = ttk.Frame()
 main_tools = ttk.Frame()
@@ -1616,32 +1622,44 @@ frame_resize = ttk.Labelframe(frame_first_col, text=_("Scale/Resize"),
 frame_resize.grid(column=1, row=2, columnspan=2,
                   sticky=(N, W, E, S), padx=5, pady=5)
 ###
-rb_resize_1 = ttk.Radiobutton(frame_resize, text=_("Pixels"),
-                              variable=img_resize, value="1")
-e1_resize = ttk.Entry(frame_resize, width=7,
-                      validate="key", validatecommand=(validation, '%S'))
-rb_resize_2 = ttk.Radiobutton(frame_resize, text=_("Percent"),
-                              variable=img_resize, value="2")
-e2_resize = ttk.Entry(frame_resize, width=7,
-                      validate="key", validatecommand=(validation, '%S'))
-rb_resize_3 = ttk.Radiobutton(frame_resize, text="FullHD (1920x1080)",
+frame_resize_row1 = ttk.Frame(frame_resize)
+rb_resize_3 = ttk.Radiobutton(frame_resize_row1, text="FullHD (1920x1080)",
                               variable=img_resize, value="3")
-rb_resize_4 = ttk.Radiobutton(frame_resize, text="2K (2048×1556)",
+rb_resize_4 = ttk.Radiobutton(frame_resize_row1, text="2K (2048×1556)",
                               variable=img_resize, value="4")
-rb_resize_5 = ttk.Radiobutton(frame_resize, text="4K (4096×3112)",
+rb_resize_5 = ttk.Radiobutton(frame_resize_row1, text="4K (4096×3112)",
                               variable=img_resize, value="5")
-b_resize_run = ttk.Button(frame_resize, text=_("Execute"),
+frame_resize_row2 = ttk.Frame(frame_resize)
+rb_resize_1 = ttk.Radiobutton(frame_resize_row2, text=_("Max"),
+                              variable=img_resize, value="1")
+l_resize_x = ttk.Label(frame_resize_row2, text="X")
+e1_resize_x = ttk.Entry(frame_resize_row2, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
+l_resize_y = ttk.Label(frame_resize_row2, text="Y")
+e1_resize_y = ttk.Entry(frame_resize_row2, width=4,
+                      validate="key", validatecommand=(validation, '%S'))
+rb_resize_2 = ttk.Radiobutton(frame_resize_row2, text=_("Percent"),
+                              variable=img_resize, value="2")
+e2_resize = ttk.Entry(frame_resize_row2, width=3,
+                      validate="key", validatecommand=(validation, '%S'))
+b_resize_run = ttk.Button(frame_resize_row2, text=_("Execute"),
                           style="Brown.TButton",
                           command=convert_resize_button)
 
-rb_resize_3.grid(row=1, column=1, columnspan=2, sticky=W, padx=5, pady=2)
-rb_resize_4.grid(row=1, column=3, columnspan=2, sticky=W, padx=5, pady=2)
-rb_resize_5.grid(row=1, column=5, sticky=W, padx=5, pady=2)
-rb_resize_1.grid(row=2, column=1, sticky=W, padx=5, pady=5)
-e1_resize.grid(row=2, column=2, sticky=W, padx=5, pady=5)
-rb_resize_2.grid(row=2, column=3, sticky=W, padx=5, pady=5)
-e2_resize.grid(row=2, column=4, sticky=W, padx=5, pady=5)
-b_resize_run.grid(row=2, column=5, sticky=(E), padx=5, pady=5)
+rb_resize_3.pack(side='left', padx=5)
+rb_resize_4.pack(side='left', padx=5)
+rb_resize_5.pack(side='left', padx=5)
+rb_resize_1.pack(side='left', padx=5)
+l_resize_x.pack(side='left', padx=5)
+e1_resize_x.pack(side='left', padx=0)
+l_resize_y.pack(side='left', padx=5)
+e1_resize_y.pack(side='left', padx=0)
+rb_resize_2.pack(side='left', padx=5)
+e2_resize.pack(side='left', padx=0)
+b_resize_run.pack(side='left', padx=25)
+
+frame_resize_row1.pack(side='top', fill='x', expand=1)
+frame_resize_row2.pack(side='top', fill='x', expand=1)
 
 ############################
 # crop
@@ -1762,7 +1780,6 @@ frame_crop_buttons.grid(row=5, column=1, sticky=(W, E))
 b_crop_read.grid(row=1, column=1, sticky=W, padx=15, pady=5)
 b_crop_show.grid(row=1, column=2, sticky=W, padx=5, pady=5)
 b_crop_run.grid(row=5, column=4, columnspan=2, sticky=W, padx=5, pady=5)
-
 
 ###########################
 # Tekst
@@ -2026,7 +2043,6 @@ co_normalize_channel.grid(row=1, column=3, padx=5, pady=4, sticky=E)
 rb2_normalize.grid(row=2, column=1, padx=5, pady=4, sticky=W)
 b_normalize_run.grid(row=2, column=2, columnspan=2, padx=5, pady=4, sticky=E)
 
-
 ###########################
 # Mirror
 ###########################
@@ -2190,12 +2206,10 @@ pi_histogram_orig = PhotoImage()
 l_histogram_orig = ttk.Label(frame_histogram_orig, image=pi_histogram_orig)
 l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
 
-
 #####################################################
 # Third column
 #####################################################
 frame_third_col = ttk.Frame(main)
-
 
 ##########################
 # Result preview
@@ -2217,6 +2231,7 @@ l_preview_new_pi.pack(side='bottom')
 b_preview_new_run.pack(side='left', padx=5, pady=5)
 l_preview_new.pack(side='left', padx=5, pady=5)
 co_preview_selector_new.pack(side='left', padx=5, pady=1)
+
 ###########################
 # Histogram new
 ###########################
@@ -2258,20 +2273,79 @@ root.bind("<End>", open_file_last_key)
 ###############################################################################
 # toolTips
 ###############################################################################
-# Text
+# main first
+Hovertip(b_file_select, _("Select image file for processing"))
+Hovertip(b_file_select_screenshot, _("MacOS and Windows: take image from clipboard.\nLinux: make screenshot, click window or select area.\nGrabbed image is saved into %TEMP%/today directory ad load for processing."))
+Hovertip(b_file_select_first, _("Load first image from current directory.\nUse Home key instead"))
+Hovertip(b_file_select_prev, _("Load previous image from current directory.\nUse PgUp key instead"))
+Hovertip(b_file_select_next, _("Load next image from current directory.\nUse PgDn key instead"))
+Hovertip(b_file_select_last, _("Load last image from current directory.\nUse End key instead"))
+Hovertip(rb_apply_dir, _("Processing all files in current directory"))
+Hovertip(rb_apply_file, _("Processing only current file"))
+Hovertip(co_apply_type, _("Selection of format output file; JPG, PNG or TIF"))
+Hovertip(b_apply_run, _("Perform all selected conversion for current file or all files in current directory"))
+Hovertip(b_last_save, _("Save all values into configuration file (~/.fotokilof.ini).\nFotoKilof will load it during starting"))
+Hovertip(b_last_read, _("Load saved values of conversion"))
+# main second
+Hovertip(cb_resize, _("Scale image, proportions are saved.\nSpecify maximum dimensions of image or percent"))
+Hovertip(cb_crop, _("Take part of image. Select crop by:\n- absolute coordinate\n- absolute coorinate left-top corner plus width and height\n- gravity plus width and height plus offset.\nRemember point (0,0) is located in left-top corner of image."))
+Hovertip(cb_text, _("Insert text on picture or add text at bottom.\nText can be rotated, colored and with background.\nAll font from OS are available"))
+Hovertip(cb_rotate, _("Rotate picture by 90, 180, 270 degree or specify own angle of rotation"))
+Hovertip(cb_border, _("Add border around picture.\nSpecify width of horizontal and vertical border separately"))
+Hovertip(cb_bw, _("Convert into black-white or sepia"))
+Hovertip(cb_contrast, _("Change contrast or change range of contrast"))
+Hovertip(cb_normalize, _("Normalize of color level"))
+Hovertip(cb_mirror, _("Make mirror of picture in vertical or horizotal or both direction"))
+Hovertip(cb_logo, _("Insert picture, eg. own logo, into picture"))
+Hovertip(cb_custom, _("Processing ImageMagick command.\nWorks only on Linux OS"))
 Hovertip(cb_exif, _("If ON keep EXIF data\nif OFF EXIF data will be removed"))
+Hovertip(co_theme_selector, _("Select theme"))
+# preview
+Hovertip(b_preview_orig_run, _("Display original image by IMdisplay or default image viewer of OS"))
+Hovertip(co_preview_selector_orig, _("Select size of preview"))
+Hovertip(b_preview_new_run, _("Display result image by IMdisplay or default image viewer of OS"))
+Hovertip(co_preview_selector_new, _("Select size of preview"))
+# Scaling
+# Crop
+Hovertip(rb1_crop, _("Select crop by absolute coordinate.\nRemember point (0,0) is located in left-top corner of image."))
+Hovertip(rb2_crop, _("Select crop by absolute coorinate left-top corner plus width and height.\nRemember point (0,0) is located in left-top corner of image."))
+Hovertip(rb3_crop, _("Select crop by gravity plus width and height plus offset.\nRemember point (0,0) is located in left-top corner of image."))
+Hovertip(e1_crop_1, _("x1 - horizontal position of left-top corner of crop\nClick left mouse button on preview in place of left-top corner"))
+Hovertip(e2_crop_1, _("y1 - vertical position of left-top corner of crop\nClick left mouse button on preview in place of left-top corner"))
+Hovertip(e3_crop_1, _("x2 - horizontal position of right-bottom corner of crop\nClick right mouse button on preview in place of left-top corner"))
+Hovertip(e4_crop_1, _("y2 - vertical position of right-bottom corner of crop\nClick right mouse button on preview in place of left-top corner"))
+Hovertip(e1_crop_2, _("x1 - horizontal position of left-top corner of crop"))
+Hovertip(e2_crop_2, _("y1 - vertical position of left-top corner of crop"))
+Hovertip(e3_crop_2, _("X - width of crop"))
+Hovertip(e4_crop_2, _("Y - height of crop"))
+Hovertip(e1_crop_3, _("dx - horizontal offset from gravity point"))
+Hovertip(e2_crop_3, _("dy - vertical offsef from gravity point"))
+Hovertip(e3_crop_3, _("X - width of crop"))
+Hovertip(e4_crop_3, _("Y - height of crop"))
+Hovertip(b_crop_read, _("Take size of crop from current picture.\nCrop will be 100% of original picture"))
+Hovertip(b_crop_show, _("Refresh preview to see crop on picture"))
+Hovertip(b_crop_run, _("Execute only crop conversion on current picture"))
+# Text
 Hovertip(e_text_size, _("Text size"))
 Hovertip(e_text_angle, _("Angle of text"))
 Hovertip(co_text_font, _("Font"))
 Hovertip(rb_text_in, _("Put text on picture"))
-Hovertip(rb_text_out, _("Put text outside picture, above or below"))
+Hovertip(rb_text_out, _("Put text below picture"))
 Hovertip(cb_text_gravity, _("Use gravity for putting text or Absolute position"))
 Hovertip(cb_text_box, _("Use background for text"))
 Hovertip(e_text_x, _("Offset from gravity or absolute position"))
 Hovertip(e_text_y, _("Offset from gravity or absolute position"))
+Hovertip(b_text_run, _("Execute only adding text on current picture"))
+# Rotate
+# Border
+# Black-white
+# Contrast
+# Normalize
 # Mirror
 Hovertip(cb_mirror_flip, _("Mirror top-bottom"))
 Hovertip(cb_mirror_flop, _("Mirror left-right"))
+# Logo
+
 ##########################################
 # Run functions
 #
@@ -2297,7 +2371,6 @@ if GM_or_IM is not None:
         if os.path.isfile(file_logo_path.get()):
             # Load preview logo
             preview_logo()
-
 else:
     root.withdraw()
     messagebox.showerror(title=_("Error"),
@@ -2332,7 +2405,7 @@ else:
     root.deiconify()
 
 # -------------------------------------------------------
-# Lock in 4.0.0, will be unlocked in next releases
+# Lock in 4.0.0, will be unlocked or removed in next releases
 img_histograms_on.set(0)
 cb_histograms.configure(state=DISABLED)
 # -------------------------------------------------------

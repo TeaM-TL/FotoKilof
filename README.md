@@ -49,12 +49,11 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
    - gravity, width plus height plus offset,
  - text: color, font and size selection, background, rotation,
  - text position:
-   - outside: top/bottom, left/center/right
-   - inside: by gravity or by position
-   - rotation
+   - outside: bottom, left/center/right
+   - inside: by gravity or by position and rotate
  - customized sepia,
  - equalize by channel,
- - contrast between -3 and +3,
+ - contrast between -5 and +5,
  - customized contrast stretching,
  - logo position by gravity, size and offset,
  - histograms of original and result pictures (temporary disabled),
@@ -79,7 +78,6 @@ Processing order for all selected conversion:
 
 Processed is always on clone of picture in memory. Originals are not touched.
 
-
 ## User manual
 
 - PDF: [English](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.pdf), [Polish](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/pl/fotokilof.pdf).
@@ -102,12 +100,12 @@ Available: Bulgarian, English, German, Indonesian, Polish and Turkish.
 
 Install as PyPi package by PIP:
 ```bash
-python3 -m pip install wand fotokilof
+python3 -m pip install fotokilof
 ```
 
 for Windows:
 ```bash
-python -m pip install pywin32 wand fotokilof
+python -m pip install pywin32 fotokilof
 ```
 
 ### Upgrade

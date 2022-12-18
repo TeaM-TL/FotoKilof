@@ -125,41 +125,42 @@ def text(clone, in_out, own, angle,
             text_x, text_y, text):
     """ add text into picture """
     if len(text) > 0:
-        if angle == -1:
-            angle = common.empty(own)
+        draw_gravity = str(convert.gravitation(gravity))
         if in_out == 0:
-        # inside
-            with Drawing() as draw:
-                draw.fill_color = text_color
-                draw.font = font
-                draw.font_size = common.empty(text_size)
-                if gravity_onoff == 0:
-                    draw.gravity = 'forget'
-                else:
-                    draw.gravity = str(convert.gravitation(gravity))
-                if box:
-                    draw.text_under_color = box_color
-                #draw.text(common.empty(text_x), common.empty(text_y), text)
-                #draw(clone)
-                #clone.annotate(text, draw, left=20, baseline=50, angle=angle)
-                clone.annotate(text, draw, angle=common.empty(angle), 
-                        left=common.empty(text_x), baseline=common.empty(text_y))
+            # inside
+            if gravity_onoff == 0:
+                draw_gravity = 'forget'
+            if angle == -1:
+                angle = common.empty(own)
         else:
-        # outside bottom
+            # outside
             if box:
                 backgroud_color = box_color
             else:
                 backgroud_color = "#FFFFFF"
-            with Image(width=clone.width, height=int(text_size), background=backgroud_color) as canvas:
-                with Drawing() as draw:
-                    draw.fill_color = text_color
-                    draw.font = font
-                    draw.font_size = common.empty(text_size)
-                    draw.gravity = str(convert.gravitation(gravity))
-                    draw.text(x=0, y=common.empty(text_size), body=text)
-                    canvas.annotate(text, draw)
+            angle = 0
+            text_x = 0
+            text_y = 0
+
+        draw = Drawing()
+        if box and not in_out:
+            draw.text_under_color = box_color
+        draw.fill_color = text_color
+        draw.font = font
+        draw.font_size = common.empty(text_size)
+        draw.gravity = draw_gravity
+        
+        if in_out == 0:
+            # inside
+            clone.annotate(text, draw, angle=common.empty(angle), 
+                    left=common.empty(text_x), baseline=common.empty(text_y))
+        else:
+            # outside
+            metrics = draw.get_font_metrics(clone, text, multiline=False)
+            with Image(width=clone.width, height=int(metrics.text_height), background=backgroud_color) as canvas:
+                canvas.annotate(text, draw)
                 clone.sequence.append(canvas)
-                clone.concat(stacked=True) 
+                clone.concat(stacked=True)
 
 
 def bw(clone, bw, sepia):
@@ -172,11 +173,11 @@ def bw(clone, bw, sepia):
         clone.sepia_tone(threshold=common.empty(sepia)/100)
 
 
-def resize_subdir(resize, pixel, percent):
+def resize_subdir(resize, pixel_x, pixel_y, percent):
     """ prepare name for subdir and command for resize """
     if resize == 1:
-        command = pixel + "x" + pixel
-        sub_dir = pixel
+        command = str(pixel_x) + "x" + str(pixel_y)
+        sub_dir = str(pixel_x) + "x" + str(pixel_y)
     elif resize == 2:
         if percent > 100:
             percent = 100
