@@ -469,7 +469,7 @@ msgstr ""
 
 #: fotokilof.py:2291
 msgid "Load saved values of conversion"
-msgstr "Zapisuje ustawienia konwersji"
+msgstr "Wczytuje zapisane ustawienia konwersji"
 
 #: fotokilof.py:2293
 msgid ""
