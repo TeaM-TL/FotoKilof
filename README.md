@@ -108,6 +108,12 @@ for Windows:
 python -m pip install pywin32 fotokilof
 ```
 
+Newer MacOS, add to .zshrc eg.:
+```bash
+export MAGICK_HOME=/opt/homebrew/Cellar/imagemagick/7.1.0-55
+```
+of course, be sure that path to Cellar is correct, and version of ImageMagick
+
 ### Upgrade
 
 ```bash
