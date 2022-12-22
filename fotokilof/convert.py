@@ -21,103 +21,70 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-Converters
-- preview_crop_gravity - convert coordinates for crop3 and logo position
-- gravity - translate eg. NS to Northsouth as Wand-py expect
+
+- out_full_filename - prepare output file for conversion
 """
+import os
+
+import log
 
 
-def preview_crop_gravity(coordinates, x_max, y_max):
+def out_full_filename(file_in, destination, extension):
     """
-    convert corrdinates from crop3:
-    offset_x, offset_y, width, height, gravitation
-    original image size:
-    x_max, y_max
-    return coordinates for drawing crop: x0, y0, x1, y1
+    Input:
+        file_in - original file for processing
+        destination - output directory
+        extension - extension of result file, for change format (jpg->png)
+    Output:
+        file_out - fullname file for processing in destination
     """
-    offset_x = coordinates[0]
-    offset_y = coordinates[1]
-    width = coordinates[2]
-    height = coordinates[3]
-    gravitation = coordinates[4]
-    if gravitation == "NW":
-        x0 = offset_x
-        y0 = offset_y
-        x1 = x0 + width
-        y1 = y0 + height
-    elif gravitation == "N":
-        x0 = x_max/2 - width/2
-        y0 = offset_y
-        x1 = x_max/2 + width/2
-        y1 = y0 + height
-    elif gravitation == "NE":
-        x0 = x_max - width - offset_x
-        y0 = offset_y
-        x1 = x_max - offset_x
-        y1 = y0 + height
-    elif gravitation == "W":
-        x0 = offset_x
-        y0 = y_max/2 - height/2
-        x1 = x0 + width
-        y1 = y_max/2 + height/2
-    elif gravitation == "C":
-        x0 = x_max/2 - width/2 + offset_x
-        y0 = y_max/2 - height/2 + offset_y
-        x1 = x_max/2 + width/2 + offset_x
-        y1 = y_max/2 + height/2 + offset_y
-    elif gravitation == "E":
-        x0 = x_max - width - offset_x
-        y0 = y_max/2 - height/2
-        x1 = x_max - offset_x
-        y1 = y_max/2 + height/2
-    elif gravitation == "SW":
-        x0 = offset_x
-        y0 = y_max - height - offset_y
-        x1 = x0 + width
-        y1 = y_max - offset_y
-    elif gravitation == "S":
-        x0 = x_max/2 - width/2
-        y0 = y_max - height - offset_y
-        x1 = x_max/2 + width/2
-        y1 = y_max - offset_y
-    elif gravitation == "SE":
-        x0 = x_max - width - offset_x
-        y0 = y_max - height - offset_y
-        x1 = x_max - offset_x
-        y1 = y_max - offset_y
+    result = "OK"  # initial value
+    if file_in is not None:
+        if os.path.isfile(file_in):
+            # making output diretory if not exist
+            out_dir = os.path.join(os.path.dirname(file_in), destination)
+            if os.path.isdir(out_dir) is False:
+                try:
+                    os.mkdir(out_dir)
+                except FileExistsError:
+                    log.write_log("pre_imagick: FileExistsError" + out_dir, "E")
+                except FileNotFoundError:
+                    try:
+                        os.mkdir(os.path.dirname(out_dir))
+                    except FileNotFoundError:
+                        log.write_log("pre_imagick: Cannot make directory for output pictures" + os.path.dirname(out_dir), "E")
+                        result = None
+                    except:
+                        log.write_log("pre_imagick: other problem to create" + os.path.dirname(out_dir), "E")
+                        result = None
+                    if result == "OK":
+                        try:
+                            os.mkdir(out_dir)
+                        except FileExistsError:
+                            log.write_log("pre_imagick: FileExistsError" + out_dir, "E")
+                        except FileNotFoundError:
+                            log.write_log("pre_imagick: FileExistsError" + os.path.dirname(out_dir), "E")
+                            result = None
+                        except:
+                            log.write_log("pre_imagick: other problem to create" + out_dir, "E")
+                            result = None
+                except:
+                    log.write_log("pre_imagick: other problem to create" + out_dir, "E")
+                    result = None
+
+        else:
+            result = None
     else:
-        x0 = 5
-        y0 = 5
-        x1 = x_max - 5
-        y1 = y_max -5
-    return (x0, y0, x1, y1)
+        result = None
 
-
-def gravitation(gravitation):
-    """ translate gravitation name from Tk to Wand-py specification"""
-
-    if gravitation == "N":
-        result = "north"
-    if gravitation == "NW":
-        result = "north_west"
-    if gravitation == "NE":
-        result = "north_east"
-    if gravitation == "W":
-        result = "west"
-    if gravitation == "C":
-        result = "center"
-    if gravitation == "E":
-        result = "east"
-    if gravitation == "SW":
-        result = "south_west"
-    if gravitation == "S":
-        result = "south"
-    if gravitation == "SE":
-        result = "south_east"
-    if gravitation == "0":
-        result = "0"
-
-    return result
-
+    if result == "OK":
+        # preparing output filename
+        file_in_without_ext = os.path.splitext(file_in)
+        file_out = os.path.join(out_dir,
+                                os.path.basename(file_in_without_ext[0] \
+                                                 + extension))
+    else:
+        file_out = None
+    return file_out
 
 # EOF

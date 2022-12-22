@@ -170,7 +170,7 @@ def preview_orig_button():
     # global file_in_path
 
     try:
-        magick.display_image(file_in_path.get())
+        convert_wand.display_image(file_in_path.get())
     except:
         log.write_log("No orig picture to preview", "W")
 
@@ -180,7 +180,7 @@ def preview_new_button():
 
     # to define file_out
     if os.path.isfile(path_to_file_out(resized.get())):
-        magick.display_image(path_to_file_out(resized.get()))
+        convert_wand.display_image(path_to_file_out(resized.get()))
 
 
 def extension_from_file():
@@ -206,7 +206,7 @@ def path_to_file_out(resize):
         workdir = work_dir.get()
         resized.set(0)
 
-    filename = magick.pre_magick(file_in_path.get(), workdir, co_apply_type.get())
+    filename = convert.out_full_filename(file_in_path.get(), workdir, co_apply_type.get())
     return filename
 
 
@@ -268,7 +268,7 @@ def apply_all_button():
                 width = clone.width
                 convert_wand.pip(clone, file_logo_path.get(), coordinates, width, height)
 
-            file_out = magick.pre_magick(file_in, subdir, co_apply_type.get())
+            file_out = convert.out_full_filename(file_in, subdir, co_apply_type.get())
             convert_wand.save_close_clone(clone, file_out, img_exif_on.get())
             preview_new(file_out)
             # progressbar
@@ -295,7 +295,7 @@ def convert_custom_button():
     """ execute custom command """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    out_file = magick.pre_magick(file_in_path.get(),
+    out_file = convert.out_full_filename(file_in_path.get(),
                                  work_dir.get(),
                                  co_apply_type.get())
     cmd = t_custom.get('1.0', 'end-1c')
@@ -390,7 +390,7 @@ def crop_read():
     """ Read size of picture and load into crop widget """
     if file_in_path.get() is not None:
         if os.path.isfile(file_in_path.get()):
-            image_size_xy = magick.get_image_size(file_in_path.get())
+            image_size_xy = convert_wand.get_image_size(file_in_path.get())
             width = image_size_xy[0]
             height = image_size_xy[1]
 
@@ -545,7 +545,7 @@ def open_file():
         extension_from_file()
         file_in_path.set(result)
         root.title(window_title + file_in_path.get())
-        image_size =  magick.get_image_size(file_in_path.get())
+        image_size =  convert_wand.get_image_size(file_in_path.get())
         file_in_width.set(image_size[0])
         file_in_height.set(image_size[1])
         preview_orig()
@@ -572,7 +572,7 @@ def open_file_last():
                 try:
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     root.title(window_title + file_in_path.get())
-                    image_size =  magick.get_image_size(file_in_path.get())
+                    image_size =  convert_wand.get_image_size(file_in_path.get())
                     file_in_width.set(image_size[0])
                     file_in_height.set(image_size[1])
                     preview_orig()
@@ -601,7 +601,7 @@ def open_file_next():
                 try:
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     root.title(window_title + file_in_path.get())
-                    image_size =  magick.get_image_size(file_in_path.get())
+                    image_size =  convert_wand.get_image_size(file_in_path.get())
                     file_in_width.set(image_size[0])
                     file_in_height.set(image_size[1])
                     preview_orig()
@@ -633,7 +633,7 @@ def open_file_first():
                 try:
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     root.title(window_title + file_in_path.get())
-                    image_size =  magick.get_image_size(file_in_path.get())
+                    image_size =  convert_wand.get_image_size(file_in_path.get())
                     file_in_width.set(image_size[0])
                     file_in_height.set(image_size[1])
                     preview_orig()
@@ -662,7 +662,7 @@ def open_file_prev():
                 try:
                     file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
                     root.title(window_title + file_in_path.get())
-                    image_size =  magick.get_image_size(file_in_path.get())
+                    image_size =  convert_wand.get_image_size(file_in_path.get())
                     file_in_width.set(image_size[0])
                     file_in_height.set(image_size[1])
                     preview_orig()
@@ -695,6 +695,9 @@ def open_screenshot():
         magick.magick(" ", "-quiet", out_file, "import")
     file_in_path.set(out_file)
     root.title(window_title + out_file)
+    image_size =  convert_wand.get_image_size(file_in_path.get())
+    file_in_width.set(image_size[0])
+    file_in_height.set(image_size[1])
     preview_orig()
     extension_from_file()
     preview_new_refresh("none")
@@ -1074,17 +1077,15 @@ def preview_orig():
                                                file_in_height.get(),
                                                int(co_preview_selector_orig.get()))
                 if img_crop.get() == 1:
-                    x0 = int(e1_crop_1.get())
-                    y0 = int(e2_crop_1.get())
-                    x1 = int(e3_crop_1.get())
-                    y1 = int(e4_crop_1.get())
-                    # do_nothing = 0
+                    x0 = common.empty(e1_crop_1.get())
+                    y0 = common.empty(e2_crop_1.get())
+                    x1 = common.empty(e3_crop_1.get())
+                    y1 = common.empty(e4_crop_1.get())
                 elif img_crop.get() == 2:
-                    x0 = int(e1_crop_2.get())
-                    y0 = int(e2_crop_2.get())
-                    x1 = x0 + int(e3_crop_2.get())
-                    y1 = y0 + int(e4_crop_2.get())
-                    # do_nothing = 0
+                    x0 = common.empty(e1_crop_2.get())
+                    y0 = common.empty(e2_crop_2.get())
+                    x1 = x0 + common.empty(e3_crop_2.get())
+                    y1 = y0 + common.empty(e4_crop_2.get())
                 elif img_crop.get() == 3:
                     coord_for_crop = (common.empty(e1_crop_3.get()), common.empty(e2_crop_3.get()),
                                         common.empty(e3_crop_3.get()), common.empty(e4_crop_3.get()),
@@ -1197,6 +1198,7 @@ def tools_set(preview_on):
         frame_crop.grid_remove()
     else:
         frame_crop.grid()
+        crop_tool_hide_show()
 
     if img_text_on.get() == 0:
         frame_text.grid_remove()
@@ -2363,7 +2365,7 @@ if GM_or_IM is not None:
     l_border.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
         root.title(window_title + file_in_path.get())
-        image_dimension =  magick.get_image_size(file_in_path.get())
+        image_dimension =  convert_wand.get_image_size(file_in_path.get())
         file_in_width.set(image_dimension[0])
         file_in_height.set(image_dimension[1])
         crop_tool_hide_show()

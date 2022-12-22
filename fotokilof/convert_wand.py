@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=bare-except
 
 """
 Copyright (c) 2022 Tomasz Łuczak, TeaM-TL
@@ -21,11 +22,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-Converters
+Info
 - font_list - get list of available fonts
 - magick_wand_version - info about versions of IM ag Wand
+Common
+- get_image_size - identify picture: width and height
+- display_image - display image
 - make_clone - open origal picture and make clone for processing
 - save_close_clone - save clone into file and close clone
+- gravity - translate eg. NS to Northsouth as Wand-py expect
+Converters
 - pip - picture in picture, for inserting logo
 - rotate - rotate picture
 - mirror - mirroring picture
@@ -38,6 +44,7 @@ Converters
 - crop - crop picture
 """
 
+import os
 from wand.color import Color
 from wand.drawing import Drawing
 from wand.font import Font
@@ -48,9 +55,12 @@ from wand.version import MAGICK_VERSION, VERSION
 # my modules
 import common
 import convert
+import log
 import magick
 
 
+
+# ------------------------------------ Info
 def fonts_list():
     """ list of available fonts """
     return fontsList()
@@ -61,11 +71,46 @@ def magick_wand_version():
     return 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
 
 
+# ------------------------------------ Common
+def get_image_size(file_in):
+    """
+    identify width and height of picture
+    input: file name
+    output: width and height
+    """
+
+    width = 1
+    height = 1
+
+    if file_in is not None:
+        if os.path.isfile(file_in):
+            with Image(filename=file_in) as image:
+                width = image.width
+                height = image.height
+    return (width, height)
+
+
+def display_image(file_in):
+    """ display image """
+    file_in = common.spacja(file_in)
+    try:
+        with Image(filename=file_in) as image:
+            display(image)
+    except:
+        log.write_log(" Error display file: " + file_in, "E")
+        result = None
+    else:
+        result = "OK"
+
+    return result
+
+
 def make_clone(file_in):
     """ open picture and make clone for processing """
     with Image(filename=file_in) as image:
         clone = image.clone()
         return clone
+
 
 def save_close_clone(clone, file_out, exif):
     """ save and close clone after processing """
@@ -75,6 +120,34 @@ def save_close_clone(clone, file_out, exif):
     clone.close()
 
 
+def gravitation(gravitation):
+    """ translate gravitation name from Tk to Wand-py specification"""
+
+    if gravitation == "N":
+        result = "north"
+    if gravitation == "NW":
+        result = "north_west"
+    if gravitation == "NE":
+        result = "north_east"
+    if gravitation == "W":
+        result = "west"
+    if gravitation == "C":
+        result = "center"
+    if gravitation == "E":
+        result = "east"
+    if gravitation == "SW":
+        result = "south_west"
+    if gravitation == "S":
+        result = "south"
+    if gravitation == "SE":
+        result = "south_east"
+    if gravitation == "0":
+        result = "0"
+
+    return result
+
+
+# ------------------------------------ Converters
 def pip(clone, logo, logo_data, image_height, image_width):
     """ put picture on picture
     clone - clone of image for processing
@@ -125,7 +198,7 @@ def text(clone, in_out, own, angle,
             text_x, text_y, text):
     """ add text into picture """
     if len(text) > 0:
-        draw_gravity = str(convert.gravitation(gravity))
+        draw_gravity = gravitation(gravity)
         if in_out == 0:
             # inside
             if gravity_onoff == 0:
@@ -238,7 +311,7 @@ def crop(file_in, clone, crop, gravity, entries):
     crop picture 
     entries are as dictionary
     """
-    image_size = magick.get_image_size(file_in)
+    image_size = get_image_size(file_in)
 
     if crop == 1:
         if (entries['one_x1'] < entries['one_x2']) and (entries['one_y1'] < entries['one_y2']):
@@ -256,7 +329,7 @@ def crop(file_in, clone, crop, gravity, entries):
         if (entries['three_width'] > 0) and (entries['three_height'] > 0):
             clone.crop(left=entries['three_dx'], top=entries['three_dy'], 
                         width=entries['three_width'], height=entries['three_height'], 
-                        gravity=convert.gravitation(gravity))
+                        gravity=gravitation(gravity))
             
 
 # EOF

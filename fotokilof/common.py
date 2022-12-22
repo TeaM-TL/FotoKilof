@@ -26,6 +26,7 @@ module contains common functions:
 - humansize - converts B to kB or MB
 - mouse_crop_calculation - recalculation pixels from previev original image
 - spacja - escaping space and special char in pathname
+- preview_crop_gravity - convert coordinates for crop3 and logo position
 - list_of_images - sorted list images in cwd
 - file_from_list_of_images - return filename from file_list depends of request
 """
@@ -68,13 +69,13 @@ def mouse_crop_calculation(width, height, size):
     x_orig = width
     y_orig = height
 
-    # x_max, y_max - wymiary podglądu, znamy max czyli PREVIEW
+    # x_max, y_max - size of preview, we know max: PREVIEW
     if x_orig > y_orig:
-        # piksele podglądu, trzeba przeliczyć y_max podglądu
+        # preview pixels, calculation of y_max preview
         x_max = size
         y_max = x_max*y_orig/x_orig
     elif y_orig > x_orig:
-        # przeliczenie x
+        # calculation of x_max
         y_max = size
         x_max = y_max*x_orig/y_orig
     elif y_orig == x_orig:
@@ -108,6 +109,72 @@ def spacja(file_path):
                 file_path = '/'.join(path_escaped) + path[1]
         result = file_path
     return result
+
+
+def preview_crop_gravity(coordinates, x_max, y_max):
+    """
+    convert corrdinates from crop3:
+    offset_x, offset_y, width, height, gravitation
+    original image size:
+    x_max, y_max
+    return coordinates for drawing crop: x0, y0, x1, y1
+    """
+    offset_x = coordinates[0]
+    offset_y = coordinates[1]
+    width = coordinates[2]
+    height = coordinates[3]
+    gravitation = coordinates[4]
+    if gravitation == "NW":
+        x0 = offset_x
+        y0 = offset_y
+        x1 = x0 + width
+        y1 = y0 + height
+    elif gravitation == "N":
+        x0 = x_max/2 - width/2
+        y0 = offset_y
+        x1 = x_max/2 + width/2
+        y1 = y0 + height
+    elif gravitation == "NE":
+        x0 = x_max - width - offset_x
+        y0 = offset_y
+        x1 = x_max - offset_x
+        y1 = y0 + height
+    elif gravitation == "W":
+        x0 = offset_x
+        y0 = y_max/2 - height/2
+        x1 = x0 + width
+        y1 = y_max/2 + height/2
+    elif gravitation == "C":
+        x0 = x_max/2 - width/2 + offset_x
+        y0 = y_max/2 - height/2 + offset_y
+        x1 = x_max/2 + width/2 + offset_x
+        y1 = y_max/2 + height/2 + offset_y
+    elif gravitation == "E":
+        x0 = x_max - width - offset_x
+        y0 = y_max/2 - height/2
+        x1 = x_max - offset_x
+        y1 = y_max/2 + height/2
+    elif gravitation == "SW":
+        x0 = offset_x
+        y0 = y_max - height - offset_y
+        x1 = x0 + width
+        y1 = y_max - offset_y
+    elif gravitation == "S":
+        x0 = x_max/2 - width/2
+        y0 = y_max - height - offset_y
+        x1 = x_max/2 + width/2
+        y1 = y_max - offset_y
+    elif gravitation == "SE":
+        x0 = x_max - width - offset_x
+        y0 = y_max - height - offset_y
+        x1 = x_max - offset_x
+        y1 = y_max - offset_y
+    else:
+        x0 = 5
+        y0 = 5
+        x1 = x_max - 5
+        y1 = y_max -5
+    return (x0, y0, x1, y1)
 
 
 def list_of_images(cwd):

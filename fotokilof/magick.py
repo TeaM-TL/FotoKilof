@@ -22,81 +22,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-module to work with *Magick:
-- pre_magick - prepare output file for conversion
+module to work with ImageMagick:
 - magick - picture conversion
-- magick_command - make [Graphics|Image]Magick independent
-- get_image_size - identify picture: width and height
-- display_image - display image
+- magick_command - make ImageMagick independent
 """
 
 import os
 import re
 import shutil
-import tempfile
-from wand.display import display
-from wand.image import Image
 
 import common
 import log
 import mswindows
-
-
-def pre_magick(file_in, destination, extension):
-    """
-    file_in - original file for processing
-    destination - output directory
-    extension - extension of result file, for change format (jpg->png)
-    file_out - fullname file for processing in destination
-    """
-    result = "OK"  # initial value
-    if file_in is not None:
-        if os.path.isfile(file_in):
-            # making output diretory if not exist
-            out_dir = os.path.join(os.path.dirname(file_in), destination)
-            if os.path.isdir(out_dir) is False:
-                try:
-                    os.mkdir(out_dir)
-                except FileExistsError:
-                    log.write_log("pre_imagick: FileExistsError" + out_dir, "E")
-                except FileNotFoundError:
-                    try:
-                        os.mkdir(os.path.dirname(out_dir))
-                    except FileNotFoundError:
-                        log.write_log("pre_imagick: Cannot make directory for output pictures" + os.path.dirname(out_dir), "E")
-                        result = None
-                    except:
-                        log.write_log("pre_imagick: other problem to create" + os.path.dirname(out_dir), "E")
-                        result = None
-                    if result == "OK":
-                        try:
-                            os.mkdir(out_dir)
-                        except FileExistsError:
-                            log.write_log("pre_imagick: FileExistsError" + out_dir, "E")
-                        except FileNotFoundError:
-                            log.write_log("pre_imagick: FileExistsError" + os.path.dirname(out_dir), "E")
-                            result = None
-                        except:
-                            log.write_log("pre_imagick: other problem to create" + out_dir, "E")
-                            result = None
-                except:
-                    log.write_log("pre_imagick: other problem to create" + out_dir, "E")
-                    result = None
-
-        else:
-            result = None
-    else:
-        result = None
-
-    if result == "OK":
-        # preparing output filename
-        file_in_without_ext = os.path.splitext(file_in)
-        file_out = os.path.join(out_dir,
-                                os.path.basename(file_in_without_ext[0] \
-                                                 + extension))
-    else:
-        file_out = None
-    return file_out
 
 
 def magick(cmd, file_in, file_out, command):
@@ -134,7 +71,7 @@ def magick(cmd, file_in, file_out, command):
 
 def magick_command(command):
     """
-    make [Graphics|Image]Magick independent
+    make ImageMagick independent
     command: it depends:
       - Unix: convert, mogrify, composite
       - Windows: magick.exe convert, magick.exe mogrify, magick.exe composite
@@ -149,37 +86,5 @@ def magick_command(command):
     result = "".join(tool)
     return result
 
-
-def get_image_size(file_in):
-    """
-    identify width and height of picture
-    input: file name
-    output: width and height
-    """
-
-    width = 1
-    height = 1
-
-    if file_in is not None:
-        if os.path.isfile(file_in):
-            with Image(filename=file_in) as image:
-                width = image.width
-                height = image.height
-    return (width, height)
-
-
-def display_image(file_in):
-    """ display image """
-    file_in = common.spacja(file_in)
-    try:
-        with Image(filename=file_in) as image:
-            display(image)
-    except:
-        log.write_log(" Error display file: " + file_in, "E")
-        result = None
-    else:
-        result = "OK"
-
-    return result
 
 # EOF
