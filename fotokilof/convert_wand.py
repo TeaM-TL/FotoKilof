@@ -107,9 +107,12 @@ def display_image(file_in):
 
 def make_clone(file_in):
     """ open picture and make clone for processing """
-    with Image(filename=file_in) as image:
-        clone = image.clone()
-        return clone
+    if len(file_in) > 0:
+        with Image(filename=file_in) as image:
+            clone = image.clone()
+    else:
+        clone = None
+    return clone
 
 
 def save_close_clone(clone, file_out, exif):

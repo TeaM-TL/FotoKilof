@@ -241,7 +241,7 @@ def apply_all_button():
             if img_normalize_on.get():
                 convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
             if img_border_on.get():
-                convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
+                convert_wand.border(clone, img_border_color.get(), e_border_ns.get(), e_border_we.get())
             if img_rotate_on.get():
                 convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
             if img_resize_on.get():
@@ -311,10 +311,11 @@ def convert_contrast_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
-    preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+    if clone != None:
+        convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
+        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        preview_new(path_to_file_out(0))
+        progress_files.set(_("done"))
 
 
 def convert_bw_button():
@@ -322,10 +323,11 @@ def convert_bw_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
-    preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+    if clone != None:
+        convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
+        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        preview_new(path_to_file_out(0))
+        progress_files.set(_("done"))
 
 
 def convert_normalize_button():
@@ -333,10 +335,11 @@ def convert_normalize_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
-    preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+    if clone != None:
+        convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
+        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        preview_new(path_to_file_out(0))
+        progress_files.set(_("done"))
 
 
 def convert_rotate_button():
@@ -344,10 +347,11 @@ def convert_rotate_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
-    preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+    if clone != None:
+        convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
+        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        preview_new(path_to_file_out(0))
+        progress_files.set(_("done"))
 
 
 def convert_mirror_button():
@@ -355,10 +359,11 @@ def convert_mirror_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
-    preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+    if clone != None:
+        convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
+        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        preview_new(path_to_file_out(0))
+        progress_files.set(_("done"))
 
 
 def convert_resize_button():
@@ -369,10 +374,11 @@ def convert_resize_button():
     resize_command = convert_wand.resize_subdir(img_resize.get(), common.empty(e1_resize_x.get()), common.empty(e1_resize_y.get()), common.empty(e2_resize.get()))
     file_out = path_to_file_out(1)
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.resize(clone, resize_command[1])
-    convert_wand.save_close_clone(clone, file_out, img_exif_on.get())
-    preview_new(file_out)
-    progress_files.set(_("done"))
+    if clone != None:
+        convert_wand.resize(clone, resize_command[1])
+        convert_wand.save_close_clone(clone, file_out, img_exif_on.get())
+        preview_new(file_out)
+        progress_files.set(_("done"))
 
 
 def convert_border_button():
@@ -380,10 +386,11 @@ def convert_border_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.border(clone, img_border_color.get(), e_border_x.get(), e_border_y.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
-    preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+    if clone != None:
+        convert_wand.border(clone, img_border_color.get(), e_border_ns.get(), e_border_we.get())
+        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        preview_new(path_to_file_out(0))
+        progress_files.set(_("done"))
 
 
 def crop_read():
@@ -444,10 +451,11 @@ def convert_crop_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
-    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
-    preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+    if clone != None:
+        convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        preview_new(path_to_file_out(0))
+        progress_files.set(_("done"))
 
 
 def convert_text_button():
@@ -455,14 +463,15 @@ def convert_text_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.text(clone, img_text_inout.get(), e_text_angle.get(), img_text_rotate.get(),
-                                    img_text_color.get(), img_text_font.get(), e_text_size.get(),
-                                    img_text_gravity_onoff.get(), img_text_gravity.get(),
-                                    img_text_box.get(), img_text_box_color.get(),
-                                    e_text_x.get(), e_text_y.get(), e_text.get())
-    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
-    preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+    if clone != None:
+        convert_wand.text(clone, img_text_inout.get(), e_text_angle.get(), img_text_rotate.get(),
+                            img_text_color.get(), img_text_font.get(), e_text_size.get(),
+                            img_text_gravity_onoff.get(), img_text_gravity.get(),
+                            img_text_box.get(), img_text_box_color.get(),
+                            e_text_x.get(), e_text_y.get(), e_text.get())
+        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        preview_new(path_to_file_out(0))
+        progress_files.set(_("done"))
 
 
 def fonts():
@@ -485,10 +494,11 @@ def convert_logo_button():
                     common.empty(e_logo_width.get()), common.empty(e_logo_height.get()),
                     img_logo_gravity.get())
     clone = convert_wand.make_clone(file_in_path.get())
-    convert_wand.pip(clone, file_logo_path.get(), coordinates, clone.width, clone.height )
-    convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
-    preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+    if clone != None:
+        convert_wand.pip(clone, file_logo_path.get(), coordinates, clone.width, clone.height )
+        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        preview_new(path_to_file_out(0))
+        progress_files.set(_("done"))
 
 
 def open_file_logo():
@@ -833,10 +843,10 @@ def ini_read_wraper():
     img_border_on.set(ini_entries['img_border_on'])
     img_border_color.set(ini_entries['img_border_color'])
     l_border.configure(bg=ini_entries['img_border_color'])
-    e_border_x.delete(0, "end")
-    e_border_x.insert(0, ini_entries['img_border_size_x'])
-    e_border_y.delete(0, "end")
-    e_border_y.insert(0, ini_entries['img_border_size_y'])
+    e_border_ns.delete(0, "end")
+    e_border_ns.insert(0, ini_entries['img_border_size_x'])
+    e_border_we.delete(0, "end")
+    e_border_we.insert(0, ini_entries['img_border_size_y'])
 
     ini_entries = ini_read.ini_read_color(FILE_INI)
     img_bw_on.set(ini_entries['color_on'])
@@ -940,8 +950,8 @@ def ini_save():
     config.add_section('Border')
     config.set('Border', 'on', str(img_border_on.get()))
     config.set('Border', 'color', img_border_color.get())
-    config.set('Border', 'size_x', e_border_x.get())
-    config.set('Border', 'size_y', e_border_y.get())
+    config.set('Border', 'size_x', e_border_ns.get())
+    config.set('Border', 'size_y', e_border_we.get())
     config.add_section('Color')
     config.set('Color', 'on', str(img_bw_on.get()))
     config.set('Color', 'black-white', str(img_bw.get()))
@@ -1942,11 +1952,11 @@ frame_border = ttk.Labelframe(frame_first_col, text=_("Border"),
 frame_border.grid(row=6, column=1, sticky=(N, W, E, S), padx=5, pady=1)
 ###
 l_border = Label(frame_border, text=_("Pixels"))
-l_border_x = Label(frame_border, text="WE")
-e_border_x = ttk.Entry(frame_border, width=3,
+l_border_we = ttk.Label(frame_border, text="WE")
+e_border_ns = ttk.Entry(frame_border, width=3,
                      validate="key", validatecommand=(validation, '%S'))
-l_border_y = Label(frame_border, text="NS")
-e_border_y = ttk.Entry(frame_border, width=3,
+l_border_ns = ttk.Label(frame_border, text="NS")
+e_border_we = ttk.Entry(frame_border, width=3,
                      validate="key", validatecommand=(validation, '%S'))
 b_border_color = ttk.Button(frame_border, text=_("Color"),
                             command=color_choose_border)
@@ -1955,10 +1965,10 @@ b_border_run = ttk.Button(frame_border, text=_("Execute"),
                           command=convert_border_button)
 
 l_border.grid(row=1, column=1, padx=5, pady=5, columnspan=4)
-l_border_x.grid(row=2, column=1, padx=5, pady=5)
-e_border_x.grid(row=2, column=2, padx=5, pady=5)
-l_border_y.grid(row=2, column=3, padx=5, pady=5)
-e_border_y.grid(row=2, column=4, padx=5, pady=5)
+l_border_we.grid(row=2, column=1, padx=5, pady=5)
+e_border_ns.grid(row=2, column=2, padx=5, pady=5)
+l_border_ns.grid(row=2, column=3, padx=5, pady=5)
+e_border_we.grid(row=2, column=4, padx=5, pady=5)
 b_border_color.grid(row=1, column=5, padx=5, pady=5)
 b_border_run.grid(row=2, column=5, padx=5, pady=5, sticky=E)
 
@@ -2025,7 +2035,7 @@ frame_normalize = ttk.LabelFrame(frame_first_col, text=_("Color normalize"),
                                  style="Fiolet.TLabelframe")
 frame_normalize.grid(row=7, column=2, sticky=(N, E, S), padx=5, pady=1)
 ###
-rb1_normalize = ttk.Radiobutton(frame_normalize, text=_("Equalize"),
+rb1_normalize = ttk.Radiobutton(frame_normalize, text=_("Normalize"),
                                 variable=img_normalize,
                                 value="1")
 rb2_normalize = ttk.Radiobutton(frame_normalize, text=_("AutoLevel"),
@@ -2082,7 +2092,7 @@ b_logo_run = ttk.Button(frame_logo, text=_("Execute"),
                         style="Brown.TButton")
 l_logo_filename = ttk.Label(frame_logo, width=25)
 
-b_logo_select.grid(row=1, column=1, pady=5)
+b_logo_select.grid(row=1, column=1, padx=5, pady=5)
 l_logo_filename.grid(row=1, column=2, padx=5, pady=5, sticky=W)
 b_logo_run.grid(row=1, column=3, pady=5, sticky=E)
 
@@ -2308,6 +2318,7 @@ Hovertip(co_preview_selector_orig, _("Select size of preview"))
 Hovertip(b_preview_new_run, _("Display result image by IMdisplay or default image viewer of OS"))
 Hovertip(co_preview_selector_new, _("Select size of preview"))
 # Scaling
+Hovertip(b_resize_run, _("Execute only resize conversion on current picture"))
 # Crop
 Hovertip(rb1_crop, _("Select crop by absolute coordinate.\nRemember point (0,0) is located in left-top corner of image."))
 Hovertip(rb2_crop, _("Select crop by absolute coorinate left-top corner plus width and height.\nRemember point (0,0) is located in left-top corner of image."))
@@ -2326,27 +2337,64 @@ Hovertip(e3_crop_3, _("X - width of crop"))
 Hovertip(e4_crop_3, _("Y - height of crop"))
 Hovertip(b_crop_read, _("Take size of crop from current picture.\nCrop will be 100% of original picture"))
 Hovertip(b_crop_show, _("Refresh preview to see crop on picture"))
+Hovertip(frame_crop_gravity, _("Use gravity direction for select crop"))
 Hovertip(b_crop_run, _("Execute only crop conversion on current picture"))
 # Text
+Hovertip(e_text, _("Click here and type text.\nText will be displayed in selected color on background with selected color too."))
 Hovertip(e_text_size, _("Text size"))
 Hovertip(e_text_angle, _("Angle of text"))
 Hovertip(co_text_font, _("Font"))
 Hovertip(rb_text_in, _("Put text on picture"))
 Hovertip(rb_text_out, _("Put text below picture"))
 Hovertip(cb_text_gravity, _("Use gravity for putting text or Absolute position"))
+Hovertip(frame_text_gravity, _("Use gravity direction for text placement"))
 Hovertip(cb_text_box, _("Use background for text"))
 Hovertip(e_text_x, _("Offset from gravity or absolute position"))
 Hovertip(e_text_y, _("Offset from gravity or absolute position"))
 Hovertip(b_text_run, _("Execute only adding text on current picture"))
 # Rotate
+Hovertip(rb_rotate_own, _("Select if want to use own angle of rotation"))
+Hovertip(e_rotate_own, _("Put angle of rotation. Rotation is in right direction.\nBackground color is as choosed by Color button"))
+Hovertip(b_rotate_color, _("If OWN is choosed, select color to fill a gap."))
+Hovertip(b_rotate_run, _("Execute only rotate conversion on current picture"))
+# Scaling
+Hovertip(e2_resize, _("Put percent for rescale of picture"))
+Hovertip(b_resize_run, _("Execute only resize conversion on current picture"))
 # Border
+Hovertip(l_border, _("Preview color of border"))
+Hovertip(e_border_ns, _("Put width of vertical part of border"))
+Hovertip(e_border_we, _("Put width of horizontal part of border"))
+Hovertip(b_border_color, _("Select color of border"))
+Hovertip(b_border_run, _("Execute only add border conversion on current picture"))
 # Black-white
+Hovertip(rb1_bw, _("Convert picture into gray scale - black-white"))
+Hovertip(rb2_bw, _("Convert picture into sepia - old style silver based photography"))
+Hovertip(e_bw_sepia, _("Put threshold of sepia, try values in range 80-95"))
+Hovertip(b_bw_run, _("Execute only black-white/sepia conversion on current picture"))
 # Contrast
+Hovertip(e1_contrast, _("Black point.\nTry values in range 0-0.2"))
+Hovertip(e2_contrast, _("White point.\nTry values in range 0-0.2"))
+Hovertip(rb1_contrast, _("Enhance contrast of image by adjusting the span of the available colors"))
+Hovertip(rb2_contrast, _("Enhances the difference between lighter & darker values of the image"))
+Hovertip(co_contrast_selection, _("Select power of reduce (negative values) or increase (positive values) contrast"))
+Hovertip(b_contrast_run, _("Execute only change contrast conversion on current picture"))
 # Normalize
+Hovertip(rb1_normalize, _("Normalize color channels"))
+Hovertip(co_normalize_channel, _("Select channel for normalize"))
+Hovertip(rb2_normalize, _("Scale the minimum and maximum values to a full quantum range"))
+Hovertip(b_normalize_run, _("Execute only color normalize conversion on current picture"))
 # Mirror
 Hovertip(cb_mirror_flip, _("Mirror top-bottom"))
 Hovertip(cb_mirror_flop, _("Mirror left-right"))
+Hovertip(b_mirror_run, _("Execute only mirror conversion on current picture"))
 # Logo
+Hovertip(b_logo_select, _("Select picture to put on picture"))
+Hovertip(e_logo_width, _("Width picture"))
+Hovertip(e_logo_height, _("Height picture"))
+Hovertip(e_logo_dx, _("Horizontal offset from gravity point"))
+Hovertip(e_logo_dy, _("Vertical offset from gravity point"))
+Hovertip(frame_logo_gravity, _("Use gravity for putting picture"))
+Hovertip(b_logo_run, _("Execute only add logo on current picture"))
 
 ##########################################
 # Run functions

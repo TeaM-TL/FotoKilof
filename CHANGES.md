@@ -2,7 +2,7 @@
 
 ## 2022
 
-4.1.1 order in modules, fix error screenshot when crop, fix crop widget display
+4.1.1 order in modules, fix error screenshot when crop, fix crop widget display, more tooltips, more error handling
 
 4.1.0 better handling text outside, better resize, fixed screenshot under MacOS, much more tooltips, better code of text
 
