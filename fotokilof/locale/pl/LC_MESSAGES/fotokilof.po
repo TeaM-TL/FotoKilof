@@ -395,7 +395,7 @@ msgstr "Wynik"
 
 #: fotokilof.py:2280
 msgid "Select image file for processing"
-msgstr "Wybór pliku orazka do przetwarzania"
+msgstr "Wybór pliku obrazka do przetwarzania"
 
 #: fotokilof.py:2281
 msgid ""
@@ -404,8 +404,8 @@ msgid ""
 "Grabbed image is saved into %TEMP%/today directory ad load for processing."
 msgstr ""
 "MacOS i Windows: pobiera obrazek ze schowka.\n"
-"Linux: robi zrzut ekranu, zaznacz oko lub zaznacz obszar.\n"
-"Porany obraz jest zapisywany w katalogu %TEMP%/today i wczytywany do przetwarzania."
+"Linux: wykonuje zrzut ekranu, zaznacz oko lub zaznacz obszar.\n"
+"Pobrany obraz jest zapisywany w katalogu %TEMP%/today i wczytywany do przetwarzania."
 
 #: fotokilof.py:2282
 msgid ""
@@ -733,7 +733,7 @@ msgstr "Wykonaj tylko obrót bieżącego obrazka"
 
 #: fotokilof.py:2361
 msgid "Put percent for rescale of picture"
-msgstr "Podaj procent dla przeskalowania orazka"
+msgstr "Podaj procent dla przeskalowania obrazka"
 
 #: fotokilof.py:2364
 msgid "Preview color of border"
