@@ -325,10 +325,6 @@ msgstr "Sepia"
 msgid "Stretch"
 msgstr "Rozciąganie"
 
-#: fotokilof.py:2091
-msgid "Normalize"
-msgstr "Normalizacja"
-
 #: fotokilof.py:2096
 msgid "Black"
 msgstr "Czerń"
@@ -342,8 +338,8 @@ msgid "Color normalize"
 msgstr "Normalizacja kolorów"
 
 #: fotokilof.py:2119
-msgid "Equalize"
-msgstr "Equalize"
+msgid "Normalize"
+msgstr "Normalizacja"
 
 #: fotokilof.py:2122
 msgid "AutoLevel"
@@ -500,7 +496,7 @@ msgid ""
 "All font from OS are available"
 msgstr ""
 "Wstawia tekst na obrazek lub pod obrazek.\n"
-"Tekst możę być obrócony, kolorowy lub z tłem.\n"
+"Tekst może być obrócony, kolorowy lub z tłem.\n"
 "Dostępne są wszystkie foty systemowe"
 
 #: fotokilof.py:2296
@@ -558,6 +554,10 @@ msgstr "Wybór motywu graficznego"
 #: fotokilof.py:2307
 msgid "Display original image by IMdisplay or default image viewer of OS"
 msgstr "Wyświetla oryginalny obrazek z programie IMdisplay lub w domyślnej przeglądarce obrazków"
+
+#: fotokilof.py:2321 fotokilof.py:2362
+msgid "Execute only resize conversion on current picture"
+msgstr "Wykonaj tylko przeskalowanie bieżącego obrazka"
 
 #: fotokilof.py:2308 fotokilof.py:2310
 msgid "Select size of preview"
@@ -659,9 +659,21 @@ msgstr ""
 msgid "Refresh preview to see crop on picture"
 msgstr "Odśwież podgląd by zobaczyć podgląd wycinka"
 
+#: fotokilof.py:2340
+msgid "Use gravity direction for select crop"
+msgstr "Użyj grawitacji dla wyboru wycinka"
+
 #: fotokilof.py:2330
 msgid "Execute only crop conversion on current picture"
 msgstr "Pobiera tylko wycinek z bieżącego obrazka"
+
+#: fotokilof.py:2343
+msgid ""
+"Click here and type text.\n"
+"Text will be displayed in selected color on background with selected color too."
+msgstr ""
+"Kliknij tutaj i pisz.\n"
+"Tekst będzie wyświetlany w wybranym kolorze na tle wybranego koloru"
 
 #: fotokilof.py:2332
 msgid "Text size"
@@ -683,6 +695,10 @@ msgstr "Umieść tekst pod rysunkiem"
 msgid "Use gravity for putting text or Absolute position"
 msgstr "Użyj grawitacji dla umieszczenia tekstu albo pozycji bezwzględnej"
 
+#: fotokilof.py:2350
+msgid "Use gravity direction for text placement"
+msgstr "Użyj grawitacji wyboru umieszczenia tekstu"
+
 #: fotokilof.py:2338
 msgid "Use background for text"
 msgstr "Użyj tła dla tekstu"
@@ -695,6 +711,114 @@ msgstr "Odstęp od punktu grawitacji lub pozycja bezwzględna"
 msgid "Execute only adding text on current picture"
 msgstr "Wykonaj tylko dodanie tekstu do obrazka"
 
+#: fotokilof.py:2356
+msgid "Select if want to use own angle of rotation"
+msgstr "Wybierz jeśli chcesz podać inny kąt obrotu"
+
+#: fotokilof.py:2357
+msgid ""
+"Put angle of rotation. Rotation is in right direction.\n"
+"Background color is as choosed by Color button"
+msgstr ""
+"Wstaw kąt obrotu. Obrót będzie w prawo\n"
+"Kolor tła jesttaki jak wybrany przyciskiem Kolor"
+
+#: fotokilof.py:2358
+msgid "If OWN is choosed, select color to fill a gap."
+msgstr "Jeśli wybrano Własne, wybierz kolor do wypełnienia pustej przestrzeni"
+
+#: fotokilof.py:2359
+msgid "Execute only rotate conversion on current picture"
+msgstr "Wykonaj tylko obrót bieżącego obrazka"
+
+#: fotokilof.py:2361
+msgid "Put percent for rescale of picture"
+msgstr "Podaj procent dla przeskalowania orazka"
+
+#: fotokilof.py:2364
+msgid "Preview color of border"
+msgstr "Podgląd koloru ramki"
+
+#: fotokilof.py:2365
+msgid "Put width of vertical part of border"
+msgstr "Podaj szerokość pionowej części ramki"
+
+#: fotokilof.py:2366
+msgid "Put width of horizontal part of border"
+msgstr "Podaj szerokość poziomej części ramki"
+
+#: fotokilof.py:2367
+msgid "Select color of border"
+msgstr "Wybierz kolor ramki"
+
+#: fotokilof.py:2368
+msgid "Execute only add border conversion on current picture"
+msgstr "Wykonaj tylko dodanie ramki do bieżącego obrazka"
+
+#: fotokilof.py:2370
+msgid "Convert picture into gray scale - black-white"
+msgstr "Konwersja obrazka do skali szarości - jak zdjęcie czarno-białe"
+
+#: fotokilof.py:2371
+msgid "Convert picture into sepia - old style silver based photography"
+msgstr "Konwersja do sepii - stara serbrowa fotografia "
+
+#: fotokilof.py:2372
+msgid "Put threshold of sepia, try values in range 80-95"
+msgstr "Podaj punkt odcięcia dla sepii, spróbuj wartości w zakresie 80-95"
+
+#: fotokilof.py:2373
+msgid "Execute only black-white/sepia conversion on current picture"
+msgstr "Wykonuje tylko konwersję do odcieni szarości/sepii"
+
+#: fotokilof.py:2375
+msgid ""
+"Black point.\n"
+"Try values in range 0-0.2"
+msgstr ""
+"Punkt czerni.\n"
+"Spróbuj wartości w zakresie 0-0.2"
+
+#: fotokilof.py:2376
+msgid ""
+"White point.\n"
+"Try values in range 0-0.2"
+msgstr ""
+"Punkt bieli.\n"
+"Spróbuj wartości w zakresie 0-0.2"
+
+#: fotokilof.py:2377
+msgid "Enhance contrast of image by adjusting the span of the available colors"
+msgstr "Rozszerza zakres kontratu"
+
+#: fotokilof.py:2378
+msgid "Enhances the difference between lighter & darker values of the image"
+msgstr "Zwiększa różnice pomiędzy ciemnymi a jasnymi partiami obrazka"
+
+#: fotokilof.py:2379
+msgid "Select power of reduce (negative values) or increase (positive values) contrast"
+msgstr "Wybierz siłę osłabienia (ujemne wartości) lub wzmocnienia (dodatnie wartości) kontrastu"
+
+#: fotokilof.py:2380
+msgid "Execute only change contrast conversion on current picture"
+msgstr "Wykonaj tyko zmianę kontrastu tylko bieżącego obrazka"
+
+#: fotokilof.py:2382
+msgid "Normalize color channels"
+msgstr "Normalizacja kanałów kolorów"
+
+#: fotokilof.py:2383
+msgid "Select channel for normalize"
+msgstr "Wybierz kanał do normalizacji"
+
+#: fotokilof.py:2384
+msgid "Scale the minimum and maximum values to a full quantum range"
+msgstr "Skaluje minimalne i maksymalne wartości do pełnego zakresu"
+
+#: fotokilof.py:2385
+msgid "Execute only color normalize conversion on current picture"
+msgstr "Wykonuje tylko normalizację kolorów bieżącego obrazka"
+
 #: fotokilof.py:2348
 msgid "Mirror top-bottom"
 msgstr "Odbicie lustrzane góra-dół"
@@ -702,6 +826,38 @@ msgstr "Odbicie lustrzane góra-dół"
 #: fotokilof.py:2349
 msgid "Mirror left-right"
 msgstr "Odbicie lustrzane lewo-prawo"
+
+#: fotokilof.py:2389
+msgid "Execute only mirror conversion on current picture"
+msgstr "Wykonuje tylko odbicie lustrzane bieżącego obrazka"
+
+#: fotokilof.py:2391
+msgid "Select picture to put on picture"
+msgstr "Wybierz obrazek do wstawienia na obrazek"
+
+#: fotokilof.py:2392
+msgid "Width picture"
+msgstr "Szerokość obrazka"
+
+#: fotokilof.py:2393
+msgid "Height picture"
+msgstr "Wysokość obrazka"
+
+#: fotokilof.py:2394
+msgid "Horizontal offset from gravity point"
+msgstr "Poziome przesunięcie od punktu grawitacji"
+
+#: fotokilof.py:2395
+msgid "Vertical offset from gravity point"
+msgstr "Pionowe przesunięcie od punktu grawitacji"
+
+#: fotokilof.py:2396
+msgid "Use gravity for putting picture"
+msgstr "Użyj grawitacji do umieszczenia obrazka"
+
+#: fotokilof.py:2397
+msgid "Execute only add logo on current picture"
+msgstr "Wykonaj tylko dodanie obrazka"
 
 #: fotokilof.py:2397
 msgid "Error"
