@@ -1185,7 +1185,7 @@ def tools_set_off():
 
 
 def tools_set(preview_on):
-    """ wybór narzędzi do wyświetlenia """
+    """ selection tools for showing """
 
     if img_custom_on.get() == 1:
         frame_custom.grid()
