@@ -1,5 +1,6 @@
-# Copyright (C) 2019-2021 Tomasz Łuczak
-# Tomasz Łuczak <tlu@team-tl.pl>, 2019.
+# Polish translation of FotoKilof
+# Copyright (C) 2019-2022 Tomasz Łuczak
+# Tomasz Łuczak <tlu@team-tl.pl>, 2022.
 #
 msgid ""
 msgstr ""
@@ -16,10 +17,7 @@ msgstr ""
 "X-Poedit-Basepath: ../../..\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Poedit-SearchPath-0: common.py\n"
-"X-Poedit-SearchPath-1: convert.py\n"
-"X-Poedit-SearchPath-2: fotokilof.py\n"
-"X-Poedit-SearchPath-3: ini_read.py\n"
+
 
 #: fotokilof.py:216 fotokilof.py:296 fotokilof.py:311 fotokilof.py:322
 #: fotokilof.py:333 fotokilof.py:344 fotokilof.py:355 fotokilof.py:366
@@ -198,6 +196,10 @@ msgstr "Logo"
 msgid "Custom"
 msgstr "Własne"
 
+#: fotokilof.py:1640 fotokilof.py:2130
+msgid "Vignette"
+msgstr "Winieta"
+
 #: fotokilof.py:1578
 msgid "EXIF"
 msgstr "EXIF"
@@ -297,6 +299,10 @@ msgstr "Tło"
 msgid "Gravity"
 msgstr "Grawitacja"
 
+#: fotokilof.py:1930
+msgid "Color test"
+msgstr "Test koloru"
+
 #: fotokilof.py:1992 fotokilof.py:2042
 msgid "Color"
 msgstr "Kolor"
@@ -308,10 +314,6 @@ msgstr "Font"
 #: fotokilof.py:1870
 msgid "Height"
 msgstr "Wysokość"
-
-#: fotokilof.py:1943
-msgid "Pixels"
-msgstr "Piksele"
 
 #: fotokilof.py:2056 fotokilof.py:2060
 msgid "Black-white"
@@ -637,7 +639,7 @@ msgstr "X - szerokość wycinka"
 
 #: fotokilof.py:2323 fotokilof.py:2327
 msgid "Y - height of crop"
-msgstr "Y - wyskość wycinka"
+msgstr "Y - wysokość wycinka"
 
 #: fotokilof.py:2324
 msgid "dx - horizontal offset from gravity point"
@@ -669,11 +671,9 @@ msgstr "Pobiera tylko wycinek z bieżącego obrazka"
 
 #: fotokilof.py:2343
 msgid ""
-"Click here and type text.\n"
-"Text will be displayed in selected color on background with selected color too."
+"Click here and type text"
 msgstr ""
-"Kliknij tutaj i pisz.\n"
-"Tekst będzie wyświetlany w wybranym kolorze na tle wybranego koloru"
+"Kliknij tutaj i pisz"
 
 #: fotokilof.py:2332
 msgid "Text size"
@@ -693,11 +693,11 @@ msgstr "Umieść tekst pod rysunkiem"
 
 #: fotokilof.py:2337
 msgid "Use gravity for putting text or Absolute position"
-msgstr "Użyj grawitacji dla umieszczenia tekstu albo pozycji bezwzględnej"
+msgstr "Użyj grawitacji albo pozycji bezwzględnej dla umieszczenia tekstu"
 
 #: fotokilof.py:2350
 msgid "Use gravity direction for text placement"
-msgstr "Użyj grawitacji wyboru umieszczenia tekstu"
+msgstr "Wybierz kierunek grawitacji dla umieszczenia tekstu"
 
 #: fotokilof.py:2338
 msgid "Use background for text"
@@ -706,6 +706,18 @@ msgstr "Użyj tła dla tekstu"
 #: fotokilof.py:2339 fotokilof.py:2340
 msgid "Offset from gravity or absolute position"
 msgstr "Odstęp od punktu grawitacji lub pozycja bezwzględna"
+
+#: fotokilof.py:2451
+msgid "Selected color of text and background"
+msgstr "Wybrany kolor tekstu i tła"
+
+#: fotokilof.py:2452
+msgid "Select color of text"
+msgstr "Wybierz kolor tekstu"
+
+#: fotokilof.py:2453
+msgid "Select color of background"
+msgstr "Wybierz kolor tła"
 
 #: fotokilof.py:2341
 msgid "Execute only adding text on current picture"
@@ -721,7 +733,11 @@ msgid ""
 "Background color is as choosed by Color button"
 msgstr ""
 "Wstaw kąt obrotu. Obrót będzie w prawo\n"
-"Kolor tła jesttaki jak wybrany przyciskiem Kolor"
+"Kolor tła jest taki jak wybrany przyciskiem Kolor"
+
+#: fotokilof.py:2458
+msgid "Selected color to fill a gap"
+msgstr "Wybrany kolor wypełnienia"
 
 #: fotokilof.py:2358
 msgid "If OWN is choosed, select color to fill a gap."
@@ -746,6 +762,10 @@ msgstr "Podaj szerokość pionowej części ramki"
 #: fotokilof.py:2366
 msgid "Put width of horizontal part of border"
 msgstr "Podaj szerokość poziomej części ramki"
+
+#: fotokilof.py:2467
+msgid "Selected color of border"
+msgstr "Wybrany kolor ramki"
 
 #: fotokilof.py:2367
 msgid "Select color of border"
@@ -831,6 +851,34 @@ msgstr "Odbicie lustrzane lewo-prawo"
 msgid "Execute only mirror conversion on current picture"
 msgstr "Wykonuje tylko odbicie lustrzane bieżącego obrazka"
 
+#: fotokilof.py:2492
+msgid "Radius of the Gaussian blur effect"
+msgstr "Promień rozmycia Gaussa"
+
+#: fotokilof.py:2493
+msgid "Standard deviation of the Gaussian effect"
+msgstr "Standardowe odchylenie dla efektu rozmycia"
+
+#: fotokilof.py:2494
+msgid "Horizontal offset of vignette"
+msgstr "Poziome przesunięcie winiety od krawędzi"
+
+#: fotokilof.py:2495
+msgid "Vertical offset of vignette"
+msgstr "Pionowe przesunięcie winiety od krawędzi"
+
+#: fotokilof.py:2496
+msgid "Selected color of corners"
+msgstr "Wybrany kolor narożników"
+
+#: fotokilof.py:2497
+msgid "Select color of corners"
+msgstr "Wybierz kolor narożników"
+
+#: fotokilof.py:2498
+msgid "Execute only vignette conversion on current picture"
+msgstr "Wykonaj tylko konwersję winiety bieżącego obrazka"
+
 #: fotokilof.py:2391
 msgid "Select picture to put on picture"
 msgstr "Wybierz obrazek do wstawienia na obrazek"
@@ -865,14 +913,9 @@ msgstr "Błąd"
 
 #: fotokilof.py:2398
 msgid ""
-"ImageMagick nor GraphicsMagick are not installed in you system. Is impossile "
+"ImageMagick nor GraphicsMagick are not installed in you system. Is impossible "
 "to process any graphics."
 msgstr ""
 "ImageMagick ani GraphicsMagick nie zostały znalezione w Twoim systemie. "
 "Niestety nie można przetwarzać obrazków."
 
-#~ msgid "Offset"
-#~ msgstr "Przesunięcie"
-
-#~ msgid "Command:"
-#~ msgstr "Polecenie:"

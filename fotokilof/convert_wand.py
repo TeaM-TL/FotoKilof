@@ -24,7 +24,6 @@ THE SOFTWARE.
 
 Info
 - font_list - get list of available fonts
-- magick_wand_version - info about versions of IM ag Wand
 Common
 - get_image_size - identify picture: width and height
 - display_image - display image
@@ -46,12 +45,6 @@ Converters
 """
 
 import os
-from wand.color import Color
-from wand.drawing import Drawing
-from wand.font import Font
-from wand.image import Image, COMPOSITE_OPERATORS
-from wand.version import fonts as fontsList
-from wand.version import MAGICK_VERSION, VERSION
 
 # my modules
 import common
@@ -59,17 +52,20 @@ import convert
 import log
 import magick
 
+try:
+    from wand.color import Color
+    from wand.drawing import Drawing
+    from wand.font import Font
+    from wand.image import Image, COMPOSITE_OPERATORS
+    from wand.version import fonts as fontsList
+except:
+    log.write_log(" ImageMagick or Wand-py not found", "E")
 
 
 # ------------------------------------ Info
 def fonts_list():
     """ list of available fonts """
     return fontsList()
-
-
-def magick_wand_version():
-    """ version of ImageMagick and Wand-py """
-    return 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
 
 
 # ------------------------------------ Common

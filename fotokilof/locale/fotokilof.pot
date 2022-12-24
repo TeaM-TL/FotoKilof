@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-23 00:34+0100\n"
+"POT-Creation-Date: 2022-12-24 20:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,424 +15,434 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: fotokilof.py:216 fotokilof.py:296 fotokilof.py:311 fotokilof.py:323
-#: fotokilof.py:335 fotokilof.py:347 fotokilof.py:359 fotokilof.py:371
-#: fotokilof.py:386 fotokilof.py:451 fotokilof.py:463 fotokilof.py:491
+#: fotokilof.py:216 fotokilof.py:299 fotokilof.py:314 fotokilof.py:326
+#: fotokilof.py:338 fotokilof.py:350 fotokilof.py:362 fotokilof.py:374
+#: fotokilof.py:389 fotokilof.py:401 fotokilof.py:467 fotokilof.py:479
+#: fotokilof.py:507
 msgid "Processing"
 msgstr ""
 
-#: fotokilof.py:276
+#: fotokilof.py:279
 msgid "of"
 msgstr ""
 
-#: fotokilof.py:287 fotokilof.py:306 fotokilof.py:318 fotokilof.py:330
-#: fotokilof.py:342 fotokilof.py:354 fotokilof.py:366 fotokilof.py:381
-#: fotokilof.py:393 fotokilof.py:458 fotokilof.py:474 fotokilof.py:501
+#: fotokilof.py:290 fotokilof.py:309 fotokilof.py:321 fotokilof.py:333
+#: fotokilof.py:345 fotokilof.py:357 fotokilof.py:369 fotokilof.py:384
+#: fotokilof.py:396 fotokilof.py:409 fotokilof.py:474 fotokilof.py:490
+#: fotokilof.py:517
 msgid "done"
 msgstr ""
 
-#: fotokilof.py:508 fotokilof.py:515 fotokilof.py:536 fotokilof.py:543
+#: fotokilof.py:524 fotokilof.py:531 fotokilof.py:552 fotokilof.py:559
 msgid "All graphics files"
 msgstr ""
 
-#: fotokilof.py:509 fotokilof.py:517 fotokilof.py:537 fotokilof.py:545
+#: fotokilof.py:525 fotokilof.py:533 fotokilof.py:553 fotokilof.py:561
 msgid "JPG files"
 msgstr ""
 
-#: fotokilof.py:510 fotokilof.py:518 fotokilof.py:538 fotokilof.py:546
+#: fotokilof.py:526 fotokilof.py:534 fotokilof.py:554 fotokilof.py:562
 msgid "PNG files"
 msgstr ""
 
-#: fotokilof.py:511 fotokilof.py:519 fotokilof.py:539 fotokilof.py:547
+#: fotokilof.py:527 fotokilof.py:535 fotokilof.py:555 fotokilof.py:563
 msgid "TIFF files"
 msgstr ""
 
-#: fotokilof.py:512 fotokilof.py:520 fotokilof.py:540 fotokilof.py:548
+#: fotokilof.py:528 fotokilof.py:536 fotokilof.py:556 fotokilof.py:564
 msgid "SVG files"
 msgstr ""
 
-#: fotokilof.py:513 fotokilof.py:521 fotokilof.py:541 fotokilof.py:549
+#: fotokilof.py:529 fotokilof.py:537 fotokilof.py:557 fotokilof.py:565
 msgid "ALL types"
 msgstr ""
 
-#: fotokilof.py:525
+#: fotokilof.py:541
 msgid "Select logo picture for inserting"
 msgstr ""
 
-#: fotokilof.py:553
+#: fotokilof.py:569
 msgid "Select picture for processing"
 msgstr ""
 
-#: fotokilof.py:1005
+#: fotokilof.py:1045
 msgid "License"
 msgstr ""
 
-#: fotokilof.py:1167
+#: fotokilof.py:1210
 msgid "No file selected"
 msgstr ""
 
-#: fotokilof.py:1336 fotokilof.py:1824
+#: fotokilof.py:1384 fotokilof.py:1876
 msgid "dx"
 msgstr ""
 
-#: fotokilof.py:1337 fotokilof.py:1825
+#: fotokilof.py:1385 fotokilof.py:1877
 msgid "dy"
 msgstr ""
 
-#: fotokilof.py:1349
+#: fotokilof.py:1397
 msgid "x"
 msgstr ""
 
-#: fotokilof.py:1350
+#: fotokilof.py:1398
 msgid "y"
 msgstr ""
 
-#: fotokilof.py:1464
+#: fotokilof.py:1514
 msgid "Image"
 msgstr ""
 
-#: fotokilof.py:1468 fotokilof.py:2087
+#: fotokilof.py:1518 fotokilof.py:2169
 msgid "File selection"
 msgstr ""
 
-#: fotokilof.py:1471
+#: fotokilof.py:1521
 msgid "Screenshot"
 msgstr ""
 
-#: fotokilof.py:1474
+#: fotokilof.py:1524
 msgid "Clipboard"
 msgstr ""
 
-#: fotokilof.py:1476
+#: fotokilof.py:1526
 msgid "First"
 msgstr ""
 
-#: fotokilof.py:1478
+#: fotokilof.py:1528
 msgid "Previous"
 msgstr ""
 
-#: fotokilof.py:1480
+#: fotokilof.py:1530
 msgid "Next"
 msgstr ""
 
-#: fotokilof.py:1482
+#: fotokilof.py:1532
 msgid "Last"
 msgstr ""
 
-#: fotokilof.py:1497 fotokilof.py:1508
+#: fotokilof.py:1547 fotokilof.py:1558
 msgid "Execute all"
 msgstr ""
 
-#: fotokilof.py:1501
+#: fotokilof.py:1551
 msgid "Folder"
 msgstr ""
 
-#: fotokilof.py:1503
+#: fotokilof.py:1553
 msgid "File"
 msgstr ""
 
-#: fotokilof.py:1524
+#: fotokilof.py:1574
 msgid "Settings"
 msgstr ""
 
-#: fotokilof.py:1528
+#: fotokilof.py:1578
 msgid "Save"
 msgstr ""
 
-#: fotokilof.py:1529
+#: fotokilof.py:1579
 msgid "Load"
 msgstr ""
 
-#: fotokilof.py:1543
+#: fotokilof.py:1593
 msgid "Tools"
 msgstr ""
 
-#: fotokilof.py:1547
+#: fotokilof.py:1597
 msgid "Scaling/Resize"
 msgstr ""
 
-#: fotokilof.py:1551 fotokilof.py:1679
+#: fotokilof.py:1601 fotokilof.py:1733
 msgid "Crop"
 msgstr ""
 
-#: fotokilof.py:1555
+#: fotokilof.py:1605
 msgid "Text"
 msgstr ""
 
-#: fotokilof.py:1559 fotokilof.py:1919
+#: fotokilof.py:1609 fotokilof.py:1971
 msgid "Rotate"
 msgstr ""
 
-#: fotokilof.py:1563 fotokilof.py:1950
+#: fotokilof.py:1613 fotokilof.py:2003
 msgid "Border"
 msgstr ""
 
-#: fotokilof.py:1567
+#: fotokilof.py:1617
 msgid "Black&white"
 msgstr ""
 
-#: fotokilof.py:1570
+#: fotokilof.py:1620
 msgid "Colors normalize"
 msgstr ""
 
-#: fotokilof.py:1574 fotokilof.py:2002 fotokilof.py:2008
+#: fotokilof.py:1624 fotokilof.py:2053 fotokilof.py:2058
 msgid "Contrast"
 msgstr ""
 
-#: fotokilof.py:1578 fotokilof.py:2061
+#: fotokilof.py:1628 fotokilof.py:2110
 msgid "Mirror"
 msgstr ""
 
-#: fotokilof.py:1582 fotokilof.py:2082
+#: fotokilof.py:1632 fotokilof.py:2166
 msgid "Logo"
 msgstr ""
 
-#: fotokilof.py:1586 fotokilof.py:1904 fotokilof.py:1929
+#: fotokilof.py:1636 fotokilof.py:1956 fotokilof.py:1980
 msgid "Custom"
 msgstr ""
 
-#: fotokilof.py:1590
+#: fotokilof.py:1640 fotokilof.py:2130
+msgid "Vignette"
+msgstr ""
+
+#: fotokilof.py:1644
 msgid "EXIF"
 msgstr ""
 
-#: fotokilof.py:1594
+#: fotokilof.py:1648
 msgid "Histograms"
 msgstr ""
 
-#: fotokilof.py:1599
+#: fotokilof.py:1653
 msgid "Theme:"
 msgstr ""
 
-#: fotokilof.py:1632
+#: fotokilof.py:1688
 msgid "Scale/Resize"
 msgstr ""
 
-#: fotokilof.py:1645
+#: fotokilof.py:1699
 msgid "Max"
 msgstr ""
 
-#: fotokilof.py:1653
+#: fotokilof.py:1707
 msgid "Percent"
 msgstr ""
 
-#: fotokilof.py:1657 fotokilof.py:1758 fotokilof.py:1884 fotokilof.py:1935
-#: fotokilof.py:1963 fotokilof.py:1989 fotokilof.py:2018 fotokilof.py:2048
-#: fotokilof.py:2071 fotokilof.py:2090 fotokilof.py:2172
+#: fotokilof.py:1711 fotokilof.py:1812 fotokilof.py:1936 fotokilof.py:1987
+#: fotokilof.py:2015 fotokilof.py:2040 fotokilof.py:2068 fotokilof.py:2097
+#: fotokilof.py:2119 fotokilof.py:2148 fotokilof.py:2172 fotokilof.py:2252
 msgid "Execute"
 msgstr ""
 
-#: fotokilof.py:1685
+#: fotokilof.py:1739
 msgid "Coordinates (x1, y1) and (x2, y2)"
 msgstr ""
 
-#: fotokilof.py:1688
+#: fotokilof.py:1742
 msgid ""
 "Left Upper\n"
 "corner\n"
 "Click left"
 msgstr ""
 
-#: fotokilof.py:1694
+#: fotokilof.py:1748
 msgid ""
 "Right Lower\n"
 "corner\n"
 "Click right"
 msgstr ""
 
-#: fotokilof.py:1701
+#: fotokilof.py:1755
 msgid "Origin (x1,y1) and dimensions (X, Y)"
 msgstr ""
 
-#: fotokilof.py:1713
+#: fotokilof.py:1767
 msgid ""
 "Offset (dx,dy), dimensions (X, Y)\n"
 "and gravity"
 msgstr ""
 
-#: fotokilof.py:1737 fotokilof.py:1851 fotokilof.py:2132
+#: fotokilof.py:1791 fotokilof.py:1903 fotokilof.py:2214
 msgid "Center"
 msgstr ""
 
-#: fotokilof.py:1754 fotokilof.py:2197 fotokilof.py:2233
+#: fotokilof.py:1808 fotokilof.py:2294 fotokilof.py:2330
 msgid "Preview"
 msgstr ""
 
-#: fotokilof.py:1756
+#: fotokilof.py:1810
 msgid "From image"
 msgstr ""
 
-#: fotokilof.py:1799
+#: fotokilof.py:1853
 msgid "Add text"
 msgstr ""
 
-#: fotokilof.py:1809
+#: fotokilof.py:1861
 msgid "Inside"
 msgstr ""
 
-#: fotokilof.py:1812
+#: fotokilof.py:1864
 msgid "Outside"
 msgstr ""
 
-#: fotokilof.py:1815 fotokilof.py:1882
+#: fotokilof.py:1867 fotokilof.py:1934
 msgid "Background"
 msgstr ""
 
-#: fotokilof.py:1819
+#: fotokilof.py:1871
 msgid "Gravity"
 msgstr ""
 
-#: fotokilof.py:1878 fotokilof.py:1933 fotokilof.py:1961
-msgid "Color"
+#: fotokilof.py:1930
+msgid "Color test"
 msgstr ""
 
-#: fotokilof.py:1879 fotokilof.py:2346
+#: fotokilof.py:1931 fotokilof.py:2443
 msgid "Font"
 msgstr ""
 
-#: fotokilof.py:1881
+#: fotokilof.py:1933
 msgid "Height"
 msgstr ""
 
-#: fotokilof.py:1954
-msgid "Pixels"
+#: fotokilof.py:1984 fotokilof.py:2006 fotokilof.py:2145
+msgid "  "
 msgstr ""
 
-#: fotokilof.py:1978 fotokilof.py:1982
+#: fotokilof.py:1985 fotokilof.py:2013 fotokilof.py:2146
+msgid "Color"
+msgstr ""
+
+#: fotokilof.py:2030 fotokilof.py:2033
 msgid "Black-white"
 msgstr ""
 
-#: fotokilof.py:1984
+#: fotokilof.py:2035
 msgid "Sepia"
 msgstr ""
 
-#: fotokilof.py:2006
+#: fotokilof.py:2056
 msgid "Stretch"
 msgstr ""
 
-#: fotokilof.py:2016
+#: fotokilof.py:2066
 msgid "Black"
 msgstr ""
 
-#: fotokilof.py:2017
+#: fotokilof.py:2067
 msgid "White"
 msgstr ""
 
-#: fotokilof.py:2034
+#: fotokilof.py:2084
 msgid "Color normalize"
 msgstr ""
 
-#: fotokilof.py:2038
+#: fotokilof.py:2087
 msgid "Normalize"
 msgstr ""
 
-#: fotokilof.py:2041
+#: fotokilof.py:2090
 msgid "AutoLevel"
 msgstr ""
 
-#: fotokilof.py:2044
+#: fotokilof.py:2093
 msgid "Channel:"
 msgstr ""
 
-#: fotokilof.py:2101
+#: fotokilof.py:2183
 msgid ""
 "Width\n"
 "Height"
 msgstr ""
 
-#: fotokilof.py:2102
+#: fotokilof.py:2184
 msgid ""
 "Offset\n"
 "(dx,dy)"
 msgstr ""
 
-#: fotokilof.py:2165
+#: fotokilof.py:2247
 msgid "Custom command"
 msgstr ""
 
-#: fotokilof.py:2170
+#: fotokilof.py:2250
 msgid "Clear"
 msgstr ""
 
-#: fotokilof.py:2192
+#: fotokilof.py:2289
 msgid "Original"
 msgstr ""
 
-#: fotokilof.py:2214 fotokilof.py:2250
+#: fotokilof.py:2311 fotokilof.py:2347
 msgid "Histogram"
 msgstr ""
 
-#: fotokilof.py:2229
+#: fotokilof.py:2326
 msgid "Result"
 msgstr ""
 
-#: fotokilof.py:2289
+#: fotokilof.py:2386
 msgid "Select image file for processing"
 msgstr ""
 
-#: fotokilof.py:2290
+#: fotokilof.py:2387
 msgid ""
 "MacOS and Windows: take image from clipboard.\n"
 "Linux: make screenshot, click window or select area.\n"
 "Grabbed image is saved into %TEMP%/today directory ad load for processing."
 msgstr ""
 
-#: fotokilof.py:2291
+#: fotokilof.py:2388
 msgid ""
 "Load first image from current directory.\n"
 "Use Home key instead"
 msgstr ""
 
-#: fotokilof.py:2292
+#: fotokilof.py:2389
 msgid ""
 "Load previous image from current directory.\n"
 "Use PgUp key instead"
 msgstr ""
 
-#: fotokilof.py:2293
+#: fotokilof.py:2390
 msgid ""
 "Load next image from current directory.\n"
 "Use PgDn key instead"
 msgstr ""
 
-#: fotokilof.py:2294
+#: fotokilof.py:2391
 msgid ""
 "Load last image from current directory.\n"
 "Use End key instead"
 msgstr ""
 
-#: fotokilof.py:2295
+#: fotokilof.py:2392
 msgid "Processing all files in current directory"
 msgstr ""
 
-#: fotokilof.py:2296
+#: fotokilof.py:2393
 msgid "Processing only current file"
 msgstr ""
 
-#: fotokilof.py:2297
+#: fotokilof.py:2394
 msgid "Selection of format output file; JPG, PNG or TIF"
 msgstr ""
 
-#: fotokilof.py:2298
+#: fotokilof.py:2395
 msgid "Perform all selected conversion for current file or all files in current directory"
 msgstr ""
 
-#: fotokilof.py:2299
+#: fotokilof.py:2396
 msgid ""
 "Save all values into configuration file (~/.fotokilof.ini).\n"
 "FotoKilof will load it during starting"
 msgstr ""
 
-#: fotokilof.py:2300
+#: fotokilof.py:2397
 msgid "Load saved values of conversion"
 msgstr ""
 
-#: fotokilof.py:2302
+#: fotokilof.py:2399
 msgid ""
 "Scale image, proportions are saved.\n"
 "Specify maximum dimensions of image or percent"
 msgstr ""
 
-#: fotokilof.py:2303
+#: fotokilof.py:2400
 msgid ""
 "Take part of image. Select crop by:\n"
 "- absolute coordinate\n"
@@ -441,348 +451,390 @@ msgid ""
 "Remember point (0,0) is located in left-top corner of image."
 msgstr ""
 
-#: fotokilof.py:2304
+#: fotokilof.py:2401
 msgid ""
 "Insert text on picture or add text at bottom.\n"
 "Text can be rotated, colored and with background.\n"
 "All font from OS are available"
 msgstr ""
 
-#: fotokilof.py:2305
+#: fotokilof.py:2402
 msgid "Rotate picture by 90, 180, 270 degree or specify own angle of rotation"
 msgstr ""
 
-#: fotokilof.py:2306
+#: fotokilof.py:2403
 msgid ""
 "Add border around picture.\n"
 "Specify width of horizontal and vertical border separately"
 msgstr ""
 
-#: fotokilof.py:2307
+#: fotokilof.py:2404
 msgid "Convert into black-white or sepia"
 msgstr ""
 
-#: fotokilof.py:2308
+#: fotokilof.py:2405
 msgid "Change contrast or change range of contrast"
 msgstr ""
 
-#: fotokilof.py:2309
+#: fotokilof.py:2406
 msgid "Normalize of color level"
 msgstr ""
 
-#: fotokilof.py:2310
+#: fotokilof.py:2407
 msgid "Make mirror of picture in vertical or horizotal or both direction"
 msgstr ""
 
-#: fotokilof.py:2311
+#: fotokilof.py:2408
 msgid "Insert picture, eg. own logo, into picture"
 msgstr ""
 
-#: fotokilof.py:2312
+#: fotokilof.py:2409
 msgid ""
 "Processing ImageMagick command.\n"
 "Works only on Linux OS"
 msgstr ""
 
-#: fotokilof.py:2313
+#: fotokilof.py:2410
 msgid ""
 "If ON keep EXIF data\n"
 "if OFF EXIF data will be removed"
 msgstr ""
 
-#: fotokilof.py:2314
+#: fotokilof.py:2411
 msgid "Select theme"
 msgstr ""
 
-#: fotokilof.py:2316
+#: fotokilof.py:2413
 msgid "Display original image by IMdisplay or default image viewer of OS"
 msgstr ""
 
-#: fotokilof.py:2317 fotokilof.py:2319
+#: fotokilof.py:2414 fotokilof.py:2416
 msgid "Select size of preview"
 msgstr ""
 
-#: fotokilof.py:2318
+#: fotokilof.py:2415
 msgid "Display result image by IMdisplay or default image viewer of OS"
 msgstr ""
 
-#: fotokilof.py:2321 fotokilof.py:2362
+#: fotokilof.py:2418 fotokilof.py:2463
 msgid "Execute only resize conversion on current picture"
 msgstr ""
 
-#: fotokilof.py:2323
+#: fotokilof.py:2420
 msgid ""
 "Select crop by absolute coordinate.\n"
 "Remember point (0,0) is located in left-top corner of image."
 msgstr ""
 
-#: fotokilof.py:2324
+#: fotokilof.py:2421
 msgid ""
 "Select crop by absolute coorinate left-top corner plus width and height.\n"
 "Remember point (0,0) is located in left-top corner of image."
 msgstr ""
 
-#: fotokilof.py:2325
+#: fotokilof.py:2422
 msgid ""
 "Select crop by gravity plus width and height plus offset.\n"
 "Remember point (0,0) is located in left-top corner of image."
 msgstr ""
 
-#: fotokilof.py:2326
+#: fotokilof.py:2423
 msgid ""
 "x1 - horizontal position of left-top corner of crop\n"
 "Click left mouse button on preview in place of left-top corner"
 msgstr ""
 
-#: fotokilof.py:2327
+#: fotokilof.py:2424
 msgid ""
 "y1 - vertical position of left-top corner of crop\n"
 "Click left mouse button on preview in place of left-top corner"
 msgstr ""
 
-#: fotokilof.py:2328
+#: fotokilof.py:2425
 msgid ""
 "x2 - horizontal position of right-bottom corner of crop\n"
 "Click right mouse button on preview in place of left-top corner"
 msgstr ""
 
-#: fotokilof.py:2329
+#: fotokilof.py:2426
 msgid ""
 "y2 - vertical position of right-bottom corner of crop\n"
 "Click right mouse button on preview in place of left-top corner"
 msgstr ""
 
-#: fotokilof.py:2330
+#: fotokilof.py:2427
 msgid "x1 - horizontal position of left-top corner of crop"
 msgstr ""
 
-#: fotokilof.py:2331
+#: fotokilof.py:2428
 msgid "y1 - vertical position of left-top corner of crop"
 msgstr ""
 
-#: fotokilof.py:2332 fotokilof.py:2336
+#: fotokilof.py:2429 fotokilof.py:2433
 msgid "X - width of crop"
 msgstr ""
 
-#: fotokilof.py:2333 fotokilof.py:2337
+#: fotokilof.py:2430 fotokilof.py:2434
 msgid "Y - height of crop"
 msgstr ""
 
-#: fotokilof.py:2334
+#: fotokilof.py:2431
 msgid "dx - horizontal offset from gravity point"
 msgstr ""
 
-#: fotokilof.py:2335
+#: fotokilof.py:2432
 msgid "dy - vertical offsef from gravity point"
 msgstr ""
 
-#: fotokilof.py:2338
+#: fotokilof.py:2435
 msgid ""
 "Take size of crop from current picture.\n"
 "Crop will be 100% of original picture"
 msgstr ""
 
-#: fotokilof.py:2339
+#: fotokilof.py:2436
 msgid "Refresh preview to see crop on picture"
 msgstr ""
 
-#: fotokilof.py:2340
+#: fotokilof.py:2437
 msgid "Use gravity direction for select crop"
 msgstr ""
 
-#: fotokilof.py:2341
+#: fotokilof.py:2438
 msgid "Execute only crop conversion on current picture"
 msgstr ""
 
-#: fotokilof.py:2343
-msgid ""
-"Click here and type text.\n"
-"Text will be displayed in selected color on background with selected color too."
+#: fotokilof.py:2440
+msgid "Click here and type text"
 msgstr ""
 
-#: fotokilof.py:2344
+#: fotokilof.py:2441
 msgid "Text size"
 msgstr ""
 
-#: fotokilof.py:2345
+#: fotokilof.py:2442
 msgid "Angle of text"
 msgstr ""
 
-#: fotokilof.py:2347
+#: fotokilof.py:2444
 msgid "Put text on picture"
 msgstr ""
 
-#: fotokilof.py:2348
+#: fotokilof.py:2445
 msgid "Put text below picture"
 msgstr ""
 
-#: fotokilof.py:2349
+#: fotokilof.py:2446
 msgid "Use gravity for putting text or Absolute position"
 msgstr ""
 
-#: fotokilof.py:2350
+#: fotokilof.py:2447
 msgid "Use gravity direction for text placement"
 msgstr ""
 
-#: fotokilof.py:2351
+#: fotokilof.py:2448
 msgid "Use background for text"
 msgstr ""
 
-#: fotokilof.py:2352 fotokilof.py:2353
+#: fotokilof.py:2449 fotokilof.py:2450
 msgid "Offset from gravity or absolute position"
 msgstr ""
 
-#: fotokilof.py:2354
+#: fotokilof.py:2451
+msgid "Selected color of text and background"
+msgstr ""
+
+#: fotokilof.py:2452
+msgid "Select color of text"
+msgstr ""
+
+#: fotokilof.py:2453
+msgid "Select color of background"
+msgstr ""
+
+#: fotokilof.py:2454
 msgid "Execute only adding text on current picture"
 msgstr ""
 
-#: fotokilof.py:2356
+#: fotokilof.py:2456
 msgid "Select if want to use own angle of rotation"
 msgstr ""
 
-#: fotokilof.py:2357
+#: fotokilof.py:2457
 msgid ""
 "Put angle of rotation. Rotation is in right direction.\n"
 "Background color is as choosed by Color button"
 msgstr ""
 
-#: fotokilof.py:2358
+#: fotokilof.py:2458
+msgid "Selected color to fill a gap"
+msgstr ""
+
+#: fotokilof.py:2459
 msgid "If OWN is choosed, select color to fill a gap."
 msgstr ""
 
-#: fotokilof.py:2359
+#: fotokilof.py:2460
 msgid "Execute only rotate conversion on current picture"
 msgstr ""
 
-#: fotokilof.py:2361
+#: fotokilof.py:2462
 msgid "Put percent for rescale of picture"
 msgstr ""
 
-#: fotokilof.py:2364
-msgid "Preview color of border"
-msgstr ""
-
-#: fotokilof.py:2365
+#: fotokilof.py:2465
 msgid "Put width of vertical part of border"
 msgstr ""
 
-#: fotokilof.py:2366
+#: fotokilof.py:2466
 msgid "Put width of horizontal part of border"
 msgstr ""
 
-#: fotokilof.py:2367
+#: fotokilof.py:2467
+msgid "Selected color of border"
+msgstr ""
+
+#: fotokilof.py:2468
 msgid "Select color of border"
 msgstr ""
 
-#: fotokilof.py:2368
+#: fotokilof.py:2469
 msgid "Execute only add border conversion on current picture"
 msgstr ""
 
-#: fotokilof.py:2370
+#: fotokilof.py:2471
 msgid "Convert picture into gray scale - black-white"
 msgstr ""
 
-#: fotokilof.py:2371
+#: fotokilof.py:2472
 msgid "Convert picture into sepia - old style silver based photography"
 msgstr ""
 
-#: fotokilof.py:2372
+#: fotokilof.py:2473
 msgid "Put threshold of sepia, try values in range 80-95"
 msgstr ""
 
-#: fotokilof.py:2373
+#: fotokilof.py:2474
 msgid "Execute only black-white/sepia conversion on current picture"
 msgstr ""
 
-#: fotokilof.py:2375
+#: fotokilof.py:2476
 msgid ""
 "Black point.\n"
 "Try values in range 0-0.2"
 msgstr ""
 
-#: fotokilof.py:2376
+#: fotokilof.py:2477
 msgid ""
 "White point.\n"
 "Try values in range 0-0.2"
 msgstr ""
 
-#: fotokilof.py:2377
+#: fotokilof.py:2478
 msgid "Enhance contrast of image by adjusting the span of the available colors"
 msgstr ""
 
-#: fotokilof.py:2378
+#: fotokilof.py:2479
 msgid "Enhances the difference between lighter & darker values of the image"
 msgstr ""
 
-#: fotokilof.py:2379
+#: fotokilof.py:2480
 msgid "Select power of reduce (negative values) or increase (positive values) contrast"
 msgstr ""
 
-#: fotokilof.py:2380
+#: fotokilof.py:2481
 msgid "Execute only change contrast conversion on current picture"
 msgstr ""
 
-#: fotokilof.py:2382
+#: fotokilof.py:2483
 msgid "Normalize color channels"
 msgstr ""
 
-#: fotokilof.py:2383
+#: fotokilof.py:2484
 msgid "Select channel for normalize"
 msgstr ""
 
-#: fotokilof.py:2384
+#: fotokilof.py:2485
 msgid "Scale the minimum and maximum values to a full quantum range"
 msgstr ""
 
-#: fotokilof.py:2385
+#: fotokilof.py:2486
 msgid "Execute only color normalize conversion on current picture"
 msgstr ""
 
-#: fotokilof.py:2387
+#: fotokilof.py:2488
 msgid "Mirror top-bottom"
 msgstr ""
 
-#: fotokilof.py:2388
+#: fotokilof.py:2489
 msgid "Mirror left-right"
 msgstr ""
 
-#: fotokilof.py:2389
+#: fotokilof.py:2490
 msgid "Execute only mirror conversion on current picture"
 msgstr ""
 
-#: fotokilof.py:2391
+#: fotokilof.py:2492
+msgid "Radius of the Gaussian blur effect"
+msgstr ""
+
+#: fotokilof.py:2493
+msgid "Standard deviation of the Gaussian effect"
+msgstr ""
+
+#: fotokilof.py:2494
+msgid "Horizontal offset of vignette"
+msgstr ""
+
+#: fotokilof.py:2495
+msgid "Verticaloffset of vignette"
+msgstr ""
+
+#: fotokilof.py:2496
+msgid "Selected color of corners"
+msgstr ""
+
+#: fotokilof.py:2497
+msgid "Select color of corners"
+msgstr ""
+
+#: fotokilof.py:2498
+msgid "Execute only vignette conversion on current picture"
+msgstr ""
+
+#: fotokilof.py:2500
 msgid "Select picture to put on picture"
 msgstr ""
 
-#: fotokilof.py:2392
+#: fotokilof.py:2501
 msgid "Width picture"
 msgstr ""
 
-#: fotokilof.py:2393
+#: fotokilof.py:2502
 msgid "Height picture"
 msgstr ""
 
-#: fotokilof.py:2394
+#: fotokilof.py:2503
 msgid "Horizontal offset from gravity point"
 msgstr ""
 
-#: fotokilof.py:2395
+#: fotokilof.py:2504
 msgid "Vertical offset from gravity point"
 msgstr ""
 
-#: fotokilof.py:2396
+#: fotokilof.py:2505
 msgid "Use gravity for putting picture"
 msgstr ""
 
-#: fotokilof.py:2397
+#: fotokilof.py:2506
 msgid "Execute only add logo on current picture"
 msgstr ""
 
-#: fotokilof.py:2426
+#: fotokilof.py:2535
 msgid "Error"
 msgstr ""
 
-#: fotokilof.py:2427
+#: fotokilof.py:2536
 msgid "ImageMagick nor GraphicsMagick are not installed in you system. Is impossile to process any graphics."
 msgstr ""
 

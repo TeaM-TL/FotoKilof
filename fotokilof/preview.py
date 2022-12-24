@@ -29,13 +29,18 @@ module contains function for generating preview and histogram:
 
 import os
 import tempfile
-from wand.drawing import Drawing
-from wand.image import Image
 
 import common
 import convert_wand
 import log
 import magick
+
+try:
+    from wand.drawing import Drawing
+    from wand.image import Image
+except:
+    log.write_log(" ImageMagick or Wand-py not found", "E")
+
 
 
 def preview_histogram(file_in, gm_or_im):

@@ -40,6 +40,12 @@ try:
 except:
     from tkinter.colorchooser import askcolor
 
+try:
+    from wand.version import MAGICK_VERSION, VERSION
+    GM_or_IM = ""
+except:
+    GM_or_IM = None
+
 # standard modules
 import configparser
 import datetime
@@ -740,7 +746,7 @@ def color_choose_border():
     """ Border color selection """
     color = askcolor(img_border_color.get())
     img_border_color.set(color[1])
-    l_border.configure(bg=color[1])
+    l_border_color.configure(bg=color[1])
 
 
 def color_choose_vignette():
@@ -862,7 +868,7 @@ def ini_read_wraper():
     ini_entries = ini_read.ini_read_border(FILE_INI)
     img_border_on.set(ini_entries['img_border_on'])
     img_border_color.set(ini_entries['img_border_color'])
-    l_border.configure(bg=img_border_color.get())
+    l_border_color.configure(bg=img_border_color.get())
     e_border_ns.delete(0, "end")
     e_border_ns.insert(0, ini_entries['img_border_size_x'])
     e_border_we.delete(0, "end")
@@ -1927,7 +1933,7 @@ co_text_font = ttk.Combobox(frame_text, width=30,
 co_text_font.configure(state='readonly')
 e_text_size = ttk.Entry(frame_text, width=3,
                         validate="key", validatecommand=(validation, '%S'))
-l_text_color = Label(frame_text, text=_("Example"))
+l_text_color = Label(frame_text, text=_("Color test"))
 b_text_color = ttk.Button(frame_text, text=_("Font"),
                           command=color_choose)
 l_text_heght = ttk.Label(frame_text, text=_("Height"))
@@ -2003,7 +2009,7 @@ b_rotate_run.pack(side="left", padx=5, pady=5)
 frame_border = ttk.Labelframe(frame_first_col, text=_("Border"),
                               style="Fiolet.TLabelframe")
 ###
-l_border = Label(frame_border, text=_("  "))
+l_border_color = Label(frame_border, text=_("  "))
 l_border_we = ttk.Label(frame_border, text="WE")
 e_border_ns = ttk.Entry(frame_border, width=3,
                      validate="key", validatecommand=(validation, '%S'))
@@ -2020,7 +2026,7 @@ l_border_we.grid(row=1, column=1, padx=5, pady=0)
 e_border_we.grid(row=1, column=2, padx=5, pady=0)
 l_border_ns.grid(row=2, column=1, padx=5, pady=5)
 e_border_ns.grid(row=2, column=2, padx=5, pady=5)
-l_border.grid(row=1, column=3)
+l_border_color.grid(row=1, column=3)
 b_border_color.grid(row=1, column=5, padx=5, pady=0)
 b_border_run.grid(row=2, column=5, padx=5, pady=5, sticky=E)
 
@@ -2437,7 +2443,7 @@ Hovertip(b_crop_show, _("Refresh preview to see crop on picture"))
 Hovertip(frame_crop_gravity, _("Use gravity direction for select crop"))
 Hovertip(b_crop_run, _("Execute only crop conversion on current picture"))
 # Text
-Hovertip(e_text, _("Click here and type text.\nText will be displayed in selected color on background with selected color too."))
+Hovertip(e_text, _("Click here and type text"))
 Hovertip(e_text_size, _("Text size"))
 Hovertip(e_text_angle, _("Angle of text"))
 Hovertip(co_text_font, _("Font"))
@@ -2448,19 +2454,23 @@ Hovertip(frame_text_gravity, _("Use gravity direction for text placement"))
 Hovertip(cb_text_box, _("Use background for text"))
 Hovertip(e_text_x, _("Offset from gravity or absolute position"))
 Hovertip(e_text_y, _("Offset from gravity or absolute position"))
+Hovertip(l_text_color, _("Selected color of text and background"))
+Hovertip(b_text_color,_("Select color of text"))
+Hovertip(b_text_box_color, _("Select color of background"))
 Hovertip(b_text_run, _("Execute only adding text on current picture"))
 # Rotate
 Hovertip(rb_rotate_own, _("Select if want to use own angle of rotation"))
 Hovertip(e_rotate_own, _("Put angle of rotation. Rotation is in right direction.\nBackground color is as choosed by Color button"))
+Hovertip(l_rotate_color, _("Selected color to fill a gap"))
 Hovertip(b_rotate_color, _("If OWN is choosed, select color to fill a gap."))
 Hovertip(b_rotate_run, _("Execute only rotate conversion on current picture"))
 # Scaling
 Hovertip(e2_resize, _("Put percent for rescale of picture"))
 Hovertip(b_resize_run, _("Execute only resize conversion on current picture"))
 # Border
-Hovertip(l_border, _("Preview color of border"))
 Hovertip(e_border_ns, _("Put width of vertical part of border"))
 Hovertip(e_border_we, _("Put width of horizontal part of border"))
+Hovertip(l_border_color, _("Selected color of border"))
 Hovertip(b_border_color, _("Select color of border"))
 Hovertip(b_border_run, _("Execute only add border conversion on current picture"))
 # Black-white
@@ -2484,6 +2494,14 @@ Hovertip(b_normalize_run, _("Execute only color normalize conversion on current 
 Hovertip(cb_mirror_flip, _("Mirror top-bottom"))
 Hovertip(cb_mirror_flop, _("Mirror left-right"))
 Hovertip(b_mirror_run, _("Execute only mirror conversion on current picture"))
+# Vignette
+Hovertip(e_vignette_radius, _("Radius of the Gaussian blur effect"))
+Hovertip(e_vignette_sigma, _("Standard deviation of the Gaussian effect"))
+Hovertip(e_vignette_dx, _("Horizontal offset of vignette"))
+Hovertip(e_vignette_dy, _("Vertical offset of vignette"))
+Hovertip(l_vignette_color, _("Selected color of corners"))
+Hovertip(b_vignette_color, _("Select color of corners"))
+Hovertip(b_vignette_run, _("Execute only vignette conversion on current picture"))
 # Logo
 Hovertip(b_logo_select, _("Select picture to put on picture"))
 Hovertip(e_logo_width, _("Width picture"))
@@ -2496,8 +2514,10 @@ Hovertip(b_logo_run, _("Execute only add logo on current picture"))
 ##########################################
 # Run functions
 #
-GM_or_IM = ""
-IM_version = convert_wand.magick_wand_version()
+if GM_or_IM is not None:
+    IM_version = 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
+else:
+    IM_version = "Missing ImageMagick"
 Python_version = 'Py:' + platform.python_version()
 window_title = version.__author__ + " : " + version.__appname__ + ": " + version.__version__ + " : " + IM_version + " : " + Python_version + " | "
 root.title(window_title)
@@ -2507,7 +2527,7 @@ if GM_or_IM is not None:
     tools_set(0)
     color_choose_set()
     text_tool_hide_show()
-    l_border.configure(bg=img_border_color.get())
+    l_border_color.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
         root.title(window_title + file_in_path.get())
         image_dimension =  convert_wand.get_image_size(file_in_path.get())
@@ -2521,7 +2541,7 @@ if GM_or_IM is not None:
 else:
     root.withdraw()
     messagebox.showerror(title=_("Error"),
-                         message=_("ImageMagick nor GraphicsMagick are not installed in you system. Is impossile to process any graphics."))
+                         message=_("ImageMagick nor GraphicsMagick are not installed in you system. Is impossible to process any graphics."))
     # disable processing buttons
     img_crop_on.set(0)
     img_normalize_on.set(0)
