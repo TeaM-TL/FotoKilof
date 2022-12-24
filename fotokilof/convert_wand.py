@@ -42,6 +42,7 @@ Converters
 - normalize - normalize levels
 - contrast - modify contrast
 - crop - crop picture
+- vignete - add vignete into picture
 """
 
 import os
@@ -105,10 +106,10 @@ def display_image(file_in):
     return result
 
 
-def make_clone(file_in):
+def make_clone(file_in, color = None):
     """ open picture and make clone for processing """
     if len(file_in) > 0:
-        with Image(filename=file_in) as image:
+        with Image(filename=file_in, background=color) as image:
             clone = image.clone()
     else:
         clone = None
@@ -161,7 +162,7 @@ def pip(clone, logo, logo_data, image_height, image_width):
     if len(logo):
         with Image(filename=logo) as logo:
             with Drawing() as draw:
-                position = convert.preview_crop_gravity(logo_data, image_height, image_width)
+                position = common.preview_crop_gravity(logo_data, image_height, image_width)
                 draw.composite(operator='over', 
                                 left=common.empty(position[0]), top=common.empty(position[1]),
                                 width=common.empty(logo_data[2]), height=common.empty(logo_data[3]),
@@ -333,6 +334,17 @@ def crop(file_in, clone, crop, gravity, entries):
             clone.crop(left=entries['three_dx'], top=entries['three_dy'], 
                         width=entries['three_width'], height=entries['three_height'], 
                         gravity=gravitation(gravity))
-            
+
+
+def vignette(clone, dx, dy, radius, sigma):
+    """ add vignette into picture
+    clone - clone of image for processing
+    dx, dy - offset from border
+    radius - radius of Gaussian blur
+    sigma - standard deviation for Gaussian blur
+    color - color of corners
+    """
+    clone.vignette(radius=common.empty(radius), sigma=common.empty(sigma),
+                    x=common.empty(dx), y=common.empty(dy))
 
 # EOF

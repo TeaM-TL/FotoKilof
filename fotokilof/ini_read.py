@@ -428,6 +428,54 @@ def ini_read_border(file_ini):
     return dict_return
 
 
+def ini_read_vignette(file_ini):
+    """ Vignette congiguration """
+
+    # słownik wyjściowy
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
+
+    try:
+        vignette_on = config.getint('Vignette', 'on')
+    except:
+        vignette_on = "0"
+    dict_return['on'] = entries.parse_list(vignette_on, (0, 1), 0)
+
+    try:
+        color = config.get('Vignette', 'color')
+    except:
+        color = "#FFFFFF"
+    dict_return['color'] = entries.parse_color(color, '#FFFFFF')
+
+    try:
+        dx = config.getint('Vignette', 'dx')
+    except:
+        dx = "0"
+    dict_return['dx'] = dx
+
+    try:
+        dy = config.getint('Vignette', 'dy')
+    except:
+        dy = "0"
+    dict_return['dy'] = dy
+
+    try:
+        radius = config.getint('Vignette', 'radius')
+    except:
+        radius = "0"
+    dict_return['radius'] = radius
+
+    try:
+        sigma = config.getint('Vignette', 'sigma')
+    except:
+        sigma = "0"
+    dict_return['sigma'] = sigma
+
+    return dict_return
+
+
 def ini_read_color(file_ini):
     """ Color configuration """
 

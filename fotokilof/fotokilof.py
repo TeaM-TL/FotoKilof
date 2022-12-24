@@ -229,11 +229,14 @@ def apply_all_button():
         
         file_list_len = len(files_list)
         for file_in in files_list:
-            clone = convert_wand.make_clone(file_in)
+            clone = convert_wand.make_clone(file_in, img_vignette_color.get())
             if img_crop_on.get():
                 convert_wand.crop(file_in, clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
             if img_mirror_on.get():
                 convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
+            if img_vignette_on.get():
+                convert_wand.vignette(clone, e_vignette_dx.get(), e_vignette_dy.get(),
+                                e_vignette_radius.get(), e_vignette_radius.get())
             if img_bw_on.get():
                 convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
             if img_contrast_on.get():
@@ -397,9 +400,10 @@ def convert_vignette_button():
     """ Vignette button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_wand.make_clone(file_in_path.get(), img_vignette_color.get())
     if clone != None:
-        convert_wand.vignette(clone, img_vignette_color.get(), e_vignette_ns.get(), e_vignette_we.get())
+        convert_wand.vignette(clone, e_vignette_dx.get(), e_vignette_dy.get(),
+                                e_vignette_radius.get(), e_vignette_radius.get())
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
         progress_files.set(_("done"))
@@ -729,7 +733,7 @@ def color_choose_rotate():
     """ color selection for rotate"""
     color = askcolor(img_rotate_color.get())
     img_rotate_color.set(color[1])
-    style.configure("Rotate.TEntry", fieldbackground=color[1])
+    l_rotate_color.configure(bg=color[1])
 
 
 def color_choose_border():
@@ -743,7 +747,7 @@ def color_choose_vignette():
     """ color selection for rotate"""
     color = askcolor(img_vignette_color.get())
     img_vignette_color.set(color[1])
-    style.configure("Rotate.TEntry", fieldbackground=color[1])
+    l_vignette_color.configure(bg=color[1])
 
 
 def color_choose_box():
@@ -769,12 +773,9 @@ def color_choose():
 
 def color_choose_set():
     """ Set color text: foreground and background"""
-    if img_text_box.get() == 0:
-        style.configure("Color.TEntry", fieldbackground="#FFFFFF")
-    else:
-        style.configure("Color.TEntry", fieldbackground=img_text_box_color.get())
-    style.configure("Color.TEntry", foreground=img_text_color.get())
-    style.configure("Rotate.TEntry", fieldbackground=img_rotate_color.get())
+    l_text_color.configure(fg=img_text_color.get(), bg=img_text_box_color.get())
+    l_rotate_color.configure(bg=img_rotate_color.get())
+    l_vignette_color.configure(bg=img_vignette_color.get())
 
 
 def ini_read_wraper():
@@ -861,11 +862,24 @@ def ini_read_wraper():
     ini_entries = ini_read.ini_read_border(FILE_INI)
     img_border_on.set(ini_entries['img_border_on'])
     img_border_color.set(ini_entries['img_border_color'])
-    l_border.configure(bg=ini_entries['img_border_color'])
+    l_border.configure(bg=img_border_color.get())
     e_border_ns.delete(0, "end")
     e_border_ns.insert(0, ini_entries['img_border_size_x'])
     e_border_we.delete(0, "end")
     e_border_we.insert(0, ini_entries['img_border_size_y'])
+
+    ini_entries = ini_read.ini_read_vignette(FILE_INI)
+    img_vignette_on.set(ini_entries['on'])
+    img_vignette_color.set(ini_entries['color'])
+    l_vignette_color.configure(bg=img_vignette_color.get())
+    e_vignette_dx.delete(0, "end")
+    e_vignette_dx.insert(0, ini_entries['dx'])
+    e_vignette_dy.delete(0, "end")
+    e_vignette_dy.insert(0, ini_entries['dy'])
+    e_vignette_radius.delete(0, "end")
+    e_vignette_radius.insert(0, ini_entries['radius'])
+    e_vignette_sigma.delete(0, "end")
+    e_vignette_sigma.insert(0, ini_entries['sigma'])
 
     ini_entries = ini_read.ini_read_color(FILE_INI)
     img_bw_on.set(ini_entries['color_on'])
@@ -989,6 +1003,13 @@ def ini_save():
     config.set('Mirror', 'on', str(img_mirror_on.get()))
     config.set('Mirror', 'flip', str(img_mirror_flip.get()))
     config.set('Mirror', 'flop', str(img_mirror_flop.get()))
+    config.add_section('Vignette')
+    config.set('Vignette', 'on', str(img_vignette_on.get()))
+    config.set('Vignette', 'dx', str(e_vignette_dx.get()))
+    config.set('Vignette', 'dy', str(e_vignette_dy.get()))
+    config.set('Vignette', 'radius', str(e_vignette_radius.get()))
+    config.set('Vignette', 'sigma', str(e_vignette_sigma.get()))
+    config.set('Vignette', 'color', str(img_vignette_color.get()))
     config.add_section('Logo')
     config.set('Logo', 'on', str(img_logo_on.get()))
     config.set('Logo', 'logo', file_logo_path.get())
@@ -1119,16 +1140,19 @@ def preview_orig():
                     coord_for_crop = (common.empty(e1_crop_3.get()), common.empty(e2_crop_3.get()),
                                         common.empty(e3_crop_3.get()), common.empty(e4_crop_3.get()),
                                         img_crop_gravity.get())
-                    coord = convert.preview_crop_gravity(coord_for_crop,
+                    coord = common.preview_crop_gravity(coord_for_crop,
                                                              xy_max['x_orig'],
                                                              xy_max['y_orig'])
                     x0 = coord[0]
                     y0 = coord[1]
                     x1 = coord[2]
                     y1 = coord[3]
-
-                ratio_X = xy_max['x_max'] / xy_max['x_orig']
-                ratio_Y = xy_max['y_max'] / xy_max['y_orig']
+                if (xy_max['x_orig'] > 0) and (xy_max['y_orig'] > 0):
+                    ratio_X = xy_max['x_max'] / xy_max['x_orig']
+                    ratio_Y = xy_max['y_max'] / xy_max['y_orig']
+                else:
+                    ratio_X = 1
+                    ratio_Y = 1
                 x0 = int(x0 * ratio_X)
                 y0 = int(y0 * ratio_Y)
                 x1 = int(x1 * ratio_X)
@@ -1903,7 +1927,7 @@ co_text_font = ttk.Combobox(frame_text, width=30,
 co_text_font.configure(state='readonly')
 e_text_size = ttk.Entry(frame_text, width=3,
                         validate="key", validatecommand=(validation, '%S'))
-l_text_color = ttk.Label(frame_text, text=_("Color"))
+l_text_color = Label(frame_text, text=_("Example"))
 b_text_color = ttk.Button(frame_text, text=_("Font"),
                           command=color_choose)
 l_text_heght = ttk.Label(frame_text, text=_("Height"))
@@ -1957,19 +1981,21 @@ rb_rotate_own = ttk.Radiobutton(frame_rotate, text=_("Custom"),
                                 variable=img_rotate, value="0")
 e_rotate_own = ttk.Entry(frame_rotate, width=3, style='Rotate.TEntry',
                      validate="key", validatecommand=(validation, '%S'))
+l_rotate_color = Label(frame_rotate, text=_("  "))
 b_rotate_color = ttk.Button(frame_rotate, text=_("Color"),
                           command=color_choose_rotate)
 b_rotate_run = ttk.Button(frame_rotate, text=_("Execute"),
                           style="Brown.TButton",
                           command=convert_rotate_button)
 
-rb_rotate_90.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
-rb_rotate_180.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
-rb_rotate_270.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
-rb_rotate_own.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
-e_rotate_own.grid(row=1, column=5, sticky=(N, W, E, S), padx=5, pady=5)
-b_rotate_color.grid(row=1, column=6, padx=5, pady=5)
-b_rotate_run.grid(row=1, column=7, padx=5, pady=5)
+rb_rotate_90.pack(side="left", padx=5, pady=5)
+rb_rotate_180.pack(side="left", padx=5, pady=5)
+rb_rotate_270.pack(side="left", padx=5, pady=5)
+rb_rotate_own.pack(side="left", padx=5, pady=5)
+e_rotate_own.pack(side="left", padx=5, pady=5)
+l_rotate_color.pack(side="left", pady=5)
+b_rotate_color.pack(side="left", padx=5, pady=5)
+b_rotate_run.pack(side="left", padx=5, pady=5)
 
 ###########################
 # Border
@@ -2116,6 +2142,7 @@ e_vignette_dx = ttk.Entry(frame_vignette, width=3,
 l_vignette_dy = ttk.Label(frame_vignette, text="dy")
 e_vignette_dy = ttk.Entry(frame_vignette, width=3,
                      validate="key", validatecommand=(validation, '%S'))
+l_vignette_color = Label(frame_vignette, text=_("  "))
 b_vignette_color = ttk.Button(frame_vignette, text=_("Color"),
                             command=color_choose_vignette)
 b_vignette_run = ttk.Button(frame_vignette, text=_("Execute"),
@@ -2129,8 +2156,9 @@ l_vignette_dx.grid(row=1, column=3, padx=5, pady=0)
 e_vignette_dx.grid(row=1, column=4, padx=5, pady=0)
 l_vignette_dy.grid(row=2, column=3, padx=5, pady=5)
 e_vignette_dy.grid(row=2, column=4, padx=5, pady=5)
-b_vignette_color.grid(row=1, column=5, padx=5, pady=0)
-b_vignette_run.grid(row=2, column=5, padx=5, pady=5)
+l_vignette_color.grid(row=1, column=5)
+b_vignette_color.grid(row=1, column=6, padx=5, pady=0)
+b_vignette_run.grid(row=2, column=6, padx=5, pady=5)
 
 ###########################
 # Logo
