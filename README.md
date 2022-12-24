@@ -23,10 +23,11 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - text annotation, inside or outside of picture (mems generator),
  - border around picture,
  - rotation,
- - mirroring (verticl or horizontal)
+ - mirroring (vertical or horizontal)
  - black-white or sepia,
  - contrast increase/decrease or normalize or histogram stretching,
  - color auto-level or equalize,
+ - vignette
  - adding logo image on picture,
  - file formats: JPG, PNG, TIFF, SVG
  - format conversion into JPG, PNG, TIFF.
@@ -55,9 +56,10 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - equalize by channel,
  - contrast between -5 and +5,
  - customized contrast stretching,
+ - vignette can be sharp or blured, corners can be filled by selected color,
  - logo position by gravity, size and offset,
  - histograms of original and result pictures (temporary disabled),
- - fast file navigation: First, Prev, Next, Last,
+ - fast file navigation: First, Prev, Next, Last or keys: Home, PgUp, PgDn, End,
  - is possible to use other ImageMagick commands, eg. *-gaussian-blur* etc. In command editor - doesn't work under Windows11
 
 ## Processing
