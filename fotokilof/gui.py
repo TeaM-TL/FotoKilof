@@ -20,12 +20,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-function for GUI
+function for GUI:
+- copy_to_clipboard - copy result into clipboard (only Windows)
+- only_numbers - validate only natural values
+- only_integer - validate integer values
 """
 
 from io import BytesIO
 from PIL import Image
-#from wand import Image
+import re
 
 import mswindows
 if mswindows.windows() == 1:
@@ -58,5 +61,12 @@ def only_numbers(char):
     """  Validation entry widgets: only digits """
     return char.isdigit()
 
+
+def only_integer(char):
+    """  Validation entry widgets: only digits """
+    if re.match('^[-]{0,1}[0-9]{,6}$', str(char)):
+        return True
+    else:
+        return False
 
 # EOF

@@ -46,12 +46,6 @@ Converters
 
 import os
 
-# my modules
-import common
-import convert
-import log
-import magick
-
 try:
     from wand.color import Color
     from wand.drawing import Drawing
@@ -59,7 +53,14 @@ try:
     from wand.image import Image, COMPOSITE_OPERATORS
     from wand.version import fonts as fontsList
 except:
-    log.write_log(" ImageMagick or Wand-py not found", "E")
+    print(" ImageMagick or Wand-py not found")
+
+# my modules
+import common
+import convert
+import log
+import magick
+
 
 
 # ------------------------------------ Info
@@ -93,6 +94,7 @@ def display_image(file_in):
     try:
         with Image(filename=file_in) as image:
             display(image)
+ 
     except:
         log.write_log(" Error display file: " + file_in, "E")
         result = None

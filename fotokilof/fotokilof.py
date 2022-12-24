@@ -44,6 +44,7 @@ try:
     from wand.version import MAGICK_VERSION, VERSION
     GM_or_IM = ""
 except:
+    print(" ImageMagick or Wand-py not found")
     GM_or_IM = None
 
 # standard modules
@@ -240,19 +241,19 @@ def apply_all_button():
                 convert_wand.crop(file_in, clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
             if img_mirror_on.get():
                 convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
-            if img_vignette_on.get():
-                convert_wand.vignette(clone, e_vignette_dx.get(), e_vignette_dy.get(),
-                                e_vignette_radius.get(), e_vignette_radius.get())
             if img_bw_on.get():
                 convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
             if img_contrast_on.get():
                 convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
             if img_normalize_on.get():
                 convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
-            if img_border_on.get():
-                convert_wand.border(clone, img_border_color.get(), e_border_ns.get(), e_border_we.get())
+            if img_vignette_on.get():
+                convert_wand.vignette(clone, e_vignette_dx.get(), e_vignette_dy.get(),
+                                e_vignette_radius.get(), e_vignette_radius.get())
             if img_rotate_on.get():
                 convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
+            if img_border_on.get():
+                convert_wand.border(clone, img_border_color.get(), e_border_we.get(), e_border_ns.get())
             if img_resize_on.get():
                 #  subdir for results if resize
                 subdir_command = convert_wand.resize_subdir(img_resize.get(), common.empty(e1_resize_x.get()), common.empty(e1_resize_y.get()), common.empty(e2_resize.get()))
@@ -396,7 +397,7 @@ def convert_border_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     if clone != None:
-        convert_wand.border(clone, img_border_color.get(), e_border_ns.get(), e_border_we.get())
+        convert_wand.border(clone, img_border_color.get(), e_border_we.get(), e_border_ns.get())
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
         progress_files.set(_("done"))
@@ -1011,8 +1012,15 @@ def ini_save():
     config.set('Mirror', 'flop', str(img_mirror_flop.get()))
     config.add_section('Vignette')
     config.set('Vignette', 'on', str(img_vignette_on.get()))
-    config.set('Vignette', 'dx', str(e_vignette_dx.get()))
-    config.set('Vignette', 'dy', str(e_vignette_dy.get()))
+    try:
+        config.set('Vignette', 'dx', str(int(e_vignette_dx.get())))
+    except:
+        config.set('Vignette', 'dx', "0")
+    try:
+        e_vignette_dy.get()
+        config.set('Vignette', 'dy', str(int(e_vignette_dy.get())))
+    except:
+        config.set('Vignette', 'dy', "0")
     config.set('Vignette', 'radius', str(e_vignette_radius.get()))
     config.set('Vignette', 'sigma', str(e_vignette_sigma.get()))
     config.set('Vignette', 'color', str(img_vignette_color.get()))
@@ -1509,6 +1517,7 @@ main_tools.pack(side='top', expand=0, fill='both')
 main.pack(side='bottom', expand=1, fill='both')
 
 validation = main.register(gui.only_numbers)  # Entry validation
+validationint = main.register(gui.only_integer)  # Entry validation integer value
 
 ####################################################################
 # main_menu row
@@ -1664,10 +1673,10 @@ co_theme_selector.configure(state='readonly')
 
 cb_crop.pack(padx=5, pady=1, anchor=W, side='left')
 cb_mirror.pack(padx=5, pady=1, anchor=W, side='left')
-cb_vignette.pack(padx=5, pady=1, anchor=W, side='left')
 cb_bw.pack(padx=5, pady=1, anchor=W, side='left')
 cb_contrast.pack(padx=5, pady=1, anchor=W, side='left')
 cb_normalize.pack(padx=5, pady=1, anchor=W, side='left')
+cb_vignette.pack(padx=5, pady=1, anchor=W, side='left')
 cb_border.pack(padx=5, pady=1, anchor=W, side='left')
 cb_rotate.pack(padx=5, pady=1, anchor=W, side='left')
 cb_resize.pack(padx=5, pady=1, anchor=W, side='left')
@@ -2011,10 +2020,10 @@ frame_border = ttk.Labelframe(frame_first_col, text=_("Border"),
 ###
 l_border_color = Label(frame_border, text=_("  "))
 l_border_we = ttk.Label(frame_border, text="WE")
-e_border_ns = ttk.Entry(frame_border, width=3,
+e_border_we = ttk.Entry(frame_border, width=3,
                      validate="key", validatecommand=(validation, '%S'))
 l_border_ns = ttk.Label(frame_border, text="NS")
-e_border_we = ttk.Entry(frame_border, width=3,
+e_border_ns = ttk.Entry(frame_border, width=3,
                      validate="key", validatecommand=(validation, '%S'))
 b_border_color = ttk.Button(frame_border, text=_("Color"),
                             command=color_choose_border)
@@ -2136,18 +2145,18 @@ b_mirror_run.grid(row=1, column=5, sticky=E, padx=5, pady=5)
 frame_vignette = ttk.Labelframe(frame_first_col, text=_("Vignette"),
                               style="Fiolet.TLabelframe")
 ###
-l_vignette_radius = ttk.Label(frame_vignette, text="Radius")
+l_vignette_radius = ttk.Label(frame_vignette, text=_("Radius"))
 e_vignette_radius = ttk.Entry(frame_vignette, width=3,
                      validate="key", validatecommand=(validation, '%S'))
-l_vignette_sigma = ttk.Label(frame_vignette, text="Sigma")
+l_vignette_sigma = ttk.Label(frame_vignette, text=_("Sigma"))
 e_vignette_sigma = ttk.Entry(frame_vignette, width=3,
                      validate="key", validatecommand=(validation, '%S'))
-l_vignette_dx = ttk.Label(frame_vignette, text="dx")
+l_vignette_dx = ttk.Label(frame_vignette, text=_("dx"))
 e_vignette_dx = ttk.Entry(frame_vignette, width=3,
-                     validate="key", validatecommand=(validation, '%S'))
-l_vignette_dy = ttk.Label(frame_vignette, text="dy")
+                     validate="key", validatecommand=(validationint, '%S'))
+l_vignette_dy = ttk.Label(frame_vignette, text=_("dy"))
 e_vignette_dy = ttk.Entry(frame_vignette, width=3,
-                     validate="key", validatecommand=(validation, '%S'))
+                     validate="key", validatecommand=(validationint, '%S'))
 l_vignette_color = Label(frame_vignette, text=_("  "))
 b_vignette_color = ttk.Button(frame_vignette, text=_("Color"),
                             command=color_choose_vignette)

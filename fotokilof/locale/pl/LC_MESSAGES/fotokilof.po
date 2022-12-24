@@ -351,6 +351,14 @@ msgstr "AutoLevel"
 msgid "Channel:"
 msgstr "Kanał:"
 
+#: fotokilof.py:2148
+msgid "Radius"
+msgstr "Promień"
+
+#: fotokilof.py:2151
+msgid "Sigma"
+msgstr "Odchylenie"
+
 #: fotokilof.py:2147
 msgid "Flip"
 msgstr "Pionowo"

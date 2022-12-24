@@ -67,12 +67,12 @@ Processing order for all selected conversion:
 
 - crop,
 - mirror,
-- vignette,
 - black-white/sepia,
 - contrast,
 - color normalize,
-- border,
+- vignette,
 - rotate,
+- border,
 - resize,
 - text,
 - logo.
