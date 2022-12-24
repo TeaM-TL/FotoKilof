@@ -393,6 +393,18 @@ def convert_border_button():
         progress_files.set(_("done"))
 
 
+def convert_vignette_button():
+    """ Vignette button """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+    clone = convert_wand.make_clone(file_in_path.get())
+    if clone != None:
+        convert_wand.vignette(clone, img_vignette_color.get(), e_vignette_ns.get(), e_vignette_we.get())
+        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        preview_new(path_to_file_out(0))
+        progress_files.set(_("done"))
+
+
 def crop_read():
     """ Read size of picture and load into crop widget """
     if file_in_path.get() is not None:
@@ -725,6 +737,13 @@ def color_choose_border():
     color = askcolor(img_border_color.get())
     img_border_color.set(color[1])
     l_border.configure(bg=color[1])
+
+
+def color_choose_vignette():
+    """ color selection for rotate"""
+    color = askcolor(img_vignette_color.get())
+    img_vignette_color.set(color[1])
+    style.configure("Rotate.TEntry", fieldbackground=color[1])
 
 
 def color_choose_box():
@@ -1187,43 +1206,21 @@ def tools_set_off():
 def tools_set(preview_on):
     """ selection tools for showing """
 
-    if img_custom_on.get() == 1:
-        frame_custom.grid()
-    else:
-        frame_custom.grid_remove()
-
-    if img_histograms_on.get() == 0:
-        frame_histogram_orig.grid_remove()
-        frame_histogram_new.grid_remove()
-    else:
-        frame_histogram_orig.grid()
-        frame_histogram_new.grid()
-
-    if img_resize_on.get() == 0:
-        frame_resize.grid_remove()
-    else:
-        frame_resize.grid()
-
     if img_crop_on.get() == 0:
         frame_crop.grid_remove()
     else:
         frame_crop.grid()
         crop_tool_hide_show()
 
-    if img_text_on.get() == 0:
-        frame_text.grid_remove()
+    if img_mirror_on.get() == 0:
+        frame_mirror.grid_remove()
     else:
-        frame_text.grid()
+        frame_mirror.grid(sticky=W)
 
-    if img_rotate_on.get() == 0:
-        frame_rotate.grid_remove()
+    if img_vignette_on.get() == 0:
+        frame_vignette.grid_remove()
     else:
-        frame_rotate.grid()
-
-    if img_border_on.get() == 0:
-        frame_border.grid_remove()
-    else:
-        frame_border.grid()
+        frame_vignette.grid(sticky=W)
 
     if img_bw_on.get() == 0:
         frame_bw.grid_remove()
@@ -1240,15 +1237,42 @@ def tools_set(preview_on):
     else:
         frame_normalize.grid(sticky=W)
 
-    if img_mirror_on.get() == 0:
-        frame_mirror.grid_remove()
+    if img_border_on.get() == 0:
+        frame_border.grid_remove()
     else:
-        frame_mirror.grid(sticky=W)
+        frame_border.grid()
+
+    if img_rotate_on.get() == 0:
+        frame_rotate.grid_remove()
+    else:
+        frame_rotate.grid()
+
+    if img_resize_on.get() == 0:
+        frame_resize.grid_remove()
+    else:
+        frame_resize.grid()
+
+    if img_text_on.get() == 0:
+        frame_text.grid_remove()
+    else:
+        frame_text.grid()
 
     if img_logo_on.get() == 0:
         frame_logo.grid_remove()
     else:
         frame_logo.grid()
+
+    if img_custom_on.get() == 1:
+        frame_custom.grid()
+    else:
+        frame_custom.grid_remove()
+
+    if img_histograms_on.get() == 0:
+        frame_histogram_orig.grid_remove()
+        frame_histogram_new.grid_remove()
+    else:
+        frame_histogram_orig.grid()
+        frame_histogram_new.grid()
 
     style.theme_use(co_theme_selector.get())
     if preview_on:
@@ -1436,6 +1460,8 @@ img_mirror_flop = IntVar()  # (0, 1)
 contrast_selection = ("+5", "+4", "+3", "+2", "+1", "-1", "-2", "-3", "-4", "-5")
 img_custom_on = IntVar()  # Custom
 img_exif_on = IntVar()
+img_vignette_on = IntVar()
+img_vignette_color = StringVar()
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
 file_extension = (".jpeg", ".jpg", ".png", ".tif")
@@ -1587,6 +1613,10 @@ cb_custom = ttk.Checkbutton(frame_tools_set, text=_("Custom"),
                             variable=img_custom_on,
                             offvalue="0", onvalue="1",
                             command=tools_set_off)
+cb_vignette = ttk.Checkbutton(frame_tools_set, text=_("Vignette"),
+                            variable=img_vignette_on,
+                            offvalue="0", onvalue="1",
+                            command=tools_set_off)
 cb_exif = ttk.Checkbutton(frame_tools_set, text=_("EXIF"),
                                 variable=img_exif_on,
                                 offvalue="0", onvalue="1",
@@ -1601,15 +1631,17 @@ co_theme_selector = ttk.Combobox(frame_tools_set,
                                  width=9, values=theme_list)
 co_theme_selector.configure(state='readonly')
 
-cb_resize.pack(padx=5, pady=1, anchor=W, side='left')
+
 cb_crop.pack(padx=5, pady=1, anchor=W, side='left')
-cb_text.pack(padx=5, pady=1, anchor=W, side='left')
-cb_rotate.pack(padx=5, pady=1, anchor=W, side='left')
-cb_border.pack(padx=5, pady=1, anchor=W, side='left')
+cb_mirror.pack(padx=5, pady=1, anchor=W, side='left')
+cb_vignette.pack(padx=5, pady=1, anchor=W, side='left')
 cb_bw.pack(padx=5, pady=1, anchor=W, side='left')
 cb_contrast.pack(padx=5, pady=1, anchor=W, side='left')
 cb_normalize.pack(padx=5, pady=1, anchor=W, side='left')
-cb_mirror.pack(padx=5, pady=1, anchor=W, side='left')
+cb_border.pack(padx=5, pady=1, anchor=W, side='left')
+cb_rotate.pack(padx=5, pady=1, anchor=W, side='left')
+cb_resize.pack(padx=5, pady=1, anchor=W, side='left')
+cb_text.pack(padx=5, pady=1, anchor=W, side='left')
 cb_logo.pack(padx=5, pady=1, anchor=W, side='left')
 cb_custom.pack(padx=5, pady=1, anchor=W, side='left')
 cb_exif.pack(padx=5, pady=1, anchor=W, side='left')
@@ -1631,8 +1663,6 @@ frame_first_col = ttk.Frame(main)
 ###########################
 frame_resize = ttk.Labelframe(frame_first_col, text=_("Scale/Resize"),
                               style="Fiolet.TLabelframe")
-frame_resize.grid(column=1, row=2, columnspan=2,
-                  sticky=(N, W, E, S), padx=5, pady=5)
 ###
 frame_resize_row1 = ttk.Frame(frame_resize)
 rb_resize_3 = ttk.Radiobutton(frame_resize_row1, text="FullHD (1920x1080)",
@@ -1798,8 +1828,6 @@ b_crop_run.grid(row=5, column=4, columnspan=2, sticky=W, padx=5, pady=5)
 ###########################
 frame_text = ttk.Labelframe(frame_first_col, text=_("Add text"),
                             style="Fiolet.TLabelframe")
-frame_text.grid(row=4, column=1, columnspan=2,
-                sticky=(N, W, E, S), padx=5, pady=1)
 ###
 e_text = ttk.Entry(frame_text, width=55, style='Color.TEntry')
 #frame_text_text.grid(row=1, column=1, columnspan=5, sticky=(W, E))
@@ -1870,7 +1898,7 @@ rb_text_S.grid(row=3, column=2, pady=1)
 rb_text_SE.grid(row=3, column=3, sticky=W, pady=1)
 
 ###
-co_text_font = ttk.Combobox(frame_text, width=35,
+co_text_font = ttk.Combobox(frame_text, width=30,
                             textvariable=img_text_font)
 co_text_font.configure(state='readonly')
 e_text_size = ttk.Entry(frame_text, width=3,
@@ -1918,7 +1946,6 @@ frame_text_rotate.grid(row=6, column=1, columnspan=6, sticky=W, padx=5)
 ###########################
 frame_rotate = ttk.LabelFrame(frame_first_col, text=_("Rotate"),
                               style="Fiolet.TLabelframe")
-frame_rotate.grid(row=5, column=1, columnspan=2, sticky=(N, W, E, S), padx=5, pady=1)
 ###
 rb_rotate_90 = ttk.Radiobutton(frame_rotate, text="90",
                                variable=img_rotate, value="90")
@@ -1949,9 +1976,8 @@ b_rotate_run.grid(row=1, column=7, padx=5, pady=5)
 ###########################
 frame_border = ttk.Labelframe(frame_first_col, text=_("Border"),
                               style="Fiolet.TLabelframe")
-frame_border.grid(row=6, column=1, sticky=(N, W, E, S), padx=5, pady=1)
 ###
-l_border = Label(frame_border, text=_("Pixels"))
+l_border = Label(frame_border, text=_("  "))
 l_border_we = ttk.Label(frame_border, text="WE")
 e_border_ns = ttk.Entry(frame_border, width=3,
                      validate="key", validatecommand=(validation, '%S'))
@@ -1964,12 +1990,12 @@ b_border_run = ttk.Button(frame_border, text=_("Execute"),
                           style="Brown.TButton",
                           command=convert_border_button)
 
-l_border.grid(row=1, column=1, padx=5, pady=5, columnspan=4)
-l_border_we.grid(row=2, column=1, padx=5, pady=5)
+l_border_we.grid(row=1, column=1, padx=5, pady=0)
+e_border_we.grid(row=1, column=2, padx=5, pady=0)
+l_border_ns.grid(row=2, column=1, padx=5, pady=5)
 e_border_ns.grid(row=2, column=2, padx=5, pady=5)
-l_border_ns.grid(row=2, column=3, padx=5, pady=5)
-e_border_we.grid(row=2, column=4, padx=5, pady=5)
-b_border_color.grid(row=1, column=5, padx=5, pady=5)
+l_border.grid(row=1, column=3)
+b_border_color.grid(row=1, column=5, padx=5, pady=0)
 b_border_run.grid(row=2, column=5, padx=5, pady=5, sticky=E)
 
 ############################
@@ -1977,7 +2003,6 @@ b_border_run.grid(row=2, column=5, padx=5, pady=5, sticky=E)
 ############################
 frame_bw = ttk.LabelFrame(frame_first_col, text=_("Black-white"),
                           style="Fiolet.TLabelframe")
-frame_bw.grid(row=6, column=2, rowspan=1, sticky=(N, E, S), padx=5, pady=1)
 ###
 rb1_bw = ttk.Radiobutton(frame_bw, text=_("Black-white"),
                          variable=img_bw, value="1")
@@ -2001,7 +2026,6 @@ b_bw_run.grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky=E)
 #########################
 frame_contrast = ttk.Labelframe(frame_first_col, text=_("Contrast"),
                                 style="Fiolet.TLabelframe")
-frame_contrast.grid(row=7, column=1, sticky=(N, W, E, S), padx=5, pady=1)
 ###
 rb1_contrast = ttk.Radiobutton(frame_contrast, text=_("Stretch"),
                                variable=img_contrast, value="1")
@@ -2033,7 +2057,6 @@ b_contrast_run.grid(row=2, column=3, padx=5, pady=5, columnspan=3, sticky=E)
 ############################
 frame_normalize = ttk.LabelFrame(frame_first_col, text=_("Color normalize"),
                                  style="Fiolet.TLabelframe")
-frame_normalize.grid(row=7, column=2, sticky=(N, E, S), padx=5, pady=1)
 ###
 rb1_normalize = ttk.Radiobutton(frame_normalize, text=_("Normalize"),
                                 variable=img_normalize,
@@ -2060,7 +2083,6 @@ b_normalize_run.grid(row=2, column=2, columnspan=2, padx=5, pady=4, sticky=E)
 ###########################
 frame_mirror = ttk.LabelFrame(frame_first_col, text=_("Mirror"),
                               style="Fiolet.TLabelframe")
-frame_mirror.grid(row=8, column=1, sticky=(N, E, S), padx=5, pady=1)
 
 cb_mirror_flip = ttk.Checkbutton(frame_mirror, text="NS",
                                  variable=img_mirror_flip,
@@ -2077,12 +2099,44 @@ cb_mirror_flop.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
 b_mirror_run.grid(row=1, column=5, sticky=E, padx=5, pady=5)
 
 ###########################
+# vignette
+###########################
+frame_vignette = ttk.Labelframe(frame_first_col, text=_("Vignette"),
+                              style="Fiolet.TLabelframe")
+###
+l_vignette_radius = ttk.Label(frame_vignette, text="Radius")
+e_vignette_radius = ttk.Entry(frame_vignette, width=3,
+                     validate="key", validatecommand=(validation, '%S'))
+l_vignette_sigma = ttk.Label(frame_vignette, text="Sigma")
+e_vignette_sigma = ttk.Entry(frame_vignette, width=3,
+                     validate="key", validatecommand=(validation, '%S'))
+l_vignette_dx = ttk.Label(frame_vignette, text="dx")
+e_vignette_dx = ttk.Entry(frame_vignette, width=3,
+                     validate="key", validatecommand=(validation, '%S'))
+l_vignette_dy = ttk.Label(frame_vignette, text="dy")
+e_vignette_dy = ttk.Entry(frame_vignette, width=3,
+                     validate="key", validatecommand=(validation, '%S'))
+b_vignette_color = ttk.Button(frame_vignette, text=_("Color"),
+                            command=color_choose_vignette)
+b_vignette_run = ttk.Button(frame_vignette, text=_("Execute"),
+                          style="Brown.TButton",
+                          command=convert_vignette_button)
+l_vignette_radius.grid(row=1, column=1, padx=5, pady=0)
+e_vignette_radius.grid(row=1, column=2, padx=5, pady=0)
+l_vignette_sigma.grid(row=2, column=1, padx=5, pady=5)
+e_vignette_sigma.grid(row=2, column=2, padx=5, pady=5)
+l_vignette_dx.grid(row=1, column=3, padx=5, pady=0)
+e_vignette_dx.grid(row=1, column=4, padx=5, pady=0)
+l_vignette_dy.grid(row=2, column=3, padx=5, pady=5)
+e_vignette_dy.grid(row=2, column=4, padx=5, pady=5)
+b_vignette_color.grid(row=1, column=5, padx=5, pady=0)
+b_vignette_run.grid(row=2, column=5, padx=5, pady=5)
+
+###########################
 # Logo
 ###########################
 frame_logo = ttk.LabelFrame(frame_first_col, text=_("Logo"),
                             style="Fiolet.TLabelframe")
-frame_logo.grid(row=11, column=1, columnspan=2,
-                sticky=(N, W, E, S), padx=5, pady=1)
 
 b_logo_select = ttk.Button(frame_logo, text=_("File selection"),
                            command=open_file_logo)
@@ -2164,8 +2218,6 @@ l_logo_preview.grid(row=1, column=1, padx=5, pady=1)
 ############################
 frame_custom = ttk.LabelFrame(frame_first_col, text=_("Custom command"),
                               style="Fiolet.TLabelframe")
-frame_custom.grid(row=11, column=1, columnspan=2,
-                  sticky=(N, W, E, S), padx=5, pady=1)
 
 b_custom_clear = ttk.Button(frame_custom, text=_("Clear"),
                             command=convert_custom_clear)
@@ -2180,6 +2232,23 @@ t_custom = ScrolledText(frame_custom, state=NORMAL,
 t_custom.pack(expand=1, fill='both', padx=5, pady=5)
 b_custom_run.pack(side='right', padx=5, pady=5)
 b_custom_clear.pack(side='right', padx=5, pady=5)
+
+############################
+# Pack frames
+############################
+
+frame_crop.grid(row=2, column=1, columnspan=2,    sticky=(N, W, S), padx=5, pady=1)
+frame_mirror.grid(row=3, column=1,                sticky=(N, W, S), padx=5, pady=1)
+frame_vignette.grid(row=3, column=2,              sticky=(N, W, S),    padx=5, pady=1)
+frame_contrast.grid(row=5, column=2,              sticky=(N, W, S),    padx=5, pady=1)
+frame_bw.grid(row=5, column=1,                    sticky=(N, W, E, S), padx=5, pady=1)
+frame_normalize.grid(row=6, column=2,             sticky=(N, E, S),    padx=5, pady=1)
+frame_border.grid(row=6, column=1,                sticky=(N, W, E, S), padx=5, pady=1)
+frame_rotate.grid(row=7, column=1, columnspan=2,  sticky=(N, W, S), padx=5, pady=1)
+frame_resize.grid(row=8, column=1, columnspan=2,  sticky=(N, W, S), padx=5, pady=5)
+frame_text.grid(row=9, column=1, columnspan=2,    sticky=(N, W, S), padx=5, pady=1)
+frame_logo.grid(row=10, column=1, columnspan=2,   sticky=(N, W, S), padx=5, pady=1)
+frame_custom.grid(row=11, column=1, columnspan=2, sticky=(N, W, S), padx=5, pady=1)
 
 #####################################################
 # Second column
