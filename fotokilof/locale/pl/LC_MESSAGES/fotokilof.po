@@ -537,6 +537,10 @@ msgstr "Normalizacja kolorów"
 msgid "Make mirror of picture in vertical or horizotal or both direction"
 msgstr "Odbicie lustrzane w pionie lub w poziomie"
 
+#: fotokilof.py:2424
+msgid "Add vignette as on old photography or not the best lens"
+msgstr "Dodaje winietę jak na starych fotografiach lub przy nie najlepszym obiektywie"
+
 #: fotokilof.py:2302
 msgid "Insert picture, eg. own logo, into picture"
 msgstr "Wstawia obrazek, np. logo, na obrazek wynikowy"

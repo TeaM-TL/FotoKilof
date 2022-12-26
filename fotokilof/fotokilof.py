@@ -1252,32 +1252,32 @@ def tools_set(preview_on):
     if img_mirror_on.get() == 0:
         frame_mirror.grid_remove()
     else:
-        frame_mirror.grid(sticky=W)
+        frame_mirror.grid(row=1, column=1, sticky=(W, N, S), padx=5)
 
     if img_vignette_on.get() == 0:
         frame_vignette.grid_remove()
     else:
-        frame_vignette.grid(sticky=W)
+        frame_vignette.grid(row=1, column=2, sticky=W, padx=5)
 
     if img_bw_on.get() == 0:
         frame_bw.grid_remove()
     else:
-        frame_bw.grid(sticky=W)
+        frame_bw.grid(row=1, column=1, sticky=W, padx=5)
 
     if img_contrast_on.get() == 0:
         frame_contrast.grid_remove()
     else:
-        frame_contrast.grid()
+        frame_contrast.grid(row=1, column=2, sticky=W, padx=5)
 
     if img_normalize_on.get() == 0:
         frame_normalize.grid_remove()
     else:
-        frame_normalize.grid(sticky=W)
+        frame_normalize.grid(row=1, column=2, sticky=W, padx=5)
 
     if img_border_on.get() == 0:
         frame_border.grid_remove()
     else:
-        frame_border.grid()
+        frame_border.grid(row=1, column=1, sticky=W, padx=5)
 
     if img_rotate_on.get() == 0:
         frame_rotate.grid_remove()
@@ -2011,9 +2011,15 @@ b_rotate_color.pack(side="left", padx=5, pady=5)
 b_rotate_run.pack(side="left", padx=5, pady=5)
 
 ###########################
+# frames for two widgets
+frame_mirror_vignette = ttk.Frame(frame_first_col)
+frame_bw_contrast = ttk.Frame(frame_first_col)
+frame_border_normalize = ttk.Frame(frame_first_col)
+
+###########################
 # Border
 ###########################
-frame_border = ttk.Labelframe(frame_first_col, text=_("Border"),
+frame_border = ttk.Labelframe(frame_border_normalize, text=_("Border"),
                               style="Fiolet.TLabelframe")
 ###
 l_border_color = Label(frame_border, text=_("  "))
@@ -2040,7 +2046,7 @@ b_border_run.grid(row=2, column=5, padx=5, pady=5, sticky=E)
 ############################
 # Black-white
 ############################
-frame_bw = ttk.LabelFrame(frame_first_col, text=_("Black-white"),
+frame_bw = ttk.LabelFrame(frame_bw_contrast, text=_("Black-white"),
                           style="Fiolet.TLabelframe")
 ###
 rb1_bw = ttk.Radiobutton(frame_bw, text=_("Black-white"),
@@ -2063,7 +2069,7 @@ b_bw_run.grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky=E)
 ########################
 # Contrast
 #########################
-frame_contrast = ttk.Labelframe(frame_first_col, text=_("Contrast"),
+frame_contrast = ttk.Labelframe(frame_bw_contrast, text=_("Contrast"),
                                 style="Fiolet.TLabelframe")
 ###
 rb1_contrast = ttk.Radiobutton(frame_contrast, text=_("Stretch"),
@@ -2094,7 +2100,7 @@ b_contrast_run.grid(row=2, column=3, padx=5, pady=5, columnspan=3, sticky=E)
 ############################
 # Color normalize
 ############################
-frame_normalize = ttk.LabelFrame(frame_first_col, text=_("Color normalize"),
+frame_normalize = ttk.LabelFrame(frame_border_normalize, text=_("Color normalize"),
                                  style="Fiolet.TLabelframe")
 ###
 rb1_normalize = ttk.Radiobutton(frame_normalize, text=_("Normalize"),
@@ -2120,7 +2126,7 @@ b_normalize_run.grid(row=2, column=2, columnspan=2, padx=5, pady=4, sticky=E)
 ###########################
 # Mirror
 ###########################
-frame_mirror = ttk.LabelFrame(frame_first_col, text=_("Mirror"),
+frame_mirror = ttk.LabelFrame(frame_mirror_vignette, text=_("Mirror"),
                               style="Fiolet.TLabelframe")
 
 cb_mirror_flip = ttk.Checkbutton(frame_mirror, text="NS",
@@ -2140,7 +2146,7 @@ b_mirror_run.grid(row=1, column=5, sticky=E, padx=5, pady=5)
 ###########################
 # vignette
 ###########################
-frame_vignette = ttk.Labelframe(frame_first_col, text=_("Vignette"),
+frame_vignette = ttk.Labelframe(frame_mirror_vignette, text=_("Vignette"),
                               style="Fiolet.TLabelframe")
 ###
 l_vignette_radius = ttk.Label(frame_vignette, text=_("Radius"))
@@ -2278,18 +2284,15 @@ b_custom_clear.pack(side='right', padx=5, pady=5)
 # Pack frames
 ############################
 
-frame_crop.grid(row=2, column=1, columnspan=2,    sticky=(N, W, S), padx=5, pady=1)
-frame_mirror.grid(row=3, column=1,                sticky=(N, W, S), padx=5, pady=1)
-frame_vignette.grid(row=3, column=2,              sticky=(N, W, S),    padx=5, pady=1)
-frame_contrast.grid(row=5, column=2,              sticky=(N, W, S),    padx=5, pady=1)
-frame_bw.grid(row=5, column=1,                    sticky=(N, W, E, S), padx=5, pady=1)
-frame_normalize.grid(row=6, column=2,             sticky=(N, E, S),    padx=5, pady=1)
-frame_border.grid(row=6, column=1,                sticky=(N, W, E, S), padx=5, pady=1)
-frame_rotate.grid(row=7, column=1, columnspan=2,  sticky=(N, W, S), padx=5, pady=1)
-frame_resize.grid(row=8, column=1, columnspan=2,  sticky=(N, W, S), padx=5, pady=5)
-frame_text.grid(row=9, column=1, columnspan=2,    sticky=(N, W, S), padx=5, pady=1)
-frame_logo.grid(row=10, column=1, columnspan=2,   sticky=(N, W, S), padx=5, pady=1)
-frame_custom.grid(row=11, column=1, columnspan=2, sticky=(N, W, S), padx=5, pady=1)
+frame_crop.grid(row=2, column=1,             sticky=(N, W, S), padx=5, pady=1)
+frame_mirror_vignette.grid(row=3, column=1,  sticky=(N, W, S), padx=0, pady=1)
+frame_bw_contrast.grid(row=4, column=1,      sticky=(N, W, S), padx=0, pady=1)
+frame_border_normalize.grid(row=5, column=1, sticky=(N, W, S), padx=0, pady=1)
+frame_rotate.grid(row=7, column=1,           sticky=(N, W, S), padx=5, pady=1)
+frame_resize.grid(row=8, column=1,           sticky=(N, W, S), padx=5, pady=5)
+frame_text.grid(row=9, column=1,             sticky=(N, W, S), padx=5, pady=1)
+frame_logo.grid(row=10, column=1,            sticky=(N, W, S), padx=5, pady=1)
+frame_custom.grid(row=11, column=1,          sticky=(N, W, S), padx=5, pady=1)
 
 #####################################################
 # Second column
@@ -2418,6 +2421,7 @@ Hovertip(cb_bw, _("Convert into black-white or sepia"))
 Hovertip(cb_contrast, _("Change contrast or change range of contrast"))
 Hovertip(cb_normalize, _("Normalize of color level"))
 Hovertip(cb_mirror, _("Make mirror of picture in vertical or horizotal or both direction"))
+Hovertip(cb_vignette, _("Add vignette as on old photography or not the best lens"))
 Hovertip(cb_logo, _("Insert picture, eg. own logo, into picture"))
 Hovertip(cb_custom, _("Processing ImageMagick command.\nWorks only on Linux OS"))
 Hovertip(cb_exif, _("If ON keep EXIF data\nif OFF EXIF data will be removed"))
