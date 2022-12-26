@@ -194,7 +194,7 @@ def text(clone, in_out, own, angle,
             box, box_color,
             text_x, text_y, text_string):
     """ add text into picture """
-    if len(text) > 0:
+    if len(text_string) > 0:
         draw_gravity = gravitation(gravity)
         if in_out == 0:
             # inside
@@ -226,7 +226,7 @@ def text(clone, in_out, own, angle,
                     left=common.empty(text_x), baseline=common.empty(text_y))
         else:
             # outside
-            metrics = draw.get_font_metrics(clone, text, multiline=False)
+            metrics = draw.get_font_metrics(clone, text_string, multiline=False)
             with Image(width=clone.width, height=int(metrics.text_height),
                         background=backgroud_color) as canvas:
                 canvas.annotate(text_string, draw)
