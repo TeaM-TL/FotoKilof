@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=too-many-branches
 
 """
 Copyright (c) 2019-2022 Tomasz Łuczak, TeaM-TL

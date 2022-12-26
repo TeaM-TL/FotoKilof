@@ -39,8 +39,8 @@ import mswindows
 
 
 def empty(value):
-    """ 
-    convert empty string into 0 
+    """
+    convert empty string into 0
     non empty into int
     """
     if value == '':

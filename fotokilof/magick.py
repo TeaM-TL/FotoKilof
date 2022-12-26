@@ -28,8 +28,6 @@ module to work with ImageMagick:
 """
 
 import os
-import re
-import shutil
 
 import common
 import log

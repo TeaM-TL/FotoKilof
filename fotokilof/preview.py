@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 module contains function for generating preview and histogram:
 - preview_histogram - preview histogram
-- preview_wand - for preview pictures 
+- preview_wand - for preview pictures
 """
 
 import os
@@ -32,7 +32,6 @@ import tempfile
 
 try:
     from wand.drawing import Drawing
-    from wand.image import Image
 except:
     print(" ImageMagick or Wand-py not found")
 
@@ -88,7 +87,7 @@ def preview_wand(file_in, size, coord):
             height = clone.height
 
             convert_wand.resize(clone, str(size) + "x" + str(size))
-            
+
             # write crop if coordinates are given
             if len(coord) == 4 :
                 with Drawing() as draw:

@@ -47,20 +47,16 @@ Converters
 import os
 
 try:
-    from wand.color import Color
     from wand.drawing import Drawing
-    from wand.font import Font
-    from wand.image import Image, COMPOSITE_OPERATORS
+    from wand.image import Image
     from wand.version import fonts as fontsList
+    from wand.display import display
 except:
     print(" ImageMagick or Wand-py not found")
 
 # my modules
 import common
-import convert
 import log
-import magick
-
 
 
 # ------------------------------------ Info
@@ -94,7 +90,7 @@ def display_image(file_in):
     try:
         with Image(filename=file_in) as image:
             display(image)
- 
+
     except:
         log.write_log(" Error display file: " + file_in, "E")
         result = None
@@ -118,32 +114,32 @@ def save_close_clone(clone, file_out, exif):
     """ save and close clone after processing """
     if not exif:
         clone.strip()
-    clone.save(filename=file_out) 
+    clone.save(filename=file_out)
     clone.close()
 
 
-def gravitation(gravitation):
+def gravitation(gravity):
     """ translate gravitation name from Tk to Wand-py specification"""
 
-    if gravitation == "N":
+    if gravity == "N":
         result = "north"
-    if gravitation == "NW":
+    if gravity == "NW":
         result = "north_west"
-    if gravitation == "NE":
+    if gravity == "NE":
         result = "north_east"
-    if gravitation == "W":
+    if gravity == "W":
         result = "west"
-    if gravitation == "C":
+    if gravity == "C":
         result = "center"
-    if gravitation == "E":
+    if gravity == "E":
         result = "east"
-    if gravitation == "SW":
+    if gravity == "SW":
         result = "south_west"
-    if gravitation == "S":
+    if gravity == "S":
         result = "south"
-    if gravitation == "SE":
+    if gravity == "SE":
         result = "south_east"
-    if gravitation == "0":
+    if gravity == "0":
         result = "0"
 
     return result
@@ -158,13 +154,13 @@ def pip(clone, logo, logo_data, image_height, image_width):
     original image size: image_height, image_width
     """
     if len(logo):
-        with Image(filename=logo) as logo:
+        with Image(filename=logo) as logo_img:
             with Drawing() as draw:
                 position = common.preview_crop_gravity(logo_data, image_height, image_width)
-                draw.composite(operator='over', 
+                draw.composite(operator='over',
                                 left=common.empty(position[0]), top=common.empty(position[1]),
                                 width=common.empty(logo_data[2]), height=common.empty(logo_data[3]),
-                                image=logo)
+                                image=logo_img)
                 draw(clone)
 
 
@@ -175,7 +171,6 @@ def rotate(clone, angle, color, own):
         if angle == 0:
             color = None
     else:
-        angle = angle
         color = None
     clone.rotate(angle, background=color)
 
@@ -194,10 +189,10 @@ def border(clone, color, x, y):
 
 
 def text(clone, in_out, own, angle,
-            text_color, font, text_size, 
-            gravity_onoff, gravity, 
+            text_color, font, text_size,
+            gravity_onoff, gravity,
             box, box_color,
-            text_x, text_y, text):
+            text_x, text_y, text_string):
     """ add text into picture """
     if len(text) > 0:
         draw_gravity = gravitation(gravity)
@@ -224,78 +219,79 @@ def text(clone, in_out, own, angle,
         draw.font = font
         draw.font_size = common.empty(text_size)
         draw.gravity = draw_gravity
-        
+
         if in_out == 0:
             # inside
-            clone.annotate(text, draw, angle=common.empty(angle), 
+            clone.annotate(text_string, draw, angle=common.empty(angle),
                     left=common.empty(text_x), baseline=common.empty(text_y))
         else:
             # outside
             metrics = draw.get_font_metrics(clone, text, multiline=False)
-            with Image(width=clone.width, height=int(metrics.text_height), background=backgroud_color) as canvas:
-                canvas.annotate(text, draw)
+            with Image(width=clone.width, height=int(metrics.text_height),
+                        background=backgroud_color) as canvas:
+                canvas.annotate(text_string, draw)
                 clone.sequence.append(canvas)
                 clone.concat(stacked=True)
 
 
-def bw(clone, bw, sepia):
+def bw(clone, bw_variant, sepia):
     """ black and white or sepia """
-    if bw == 1:
+    if bw_variant == 1:
         # black-white
-        clone.type = 'grayscale';
+        clone.type = 'grayscale'
     else:
         # sepia
         clone.sepia_tone(threshold=common.empty(sepia)/100)
 
 
-def resize_subdir(resize, pixel_x, pixel_y, percent):
+def resize_subdir(resize_vatiant, pixel_x, pixel_y, percent):
     """ prepare name for subdir and command for resize """
-    if resize == 1:
+    if resize_vatiant == 1:
         command = str(pixel_x) + "x" + str(pixel_y)
         sub_dir = str(pixel_x) + "x" + str(pixel_y)
-    elif resize == 2:
+    elif resize_vatiant == 2:
         if percent > 100:
             percent = 100
         if percent == 0:
             percent = 1
         command = str(percent) + "%"
         sub_dir = str(percent)
-    elif resize == 3:
+    elif resize_vatiant == 3:
         command = '1920x1080'
         sub_dir = "1920x1080"
-    elif resize == 4:
+    elif resize_vatiant == 4:
         command = "2048x1556"
         sub_dir = "2048x1556"
-    elif resize == 5:
+    elif resize_vatiant == 5:
         command = "4096x3112"
         sub_dir = "4096x3112"
     return (sub_dir, command)
 
-    
+
 def resize(clone, command):
     """ resize picture """
     clone.transform(crop='', resize=command)
 
 
-def normalize(clone, normalize, channel):
+def normalize(clone, normalize_variant, channel):
     """ normalize levels of colors """
-    if normalize == 1:
+    if normalize_variant == 1:
         if channel != "None":
             clone.normalize(channel=channel)
         else:
             clone.normalize()
-    elif normalize == 2:
+    else:
         clone.auto_level()
 
 
-def contrast(clone, contrast, selection, black, white):
+def contrast(clone, contrast_variant, selection, black, white):
     """ normalize levels of colors """
-    if int(contrast) == 1:
-            if float(black) > 1:
-                black = 0
-            if float(white) > 1:
-                white = None
-            clone.contrast_stretch(black_point=float(black), white_point=float(white))
+    if int(contrast_variant) == 1:
+        if float(black) > 1:
+            black = 0
+        if float(white) > 1:
+            white = None
+        clone.contrast_stretch(black_point=float(black), white_point=float(white))
     else:
         if int(selection) != 0:
             if int(selection) > 0:
@@ -308,29 +304,29 @@ def contrast(clone, contrast, selection, black, white):
                 clone.contrast(sharpen=sharpen)
 
 
-def crop(file_in, clone, crop, gravity, entries):
-    """ 
-    crop picture 
+def crop(file_in, clone, crop_variat, gravity, entries):
+    """
+    crop picture
     entries are as dictionary
     """
     image_size = get_image_size(file_in)
 
-    if crop == 1:
+    if crop_variat == 1:
         if (entries['one_x1'] < entries['one_x2']) and (entries['one_y1'] < entries['one_y2']):
             if entries['one_x2'] > image_size[0]:
                 entries['one_x2'] = image_size[0]
             if entries['one_y2'] > image_size[1]:
                 entries['one_y2'] = image_size[1]
-            clone.crop(left=entries['one_x1'], top=entries['one_y1'], 
+            clone.crop(left=entries['one_x1'], top=entries['one_y1'],
                     right=entries['one_x2'], bottom=entries['one_y2'])
-    if crop == 2:
+    if crop_variat == 2:
         if (entries['two_width'] > 0) and (entries['two_height'] > 0):
-            clone.crop(left=entries['two_x1'], top=entries['two_y1'], 
+            clone.crop(left=entries['two_x1'], top=entries['two_y1'],
                         width=entries['two_width'], height=entries['two_height'])
-    if crop == 3:
+    if crop_variat == 3:
         if (entries['three_width'] > 0) and (entries['three_height'] > 0):
-            clone.crop(left=entries['three_dx'], top=entries['three_dy'], 
-                        width=entries['three_width'], height=entries['three_height'], 
+            clone.crop(left=entries['three_dx'], top=entries['three_dy'],
+                        width=entries['three_width'], height=entries['three_height'],
                         gravity=gravitation(gravity))
 
 

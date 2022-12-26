@@ -34,7 +34,7 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog, messagebox
 from tkinter import TclError, StringVar, IntVar
 from tkinter import N, S, W, E, END, DISABLED, NORMAL
-from idlelib.tooltip import Hovertip
+
 try:
     from tkcolorpicker import askcolor
 except:
@@ -55,6 +55,7 @@ import os
 import platform
 import sys
 import tempfile
+from idlelib.tooltip import Hovertip
 
 # my modules
 import convert
@@ -204,8 +205,9 @@ def path_to_file_out(resize):
     """ create filename of out file """
 
     if resize:
-        subdir = convert_wand.resize_subdir(img_resize.get(), 
-                                            common.empty(e1_resize_x.get()), common.empty(e1_resize_y.get()), 
+        subdir = convert_wand.resize_subdir(img_resize.get(),
+                                            common.empty(e1_resize_x.get()),
+                                            common.empty(e1_resize_y.get()),
                                             common.empty(e2_resize.get()))
         workdir = os.path.join(work_dir.get(), subdir[0])
         resized.set(1)
@@ -233,18 +235,20 @@ def apply_all_button():
             files_list = []
             for filename_short in files_list_short:
                 files_list.append(os.path.join(dirname, filename_short))
-        
+
         file_list_len = len(files_list)
         for file_in in files_list:
             clone = convert_wand.make_clone(file_in, img_vignette_color.get())
             if img_crop_on.get():
-                convert_wand.crop(file_in, clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+                convert_wand.crop(file_in, clone, img_crop.get(),
+                                    img_crop_gravity.get(), convert_crop_entries())
             if img_mirror_on.get():
                 convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
             if img_bw_on.get():
                 convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
             if img_contrast_on.get():
-                convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
+                convert_wand.contrast(clone, img_contrast.get(),
+                                        co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
             if img_normalize_on.get():
                 convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
             if img_vignette_on.get():
@@ -271,7 +275,7 @@ def apply_all_button():
                                     img_text_box.get(), img_text_box_color.get(),
                                     e_text_x.get(), e_text_y.get(), e_text.get())
             if img_logo_on.get():
-                coordinates = (common.empty(e_logo_dx.get()), common.empty(e_logo_dy.get()), 
+                coordinates = (common.empty(e_logo_dx.get()), common.empty(e_logo_dy.get()),
                                 common.empty(e_logo_width.get()), common.empty(e_logo_height.get()),
                                 img_logo_gravity.get())
                 height = clone.height
@@ -286,7 +290,7 @@ def apply_all_button():
             progress_files.set(str(i) + " " + _("of") + " " \
                             + str(file_list_len) + " : " \
                             + os.path.basename(file_in))
-            
+
             progress_var.set(i)
             root.update_idletasks()
 
@@ -513,7 +517,7 @@ def convert_logo_button():
     """ Logo button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    coordinates = (common.empty(e_logo_dx.get()), common.empty(e_logo_dy.get()), 
+    coordinates = (common.empty(e_logo_dx.get()), common.empty(e_logo_dy.get()),
                     common.empty(e_logo_width.get()), common.empty(e_logo_height.get()),
                     img_logo_gravity.get())
     clone = convert_wand.make_clone(file_in_path.get())
@@ -2535,11 +2539,11 @@ Hovertip(b_logo_run, _("Execute only add logo on current picture"))
 # Run functions
 #
 if GM_or_IM is not None:
-    IM_version = 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
+    ImageMagick_version = 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
 else:
-    IM_version = "Missing ImageMagick"
+    ImageMagick_version = "Missing ImageMagick"
 Python_version = 'Py:' + platform.python_version()
-window_title = version.__author__ + " : " + version.__appname__ + ": " + version.__version__ + " : " + IM_version + " : " + Python_version + " | "
+window_title = version.__author__ + " : " + version.__appname__ + ": " + version.__version__ + " : " + ImageMagick_version + " : " + Python_version + " | "
 root.title(window_title)
 if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts

@@ -27,8 +27,8 @@ function for GUI:
 """
 
 from io import BytesIO
-from PIL import Image
 import re
+from PIL import Image
 
 import mswindows
 if mswindows.windows() == 1:
@@ -65,8 +65,9 @@ def only_numbers(char):
 def only_integer(char):
     """  Validation entry widgets: only digits """
     if re.match('^[-]{0,1}[0-9]{,6}$', str(char)):
-        return True
+        result = True
     else:
-        return False
+        result = False
+    return result
 
 # EOF
