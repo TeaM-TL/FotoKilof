@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 - out_full_filename - prepare output file for conversion
 """
+
 import os
 
 import log

@@ -42,10 +42,10 @@ except:
 
 try:
     from wand.version import MAGICK_VERSION, VERSION
-    GM_or_IM = ""
+    imagemagick_wand = "OK"
 except:
     print(" ImageMagick or Wand-py not found")
-    GM_or_IM = None
+    imagemagick_wand = None
 
 # standard modules
 import configparser
@@ -165,8 +165,7 @@ def preview_new(file_out):
         if img_histograms_on.get() == 1:
             try:
                 l_histogram_new.configure(image=pi_histogram_new)
-                pi_histogram_new.configure(file=preview.preview_histogram(file_out,
-                                                                      GM_or_IM))
+                pi_histogram_new.configure(file=preview.preview_histogram(file_out))
             except:
                 log.write_log("previe_new: errot in preview histogram_new", "E")
     else:
@@ -205,7 +204,7 @@ def path_to_file_out(resize):
     """ create filename of out file """
 
     if resize:
-        subdir = convert_wand.resize_subdir(img_resize.get(),
+        subdir = common.resize_subdir(img_resize.get(),
                                             common.empty(e1_resize_x.get()),
                                             common.empty(e1_resize_y.get()),
                                             common.empty(e2_resize.get()))
@@ -248,19 +247,25 @@ def apply_all_button():
                 convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
             if img_contrast_on.get():
                 convert_wand.contrast(clone, img_contrast.get(),
-                                        co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
+                                        co_contrast_selection.get(),
+                                        e1_contrast.get(), e2_contrast.get())
             if img_normalize_on.get():
                 convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
             if img_vignette_on.get():
                 convert_wand.vignette(clone, e_vignette_dx.get(), e_vignette_dy.get(),
                                 e_vignette_radius.get(), e_vignette_radius.get())
             if img_rotate_on.get():
-                convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
+                convert_wand.rotate(clone, img_rotate.get(),
+                                    img_rotate_color.get(), e_rotate_own.get())
             if img_border_on.get():
-                convert_wand.border(clone, img_border_color.get(), e_border_we.get(), e_border_ns.get())
+                convert_wand.border(clone, img_border_color.get(),
+                                    e_border_we.get(), e_border_ns.get())
             if img_resize_on.get():
                 #  subdir for results if resize
-                subdir_command = convert_wand.resize_subdir(img_resize.get(), common.empty(e1_resize_x.get()), common.empty(e1_resize_y.get()), common.empty(e2_resize.get()))
+                subdir_command = common.resize_subdir(img_resize.get(),
+                                                        common.empty(e1_resize_x.get()),
+                                                        common.empty(e1_resize_y.get()),
+                                                        common.empty(e2_resize.get()))
                 subdir = os.path.join(work_dir.get(), subdir_command[0])
                 convert_wand.resize(clone, subdir_command[1])
                 resized.set(1)
@@ -269,7 +274,8 @@ def apply_all_button():
                 # standard subdir for result picture
                 subdir = work_dir.get()
             if img_text_on.get():
-                convert_wand.text(clone, img_text_inout.get(), e_text_angle.get(), img_text_rotate.get(),
+                convert_wand.text(clone, img_text_inout.get(),
+                                    e_text_angle.get(), img_text_rotate.get(),
                                     img_text_color.get(), img_text_font.get(), e_text_size.get(),
                                     img_text_gravity_onoff.get(), img_text_gravity.get(),
                                     img_text_box.get(), img_text_box_color.get(),
@@ -325,11 +331,12 @@ def convert_contrast_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    if clone != None:
-        convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(), e1_contrast.get(), e2_contrast.get())
+    if clone is not None:
+        convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(),
+                                e1_contrast.get(), e2_contrast.get())
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
-        progress_files.set(_("done"))
+    progress_files.set(_("done"))
 
 
 def convert_bw_button():
@@ -337,11 +344,11 @@ def convert_bw_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    if clone != None:
+    if clone is not None:
         convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
-        progress_files.set(_("done"))
+    progress_files.set(_("done"))
 
 
 def convert_normalize_button():
@@ -349,11 +356,11 @@ def convert_normalize_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    if clone != None:
+    if clone is not None:
         convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
-        progress_files.set(_("done"))
+    progress_files.set(_("done"))
 
 
 def convert_rotate_button():
@@ -361,11 +368,11 @@ def convert_rotate_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    if clone != None:
+    if clone is not None:
         convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
-        progress_files.set(_("done"))
+    progress_files.set(_("done"))
 
 
 def convert_mirror_button():
@@ -373,11 +380,11 @@ def convert_mirror_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    if clone != None:
+    if clone is not None:
         convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
-        progress_files.set(_("done"))
+    progress_files.set(_("done"))
 
 
 def convert_resize_button():
@@ -385,14 +392,17 @@ def convert_resize_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
 
-    resize_command = convert_wand.resize_subdir(img_resize.get(), common.empty(e1_resize_x.get()), common.empty(e1_resize_y.get()), common.empty(e2_resize.get()))
+    resize_command = common.resize_subdir(img_resize.get(),
+                                            common.empty(e1_resize_x.get()),
+                                            common.empty(e1_resize_y.get()),
+                                            common.empty(e2_resize.get()))
     file_out = path_to_file_out(1)
     clone = convert_wand.make_clone(file_in_path.get())
-    if clone != None:
+    if clone is not None:
         convert_wand.resize(clone, resize_command[1])
         convert_wand.save_close_clone(clone, file_out, img_exif_on.get())
         preview_new(file_out)
-        progress_files.set(_("done"))
+    progress_files.set(_("done"))
 
 
 def convert_border_button():
@@ -400,11 +410,11 @@ def convert_border_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    if clone != None:
+    if clone is not None:
         convert_wand.border(clone, img_border_color.get(), e_border_we.get(), e_border_ns.get())
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
-        progress_files.set(_("done"))
+    progress_files.set(_("done"))
 
 
 def convert_vignette_button():
@@ -412,12 +422,12 @@ def convert_vignette_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get(), img_vignette_color.get())
-    if clone != None:
+    if clone is not None:
         convert_wand.vignette(clone, e_vignette_dx.get(), e_vignette_dy.get(),
                                 e_vignette_radius.get(), e_vignette_radius.get())
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
-        progress_files.set(_("done"))
+    progress_files.set(_("done"))
 
 
 def crop_read():
@@ -478,11 +488,12 @@ def convert_crop_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    if clone != None:
-        convert_wand.crop(file_in_path.get(), clone, img_crop.get(), img_crop_gravity.get(), convert_crop_entries())
+    if clone is not None:
+        convert_wand.crop(file_in_path.get(), clone, img_crop.get(),
+                            img_crop_gravity.get(), convert_crop_entries())
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
-        progress_files.set(_("done"))
+    progress_files.set(_("done"))
 
 
 def convert_text_button():
@@ -490,7 +501,7 @@ def convert_text_button():
     progress_files.set(_("Processing"))
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
-    if clone != None:
+    if clone is not None:
         convert_wand.text(clone, img_text_inout.get(), e_text_angle.get(), img_text_rotate.get(),
                             img_text_color.get(), img_text_font.get(), e_text_size.get(),
                             img_text_gravity_onoff.get(), img_text_gravity.get(),
@@ -498,7 +509,7 @@ def convert_text_button():
                             e_text_x.get(), e_text_y.get(), e_text.get())
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
-        progress_files.set(_("done"))
+    progress_files.set(_("done"))
 
 
 def fonts():
@@ -521,7 +532,7 @@ def convert_logo_button():
                     common.empty(e_logo_width.get()), common.empty(e_logo_height.get()),
                     img_logo_gravity.get())
     clone = convert_wand.make_clone(file_in_path.get())
-    if clone != None:
+    if clone is not None:
         convert_wand.pip(clone, file_logo_path.get(), coordinates, clone.width, clone.height )
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
@@ -1051,7 +1062,8 @@ def help_info(event):
                 message = message + i
     except:
         log.write_log("help_info: error during loading license file", "W")
-        message = "Copyright " + version.__copyright__ + " " + version.__author__ + " under MIT license"
+        message = ("Copyright " + version.__copyright__ + " "
+                    + version.__author__ + " under MIT license")
 
     messagebox.showinfo(title=_("License"), message=message)
 
@@ -1148,8 +1160,10 @@ def preview_orig():
                     x1 = x0 + common.empty(e3_crop_2.get())
                     y1 = y0 + common.empty(e4_crop_2.get())
                 elif img_crop.get() == 3:
-                    coord_for_crop = (common.empty(e1_crop_3.get()), common.empty(e2_crop_3.get()),
-                                        common.empty(e3_crop_3.get()), common.empty(e4_crop_3.get()),
+                    coord_for_crop = (common.empty(e1_crop_3.get()),
+                                        common.empty(e2_crop_3.get()),
+                                        common.empty(e3_crop_3.get()),
+                                        common.empty(e4_crop_3.get()),
                                         img_crop_gravity.get())
                     coord = common.preview_crop_gravity(coord_for_crop,
                                                              xy_max['x_orig'],
@@ -1193,8 +1207,7 @@ def preview_orig():
 
             if img_histograms_on.get() == 1:
                 pi_histogram_orig.configure(
-                        file=preview.preview_histogram(file_in_path.get(),
-                        GM_or_IM))
+                        file=preview.preview_histogram(file_in_path.get()))
                 l_histogram_orig.configure(image=pi_histogram_orig)
         else:
             preview_orig_clear()
@@ -2538,16 +2551,18 @@ Hovertip(b_logo_run, _("Execute only add logo on current picture"))
 ##########################################
 # Run functions
 #
-if GM_or_IM is not None:
-    ImageMagick_version = 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
+if imagemagick_wand is not None:
+    imagemagick_wand_version = 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
 else:
-    ImageMagick_version = "Missing ImageMagick"
+    imagemagick_wand_version = "Missing ImageMagick"
 Python_version = 'Py:' + platform.python_version()
-window_title = version.__author__ + " : " + version.__appname__ + ": " + version.__version__ + " : " + ImageMagick_version + " : " + Python_version + " | "
+window_title = ( version.__author__ + " : "
+                + version.__appname__ + ": " + version.__version__ + " : "
+                + imagemagick_wand_version + " : " + Python_version + " | " )
 root.title(window_title)
-if GM_or_IM is not None:
+if imagemagick_wand is not None:
     img_text_font_dict = fonts()    # Reading available fonts
-    ini_read_wraper()  # Loading from config file
+    ini_read_wraper()  # Loading settings from config file
     tools_set(0)
     text_tool_hide_show()
     l_border_color.configure(bg=img_border_color.get())

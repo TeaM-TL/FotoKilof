@@ -39,8 +39,9 @@ import common
 import convert_wand
 import log
 import magick
+import mswindows
 
-def preview_histogram(file_in, gm_or_im):
+def preview_histogram(file_in):
     """
     histogram generation
     file_in - fullname image file
@@ -49,7 +50,11 @@ def preview_histogram(file_in, gm_or_im):
     return: fullname of histogram
     """
 
-    cmd_magick = gm_or_im + "convert"
+    if mswindows.windows():
+        cmd_magick = "magick.exe convert"
+    else:
+        cmd_magick = "convert"
+
     file_histogram = os.path.join(tempfile.gettempdir(),
                                   "fotokilof_" + os.getlogin() \
                                   + "_histogram.ppm")

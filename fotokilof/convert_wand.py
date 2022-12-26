@@ -29,7 +29,7 @@ Common
 - display_image - display image
 - make_clone - open origal picture and make clone for processing
 - save_close_clone - save clone into file and close clone
-- gravity - translate eg. NS to Northsouth as Wand-py expect
+- gravitation - translate eg. NS to Northsouth as Wand-py expect
 Converters
 - pip - picture in picture, for inserting logo
 - rotate - rotate picture
@@ -242,30 +242,6 @@ def bw(clone, bw_variant, sepia):
     else:
         # sepia
         clone.sepia_tone(threshold=common.empty(sepia)/100)
-
-
-def resize_subdir(resize_vatiant, pixel_x, pixel_y, percent):
-    """ prepare name for subdir and command for resize """
-    if resize_vatiant == 1:
-        command = str(pixel_x) + "x" + str(pixel_y)
-        sub_dir = str(pixel_x) + "x" + str(pixel_y)
-    elif resize_vatiant == 2:
-        if percent > 100:
-            percent = 100
-        if percent == 0:
-            percent = 1
-        command = str(percent) + "%"
-        sub_dir = str(percent)
-    elif resize_vatiant == 3:
-        command = '1920x1080'
-        sub_dir = "1920x1080"
-    elif resize_vatiant == 4:
-        command = "2048x1556"
-        sub_dir = "2048x1556"
-    elif resize_vatiant == 5:
-        command = "4096x3112"
-        sub_dir = "4096x3112"
-    return (sub_dir, command)
 
 
 def resize(clone, command):
