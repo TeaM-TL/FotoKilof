@@ -2,6 +2,8 @@
 
 ## 2022
 
+4.2.2 fixed problem of display preview, cleaning after pylint
+
 4.2.1 better handling color selector, better look if two tools are in the same row, added missing tooltip
 
 4.2.0 added vignette converter, order tools as order of full conversion, unified showing selected color
