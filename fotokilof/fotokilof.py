@@ -739,50 +739,47 @@ def open_screenshot():
 def color_choose_rotate():
     """ color selection for rotate"""
     color = askcolor(img_rotate_color.get())
-    img_rotate_color.set(color[1])
-    l_rotate_color.configure(bg=color[1])
+    print('rotate: '+ str(color))
+    if color[1] is not None:
+        img_rotate_color.set(color[1])
+        l_rotate_color.configure(bg=color[1])
+    color_choose_set()
 
 
 def color_choose_border():
     """ Border color selection """
     color = askcolor(img_border_color.get())
-    img_border_color.set(color[1])
-    l_border_color.configure(bg=color[1])
+    print('border: '+ str(color))
+    if color[1] is not None:
+        img_border_color.set(color[1])
+        l_border_color.configure(bg=color[1])
 
 
 def color_choose_vignette():
     """ color selection for rotate"""
     color = askcolor(img_vignette_color.get())
-    img_vignette_color.set(color[1])
-    l_vignette_color.configure(bg=color[1])
+    print('vignette: '+ str(color))
+    if color[1] is not None:
+        img_vignette_color.set(color[1])
+        l_vignette_color.configure(bg=color[1])
 
 
 def color_choose_box():
     """ Background color selection """
-    if img_text_box.get() != 0:
-        color = askcolor(img_text_color.get())
-        if color[1] is None:
-            img_text_box_color.set("#FFFFFF")
-        else:
-            img_text_box_color.set(color[1])
-    color_choose_set()
+    color = askcolor(img_text_color.get())
+    print('background: '+ str(color))
+    if color[1] is not None:
+        img_text_box_color.set(color[1])
+        l_text_color.configure(bg=img_text_box_color.get())
 
 
 def color_choose():
     """ Color selection """
     color = askcolor(img_text_color.get())
-    if color[1] is None:
-        img_text_color.set("#FFFFFF")
-    else:
+    print('text: '+ str(color))
+    if color[1] is not None:
         img_text_color.set(color[1])
-    color_choose_set()
-
-
-def color_choose_set():
-    """ Set color text: foreground and background"""
-    l_text_color.configure(fg=img_text_color.get(), bg=img_text_box_color.get())
-    l_rotate_color.configure(bg=img_rotate_color.get())
-    l_vignette_color.configure(bg=img_vignette_color.get())
+        l_text_color.configure(fg=img_text_color.get())
 
 
 def ini_read_wraper():
@@ -818,6 +815,7 @@ def ini_read_wraper():
     img_text_gravity_onoff.set(ini_entries['img_text_gravity_onoff'])
     img_text_box.set(ini_entries['text_box'])
     img_text_box_color.set(ini_entries['text_box_color'])
+    l_text_color.configure(fg=img_text_color.get(),bg=img_text_box_color.get())
     img_text_rotate.set(ini_entries['text_rotate'])
     e_text.delete(0, "end")
     e_text.insert(0, ini_entries['text_text'])
@@ -836,6 +834,7 @@ def ini_read_wraper():
     e_rotate_own.delete(0, "end")
     e_rotate_own.insert(0, ini_entries['img_rotate_own'])
     img_rotate_color.set(ini_entries['img_rotate_color'])
+    l_rotate_color.configure(bg=img_rotate_color.get())
 
     ini_entries = ini_read.ini_read_crop(FILE_INI)
     img_crop_on.set(ini_entries['img_crop_on'])
@@ -1881,8 +1880,7 @@ rb_text_out = ttk.Radiobutton(frame_text, text=_("Outside"),
                              command=text_tool_hide_show)
 cb_text_box = ttk.Checkbutton(frame_text, text=_("Background"),
                               variable=img_text_box,
-                              onvalue="1", offvalue="0",
-                              command=color_choose_set)
+                              onvalue="1", offvalue="0")
 cb_text_gravity = ttk.Checkbutton(frame_text, text=_("Gravity"),
                               variable=img_text_gravity_onoff,
                               onvalue="1", offvalue="0",
@@ -2534,7 +2532,7 @@ if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file
     tools_set(0)
-    color_choose_set()
+    #color_choose_set()
     text_tool_hide_show()
     l_border_color.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):

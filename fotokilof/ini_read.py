@@ -30,6 +30,7 @@ Every function read part of config file
 - ini_read_rotate
 - ini_read_crop
 - ini_read_border
+- ini_read_vignette
 - ini_read_color
 - ini_read_normalize
 - ini_read_contrast
