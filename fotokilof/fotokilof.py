@@ -739,17 +739,14 @@ def open_screenshot():
 def color_choose_rotate():
     """ color selection for rotate"""
     color = askcolor(img_rotate_color.get())
-    print('rotate: '+ str(color))
     if color[1] is not None:
         img_rotate_color.set(color[1])
         l_rotate_color.configure(bg=color[1])
-    color_choose_set()
 
 
 def color_choose_border():
     """ Border color selection """
     color = askcolor(img_border_color.get())
-    print('border: '+ str(color))
     if color[1] is not None:
         img_border_color.set(color[1])
         l_border_color.configure(bg=color[1])
@@ -758,7 +755,6 @@ def color_choose_border():
 def color_choose_vignette():
     """ color selection for rotate"""
     color = askcolor(img_vignette_color.get())
-    print('vignette: '+ str(color))
     if color[1] is not None:
         img_vignette_color.set(color[1])
         l_vignette_color.configure(bg=color[1])
@@ -767,7 +763,6 @@ def color_choose_vignette():
 def color_choose_box():
     """ Background color selection """
     color = askcolor(img_text_color.get())
-    print('background: '+ str(color))
     if color[1] is not None:
         img_text_box_color.set(color[1])
         l_text_color.configure(bg=img_text_box_color.get())
@@ -776,7 +771,6 @@ def color_choose_box():
 def color_choose():
     """ Color selection """
     color = askcolor(img_text_color.get())
-    print('text: '+ str(color))
     if color[1] is not None:
         img_text_color.set(color[1])
         l_text_color.configure(fg=img_text_color.get())
@@ -1278,6 +1272,21 @@ def tools_set(preview_on):
         frame_border.grid_remove()
     else:
         frame_border.grid(row=1, column=1, sticky=W, padx=5)
+
+    if (img_bw_on.get() == 0) and (img_contrast_on.get() == 0):
+        frame_bw_contrast.grid_remove()
+    else:
+        frame_bw_contrast.grid()
+
+    if (img_border_on.get() == 0) and (img_normalize_on.get() == 0):
+        frame_border_normalize.grid_remove()
+    else:
+        frame_border_normalize.grid()
+
+    if (img_mirror_on.get() == 0) and (img_vignette_on.get() == 0):
+        frame_mirror_vignette.grid_remove()
+    else:
+        frame_mirror_vignette.grid()
 
     if img_rotate_on.get() == 0:
         frame_rotate.grid_remove()
@@ -2536,7 +2545,6 @@ if GM_or_IM is not None:
     img_text_font_dict = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading from config file
     tools_set(0)
-    #color_choose_set()
     text_tool_hide_show()
     l_border_color.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
