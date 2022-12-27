@@ -55,9 +55,7 @@ def preview_histogram(file_in):
     else:
         cmd_magick = "convert"
 
-    file_histogram = os.path.join(tempfile.gettempdir(),
-                                  "fotokilof_" + os.getlogin() \
-                                  + "_histogram.ppm")
+    file_histogram = os.path.join(tempfile.gettempdir(), "fotokilof_histogram.ppm")
     command = " -define histogram:unique-colors=false histogram:"
     command = " histogram:"
 
@@ -107,14 +105,17 @@ def preview_wand(file_in, size, coord):
                     draw.line(right_top, right_bottom)
                     draw(clone)
             clone.convert('ppm')
-            file_preview = os.path.join(tempfile.gettempdir(),
-                                            "fotokilof_" + os.getlogin() \
-                                            + "_preview.ppm")
+            file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
             convert_wand.save_close_clone(clone, file_preview, 0)
             result = {'filename': file_preview,
                           'size': filesize,
                           'width': str(width),
                           'height': str(height)}
-            return result
+        else:
+            result = {'filename': None, 'size': '0', 'width': '0', 'height': '0'}
+    else:
+        result = {'filename': None, 'size': '0', 'width': '0', 'height': '0'}
+
+    return result
 
 # EOF

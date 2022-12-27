@@ -29,11 +29,11 @@ THE SOFTWARE.
 nice GUI for ImageMagick command common used (by me)
 """
 
-from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow
+from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow, Canvas
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog, messagebox
 from tkinter import TclError, StringVar, IntVar
-from tkinter import N, S, W, E, END, DISABLED, NORMAL
+from tkinter import N, S, W, E, END, DISABLED, NORMAL, VERTICAL, HORIZONTAL
 
 try:
     from tkcolorpicker import askcolor
@@ -1479,7 +1479,6 @@ img_vignette_color = StringVar()
 progress_var = IntVar()  # progressbar
 progress_files = StringVar()
 file_extension = (".jpeg", ".jpg", ".png", ".tif")
-magick_commands = ("composite", "convert")
 
 ######################################################################
 # Tabs
@@ -2195,8 +2194,6 @@ l_logo_dxdy.grid(row=1, column=2, sticky=W, padx=5)
 e_logo_dx.grid(row=2, column=2, sticky=W, padx=5)
 e_logo_dy.grid(row=3, column=2, sticky=W, padx=5)
 
-# Wand-py has o gravity for inserting picture
-# it will be implemented later
 ###
 frame_logo_gravity = ttk.Frame(frame_logo)
 rb_logo_NW = ttk.Radiobutton(frame_logo_gravity, text="NW",
@@ -2292,6 +2289,10 @@ co_preview_selector_orig = ttk.Combobox(frame_preview_orig, width=4,
 co_preview_selector_orig.configure(state='readonly')
 pi_preview_orig = PhotoImage()
 l_preview_orig_pi = ttk.Label(frame_preview_orig, image=pi_preview_orig)
+
+#sb_orig_x = Scrollbar(frame_preview_orig, orient="horizontal", command=pi_preview_orig.xview)
+#sb_orig_x.grid(row=1, column=0, sticky="ew")
+#canvas.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
 
 l_preview_orig_pi.pack(side='bottom')
 b_preview_orig_run.pack(side='left', padx=5, pady=5)
