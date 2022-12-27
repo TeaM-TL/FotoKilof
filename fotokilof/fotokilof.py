@@ -48,7 +48,6 @@ except:
     imagemagick_wand = None
 
 # standard modules
-import configparser
 import datetime
 import gettext
 import os
@@ -63,6 +62,7 @@ import convert_wand
 import common
 import gui
 import ini_read
+import ini_save
 import log
 import magick
 import mswindows
@@ -793,8 +793,8 @@ def color_choose():
 
 def ini_read_wraper():
     """ Read config INI file """
-
-    ini_entries = ini_read.ini_read(FILE_INI, theme_list, preview_size_list)
+    # main
+    ini_entries = ini_read.main(FILE_INI, theme_list, preview_size_list)
     file_in_path.set(ini_entries['file_in_path'])
     file_dir_selector.set(ini_entries['file_dir_selector'])
     work_dir.set(ini_entries['work_dir'])
@@ -804,8 +804,8 @@ def ini_read_wraper():
     co_preview_selector_orig.current(preview_size_list.index(ini_entries['preview_orig']))
     co_preview_selector_new.current(preview_size_list.index(ini_entries['preview_new']))
     log_level.set(ini_entries['log_level'])
-
-    ini_entries = ini_read.ini_read_resize(FILE_INI)
+    # resize
+    ini_entries = ini_read.resize(FILE_INI)
     img_resize_on.set(ini_entries['img_resize_on'])
     img_resize.set(ini_entries['img_resize'])
     e1_resize_x.delete(0, "end")
@@ -814,8 +814,8 @@ def ini_read_wraper():
     e1_resize_y.insert(0, ini_entries['resize_size_pixel_y'])
     e2_resize.delete(0, "end")
     e2_resize.insert(0, ini_entries['resize_size_percent'])
-
-    ini_entries = ini_read.ini_read_text(FILE_INI, img_text_font_dict)
+    # text
+    ini_entries = ini_read.text(FILE_INI, img_text_font_dict)
     img_text_on.set(ini_entries['img_text_on'])
     img_text_inout.set(ini_entries['img_text_inout'])
     img_text_font.set(ini_entries['text_font'])
@@ -836,16 +836,16 @@ def ini_read_wraper():
     e_text_y.insert(0, ini_entries['text_y'])
     e_text_angle.delete(0, "end")
     e_text_angle.insert(0, ini_entries['text_rotate_own'])
-
-    ini_entries = ini_read.ini_read_rotate(FILE_INI)
+    # rotate
+    ini_entries = ini_read.rotate(FILE_INI)
     img_rotate_on.set(ini_entries['img_rotate_on'])
     img_rotate.set(ini_entries['img_rotate'])
     e_rotate_own.delete(0, "end")
     e_rotate_own.insert(0, ini_entries['img_rotate_own'])
     img_rotate_color.set(ini_entries['img_rotate_color'])
     l_rotate_color.configure(bg=img_rotate_color.get())
-
-    ini_entries = ini_read.ini_read_crop(FILE_INI)
+    # crop
+    ini_entries = ini_read.crop(FILE_INI)
     img_crop_on.set(ini_entries['img_crop_on'])
     img_crop.set(ini_entries['img_crop'])
     img_crop_gravity.set(ini_entries['img_crop_gravity'])
@@ -873,8 +873,8 @@ def ini_read_wraper():
     e3_crop_3.insert(0, ini_entries['crop_3_width'])
     e4_crop_3.delete(0, "end")
     e4_crop_3.insert(0, ini_entries['crop_3_height'])
-
-    ini_entries = ini_read.ini_read_border(FILE_INI)
+    # border
+    ini_entries = ini_read.border(FILE_INI)
     img_border_on.set(ini_entries['img_border_on'])
     img_border_color.set(ini_entries['img_border_color'])
     l_border_color.configure(bg=img_border_color.get())
@@ -882,8 +882,8 @@ def ini_read_wraper():
     e_border_ns.insert(0, ini_entries['img_border_size_x'])
     e_border_we.delete(0, "end")
     e_border_we.insert(0, ini_entries['img_border_size_y'])
-
-    ini_entries = ini_read.ini_read_vignette(FILE_INI)
+    # vignette
+    ini_entries = ini_read.vignette(FILE_INI)
     img_vignette_on.set(ini_entries['on'])
     img_vignette_color.set(ini_entries['color'])
     l_vignette_color.configure(bg=img_vignette_color.get())
@@ -895,19 +895,19 @@ def ini_read_wraper():
     e_vignette_radius.insert(0, ini_entries['radius'])
     e_vignette_sigma.delete(0, "end")
     e_vignette_sigma.insert(0, ini_entries['sigma'])
-
-    ini_entries = ini_read.ini_read_color(FILE_INI)
+    # color
+    ini_entries = ini_read.colors(FILE_INI)
     img_bw_on.set(ini_entries['color_on'])
     img_bw.set(ini_entries['black_white'])
     e_bw_sepia.delete(0, "end")
     e_bw_sepia.insert(0, ini_entries['sepia'])
-
-    ini_entries = ini_read.ini_read_normalize(FILE_INI, normalize_channels)
+    # normalize
+    ini_entries = ini_read.normalize(FILE_INI, normalize_channels)
     img_normalize_on.set(ini_entries['normalize_on'])
     img_normalize.set(ini_entries['normalize'])
     co_normalize_channel.current(normalize_channels.index(ini_entries['channel']))
-
-    ini_entries = ini_read.ini_read_contrast(FILE_INI, contrast_selection)
+    # contrast
+    ini_entries = ini_read.contrast(FILE_INI, contrast_selection)
     img_contrast_on.set(ini_entries['contrast_on'])
     img_contrast.set(ini_entries['contrast'])
     co_contrast_selection.current(contrast_selection.index(ini_entries['contrast_selection']))
@@ -915,11 +915,8 @@ def ini_read_wraper():
     e1_contrast.insert(0, ini_entries['contrast_stretch_1'])
     e2_contrast.delete(0, "end")
     e2_contrast.insert(0, ini_entries['contrast_stretch_2'])
-
-    ini_entries = ini_read.ini_read_custom(FILE_INI)
-    img_custom_on.set(ini_entries['custom_on'])
-
-    ini_entries = ini_read.ini_read_logo(FILE_INI)
+    # logo
+    ini_entries = ini_read.logo(FILE_INI)
     img_logo_on.set(ini_entries['img_logo_on'])
     file_logo_path.set(ini_entries['logo_logo'])
     img_logo_gravity.set(ini_entries['img_logo_gravity'])
@@ -931,124 +928,78 @@ def ini_read_wraper():
     e_logo_dx.insert(0, ini_entries['logo_dx'])
     e_logo_dy.delete(0, "end")
     e_logo_dy.insert(0, ini_entries['logo_dy'])
-
-    ini_entries = ini_read.ini_read_mirror(FILE_INI)
+    # mirror
+    ini_entries = ini_read.mirror(FILE_INI)
     img_mirror_on.set(ini_entries['img_mirror_on'])
     img_mirror_flip.set(ini_entries['img_mirror_flip'])
     img_mirror_flop.set(ini_entries['img_mirror_flop'])
 
 
-def ini_save():
+def ini_save_wraper():
     """ Write variables into config file INI """
+    # main
+    config = {'section': 'Konfiguracja', 'path': file_in_path.get(),
+                'custom_on': img_custom_on.get(),
+                'work_dir': work_dir.get(), 'file_dir': file_dir_selector.get(),
+                'exif': img_exif_on.get(), 'preview_new': co_preview_selector_new.get(),
+                'histograms': img_histograms_on.get(), 'theme': co_theme_selector.get(),
+                'log': log_level.get(), 'preview_orig': co_preview_selector_orig.get()}
+    # resize
+    resize = {'section': 'Resize', 'on': img_resize_on.get(),
+                'resize': img_resize.get(), 'size_percent': e2_resize.get(),
+                'size_pixel_x': e1_resize_x.get(), 'size_pixel_y': e1_resize_y.get()}
+    # text
+    text = {'section': 'Text', 'on': img_text_on.get(),
+            'inout': img_text_inout.get(), 'text': e_text.get(),
+            'gravity': img_text_gravity.get(),
+            'gravity_onoff': img_text_gravity_onoff.get(),
+            'font': img_text_font.get(), 'size': e_text_size.get(),
+            'color': img_text_color.get(), 'box': img_text_box.get(),
+            'box_color': img_text_box_color.get(),
+            'x': e_text_x.get(), 'y': e_text_y.get(),
+            'text_rotate': img_text_rotate.get(), 'text_rotate_own': e_text_angle.get()}
+    # rotate
+    rotate = {'section': 'Rotate', 'on': img_rotate_on.get(),
+                'rotate': img_rotate.get(), 'own': e_rotate_own.get(),
+                'color': img_rotate_color.get()}
+    # crop
+    crop = {'section': 'Crop', 'on': img_crop_on.get(), 'crop': img_crop.get(),
+            '1_x1': e1_crop_1.get(), '1_y1': e2_crop_1.get(),
+            '1_x2': e3_crop_1.get(), '1_y2': e4_crop_1.get(),
+            '2_x1': e1_crop_2.get(), '2_y1': e2_crop_2.get(),
+            '2_width': e3_crop_2.get(), '2_height': e4_crop_2.get(),
+            '3_dx': e1_crop_3.get(), '3_dy': e2_crop_3.get(),
+            '3_width': e3_crop_3.get(), '3_height': e4_crop_3.get(),
+            'gravity': img_crop_gravity.get()}
+    # border
+    border = {'section': 'Border', 'on': img_border_on.get(), 'color': img_border_color.get(),
+                'size_x': e_border_ns.get(), 'size_y': e_border_we.get()}
+    # color
+    color = {'section': 'Color', 'on': img_bw_on.get(),
+                'black-white': img_bw.get(), 'sepia': e_bw_sepia.get()}
+    # normalize
+    normalize = {'section': 'Normalize', 'on': img_normalize_on.get(),
+                 'normalize': img_normalize.get(), 'channel': co_normalize_channel.get()}
+    # contrast
+    contrast = {'section': 'Contrast', 'on': img_contrast_on.get(),
+                'contrast': img_contrast.get(), 'selection': co_contrast_selection.get(),
+                'contrast_stretch_1': e1_contrast.get(), 'contrast_stretch_2': e2_contrast.get()}
+    # mirror
+    mirror = {'section': 'Mirror', 'on': img_mirror_on.get(),
+                'flip': img_mirror_flip.get(), 'flop': img_mirror_flop.get()}
+    # vignette
+    vignette = {'section': 'Vignette', 'on': img_vignette_on.get(),
+                'color': img_vignette_color.get(),
+                'dx': e_vignette_dx.get(), 'dy': e_vignette_dy.get(),
+                'radius': e_vignette_radius.get(), 'sigma': e_vignette_sigma.get()}
+    # logo
+    logo = { 'section': 'Logo', 'on': img_logo_on.get(),
+                'logo': file_logo_path.get(), 'gravity': img_logo_gravity.get(),
+                'width': e_logo_width.get(), 'height': e_logo_height.get(),
+                'dx': e_logo_dx.get(), 'dy': e_logo_dy.get()}
 
-    # content preparing
-    config = configparser.ConfigParser()
-    config.add_section('Konfiguracja')
-    config.set('Konfiguracja', 'path', file_in_path.get())
-    config.set('Konfiguracja', 'work_dir', work_dir.get())
-    config.set('Konfiguracja', 'file_dir', str(file_dir_selector.get()))
-    config.set('Konfiguracja', 'exif', str(img_exif_on.get()))
-    config.set('Konfiguracja', 'histograms', str(img_histograms_on.get()))
-    config.set('Konfiguracja', 'theme', co_theme_selector.get())
-    config.set('Konfiguracja', 'preview_orig', co_preview_selector_orig.get())
-    config.set('Konfiguracja', 'preview_new', co_preview_selector_new.get())
-    config.set('Konfiguracja', 'log', log_level.get())
-    config.add_section('Resize')
-    config.set('Resize', 'on', str(img_resize_on.get()))
-    config.set('Resize', 'resize', str(img_resize.get()))
-    config.set('Resize', 'size_pixel_x', e1_resize_x.get())
-    config.set('Resize', 'size_pixel_y', e1_resize_y.get())
-    config.set('Resize', 'size_percent', e2_resize.get())
-    config.add_section('Text')
-    config.set('Text', 'on', str(img_text_on.get()))
-    config.set('Text', 'inout', str(img_text_inout.get()))
-    config.set('Text', 'text', e_text.get())
-    config.set('Text', 'gravity', img_text_gravity.get())
-    config.set('Text', 'gravity_onoff', str(img_text_gravity_onoff.get()))
-    config.set('Text', 'font', img_text_font.get())
-    config.set('Text', 'size', e_text_size.get())
-    config.set('Text', 'color', img_text_color.get())
-    config.set('Text', 'box', str(img_text_box.get()))
-    config.set('Text', 'box_color', img_text_box_color.get())
-    config.set('Text', 'x', e_text_x.get())
-    config.set('Text', 'y', e_text_y.get())
-    config.set('Text', 'text_rotate', str(img_text_rotate.get()))
-    config.set('Text', 'text_rotate_own', e_text_angle.get())
-    config.add_section('Rotate')
-    config.set('Rotate', 'on', str(img_rotate_on.get()))
-    config.set('Rotate', 'rotate', str(img_rotate.get()))
-    config.set('Rotate', 'own', e_rotate_own.get())
-    config.set('Rotate', 'color', img_rotate_color.get())
-    config.add_section('Crop')
-    config.set('Crop', 'on', str(img_crop_on.get()))
-    config.set('Crop', 'crop', str(img_crop.get()))
-    config.set('Crop', '1_x1', e1_crop_1.get())
-    config.set('Crop', '1_y1', e2_crop_1.get())
-    config.set('Crop', '1_x2', e3_crop_1.get())
-    config.set('Crop', '1_y2', e4_crop_1.get())
-    config.set('Crop', '2_x1', e1_crop_2.get())
-    config.set('Crop', '2_y1', e2_crop_2.get())
-    config.set('Crop', '2_width', e3_crop_2.get())
-    config.set('Crop', '2_height', e4_crop_2.get())
-    config.set('Crop', '3_dx', e1_crop_3.get())
-    config.set('Crop', '3_dy', e2_crop_3.get())
-    config.set('Crop', '3_width', e3_crop_3.get())
-    config.set('Crop', '3_height', e4_crop_3.get())
-    config.set('Crop', 'gravity', img_crop_gravity.get())
-    config.add_section('Border')
-    config.set('Border', 'on', str(img_border_on.get()))
-    config.set('Border', 'color', img_border_color.get())
-    config.set('Border', 'size_x', e_border_ns.get())
-    config.set('Border', 'size_y', e_border_we.get())
-    config.add_section('Color')
-    config.set('Color', 'on', str(img_bw_on.get()))
-    config.set('Color', 'black-white', str(img_bw.get()))
-    config.set('Color', 'sepia', e_bw_sepia.get())
-    config.add_section('Normalize')
-    config.set('Normalize', 'on', str(img_normalize_on.get()))
-    config.set('Normalize', 'normalize', str(img_normalize.get()))
-    config.set('Normalize', 'channel', co_normalize_channel.get())
-    config.add_section('Contrast')
-    config.set('Contrast', 'on', str(img_contrast_on.get()))
-    config.set('Contrast', 'contrast', str(img_contrast.get()))
-    config.set('Contrast', 'selection', co_contrast_selection.get())
-    config.set('Contrast', 'contrast_stretch_1', e1_contrast.get())
-    config.set('Contrast', 'contrast_stretch_2', e2_contrast.get())
-    config.add_section('Mirror')
-    config.set('Mirror', 'on', str(img_mirror_on.get()))
-    config.set('Mirror', 'flip', str(img_mirror_flip.get()))
-    config.set('Mirror', 'flop', str(img_mirror_flop.get()))
-    config.add_section('Vignette')
-    config.set('Vignette', 'on', str(img_vignette_on.get()))
-    try:
-        config.set('Vignette', 'dx', str(int(e_vignette_dx.get())))
-    except:
-        config.set('Vignette', 'dx', "0")
-    try:
-        e_vignette_dy.get()
-        config.set('Vignette', 'dy', str(int(e_vignette_dy.get())))
-    except:
-        config.set('Vignette', 'dy', "0")
-    config.set('Vignette', 'radius', str(e_vignette_radius.get()))
-    config.set('Vignette', 'sigma', str(e_vignette_sigma.get()))
-    config.set('Vignette', 'color', str(img_vignette_color.get()))
-    config.add_section('Logo')
-    config.set('Logo', 'on', str(img_logo_on.get()))
-    config.set('Logo', 'logo', file_logo_path.get())
-    config.set('Logo', 'gravity', img_logo_gravity.get())
-    config.set('Logo', 'width', e_logo_width.get())
-    config.set('Logo', 'height', e_logo_height.get())
-    config.set('Logo', 'dx', e_logo_dx.get())
-    config.set('Logo', 'dy', e_logo_dy.get())
-    config.add_section('Custom')
-    config.set('Custom', 'on', str(img_custom_on.get()))
-
-    # save to a file
-    try:
-        with open(FILE_INI, 'w', encoding='utf-8', buffering=1) as configfile:
-            config.write(configfile)
-    except:
-        log.write_log("ini_save: cannot save config file: " + FILE_INI, "E")
+    ini_save.save(FILE_INI, config, resize, text, rotate, crop, border,
+                    color, normalize, contrast, mirror, vignette, logo)
 
 
 def help_info(event):
@@ -1615,7 +1566,7 @@ frame_save = ttk.LabelFrame(main_menu, text=_("Settings"),
                        style="Fiolet.TLabelframe")
 frame_save.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
 
-b_last_save = ttk.Button(frame_save, text=_("Save"), command=ini_save)
+b_last_save = ttk.Button(frame_save, text=_("Save"), command=ini_save_wraper)
 b_last_read = ttk.Button(frame_save, text=_("Load"), command=ini_read_wraper)
 
 b_last_save.pack(padx=5, pady=1, anchor=W, side='left')

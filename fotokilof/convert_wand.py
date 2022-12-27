@@ -253,6 +253,7 @@ def normalize(clone, normalize_variant, channel):
     """ normalize levels of colors """
     if normalize_variant == 1:
         if channel != "None":
+            clone.alpha_channel = True
             clone.normalize(channel=channel)
         else:
             clone.normalize()

@@ -26,17 +26,17 @@ THE SOFTWARE.
 module contains function for reading entries from config file.
 Every function read part of config file
 - ini_read - general setting for FotoKilof
-- ini_read_resize
-- ini_read_text
-- ini_read_rotate
-- ini_read_crop
-- ini_read_border
-- ini_read_vignette
-- ini_read_color
-- ini_read_normalize
-- ini_read_contrast
-- ini_read_logo
-- ini_read_custom
+- resize
+- text
+- rotate
+- crop
+- border
+- vignette
+- color
+- normalize
+- contrast
+- logo
+- custom
 """
 
 import configparser
@@ -45,7 +45,7 @@ import entries
 import common
 
 
-def ini_read(file_ini, theme_list, preview_size_list):
+def main(file_ini, theme_list, preview_size_list):
     """ General settings """
 
     # słownik wyjściowy
@@ -116,7 +116,7 @@ def ini_read(file_ini, theme_list, preview_size_list):
     return dict_return
 
 
-def ini_read_resize(file_ini):
+def resize(file_ini):
     """ Resize/scalling """
 
     # słownik wyjściowy
@@ -132,10 +132,10 @@ def ini_read_resize(file_ini):
     dict_return['img_resize_on'] = entries.parse_list(resize_on, (0, 1), 0)
 
     try:
-        resize = config.getint('Resize', 'resize')
+        resize_variant = config.getint('Resize', 'resize')
     except:
-        resize = "3"  # FullHD
-    dict_return['img_resize'] = entries.parse_list(resize, (1, 2, 3, 4, 5), 3)
+        resize_variant = "3"  # FullHD
+    dict_return['img_resize'] = entries.parse_list(resize_variant, (1, 2, 3, 4, 5), 3)
 
     try:
         resize_size_pixel_x = config.getint('Resize', 'size_pixel_x')
@@ -158,7 +158,7 @@ def ini_read_resize(file_ini):
     return dict_return
 
 
-def ini_read_text(file_ini, fonts_dict):
+def text(file_ini, fonts_dict):
     """ Text configuration """
 
     # słownik wyjściowy
@@ -180,10 +180,10 @@ def ini_read_text(file_ini, fonts_dict):
     dict_return['img_text_inout'] = entries.parse_list(text_inout, (0, 1), 1)
 
     try:
-        text = config.get('Text', 'text')
+        text_string = config.get('Text', 'text')
     except:
-        text = ""
-    dict_return['text_text'] = text
+        text_string = ""
+    dict_return['text_text'] = text_string
 
     try:
         text_gravity = config.get('Text', 'gravity')
@@ -255,7 +255,7 @@ def ini_read_text(file_ini, fonts_dict):
     return dict_return
 
 
-def ini_read_rotate(file_ini):
+def rotate(file_ini):
     """ Rotate configuration """
 
     # słownik wyjściowy
@@ -271,10 +271,10 @@ def ini_read_rotate(file_ini):
     dict_return['img_rotate_on'] = entries.parse_list(rotate_on, (0, 1), 0)
 
     try:
-        rotate = config.getint('Rotate', 'rotate')
+        rotate_variant = config.getint('Rotate', 'rotate')
     except:
-        rotate = "90"
-    dict_return['img_rotate'] = entries.parse_list(rotate, (0, 90, 180, 270), 0)
+        rotate_variant = "90"
+    dict_return['img_rotate'] = entries.parse_list(rotate_variant, (0, 90, 180, 270), 0)
 
     try:
         rotate_own = config.getint('Rotate', 'own')
@@ -291,7 +291,7 @@ def ini_read_rotate(file_ini):
     return dict_return
 
 
-def ini_read_crop(file_ini):
+def crop(file_ini):
     """ Crop configuration """
 
     # słownik wyjściowy
@@ -307,10 +307,10 @@ def ini_read_crop(file_ini):
     dict_return['img_crop_on'] = entries.parse_list(crop_on, (0, 1), 0)
 
     try:
-        crop = config.getint('Crop', 'crop')
+        crop_variant = config.getint('Crop', 'crop')
     except:
-        crop = "1"
-    dict_return['img_crop'] = entries.parse_list(crop, (1, 2, 3), 1)
+        crop_variant = "1"
+    dict_return['img_crop'] = entries.parse_list(crop_variant, (1, 2, 3), 1)
 
     try:
         crop_1_x1 = config.getint('Crop', '1_x1')
@@ -394,7 +394,7 @@ def ini_read_crop(file_ini):
     return dict_return
 
 
-def ini_read_border(file_ini):
+def border(file_ini):
     """ Border congiguration """
 
     # słownik wyjściowy
@@ -416,21 +416,21 @@ def ini_read_border(file_ini):
     dict_return['img_border_color'] = entries.parse_color(border_color, '#FFFFFF')
 
     try:
-        border = config.getint('Border', 'size_x')
+        border_x = config.getint('Border', 'size_x')
     except:
-        border = "10"
-    dict_return['img_border_size_x'] = border
+        border_x = "10"
+    dict_return['img_border_size_x'] = border_x
 
     try:
-        border = config.getint('Border', 'size_y')
+        border_y = config.getint('Border', 'size_y')
     except:
-        border = "10"
-    dict_return['img_border_size_y'] = border
+        border_y = "10"
+    dict_return['img_border_size_y'] = border_y
 
     return dict_return
 
 
-def ini_read_vignette(file_ini):
+def vignette(file_ini):
     """ Vignette congiguration """
 
     # słownik wyjściowy
@@ -478,7 +478,7 @@ def ini_read_vignette(file_ini):
     return dict_return
 
 
-def ini_read_color(file_ini):
+def colors(file_ini):
     """ Color configuration """
 
     # słownik wyjściowy
@@ -508,7 +508,7 @@ def ini_read_color(file_ini):
     return dict_return
 
 
-def ini_read_normalize(file_ini, channels):
+def normalize(file_ini, channels):
     """ Normalize """
 
     # słownik wyjściowy
@@ -524,21 +524,21 @@ def ini_read_normalize(file_ini, channels):
     dict_return['normalize_on'] = entries.parse_list(normalize_on, (0, 1), 0)
 
     try:
-        normalize = config.getint('Normalize', 'normalize')
+        normalize_variant = config.getint('Normalize', 'normalize')
     except:
-        normalize = 1
-    dict_return['normalize'] = entries.parse_list(normalize, (1, 2), 1)
+        normalize_variant = 1
+    dict_return['normalize'] = entries.parse_list(normalize_variant, (1, 2), 1)
 
     try:
-        normalize = config.get('Normalize', 'channel')
+        normalize_type = config.get('Normalize', 'channel')
     except:
-        normalize = "None"
-    dict_return['channel'] = entries.parse_list(normalize, channels, "None")
+        normalize_type = "None"
+    dict_return['channel'] = entries.parse_list(normalize_type, channels, "None")
 
     return dict_return
 
 
-def ini_read_contrast(file_ini, contrast_selection_valid_list):
+def contrast(file_ini, contrast_selection_valid_list):
     """ Contrast configuration """
 
     # słownik wyjściowy
@@ -554,10 +554,10 @@ def ini_read_contrast(file_ini, contrast_selection_valid_list):
     dict_return['contrast_on'] = entries.parse_list(contrast_on, (0, 1), 0)
 
     try:
-        contrast = config.getint('Contrast', 'contrast')
+        contrast_variant = config.getint('Contrast', 'contrast')
     except:
-        contrast = "1"
-    dict_return['contrast'] = entries.parse_list(contrast, (1, 2, 3), 1)
+        contrast_variant = "1"
+    dict_return['contrast'] = entries.parse_list(contrast_variant, (1, 2, 3), 1)
 
     try:
         contrast_selection = config.get('Contrast', 'selection')
@@ -582,7 +582,7 @@ def ini_read_contrast(file_ini, contrast_selection_valid_list):
     return dict_return
 
 
-def ini_read_logo(file_ini):
+def logo(file_ini):
     """ Logo cofiguration """
 
     # słownik wyjściowy
@@ -598,10 +598,10 @@ def ini_read_logo(file_ini):
     dict_return['img_logo_on'] = entries.parse_list(logo_on, (0, 1), 0)
 
     try:
-        logo = config.get('Logo', 'logo')
+        logo_filename = config.get('Logo', 'logo')
     except:
-        logo = ""
-    dict_return['logo_logo'] = logo
+        logo_filename = ""
+    dict_return['logo_logo'] = logo_filename
 
     try:
         logo_gravity = config.get('Logo', 'gravity')
@@ -637,7 +637,7 @@ def ini_read_logo(file_ini):
     return dict_return
 
 
-def ini_read_mirror(file_ini):
+def mirror(file_ini):
     """ Rotate configuration """
 
     # słownik wyjściowy
@@ -663,23 +663,6 @@ def ini_read_mirror(file_ini):
     except:
         flop = "0"
     dict_return['img_mirror_flop'] = entries.parse_list(flop, (0, 1), 0)
-
-    return dict_return
-
-
-def ini_read_custom(file_ini):
-    """ Custom """
-
-    dict_return = {}
-
-    config = configparser.ConfigParser()
-    config.read(file_ini, encoding="utf8")
-
-    try:
-        custom_on = config.getint('Custom', 'on')
-    except:
-        custom_on = 0
-    dict_return['custom_on'] = entries.parse_list(custom_on, (0, 1), 0)
 
     return dict_return
 

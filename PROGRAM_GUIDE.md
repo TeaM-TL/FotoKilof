@@ -4,6 +4,9 @@
 
 ### ini_read.py
 - add function for reading config file
+  
+### ini_save.py
+- add function for saving config file
 
 ### convert_wand.py
 - add function for making conversion

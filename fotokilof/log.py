@@ -71,7 +71,7 @@ def write_log(message, level="M", mode="a", initial="0"):
         now = str(datetime.datetime.now())
         log_content = now + " :" + level + ": " + message + "\n"
         try:
-            with open(logfile, mode) as log:
+            with open(logfile, mode, encoding='utf-8') as log:
                 log.write(log_content)
         except:
             print("!make_log: cannot open log file for writing", logfile)
