@@ -29,7 +29,7 @@ THE SOFTWARE.
 nice GUI for ImageMagick command common used (by me)
 """
 
-from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow, Canvas
+from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow, Canvas, Scrollbar
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog, messagebox
 from tkinter import TclError, StringVar, IntVar
@@ -121,16 +121,18 @@ def convert_custom_clear():
 def preview_orig_clear():
     """ clear every preview if doesn't choose file """
     log.write_log("clear preview", "M")
-    l_histogram_orig.configure(image='')
-    l_preview_orig_pi.configure(image='')
+    c_preview_orig_pi.delete('all')
+    c_histogram_orig.delete('all')
     # if no original, new previe should be clear too
     preview_new_clear()
+
 
 def preview_new_clear():
     """ clear every preview if doesn't choose file """
     log.write_log("clear preview", "M")
-    l_histogram_new.configure(image='')
-    l_preview_new_pi.configure(image='')
+    c_preview_new_pi.delete('all')
+    c_histogram_new.delete('all')
+
 
 def preview_new_refresh(event):
     """ callback after selection of size preview"""
@@ -146,17 +148,20 @@ def preview_new(file_out):
     """ generowanie podglądu wynikowego """
 
     if co_preview_selector_new.get() != "none":
-        preview_info = preview.preview_wand(file_out,
-                                              int(co_preview_selector_new.get()),
-                                              "")
+        preview_picture = preview.preview_wand(file_out,
+                                int(co_preview_selector_new.get()))
 
         try:
-            l_preview_new.configure(text=preview_info['width'] + "x" \
-                                + preview_info['height'] \
+            pi_preview_new.configure(file=preview_picture['filename'])
+            c_preview_new_pi.delete('all')
+            c_preview_new_pi.configure(width=preview_picture['preview_width'],
+                                        height=preview_picture['preview_height'])
+            c_preview_new_pi.create_image(0, 0, image=pi_preview_new, anchor='nw')
+
+            l_preview_new.configure(text=preview_picture['width'] + "x" \
+                                + preview_picture['height'] \
                                 + " - " \
-                                + preview_info['size'])
-            pi_preview_new.configure(file=preview_info['filename'])
-            l_preview_new_pi.configure(image=pi_preview_new)
+                                + preview_picture['size'])
         except:
             log.write_log("preview_new: Cannot read preview", "E")
 
@@ -164,8 +169,10 @@ def preview_new(file_out):
 
         if img_histograms_on.get() == 1:
             try:
-                l_histogram_new.configure(image=pi_histogram_new)
                 pi_histogram_new.configure(file=preview.preview_histogram(file_out))
+                c_histogram_new.delete('all')
+                #c_histogram_orig.configure(width=400, height=400)
+                c_histogram_new.create_image(0, 0, image=pi_histogram_new, anchor='nw')
             except:
                 log.write_log("previe_new: errot in preview histogram_new", "E")
     else:
@@ -1143,8 +1150,11 @@ def preview_orig():
                                                   crop_rectangle)
 
             try:
-                pi_preview_orig.configure(file=common.spacja(preview_picture['filename']))
-                l_preview_orig_pi.configure(image=pi_preview_orig)
+                pi_preview_orig.configure(file=preview_picture['filename'])
+                c_preview_orig_pi.delete('all')
+                c_preview_orig_pi.configure(width=preview_picture['preview_width'],
+                                            height=preview_picture['preview_height'])
+                c_preview_orig_pi.create_image(0, 0, image=pi_preview_orig, anchor='nw')
             except:
                 log.write_log("preview_orig: Cannot load preview", "E")
 
@@ -1159,7 +1169,9 @@ def preview_orig():
             if img_histograms_on.get() == 1:
                 pi_histogram_orig.configure(
                         file=preview.preview_histogram(file_in_path.get()))
-                l_histogram_orig.configure(image=pi_histogram_orig)
+                c_histogram_orig.delete('all')
+                #c_histogram_orig.configure(width=400, height=400)
+                c_histogram_orig.create_image(0, 0, image=pi_histogram_orig, anchor='nw')
         else:
             preview_orig_clear()
 
@@ -1168,14 +1180,14 @@ def preview_logo():
     """ generating logo preview """
     if os.path.isfile(file_logo_path.get()):
         l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
-        preview_info = preview.preview_wand(file_logo_path.get(), PREVIEW_LOGO, "")
+        preview_picture = preview.preview_wand(file_logo_path.get(), PREVIEW_LOGO)
 
         try:
-            pi_logo_preview.configure(file=preview_info['filename'])
+            pi_logo_preview.configure(file=preview_picture['filename'])
         except:
             log.write_log("Preview_logo: Cannot display file", "E")
 
-        l_logo_preview.configure(text=preview_info['width'] + "x" + preview_info['height'])
+        l_logo_preview.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
     else:
         log.write_log("Preview_logo: Cannot load file", "E")
 
@@ -2278,8 +2290,7 @@ frame_second_col = ttk.Frame(main)
 ############################
 frame_preview_orig = ttk.Labelframe(frame_second_col, text=_("Original"),
                                     style="Fiolet.TLabelframe")
-frame_preview_orig.grid(row=2, column=1, columnspan=2,
-                        sticky=(N, W, E, S), padx=5, pady=5)
+frame_preview_orig.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 b_preview_orig_run = ttk.Button(frame_preview_orig, text=_("Preview"),
                                 command=preview_orig_button)
@@ -2288,13 +2299,10 @@ co_preview_selector_orig = ttk.Combobox(frame_preview_orig, width=4,
                                         values=preview_size_list)
 co_preview_selector_orig.configure(state='readonly')
 pi_preview_orig = PhotoImage()
-l_preview_orig_pi = ttk.Label(frame_preview_orig, image=pi_preview_orig)
+c_preview_orig_pi = Canvas(frame_preview_orig)
+c_preview_orig_pi.create_image(0, 0, image=pi_preview_orig, anchor='ne')
 
-#sb_orig_x = Scrollbar(frame_preview_orig, orient="horizontal", command=pi_preview_orig.xview)
-#sb_orig_x.grid(row=1, column=0, sticky="ew")
-#canvas.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
-
-l_preview_orig_pi.pack(side='bottom')
+c_preview_orig_pi.pack(side='bottom', anchor=W)
 b_preview_orig_run.pack(side='left', padx=5, pady=5)
 l_preview_orig.pack(side='left', padx=5, pady=5)
 co_preview_selector_orig.pack(side='left', padx=5, pady=1)
@@ -2303,11 +2311,12 @@ co_preview_selector_orig.pack(side='left', padx=5, pady=1)
 # Histogram original
 ###########################
 frame_histogram_orig = ttk.LabelFrame(frame_second_col, text=_("Histogram"))
-frame_histogram_orig.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+frame_histogram_orig.grid(row=2, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 pi_histogram_orig = PhotoImage()
-l_histogram_orig = ttk.Label(frame_histogram_orig, image=pi_histogram_orig)
-l_histogram_orig.grid(row=1, column=1, padx=10, pady=5)
+c_histogram_orig = Canvas(frame_histogram_orig)
+c_preview_orig_pi.create_image(0, 0, image=pi_histogram_orig, anchor='ne')
+c_histogram_orig.grid(row=2, column=1, padx=10, pady=5)
 
 #####################################################
 # Third column
@@ -2319,7 +2328,7 @@ frame_third_col = ttk.Frame(main)
 ###########################
 frame_preview_new = ttk.Labelframe(frame_third_col, text=_("Result"),
                                    style="Fiolet.TLabelframe")
-frame_preview_new.grid(row=3, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+frame_preview_new.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 b_preview_new_run = ttk.Button(frame_preview_new, text=_("Preview"),
                                command=preview_new_button)
@@ -2328,9 +2337,10 @@ co_preview_selector_new = ttk.Combobox(frame_preview_new, width=4,
                                        values=preview_size_list)
 co_preview_selector_new.configure(state='readonly')
 pi_preview_new = PhotoImage()
-l_preview_new_pi = ttk.Label(frame_preview_new, image=pi_preview_new)
+c_preview_new_pi = Canvas(frame_preview_new)
+c_preview_orig_pi.create_image(0, 0, image=pi_preview_orig, anchor='ne')
 
-l_preview_new_pi.pack(side='bottom')
+c_preview_new_pi.pack(side='bottom', anchor=W)
 b_preview_new_run.pack(side='left', padx=5, pady=5)
 l_preview_new.pack(side='left', padx=5, pady=5)
 co_preview_selector_new.pack(side='left', padx=5, pady=1)
@@ -2339,11 +2349,12 @@ co_preview_selector_new.pack(side='left', padx=5, pady=1)
 # Histogram new
 ###########################
 frame_histogram_new = ttk.LabelFrame(frame_third_col, text=_("Histogram"))
-frame_histogram_new.grid(row=4, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+frame_histogram_new.grid(row=2, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 pi_histogram_new = PhotoImage()
-l_histogram_new = ttk.Label(frame_histogram_new, image=pi_histogram_new)
-l_histogram_new.grid(row=1, column=1, padx=10, pady=5)
+c_histogram_new = Canvas(frame_histogram_new)
+c_histogram_new.create_image(0, 0, image=pi_histogram_new, anchor='ne')
+c_histogram_new.grid(row=2, column=1, padx=10, pady=5)
 
 ###############################################################################
 # Add Frames into PanedWindow
@@ -2360,11 +2371,11 @@ co_theme_selector.bind("<<ComboboxSelected>>", tools_set_event)
 co_preview_selector_orig.bind("<<ComboboxSelected>>", preview_orig_refresh)
 co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
-l_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
+c_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
 if mswindows.macos():
-    l_preview_orig_pi.bind("<Button-2>", mouse_crop_SE)
+    c_preview_orig_pi.bind("<Button-2>", mouse_crop_SE)
 else:
-    l_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
+    c_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
 root.bind("<F1>", help_info)
 root.protocol("WM_DELETE_WINDOW", win_deleted)
 

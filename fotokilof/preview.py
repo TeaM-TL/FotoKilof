@@ -69,7 +69,7 @@ def preview_histogram(file_in):
     return 'none'
 
 
-def preview_wand(file_in, size, coord):
+def preview_wand(file_in, size, coord=""):
     """
     preview generation by Wand
     file_in - fullname image file
@@ -105,16 +105,30 @@ def preview_wand(file_in, size, coord):
                     draw.line(right_top, right_bottom)
                     draw(clone)
             clone.convert('ppm')
+            preview_width = clone.width
+            preview_height = clone.height
             file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
             convert_wand.save_close_clone(clone, file_preview, 0)
-            result = {'filename': file_preview,
+            result = {'filename': common.spacja(file_preview),
                           'size': filesize,
                           'width': str(width),
-                          'height': str(height)}
+                          'height': str(height),
+                          'preview_width': str(preview_width),
+                          'preview_height': str(preview_height)}
         else:
-            result = {'filename': None, 'size': '0', 'width': '0', 'height': '0'}
+            result = {'filename': None,
+                        'size': '0',
+                        'width': '0',
+                        'height': '0',
+                        'preview_width': '0',
+                        'preview_height': '0'}
     else:
-        result = {'filename': None, 'size': '0', 'width': '0', 'height': '0'}
+        result = {'filename': None,
+                    'size': '0',
+                    'width': '0',
+                    'height': '0',
+                    'preview_width': '0',
+                    'preview_height': '0'}
 
     return result
 
