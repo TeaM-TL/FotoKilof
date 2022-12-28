@@ -740,22 +740,29 @@ def open_screenshot():
 
     filename = now.strftime("%F_%H-%M-%S_%f") + ".png"
     out_file = os.path.join(today_dir, filename)
+    do_it = 1
     if mswindows.windows() or mswindows.macos():
         screenshot = ImageGrab.grabclipboard()
         try:
             screenshot.save(out_file, 'PNG')
         except:
-            log.write_log('Error in open_screenshot, save from clipboards', 'E')
+            log.write_log('open_screenshot(), error save from clipboards', 'E')
+            do_it = 0
     else:
-        magick.magick(" ", "-quiet", out_file, "import")
-    file_in_path.set(out_file)
-    root.title(window_title + out_file)
-    image_size =  convert_wand.get_image_size(file_in_path.get())
-    file_in_width.set(image_size[0])
-    file_in_height.set(image_size[1])
-    preview_orig()
-    extension_from_file()
-    preview_new_refresh("none")
+        try:
+            magick.magick(" ", "-quiet", out_file, "import")
+        except:
+            log.write_log('open_screenshot(), error in make screeshot ', 'E')
+            do_it = 1
+    if do_it:
+        file_in_path.set(out_file)
+        root.title(window_title + out_file)
+        image_size =  convert_wand.get_image_size(file_in_path.get())
+        file_in_width.set(image_size[0])
+        file_in_height.set(image_size[1])
+        preview_orig()
+        extension_from_file()
+        preview_new_refresh("none")
 
 
 def color_choose_rotate():
