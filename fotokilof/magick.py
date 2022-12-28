@@ -22,9 +22,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-module to work with ImageMagick:
+module to run ImageMagick:
 - magick - picture conversion
-- magick_command - make ImageMagick independent
 """
 
 import os
@@ -42,20 +41,22 @@ def magick(cmd, file_in, file_out, command):
     file_out - fullname output picture
     command:
       convert, mogrify, composite, import - ImageMagick
-      gm convert, gm mogrify, gm composite, gm import - GraphicsMagick
     """
     result = None
     if cmd != "":
         if file_in is not None:
             file_in = common.spacja(file_in)
             file_out = common.spacja(file_out)
-            command = magick_command(command)
-            command = command + " " + file_in  + " " + cmd + file_out
-            log.write_log("Execute: " + command, "M")
+            if mswindows.windows() == 1:
+                prefix_cmd = "magick.exe "
+            else:
+                prefix_cmd = ""
+            command_exec = prefix_cmd + command + " " + file_in  + " " + cmd + file_out
+            log.write_log("Execute: " + command_exec, "M")
             try:
-                os.system(command)
+                os.system(command_exec)
             except:
-                log.write_log("Errot in imagick: " + command, "E")
+                log.write_log("Errot in imagick: " + command_exec, "E")
                 result = None
             else:
                 result = "OK"
@@ -65,24 +66,5 @@ def magick(cmd, file_in, file_out, command):
     else:
         result = None
     return result
-
-
-def magick_command(command):
-    """
-    make ImageMagick independent
-    command: it depends:
-      - Unix: convert, mogrify, composite
-      - Windows: magick.exe convert, magick.exe mogrify, magick.exe composite
-    """
-    if mswindows.windows() == 1:
-        suffix = ".exe "
-    else:
-        suffix = " "
-    tool = command.split()
-    tool.insert(1, suffix)
-    tool.extend(' ')
-    result = "".join(tool)
-    return result
-
 
 # EOF

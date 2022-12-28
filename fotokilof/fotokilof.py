@@ -29,11 +29,11 @@ THE SOFTWARE.
 nice GUI for ImageMagick command common used (by me)
 """
 
-from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow, Canvas, Scrollbar
+from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow, Canvas
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog, messagebox
 from tkinter import TclError, StringVar, IntVar
-from tkinter import N, S, W, E, END, DISABLED, NORMAL, VERTICAL, HORIZONTAL
+from tkinter import N, S, W, E, END, DISABLED, NORMAL
 
 try:
     from tkcolorpicker import askcolor
@@ -1217,41 +1217,85 @@ def tools_set_off():
 def tools_set(preview_on):
     """ selection tools for showing """
 
+    l_info_when_no_tool.grid()
+
     if img_crop_on.get() == 0:
         frame_crop.grid_remove()
     else:
         frame_crop.grid()
         crop_tool_hide_show()
+        l_info_when_no_tool.grid_remove()
 
     if img_mirror_on.get() == 0:
         frame_mirror.grid_remove()
     else:
         frame_mirror.grid(row=1, column=1, sticky=(W, N, S), padx=5)
-
-    if img_vignette_on.get() == 0:
-        frame_vignette.grid_remove()
-    else:
-        frame_vignette.grid(row=1, column=2, sticky=W, padx=5)
+        l_info_when_no_tool.grid_remove()
 
     if img_bw_on.get() == 0:
         frame_bw.grid_remove()
     else:
         frame_bw.grid(row=1, column=1, sticky=W, padx=5)
+        l_info_when_no_tool.grid_remove()
 
     if img_contrast_on.get() == 0:
         frame_contrast.grid_remove()
     else:
         frame_contrast.grid(row=1, column=2, sticky=W, padx=5)
+        l_info_when_no_tool.grid_remove()
 
     if img_normalize_on.get() == 0:
         frame_normalize.grid_remove()
     else:
         frame_normalize.grid(row=1, column=2, sticky=W, padx=5)
+        l_info_when_no_tool.grid_remove()
+
+    if img_vignette_on.get() == 0:
+        frame_vignette.grid_remove()
+    else:
+        frame_vignette.grid(row=1, column=2, sticky=W, padx=5)
+        l_info_when_no_tool.grid_remove()
 
     if img_border_on.get() == 0:
         frame_border.grid_remove()
     else:
         frame_border.grid(row=1, column=1, sticky=W, padx=5)
+        l_info_when_no_tool.grid_remove()
+
+    if img_rotate_on.get() == 0:
+        frame_rotate.grid_remove()
+    else:
+        frame_rotate.grid()
+        l_info_when_no_tool.grid_remove()
+
+    if img_resize_on.get() == 0:
+        frame_resize.grid_remove()
+    else:
+        frame_resize.grid()
+
+    if img_text_on.get() == 0:
+        frame_text.grid_remove()
+    else:
+        frame_text.grid()
+        l_info_when_no_tool.grid_remove()
+
+    if img_logo_on.get() == 0:
+        frame_logo.grid_remove()
+    else:
+        frame_logo.grid()
+        l_info_when_no_tool.grid_remove()
+
+    if img_custom_on.get() == 1:
+        frame_custom.grid()
+    else:
+        frame_custom.grid_remove()
+
+    if img_histograms_on.get() == 0:
+        frame_histogram_orig.grid_remove()
+        frame_histogram_new.grid_remove()
+    else:
+        frame_histogram_orig.grid()
+        frame_histogram_new.grid()
 
     if (img_bw_on.get() == 0) and (img_contrast_on.get() == 0):
         frame_bw_contrast.grid_remove()
@@ -1267,38 +1311,6 @@ def tools_set(preview_on):
         frame_mirror_vignette.grid_remove()
     else:
         frame_mirror_vignette.grid()
-
-    if img_rotate_on.get() == 0:
-        frame_rotate.grid_remove()
-    else:
-        frame_rotate.grid()
-
-    if img_resize_on.get() == 0:
-        frame_resize.grid_remove()
-    else:
-        frame_resize.grid()
-
-    if img_text_on.get() == 0:
-        frame_text.grid_remove()
-    else:
-        frame_text.grid()
-
-    if img_logo_on.get() == 0:
-        frame_logo.grid_remove()
-    else:
-        frame_logo.grid()
-
-    if img_custom_on.get() == 1:
-        frame_custom.grid()
-    else:
-        frame_custom.grid_remove()
-
-    if img_histograms_on.get() == 0:
-        frame_histogram_orig.grid_remove()
-        frame_histogram_new.grid_remove()
-    else:
-        frame_histogram_orig.grid()
-        frame_histogram_new.grid()
 
     style.theme_use(co_theme_selector.get())
     if preview_on:
@@ -1683,6 +1695,11 @@ co_theme_selector.pack(padx=5, pady=1, anchor=W, side='left')
 # First column
 #####################################################
 frame_first_col = ttk.Frame(main)
+
+###########################
+# Label if no any tool selected
+l_info_when_no_tool = ttk.Label(frame_first_col, 
+                        text=_("Open file for processing\nSelect tools for conversion\nExecute conversion or perform all conversion in one run"))
 
 ###########################
 # Resize
@@ -2269,7 +2286,7 @@ b_custom_clear.pack(side='right', padx=5, pady=5)
 ############################
 # Pack frames
 ############################
-
+l_info_when_no_tool.grid(row=1, column=1, padx=5, pady=5)
 frame_crop.grid(row=2, column=1,             sticky=(N, W, S), padx=5, pady=1)
 frame_mirror_vignette.grid(row=3, column=1,  sticky=(N, W, S), padx=0, pady=1)
 frame_bw_contrast.grid(row=4, column=1,      sticky=(N, W, S), padx=0, pady=1)

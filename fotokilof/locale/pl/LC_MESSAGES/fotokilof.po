@@ -212,6 +212,16 @@ msgstr "Histogramy"
 msgid "Theme:"
 msgstr "Wygląd:"
 
+#: fotokilof.py:1687
+msgid ""
+"Open file for processing\n"
+"Select tools for conversion\n"
+"Execute conversion or perform all conversion in one run"
+msgstr ""
+"Otwórz plik do przetwarzania\n"
+"Wybierz narzędzia przetwarzania\n"
+"Wykonaj konwersję lub uruchom wszystkie konwersje na raz"
+
 #: fotokilof.py:1620
 msgid "Scale/Resize"
 msgstr "Skalowanie"
