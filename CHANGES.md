@@ -2,6 +2,8 @@
 
 ## 2022
 
+4.2.3 canvas for preview instead label, info label, fixed preview issue, small code polishing
+
 4.2.2 fixed problem of display preview, cleaning after pylint
 
 4.2.1 better handling color selector, better look if two tools are in the same row, added missing tooltip

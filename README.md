@@ -56,11 +56,14 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - equalize by channel,
  - contrast between -5 and +5,
  - customized contrast stretching,
- - vignette can be sharp or blured, corners can be filled by selected color,
+ - vignette:
+   - can be sharp or blured, 
+   - corners can be filled by selected color,
+   - offset in both direction
  - logo position by gravity, size and offset,
  - histograms of original and result pictures (temporary disabled),
  - fast file navigation: First, Prev, Next, Last or keys: Home, PgUp, PgDn, End,
- - is possible to use other ImageMagick commands, eg. *-gaussian-blur* etc. In command editor - doesn't work under Windows11
+ - command editor: possible to use ImageMagick commands for convert: eg. *-gaussian-blur 10x10* or *-monochrome*, etc.
 
 ## Processing
 
@@ -81,7 +84,7 @@ Processing order for all selected conversion:
 
 Processed is always on clone of picture in memory. Originals are not touched.
 
-## User manual
+## User manual, a bit outdated
 
 - PDF: [English](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.pdf), [Polish](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/pl/fotokilof.pdf).
 - MD: [English](doc/en/fotokilof.md), [Polish](doc/pl/fotokilof.md).
@@ -101,16 +104,33 @@ Available: Bulgarian, English, German, Indonesian, Polish and Turkish.
 
 ### Install
 
+#### Linux
+
+Install requirements:
+```bash
+apt-get install python3-tk idle-python3 imagemagick libmagickwand
+```
+
 Install as PyPi package by PIP:
 ```bash
 python3 -m pip install fotokilof
 ```
+
+#### Windows
+Download and install requirements:
+- [Python3](https://www.python.org/) - add path into `%PATH%` environment variable,
+- [ImageMagick](https://imagemagick.org/script/download.php#windows) - add path into `%PATH%` environment variable, enable install libraries!
 
 for Windows:
 ```bash
 python -m pip install pywin32 fotokilof
 ```
 
+#### MacOS
+Install requirements:
+```bash
+brew install imagemagick python3
+```
 Newer MacOS, add to .zshrc eg.:
 ```bash
 export MAGICK_HOME=/opt/homebrew/Cellar/imagemagick/7.1.0-55
@@ -127,6 +147,10 @@ python3 -m pip install --upgrade fotokilof
 
 ```bash
 fotokilof
+```
+or
+```bash
+python -m fotokilof
 ```
 
 ## Thanks

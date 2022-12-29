@@ -51,7 +51,7 @@ def magick(cmd, file_in, file_out, command):
                 prefix_cmd = "magick.exe "
             else:
                 prefix_cmd = ""
-            command_exec = prefix_cmd + command + " " + file_in  + " " + cmd + file_out
+            command_exec = prefix_cmd + command + " " + file_in  + " " + cmd + " " + file_out
             log.write_log("Execute: " + command_exec, "M")
             try:
                 os.system(command_exec)

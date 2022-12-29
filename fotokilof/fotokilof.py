@@ -326,8 +326,7 @@ def convert_custom_button():
                                  work_dir.get(),
                                  co_apply_type.get())
     cmd = t_custom.get('1.0', 'end-1c')
-    cmd_magick = "magick convert"
-    result = magick.magick(cmd, file_in_path.get(), out_file, cmd_magick)
+    result = magick.magick(cmd, file_in_path.get(), out_file, "convert")
     if result == "OK":
         preview_new(out_file)
     progress_files.set(_("done"))
@@ -543,7 +542,7 @@ def convert_logo_button():
         convert_wand.pip(clone, file_logo_path.get(), coordinates, clone.width, clone.height )
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
-        progress_files.set(_("done"))
+    progress_files.set(_("done"))
 
 
 def open_file_logo():
