@@ -136,10 +136,12 @@ def preview_new_clear():
 
 def preview_new_refresh(event):
     """ callback after selection of size preview"""
-
     # to define file_out
-    if os.path.isfile(path_to_file_out(resized.get())):
-        preview_new(path_to_file_out(resized.get()))
+    if path_to_file_out(resized.get()) is not None:
+        if os.path.isfile(path_to_file_out(resized.get())):
+            preview_new(path_to_file_out(resized.get()))
+        else:
+            preview_new_clear()
     else:
         preview_new_clear()
 
@@ -205,6 +207,7 @@ def extension_from_file():
         co_apply_type.current(file_extension.index(extension))
     except:
         log.write_log("extension_from_file: wrong extension", "W")
+        co_apply_type.current(file_extension.index(".jpg"))
 
 
 def path_to_file_out(resize):
@@ -443,32 +446,32 @@ def crop_read():
             image_size_xy = convert_wand.get_image_size(file_in_path.get())
             width = image_size_xy[0]
             height = image_size_xy[1]
-
-            e1_crop_1.delete(0, "end")
-            e1_crop_1.insert(0, "0")
-            e2_crop_1.delete(0, "end")
-            e2_crop_1.insert(0, "0")
-            e3_crop_1.delete(0, "end")
-            e3_crop_1.insert(0, width)
-            e4_crop_1.delete(0, "end")
-            e4_crop_1.insert(0, height)
-            e1_crop_2.delete(0, "end")
-            e1_crop_2.insert(0, "0")
-            e2_crop_2.delete(0, "end")
-            e2_crop_2.insert(0, "0")
-            e3_crop_2.delete(0, "end")
-            e3_crop_2.insert(0, width)
-            e4_crop_2.delete(0, "end")
-            e4_crop_2.insert(0, height)
-            e1_crop_3.delete(0, "end")
-            e1_crop_3.insert(0, "0")
-            e2_crop_3.delete(0, "end")
-            e2_crop_3.insert(0, "0")
-            e3_crop_3.delete(0, "end")
-            e3_crop_3.insert(0, width)
-            e4_crop_3.delete(0, "end")
-            e4_crop_3.insert(0, height)
-            img_crop_gravity.set("C")
+            if (width != 0) and (height != 0):
+                e1_crop_1.delete(0, "end")
+                e1_crop_1.insert(0, "0")
+                e2_crop_1.delete(0, "end")
+                e2_crop_1.insert(0, "0")
+                e3_crop_1.delete(0, "end")
+                e3_crop_1.insert(0, width)
+                e4_crop_1.delete(0, "end")
+                e4_crop_1.insert(0, height)
+                e1_crop_2.delete(0, "end")
+                e1_crop_2.insert(0, "0")
+                e2_crop_2.delete(0, "end")
+                e2_crop_2.insert(0, "0")
+                e3_crop_2.delete(0, "end")
+                e3_crop_2.insert(0, width)
+                e4_crop_2.delete(0, "end")
+                e4_crop_2.insert(0, height)
+                e1_crop_3.delete(0, "end")
+                e1_crop_3.insert(0, "0")
+                e2_crop_3.delete(0, "end")
+                e2_crop_3.insert(0, "0")
+                e3_crop_3.delete(0, "end")
+                e3_crop_3.insert(0, width)
+                e4_crop_3.delete(0, "end")
+                e4_crop_3.insert(0, height)
+                img_crop_gravity.set("C")
 
 
 def convert_crop_entries():
@@ -573,9 +576,31 @@ def open_file_logo():
         preview_logo_clear()
 
 
+def open_file_common(cwd, filename):
+    """ common function for: open, first, last, next, prev """
+
+    if filename is not None:
+        try:
+            file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
+            root.title(window_title + file_in_path.get())
+            image_size =  convert_wand.get_image_size(file_in_path.get())
+            if (image_size[0] != 0) and (image_size[1] != 0):
+                file_in_width.set(image_size[0])
+                file_in_height.set(image_size[1])
+                preview_orig()
+                extension_from_file()
+                preview_new_refresh("none")
+            else:
+                preview_orig_clear()
+        except:
+            log.write_log("Error in open_file_common", "E")
+
+
 def open_file():
     """ open image for processing """
-    directory = os.path.dirname(file_in_path.get())
+
+    filename = None
+    dir_name = os.path.dirname(file_in_path.get())
     if mswindows.windows() == 1:
         filetypes = ((_("All graphics files"), ".JPG .JPEG .PNG .TIF .TIFF"),
                      (_("JPG files"), ".JPG .JPEG"),
@@ -592,19 +617,10 @@ def open_file():
                      (_("SVG files"), ".SVG .svg"),
                      (_("ALL types"), "*"))
 
-    result = filedialog.askopenfilename(initialdir=directory,
+    filename = filedialog.askopenfilename(initialdir=dir_name,
                                         filetypes=filetypes,
                                         title=_("Select picture for processing"))
-    if result:
-        extension_from_file()
-        file_in_path.set(result)
-        root.title(window_title + file_in_path.get())
-        image_size =  convert_wand.get_image_size(file_in_path.get())
-        file_in_width.set(image_size[0])
-        file_in_height.set(image_size[1])
-        preview_orig()
-    else:
-        preview_orig_clear()
+    open_file_common(dir_name, filename)
 
 
 def open_file_last_key(event):
@@ -616,24 +632,13 @@ def open_file_last():
     """ Open last file """
     if file_in_path.get():
         if os.path.isfile(file_in_path.get()):
-            cwd = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(cwd)
+            dir_name = os.path.dirname(file_in_path.get())
+            file_list = common.list_of_images(dir_name)
             current_file = os.path.basename(file_in_path.get())
             filename = common.file_from_list_of_images(file_list,
                                                    current_file,
                                                    "last")
-            if filename is not None:
-                try:
-                    file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
-                    root.title(window_title + file_in_path.get())
-                    image_size =  convert_wand.get_image_size(file_in_path.get())
-                    file_in_width.set(image_size[0])
-                    file_in_height.set(image_size[1])
-                    preview_orig()
-                    extension_from_file()
-                    preview_new_refresh("none")
-                except:
-                    log.write_log("Error in open_file_last", "E")
+            open_file_common(dir_name, filename)
 
 
 def open_file_next_key(event):
@@ -645,27 +650,13 @@ def open_file_next():
     """ Open next file """
     if file_in_path.get():
         if os.path.isfile(file_in_path.get()):
-            cwd = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(cwd)
+            dir_name = os.path.dirname(file_in_path.get())
+            file_list = common.list_of_images(dir_name)
             current_file = os.path.basename(file_in_path.get())
             filename = common.file_from_list_of_images(file_list,
                                                    current_file,
                                                    "next")
-            if filename is not None:
-                try:
-                    file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
-                    root.title(window_title + file_in_path.get())
-                    image_size =  convert_wand.get_image_size(file_in_path.get())
-                    file_in_width.set(image_size[0])
-                    file_in_height.set(image_size[1])
-                    preview_orig()
-                    extension_from_file()
-                except:
-                    log.write_log("Error in open_file_next", "E")
-                try:
-                    preview_new_refresh("none")
-                except:
-                    log.write_log("Error in open_file_next refresh", "E")
+            open_file_common(dir_name, filename)
 
 
 def open_file_first_key(event):
@@ -677,24 +668,13 @@ def open_file_first():
     """ Open first file """
     if file_in_path.get():
         if os.path.isfile(file_in_path.get()):
-            cwd = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(cwd)
+            dir_name = os.path.dirname(file_in_path.get())
+            file_list = common.list_of_images(dir_name)
             current_file = os.path.basename(file_in_path.get())
             filename = common.file_from_list_of_images(file_list,
                                                    current_file,
                                                    "first")
-            if filename is not None:
-                try:
-                    file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
-                    root.title(window_title + file_in_path.get())
-                    image_size =  convert_wand.get_image_size(file_in_path.get())
-                    file_in_width.set(image_size[0])
-                    file_in_height.set(image_size[1])
-                    preview_orig()
-                    extension_from_file()
-                    preview_new_refresh("none")
-                except:
-                    log.write_log("Error in open_file_first", "E")
+            open_file_common(dir_name, filename)
 
 
 def open_file_prev_key(event):
@@ -706,24 +686,13 @@ def open_file_prev():
     """ Open previous file """
     if file_in_path.get():
         if os.path.isfile(file_in_path.get()):
-            cwd = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(cwd)
+            dir_name = os.path.dirname(file_in_path.get())
+            file_list = common.list_of_images(dir_name)
             current_file = os.path.basename(file_in_path.get())
             filename = common.file_from_list_of_images(file_list,
                                                    current_file,
                                                    "previous")
-            if filename is not None:
-                try:
-                    file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
-                    root.title(window_title + file_in_path.get())
-                    image_size =  convert_wand.get_image_size(file_in_path.get())
-                    file_in_width.set(image_size[0])
-                    file_in_height.set(image_size[1])
-                    preview_orig()
-                    extension_from_file()
-                    preview_new_refresh("none")
-                except:
-                    log.write_log("Error in open_file_first", "E")
+            open_file_common(dir_name, filename)
 
 
 def open_screenshot():
@@ -1704,7 +1673,7 @@ frame_first_col = ttk.Frame(main)
 
 ###########################
 # Label if no any tool selected
-l_info_when_no_tool = ttk.Label(frame_first_col, 
+l_info_when_no_tool = ttk.Label(frame_first_col,
                         text=_("Open file for processing\nSelect tools for conversion\nExecute conversion or perform all conversion in one run"))
 
 ###########################

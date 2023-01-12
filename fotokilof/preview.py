@@ -87,13 +87,14 @@ def preview_wand(file_in, size, coord=""):
             'height': '0',
             'preview_width': '0',
             'preview_height': '0'}
+
     if file_in is not None:
         if os.path.isfile(file_in):
             filesize = common.humansize(os.path.getsize(file_in))
 
             clone = convert_wand.make_clone(file_in)
-            width = clone.width
-            height = clone.height
+            width = str(clone.width)
+            height = str(clone.height)
 
             convert_wand.resize(clone, str(size) + "x" + str(size))
 
@@ -111,17 +112,16 @@ def preview_wand(file_in, size, coord=""):
                     draw.line(right_top, right_bottom)
                     draw(clone)
             clone.convert('ppm')
-            preview_width = clone.width
-            preview_height = clone.height
+            preview_width = str(clone.width)
+            preview_height = str(clone.height)
             file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
-            convert_wand.save_close_clone(clone, file_preview, 0)
+            convert_wand.save_close_clone(clone, file_preview)
             result = {'filename': common.spacja(file_preview),
                           'size': filesize,
-                          'width': str(width),
-                          'height': str(height),
-                          'preview_width': str(preview_width),
-                          'preview_height': str(preview_height)}
-
+                          'width': width,
+                          'height': height,
+                          'preview_width': preview_width,
+                          'preview_height': preview_height}
 
     return result
 

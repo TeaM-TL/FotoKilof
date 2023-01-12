@@ -78,9 +78,14 @@ def get_image_size(file_in):
 
     if file_in is not None:
         if os.path.isfile(file_in):
-            with Image(filename=file_in) as image:
-                width = image.width
-                height = image.height
+            try:
+                with Image(filename=file_in) as image:
+                    width = image.width
+                    height = image.height
+            except:
+                log.write_log(" Error read file " + file_in, "E")
+                width = 0
+                height = 0
     return (width, height)
 
 
@@ -110,7 +115,7 @@ def make_clone(file_in, color = None):
     return clone
 
 
-def save_close_clone(clone, file_out, exif):
+def save_close_clone(clone, file_out, exif = 0):
     """ save and close clone after processing """
     if not exif:
         clone.strip()
