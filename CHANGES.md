@@ -1,5 +1,9 @@
 # Changelog
 
+## 2023
+
+4.2.4 fix gui, better handle open file
+
 ## 2022
 
 4.2.3 canvas for preview instead label, info label, fixed preview issue, small code polishing
