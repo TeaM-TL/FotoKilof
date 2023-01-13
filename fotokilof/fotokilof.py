@@ -1247,6 +1247,7 @@ def tools_set(preview_on):
         frame_resize.grid_remove()
     else:
         frame_resize.grid()
+        l_info_when_no_tool.grid_remove()
 
     if img_text_on.get() == 0:
         frame_text.grid_remove()
@@ -1260,10 +1261,11 @@ def tools_set(preview_on):
         frame_logo.grid()
         l_info_when_no_tool.grid_remove()
 
-    if img_custom_on.get() == 1:
-        frame_custom.grid()
-    else:
+    if img_custom_on.get() == 0:
         frame_custom.grid_remove()
+    else:
+        frame_custom.grid()
+        l_info_when_no_tool.grid_remove()
 
     if img_histograms_on.get() == 0:
         frame_histogram_orig.grid_remove()
