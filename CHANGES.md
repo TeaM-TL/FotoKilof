@@ -2,7 +2,7 @@
 
 ## 2023
 
-4.2.4 fix gui, better handle open file
+4.2.4 fix gui, better handle open file, fix crop
 
 ## 2022
 
