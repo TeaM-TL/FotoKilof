@@ -121,7 +121,8 @@ def preview_wand(file_in, size, coord=""):
                           'width': width,
                           'height': height,
                           'preview_width': preview_width,
-                          'preview_height': preview_height}
+                          'preview_height': preview_height
+                    }
 
     return result
 

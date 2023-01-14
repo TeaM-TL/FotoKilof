@@ -1311,8 +1311,6 @@ def crop_tool_hide_show():
         e4_crop_3.grid()
         frame_crop_gravity.grid()
 
-    preview_orig()
-
 def text_tool_hide_show():
     """hide not necessary things, or show if the are needed"""
     if img_text_inout.get():
