@@ -42,10 +42,10 @@ except:
 
 try:
     from wand.version import MAGICK_VERSION, VERSION
-    imagemagick_wand = "OK"
+    IMAGEMAGICK_WAND = "OK"
 except:
     print(" ImageMagick or Wand-py not found")
-    imagemagick_wand = None
+    IMAGEMAGICK_WAND = None
 
 # standard modules
 import datetime
@@ -147,8 +147,7 @@ def preview_new_refresh(event):
 
 
 def preview_new(file_out):
-    """ generowanie podglądu wynikowego """
-
+    """ generate result preview """
     if co_preview_selector_new.get() != "none":
         preview_picture = preview.preview_wand(file_out,
                                 int(co_preview_selector_new.get()))
@@ -184,7 +183,6 @@ def preview_new(file_out):
 def preview_orig_button():
     """ original preview """
     # global file_in_path
-
     try:
         convert_wand.display_image(file_in_path.get())
     except:
@@ -193,7 +191,6 @@ def preview_orig_button():
 
 def preview_new_button():
     """ preview new picture """
-
     # to define file_out
     if os.path.isfile(path_to_file_out(resized.get())):
         convert_wand.display_image(path_to_file_out(resized.get()))
@@ -212,7 +209,6 @@ def extension_from_file():
 
 def path_to_file_out(resize):
     """ create filename of out file """
-
     if resize:
         subdir = common.resize_subdir(img_resize.get(),
                                             common.empty(e1_resize_x.get()),
@@ -284,9 +280,9 @@ def apply_all_button():
                 # standard subdir for result picture
                 subdir = work_dir.get()
             if img_text_on.get():
-                convert_text_data = (clone, img_text_inout.get(), e_text_angle.get(), img_text_rotate.get(),
-                            img_text_color.get(), img_text_font.get(), e_text_size.get(),
-                            img_text_gravity_onoff.get(), img_text_gravity.get(),
+                convert_text_data = (clone, img_text_inout.get(), e_text_angle.get(),
+                            img_text_rotate.get(), img_text_color.get(), img_text_font.get(),
+                            e_text_size.get(), img_text_gravity_onoff.get(), img_text_gravity.get(),
                             img_text_box.get(), img_text_box_color.get(),
                             e_text_x.get(), e_text_y.get(), e_text.get())
                 convert_wand.text(convert_text_data)
@@ -579,7 +575,6 @@ def open_file_logo():
 
 def open_file_common(cwd, filename):
     """ common function for: open, first, last, next, prev """
-
     if filename is not None:
         try:
             file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
@@ -599,7 +594,6 @@ def open_file_common(cwd, filename):
 
 def open_file():
     """ open image for processing """
-
     filename = None
     dir_name = os.path.dirname(file_in_path.get())
     if mswindows.windows() == 1:
@@ -996,22 +990,16 @@ def help_info(event):
     messagebox.showinfo(title=_("License"), message=message)
 
 
-def close_window():
-    """ close program """
+def close_program():
+    """ close program window """
+    log.write_log("closed", "M")
     root.quit()
     root.destroy()
     sys.exit()
 
 
-def win_deleted():
-    """ close program window """
-    log.write_log("closed", "M")
-    close_window()
-
-
-def mouse_crop_NW(event):
+def mouse_crop_nw(event):
     """ Left-Upper corner """
-
     x_preview = event.x
     y_preview = event.y
 
@@ -1041,9 +1029,8 @@ def mouse_crop_NW(event):
         e_text_y.insert(0, height)
 
 
-def mouse_crop_SE(event):
+def mouse_crop_se(event):
     """ Right-Lower corner """
-
     if img_crop_on.get() == 1:
         x_preview = event.x
         y_preview = event.y
@@ -1101,15 +1088,15 @@ def preview_orig():
                     x1 = coord[2]
                     y1 = coord[3]
                 if (xy_max['x_orig'] > 0) and (xy_max['y_orig'] > 0):
-                    ratio_X = xy_max['x_max'] / xy_max['x_orig']
-                    ratio_Y = xy_max['y_max'] / xy_max['y_orig']
+                    ratio_x = xy_max['x_max'] / xy_max['x_orig']
+                    ratio_y = xy_max['y_max'] / xy_max['y_orig']
                 else:
-                    ratio_X = 1
-                    ratio_Y = 1
-                x0 = int(x0 * ratio_X)
-                y0 = int(y0 * ratio_Y)
-                x1 = int(x1 * ratio_X)
-                y1 = int(y1 * ratio_Y)
+                    ratio_x = 1
+                    ratio_y = 1
+                x0 = int(x0 * ratio_x)
+                y0 = int(y0 * ratio_y)
+                x1 = int(x1 * ratio_x)
+                y1 = int(y1 * ratio_y)
 
                 crop_rectangle = (x0, y0, x1, y1)
             else:
@@ -1186,7 +1173,6 @@ def tools_set_off():
 
 def tools_set(preview_on):
     """ selection tools for showing """
-
     l_info_when_no_tool.grid()
 
     if img_crop_on.get() == 0:
@@ -1417,7 +1403,6 @@ style.configure("Rotate.TEntry", fieldbackground="#FFFFFF")
 
 ##########################
 # global variables
-
 FILE_INI = os.path.join(os.path.expanduser("~"), ".fotokilof.ini")
 PWD = os.getcwd()
 log_level = StringVar() # E(rror), W(arning), M(essage)
@@ -1493,7 +1478,6 @@ validationint = main.register(gui.only_integer)  # Entry validation integer valu
 ####################################################################
 # main_menu row
 ####################################################################
-
 ###########################
 # Picture selection
 ###########################
@@ -1570,7 +1554,6 @@ b_last_read.pack(padx=5, pady=1, anchor=W, side='left')
 ####################################################################
 # main_tools row
 ####################################################################
-
 frame_tools_selection = ttk.Frame(main)
 
 ############################
@@ -1641,7 +1624,6 @@ co_theme_selector = ttk.Combobox(frame_tools_set,
                                  width=9, values=theme_list)
 co_theme_selector.configure(state='readonly')
 
-
 cb_crop.pack(padx=5, pady=1, anchor=W, side='left')
 cb_mirror.pack(padx=5, pady=1, anchor=W, side='left')
 cb_bw.pack(padx=5, pady=1, anchor=W, side='left')
@@ -1662,7 +1644,6 @@ co_theme_selector.pack(padx=5, pady=1, anchor=W, side='left')
 ####################################################################
 # main row
 ####################################################################
-
 #####################################################
 # First column
 #####################################################
@@ -1989,6 +1970,7 @@ b_rotate_run.pack(side="left", padx=5, pady=5)
 
 ###########################
 # frames for two widgets
+###########################
 frame_mirror_vignette = ttk.Frame(frame_first_col)
 frame_bw_contrast = ttk.Frame(frame_first_col)
 frame_border_normalize = ttk.Frame(frame_first_col)
@@ -2360,13 +2342,13 @@ co_theme_selector.bind("<<ComboboxSelected>>", tools_set_event)
 co_preview_selector_orig.bind("<<ComboboxSelected>>", preview_orig_refresh)
 co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
-c_preview_orig_pi.bind("<Button-1>", mouse_crop_NW)
+c_preview_orig_pi.bind("<Button-1>", mouse_crop_nw)
 if mswindows.macos():
-    c_preview_orig_pi.bind("<Button-2>", mouse_crop_SE)
+    c_preview_orig_pi.bind("<Button-2>", mouse_crop_se)
 else:
-    c_preview_orig_pi.bind("<Button-3>", mouse_crop_SE)
+    c_preview_orig_pi.bind("<Button-3>", mouse_crop_se)
 root.bind("<F1>", help_info)
-root.protocol("WM_DELETE_WINDOW", win_deleted)
+root.protocol("WM_DELETE_WINDOW", close_program)
 
 root.bind("<Prior>", open_file_prev_key)
 root.bind("<Next>", open_file_next_key)
@@ -2503,16 +2485,16 @@ Hovertip(b_logo_run, _("Execute only add logo on current picture"))
 ##########################################
 # Run functions
 #
-if imagemagick_wand is not None:
-    imagemagick_wand_version = 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
+if IMAGEMAGICK_WAND is not None:
+    IMAGEMAGICK_WAND_VERSION = 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
 else:
-    imagemagick_wand_version = "Missing ImageMagick"
+    IMAGEMAGICK_WAND_VERSION = "Missing ImageMagick"
 Python_version = 'Py:' + platform.python_version()
 window_title = ( version.__author__ + " : "
                 + version.__appname__ + ": " + version.__version__ + " : "
-                + imagemagick_wand_version + " : " + Python_version + " | " )
+                + IMAGEMAGICK_WAND_VERSION + " : " + Python_version + " | " )
 root.title(window_title)
-if imagemagick_wand is not None:
+if IMAGEMAGICK_WAND is not None:
     img_text_font_dict = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading settings from config file
     tools_set(0)
