@@ -1046,6 +1046,7 @@ def mouse_crop_se(event):
 
 def preview_orig_refresh(event):
     """ callback after selection of size preview"""
+    print("1049 preview_orig_refresh")
     preview_orig()
 
 
@@ -1310,6 +1311,8 @@ def crop_tool_hide_show():
         e3_crop_3.grid()
         e4_crop_3.grid()
         frame_crop_gravity.grid()
+    preview_orig()
+
 
 def text_tool_hide_show():
     """hide not necessary things, or show if the are needed"""

@@ -123,7 +123,6 @@ def preview_wand(file_in, size, coord=""):
                           'preview_width': preview_width,
                           'preview_height': preview_height
                     }
-
     return result
 
 # EOF

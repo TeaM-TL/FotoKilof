@@ -171,9 +171,9 @@ def preview_crop_gravity(coordinates, x_max, y_max):
         y1 = y_max/2 + height/2
     elif gravitation == "C":
         x0 = x_max/2 - width/2 + offset_x
-        y0 = y_max/2 - height/2 + offset_y
+        y0 = y_max/2 - height/2
         x1 = x_max/2 + width/2 + offset_x
-        y1 = y_max/2 + height/2 + offset_y
+        y1 = y_max/2 + height/2
     elif gravitation == "E":
         x0 = x_max - width - offset_x
         y0 = y_max/2 - height/2
