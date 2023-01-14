@@ -97,6 +97,7 @@ def preview_wand(file_in, size, coord=""):
             height = str(clone.height)
 
             convert_wand.resize(clone, str(size) + "x" + str(size))
+            clone.convert('ppm')
 
             # write crop if coordinates are given
             if len(coord) == 4 :
@@ -111,7 +112,6 @@ def preview_wand(file_in, size, coord=""):
                     draw.line(left_bottom, right_bottom)
                     draw.line(right_top, right_bottom)
                     draw(clone)
-            clone.convert('ppm')
             preview_width = str(clone.width)
             preview_height = str(clone.height)
             file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")

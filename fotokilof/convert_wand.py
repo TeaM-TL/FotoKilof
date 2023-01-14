@@ -70,23 +70,19 @@ def get_image_size(file_in):
     """
     identify width and height of picture
     input: file name
-    output: width and height
+    output: size (width, height)
     """
 
-    width = 1
-    height = 1
+    size = (0, 0)
 
     if file_in is not None:
         if os.path.isfile(file_in):
             try:
                 with Image(filename=file_in) as image:
-                    width = image.width
-                    height = image.height
+                    size = image.size
             except:
                 log.write_log(" Error read file " + file_in, "E")
-                width = 0
-                height = 0
-    return (width, height)
+    return size
 
 
 def display_image(file_in):
@@ -193,12 +189,22 @@ def border(clone, color, x, y):
     clone.border(color, common.empty(x), common.empty(y))
 
 
-def text(clone, in_out, own, angle,
-            text_color, font, text_size,
-            gravity_onoff, gravity,
-            box, box_color,
-            text_x, text_y, text_string):
+def text(convert_data):
     """ add text into picture """
+    clone = convert_data[0]
+    in_out = convert_data[1]
+    own = convert_data[2]
+    angle = convert_data[3]
+    text_color = convert_data[4]
+    font = convert_data[5]
+    text_size = convert_data[6]
+    gravity_onoff = convert_data[7]
+    gravity = convert_data[8]
+    box = convert_data[9]
+    box_color = convert_data[10]
+    text_x = convert_data[11]
+    text_y = convert_data[12]
+    text_string = convert_data[13]
     if len(text_string) > 0:
         draw_gravity = gravitation(gravity)
         if in_out == 0:

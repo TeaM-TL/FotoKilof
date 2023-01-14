@@ -284,12 +284,12 @@ def apply_all_button():
                 # standard subdir for result picture
                 subdir = work_dir.get()
             if img_text_on.get():
-                convert_wand.text(clone, img_text_inout.get(),
-                                    e_text_angle.get(), img_text_rotate.get(),
-                                    img_text_color.get(), img_text_font.get(), e_text_size.get(),
-                                    img_text_gravity_onoff.get(), img_text_gravity.get(),
-                                    img_text_box.get(), img_text_box_color.get(),
-                                    e_text_x.get(), e_text_y.get(), e_text.get())
+                convert_text_data = (clone, img_text_inout.get(), e_text_angle.get(), img_text_rotate.get(),
+                            img_text_color.get(), img_text_font.get(), e_text_size.get(),
+                            img_text_gravity_onoff.get(), img_text_gravity.get(),
+                            img_text_box.get(), img_text_box_color.get(),
+                            e_text_x.get(), e_text_y.get(), e_text.get())
+                convert_wand.text(convert_text_data)
             if img_logo_on.get():
                 coordinates = (common.empty(e_logo_dx.get()), common.empty(e_logo_dy.get()),
                                 common.empty(e_logo_width.get()), common.empty(e_logo_height.get()),
@@ -511,11 +511,12 @@ def convert_text_button():
     root.update_idletasks()
     clone = convert_wand.make_clone(file_in_path.get())
     if clone is not None:
-        convert_wand.text(clone, img_text_inout.get(), e_text_angle.get(), img_text_rotate.get(),
+        convert_text_data = (clone, img_text_inout.get(), e_text_angle.get(), img_text_rotate.get(),
                             img_text_color.get(), img_text_font.get(), e_text_size.get(),
                             img_text_gravity_onoff.get(), img_text_gravity.get(),
                             img_text_box.get(), img_text_box_color.get(),
                             e_text_x.get(), e_text_y.get(), e_text.get())
+        convert_wand.text(convert_text_data)
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
@@ -707,7 +708,7 @@ def open_screenshot():
             log.write_log("Error in open_screenshot, make today directory", "E")
 
     filename = now.strftime("%F_%H-%M-%S_%f") + ".png"
-    out_file = os.path.join(today_dir, filename)
+    out_file = os.path.normpath(os.path.join(today_dir, filename))
     do_it = 1
     if mswindows.windows() or mswindows.macos():
         screenshot = ImageGrab.grabclipboard()
@@ -723,14 +724,7 @@ def open_screenshot():
             log.write_log('open_screenshot(), error in make screeshot ', 'E')
             do_it = 1
     if do_it:
-        file_in_path.set(out_file)
-        root.title(window_title + out_file)
-        image_size =  convert_wand.get_image_size(file_in_path.get())
-        file_in_width.set(image_size[0])
-        file_in_height.set(image_size[1])
-        preview_orig()
-        extension_from_file()
-        preview_new_refresh("none")
+        open_file_common(today_dir, filename)
 
 
 def color_choose_rotate():
@@ -980,8 +974,9 @@ def ini_save_wraper():
                 'width': e_logo_width.get(), 'height': e_logo_height.get(),
                 'dx': e_logo_dx.get(), 'dy': e_logo_dy.get()}
 
-    ini_save.save(FILE_INI, config, resize, text, rotate, crop, border,
+    ini_save_data = (FILE_INI, config, resize, text, rotate, crop, border,
                     color, normalize, contrast, mirror, vignette, logo)
+    ini_save.save(ini_save_data)
 
 
 def help_info(event):

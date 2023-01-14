@@ -3,7 +3,7 @@
 # pylint: disable=too-many-branches
 
 """
-Copyright (c) 2022 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2022-2023 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,8 +45,22 @@ import common
 import log
 
 
-def save(file_ini, main, resize, text, rotate, crop, border, color, normalize, contrast, mirror, vignette, logo):
+def save(ini_data):
     """ save values into INI file """
+    # extract data
+    file_ini = ini_data[0]
+    main = ini_data[1]
+    resize = ini_data[2]
+    text = ini_data[3]
+    rotate = ini_data[4]
+    crop = ini_data[5]
+    border = ini_data[6]
+    color = ini_data[7]
+    normalize = ini_data[8]
+    contrast = ini_data[9]
+    mirror = ini_data[10]
+    vignette = ini_data[11]
+    logo = ini_data[12]
     # content preparing
     config = configparser.ConfigParser()
     # main
