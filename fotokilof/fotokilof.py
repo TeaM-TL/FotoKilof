@@ -2519,11 +2519,7 @@ if imagemagick_wand is not None:
     text_tool_hide_show()
     l_border_color.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
-        root.title(window_title + file_in_path.get())
-        image_dimension =  convert_wand.get_image_size(file_in_path.get())
-        file_in_width.set(image_dimension[0])
-        file_in_height.set(image_dimension[1])
-        crop_tool_hide_show()
+        open_file_common("", file_in_path.get())
     if img_logo_on.get() == 1:
         if os.path.isfile(file_logo_path.get()):
             # Load preview logo
