@@ -114,9 +114,6 @@ def convert_custom_clear():
     """ clear custom widget """
     t_custom.delete(1.0, END)
 
-################
-# Preview
-
 
 def preview_orig_clear():
     """ clear every preview if doesn't choose file """
@@ -440,9 +437,9 @@ def crop_read():
     if file_in_path.get() is not None:
         if os.path.isfile(file_in_path.get()):
             image_size_xy = convert_wand.get_image_size(file_in_path.get())
-            width = image_size_xy[0]
-            height = image_size_xy[1]
-            if (width != 0) and (height != 0):
+            if image_size_xy != (0, 0):
+                width = image_size_xy[0]
+                height = image_size_xy[1]
                 e1_crop_1.delete(0, "end")
                 e1_crop_1.insert(0, "0")
                 e2_crop_1.delete(0, "end")
@@ -580,7 +577,7 @@ def open_file_common(cwd, filename):
             file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
             root.title(window_title + file_in_path.get())
             image_size =  convert_wand.get_image_size(file_in_path.get())
-            if (image_size[0] != 0) and (image_size[1] != 0):
+            if image_size != (0, 0):
                 file_in_width.set(image_size[0])
                 file_in_height.set(image_size[1])
                 preview_orig()

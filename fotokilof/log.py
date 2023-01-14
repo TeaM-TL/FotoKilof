@@ -2,7 +2,7 @@
 # pylint: disable=bare-except
 
 """
-Copyright (c) 2019-2021 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2023 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,7 @@ def write_log(message, level="M", mode="a", initial="0"):
     write message into log file with datestamp
     level: E(rror), W(arning), M(essage)
     mode: a(ppend), w(rite) into log file
-    self: to print initial entry into log
+    initial: to print initial entry into log
     """
 
     file_ini = os.path.join(os.path.expanduser("~"), ".fotokilof.ini")
