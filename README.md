@@ -108,7 +108,7 @@ Available: Bulgarian, English, German, Indonesian, Polish and Turkish.
 
 Install requirements:
 ```bash
-apt-get install python3-tk idle-python3 imagemagick libmagickwand
+apt-get install python3-pip python3-tk python3-wand idle imagemagick
 ```
 
 Install as PyPi package by PIP:
@@ -121,7 +121,6 @@ Download and install requirements:
 - [Python3](https://www.python.org/) - add path into `%PATH%` environment variable,
 - [ImageMagick](https://imagemagick.org/script/download.php#windows) - add path into `%PATH%` environment variable, enable install libraries!
 
-for Windows:
 ```bash
 python -m pip install pywin32 fotokilof
 ```
