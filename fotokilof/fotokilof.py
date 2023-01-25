@@ -32,8 +32,8 @@ nice GUI for ImageMagick command common used (by me)
 from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow, Canvas
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog, messagebox
-from tkinter import TclError, StringVar, IntVar
-from tkinter import N, S, W, E, END, DISABLED, NORMAL
+from tkinter import StringVar, IntVar, TclError, TkVersion
+from tkinter import N, S, W, E, X, BOTH, LEFT, RIGHT, TOP, BOTTOM, END, DISABLED, NORMAL, HORIZONTAL
 
 try:
     from tkcolorpicker import askcolor
@@ -42,9 +42,11 @@ except:
 
 try:
     from wand.version import MAGICK_VERSION, VERSION
+    IMAGEMAGICK_WAND_VERSION = "IM: " + MAGICK_VERSION.split(' ')[1] + " : Wand: " + VERSION
     IMAGEMAGICK_WAND = "OK"
 except:
     print(" ImageMagick or Wand-py not found")
+    IMAGEMAGICK_WAND_VERSION = "Missing ImageMagick"
     IMAGEMAGICK_WAND = None
 
 # standard modules
@@ -296,10 +298,8 @@ def apply_all_button():
             preview_new(file_out)
             # progressbar
             i = i + 1
-            progress_files.set(str(i) + " " + _("of") + " " \
-                            + str(file_list_len) + " : " \
-                            + os.path.basename(file_in))
-
+            progress_files.set(str(i) + " " + _("of") + " " + str(file_list_len) )
+            progressbar_var.set(i / file_list_len * 100)
             progress_var.set(i)
             root.update_idletasks()
 
@@ -308,6 +308,7 @@ def apply_all_button():
 
         progress_var.set(0)
         progress_files.set(_("done"))
+        progressbar_var.set(0)
         root.update_idletasks()
         #work_sub_dir.set("")  # reset subdir name for next processing
     else:
@@ -973,17 +974,16 @@ def ini_save_wraper():
 def help_info(event):
     """ okno info """
     # global PWD
+    license_file = os.path.join(os.path.dirname(PWD), "LICENSE")
     try:
-        license_file = os.path.join(PWD, "LICENSE")
-        with open(license_file, "r", encoding="utf8") as licensef:
+        with open(license_file, "r", encoding="utf8") as license_fh:
             message = ""
-            for i in licensef:
-                message = message + i
+            for line in license_fh:
+                message = message + line
     except:
-        log.write_log("help_info: error during loading license file", "W")
+        log.write_log("help_info: error during loading license file: " + license_file, "W")
         message = ("Copyright " + version.__copyright__ + " "
                     + version.__author__ + " under MIT license")
-
     messagebox.showinfo(title=_("License"), message=message)
 
 
@@ -1046,7 +1046,6 @@ def mouse_crop_se(event):
 
 def preview_orig_refresh(event):
     """ callback after selection of size preview"""
-    print("1049 preview_orig_refresh")
     preview_orig()
 
 
@@ -1129,6 +1128,7 @@ def preview_orig():
                 c_histogram_orig.create_image(0, 0, image=pi_histogram_orig, anchor='nw')
         else:
             preview_orig_clear()
+    progress_files.set(_("Ready"))
 
 
 def preview_logo():
@@ -1456,6 +1456,7 @@ img_exif_on = IntVar()
 img_vignette_on = IntVar()
 img_vignette_color = StringVar()
 progress_var = IntVar()  # progressbar
+progressbar_var = IntVar()
 progress_files = StringVar()
 file_extension = (".jpeg", ".jpg", ".png", ".tif")
 
@@ -1464,15 +1465,21 @@ file_extension = (".jpeg", ".jpg", ".png", ".tif")
 ######################################################################
 main_menu = ttk.Frame()
 main_tools = ttk.Frame()
-main = PanedWindow()
+main_paned = PanedWindow()
+main_progress = ttk.Frame()
 
-main_menu.pack(side='top', expand=0, fill='both')
-main_tools.pack(side='top', expand=0, fill='both')
-main.pack(side='bottom', expand=1, fill='both')
+main_menu.pack(side=TOP, expand=0, fill=BOTH)
+main_tools.pack(side=TOP, expand=0, fill=BOTH)
+main_progress.pack(side=BOTTOM, expand=0, fill=X, anchor=S)
+main_paned.pack(side=BOTTOM, expand=1, fill=BOTH)
 
-validation = main.register(gui.only_numbers)  # Entry validation
-validationint = main.register(gui.only_integer)  # Entry validation integer value
 
+validation = main_paned.register(gui.only_numbers)  # Entry validation
+validationint = main_paned.register(gui.only_integer)  # Entry validation integer value
+####################################################################
+progressbar = ttk.Progressbar(main_progress, orient=HORIZONTAL, mode='determinate',
+                                variable=progressbar_var, maximum=100)
+progressbar.pack(side=BOTTOM, padx=0, pady=0, fill=X, expand=0, anchor=S)
 ####################################################################
 # main_menu row
 ####################################################################
@@ -1484,7 +1491,7 @@ frame_file_select = ttk.Labelframe(main_menu, text=_("Image"),
 frame_file_select.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 
 b_file_select = ttk.Button(frame_file_select, text=_("File selection"),
-                           command=open_file, style="Brown.TButton")
+                           command=open_file, style="Blue.TButton")
 
 b_file_select_screenshot = ttk.Button(frame_file_select, text=_("Screenshot"),
                                  command=open_screenshot)
@@ -1525,16 +1532,16 @@ co_apply_type.configure(state='readonly')
 co_apply_type.current(file_extension.index(".jpg"))
 b_apply_run = ttk.Button(frame_apply, text=_("Execute all"),
                          command=apply_all_button,
-                         style="Brown.TButton")
+                         style="Blue.TButton")
 
-b_apply_run.grid(row=1, column=1, padx=5, pady=5, sticky=(W, E))
-rb_apply_dir.grid(row=1, column=2, pady=5, sticky=W)
-rb_apply_file.grid(row=1, column=3, padx=5, pady=5, sticky=W)
+b_apply_run.pack(side=LEFT, padx=5, pady=5, anchor=W)
+rb_apply_dir.pack(side=LEFT, pady=5, anchor=W)
+rb_apply_file.pack(side=LEFT, padx=5, pady=5, anchor=W)
 
-co_apply_type.grid(row=1, column=4, padx=5, pady=1, sticky=(W, E))
+co_apply_type.pack(side=LEFT, padx=5, pady=1, anchor=W)
 
-l_pb = ttk.Label(frame_apply, textvariable=progress_files, width=35)
-l_pb.grid(row=1, column=5, padx=5, pady=2, sticky=W)
+l_pb = ttk.Label(frame_apply, textvariable=progress_files, width=15)
+l_pb.pack(side=LEFT, padx=5, pady=2, anchor=W)
 
 ###########################
 # Buttons
@@ -1546,13 +1553,13 @@ frame_save.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
 b_last_save = ttk.Button(frame_save, text=_("Save"), command=ini_save_wraper)
 b_last_read = ttk.Button(frame_save, text=_("Load"), command=ini_read_wraper)
 
-b_last_save.pack(padx=5, pady=1, anchor=W, side='left')
-b_last_read.pack(padx=5, pady=1, anchor=W, side='left')
+b_last_save.pack(padx=5, pady=1, anchor=W, side=LEFT)
+b_last_read.pack(padx=5, pady=1, anchor=W, side=LEFT)
 
 ####################################################################
 # main_tools row
 ####################################################################
-frame_tools_selection = ttk.Frame(main)
+frame_tools_selection = ttk.Frame(main_paned)
 
 ############################
 # Tools selection
@@ -1622,22 +1629,22 @@ co_theme_selector = ttk.Combobox(frame_tools_set,
                                  width=9, values=theme_list)
 co_theme_selector.configure(state='readonly')
 
-cb_crop.pack(padx=5, pady=1, anchor=W, side='left')
-cb_mirror.pack(padx=5, pady=1, anchor=W, side='left')
-cb_bw.pack(padx=5, pady=1, anchor=W, side='left')
-cb_contrast.pack(padx=5, pady=1, anchor=W, side='left')
-cb_normalize.pack(padx=5, pady=1, anchor=W, side='left')
-cb_vignette.pack(padx=5, pady=1, anchor=W, side='left')
-cb_border.pack(padx=5, pady=1, anchor=W, side='left')
-cb_rotate.pack(padx=5, pady=1, anchor=W, side='left')
-cb_resize.pack(padx=5, pady=1, anchor=W, side='left')
-cb_text.pack(padx=5, pady=1, anchor=W, side='left')
-cb_logo.pack(padx=5, pady=1, anchor=W, side='left')
-cb_custom.pack(padx=5, pady=1, anchor=W, side='left')
-cb_exif.pack(padx=5, pady=1, anchor=W, side='left')
-#cb_histograms.pack(padx=5, pady=1, anchor=W, side='left')
-l_theme_selector.pack(padx=5, pady=1, anchor=W, side='left')
-co_theme_selector.pack(padx=5, pady=1, anchor=W, side='left')
+cb_crop.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_mirror.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_bw.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_contrast.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_normalize.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_vignette.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_border.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_rotate.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_resize.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_text.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_logo.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_custom.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_exif.pack(padx=5, pady=1, anchor=W, side=LEFT)
+#cb_histograms.pack(padx=5, pady=1, anchor=W, side=LEFT)
+l_theme_selector.pack(padx=5, pady=1, anchor=W, side=LEFT)
+co_theme_selector.pack(padx=5, pady=1, anchor=W, side=LEFT)
 
 ####################################################################
 # main row
@@ -1645,7 +1652,7 @@ co_theme_selector.pack(padx=5, pady=1, anchor=W, side='left')
 #####################################################
 # First column
 #####################################################
-frame_first_col = ttk.Frame(main)
+frame_first_col = ttk.Frame(main_paned)
 
 ###########################
 # Label if no any tool selected
@@ -1682,20 +1689,20 @@ b_resize_run = ttk.Button(frame_resize_row2, text=_("Execute"),
                           style="Brown.TButton",
                           command=convert_resize_button)
 
-rb_resize_3.pack(side='left', padx=5)
-rb_resize_4.pack(side='left', padx=5)
-rb_resize_5.pack(side='left', padx=5)
-rb_resize_1.pack(side='left', padx=5)
-l_resize_x.pack(side='left', padx=5)
-e1_resize_x.pack(side='left', padx=0)
-l_resize_y.pack(side='left', padx=5)
-e1_resize_y.pack(side='left', padx=0)
-rb_resize_2.pack(side='left', padx=5)
-e2_resize.pack(side='left', padx=0)
-b_resize_run.pack(side='left', padx=25)
+rb_resize_3.pack(side=LEFT, padx=5)
+rb_resize_4.pack(side=LEFT, padx=5)
+rb_resize_5.pack(side=LEFT, padx=5)
+rb_resize_1.pack(side=LEFT, padx=5)
+l_resize_x.pack(side=LEFT, padx=5)
+e1_resize_x.pack(side=LEFT, padx=0)
+l_resize_y.pack(side=LEFT, padx=5)
+e1_resize_y.pack(side=LEFT, padx=0)
+rb_resize_2.pack(side=LEFT, padx=5)
+e2_resize.pack(side=LEFT, padx=0)
+b_resize_run.pack(side=LEFT, padx=25)
 
-frame_resize_row1.pack(side='top', fill='x', expand=1)
-frame_resize_row2.pack(side='top', fill='x', expand=1)
+frame_resize_row1.pack(side=TOP, fill=X, expand=1)
+frame_resize_row2.pack(side=TOP, fill=X, expand=1)
 
 ############################
 # crop
@@ -1957,14 +1964,14 @@ b_rotate_run = ttk.Button(frame_rotate, text=_("Execute"),
                           style="Brown.TButton",
                           command=convert_rotate_button)
 
-rb_rotate_90.pack(side="left", padx=5, pady=5)
-rb_rotate_180.pack(side="left", padx=5, pady=5)
-rb_rotate_270.pack(side="left", padx=5, pady=5)
-rb_rotate_own.pack(side="left", padx=5, pady=5)
-e_rotate_own.pack(side="left", padx=5, pady=5)
-l_rotate_color.pack(side="left", pady=5)
-b_rotate_color.pack(side="left", padx=5, pady=5)
-b_rotate_run.pack(side="left", padx=5, pady=5)
+rb_rotate_90.pack(side=LEFT, padx=5, pady=5)
+rb_rotate_180.pack(side=LEFT, padx=5, pady=5)
+rb_rotate_270.pack(side=LEFT, padx=5, pady=5)
+rb_rotate_own.pack(side=LEFT, padx=5, pady=5)
+e_rotate_own.pack(side=LEFT, padx=5, pady=5)
+l_rotate_color.pack(side=LEFT, pady=5)
+b_rotate_color.pack(side=LEFT, padx=5, pady=5)
+b_rotate_run.pack(side=LEFT, padx=5, pady=5)
 
 ###########################
 # frames for two widgets
@@ -2231,9 +2238,9 @@ t_custom = ScrolledText(frame_custom, state=NORMAL,
                         height=5, width=45,
                         wrap='word', undo=True)
 
-t_custom.pack(expand=1, fill='both', padx=5, pady=5)
-b_custom_run.pack(side='right', padx=5, pady=5)
-b_custom_clear.pack(side='right', padx=5, pady=5)
+t_custom.pack(expand=1, fill=BOTH, padx=5, pady=5)
+b_custom_run.pack(side=RIGHT, padx=5, pady=5)
+b_custom_clear.pack(side=RIGHT, padx=5, pady=5)
 
 ############################
 # Pack frames
@@ -2252,7 +2259,7 @@ frame_custom.grid(row=11, column=1,          sticky=(N, W, S), padx=5, pady=1)
 #####################################################
 # Second column
 #####################################################
-frame_second_col = ttk.Frame(main)
+frame_second_col = ttk.Frame(main_paned)
 
 ############################
 # Original preview
@@ -2271,10 +2278,10 @@ pi_preview_orig = PhotoImage()
 c_preview_orig_pi = Canvas(frame_preview_orig)
 c_preview_orig_pi.create_image(0, 0, image=pi_preview_orig, anchor='ne')
 
-c_preview_orig_pi.pack(side='bottom', anchor=W)
-b_preview_orig_run.pack(side='left', padx=5, pady=5)
-l_preview_orig.pack(side='left', padx=5, pady=5)
-co_preview_selector_orig.pack(side='left', padx=5, pady=1)
+c_preview_orig_pi.pack(side=BOTTOM, anchor=W)
+b_preview_orig_run.pack(side=LEFT, padx=5, pady=5)
+l_preview_orig.pack(side=LEFT, padx=5, pady=5)
+co_preview_selector_orig.pack(side=LEFT, padx=5, pady=1)
 
 ###########################
 # Histogram original
@@ -2290,7 +2297,7 @@ c_histogram_orig.grid(row=2, column=1, padx=10, pady=5)
 #####################################################
 # Third column
 #####################################################
-frame_third_col = ttk.Frame(main)
+frame_third_col = ttk.Frame(main_paned)
 
 ##########################
 # Result preview
@@ -2309,10 +2316,10 @@ pi_preview_new = PhotoImage()
 c_preview_new_pi = Canvas(frame_preview_new)
 c_preview_orig_pi.create_image(0, 0, image=pi_preview_orig, anchor='ne')
 
-c_preview_new_pi.pack(side='bottom', anchor=W)
-b_preview_new_run.pack(side='left', padx=5, pady=5)
-l_preview_new.pack(side='left', padx=5, pady=5)
-co_preview_selector_new.pack(side='left', padx=5, pady=1)
+c_preview_new_pi.pack(side=BOTTOM, anchor=W)
+b_preview_new_run.pack(side=LEFT, padx=5, pady=5)
+l_preview_new.pack(side=LEFT, padx=5, pady=5)
+co_preview_selector_new.pack(side=LEFT, padx=5, pady=1)
 
 ###########################
 # Histogram new
@@ -2328,9 +2335,9 @@ c_histogram_new.grid(row=2, column=1, padx=10, pady=5)
 ###############################################################################
 # Add Frames into PanedWindow
 ###############################################################################
-main.add(frame_first_col)
-main.add(frame_second_col)
-main.add(frame_third_col)
+main_paned.add(frame_first_col)
+main_paned.add(frame_second_col)
+main_paned.add(frame_third_col)
 
 ###############################################################################
 # bind
@@ -2483,13 +2490,11 @@ Hovertip(b_logo_run, _("Execute only add logo on current picture"))
 ##########################################
 # Run functions
 #
-if IMAGEMAGICK_WAND is not None:
-    IMAGEMAGICK_WAND_VERSION = 'IM:' + MAGICK_VERSION.split(' ')[1] + ' : Wand:' + VERSION
-else:
-    IMAGEMAGICK_WAND_VERSION = "Missing ImageMagick"
-Python_version = 'Py:' + platform.python_version()
+
+Python_version = "Py: " + platform.python_version() + " Tk: " + str(TkVersion)
 window_title = ( version.__author__ + " : "
-                + version.__appname__ + ": " + version.__version__ + " : "
+                + version.__appname__ + ": "
+                + version.__version__ + " : "
                 + IMAGEMAGICK_WAND_VERSION + " : " + Python_version + " | " )
 root.title(window_title)
 if IMAGEMAGICK_WAND is not None:
@@ -2497,6 +2502,7 @@ if IMAGEMAGICK_WAND is not None:
     ini_read_wraper()  # Loading settings from config file
     tools_set(0)
     text_tool_hide_show()
+    progress_files.set(_("Ready"))
     l_border_color.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
         open_file_common("", file_in_path.get())

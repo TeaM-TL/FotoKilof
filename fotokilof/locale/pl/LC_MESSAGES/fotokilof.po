@@ -72,6 +72,10 @@ msgstr "Wybierz plik do mielenia"
 msgid "License"
 msgstr "Licencja"
 
+#: fotokilof.py:1133 fotokilof.py:2507
+msgid "Ready"
+msgstr "Gotów"
+
 #: fotokilof.py:1156
 msgid "No file selected"
 msgstr "Nie wybrano pliku"

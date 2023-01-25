@@ -2,3 +2,4 @@ fotokilof/locale/**/*.mo
 dist/*
 build/*
 .directory
+fotokilof/__pycache__/*
