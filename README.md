@@ -128,7 +128,7 @@ python -m pip install pywin32 fotokilof
 #### MacOS
 Install requirements:
 ```bash
-brew install imagemagick python3
+brew install imagemagick python@3.10 python-tk@3.10
 ```
 Newer MacOS, add to .zshrc eg.:
 ```bash
