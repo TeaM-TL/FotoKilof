@@ -42,7 +42,7 @@ except:
 
 try:
     from wand.version import MAGICK_VERSION, VERSION
-    IMAGEMAGICK_WAND_VERSION = "IM: " + MAGICK_VERSION.split(' ')[1] + " : Wand: " + VERSION
+    IMAGEMAGICK_WAND_VERSION = "IM " + MAGICK_VERSION.split(' ')[1] + " : Wand " + VERSION
     IMAGEMAGICK_WAND = "OK"
 except:
     print(" ImageMagick or Wand-py not found")
@@ -2483,9 +2483,9 @@ Hovertip(b_logo_run, _("Execute only add logo on current picture"))
 # Run functions
 #
 
-Python_version = "Py: " + platform.python_version() + " Tk: " + str(TkVersion)
+Python_version = "Py " + platform.python_version() + " Tk " + str(TkVersion)
 window_title = ( version.__author__ + " : "
-                + version.__appname__ + ": "
+                + version.__appname__ + " "
                 + version.__version__ + " : "
                 + IMAGEMAGICK_WAND_VERSION + " : " + Python_version + " | " )
 root.title(window_title)
