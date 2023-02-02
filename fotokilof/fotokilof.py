@@ -762,13 +762,12 @@ def color_choose():
 def ini_read_wraper():
     """ Read config INI file """
     # main
-    ini_entries = ini_read.main(FILE_INI, theme_list, preview_size_list)
+    ini_entries = ini_read.main(FILE_INI, preview_size_list)
     file_in_path.set(ini_entries['file_in_path'])
     file_dir_selector.set(ini_entries['file_dir_selector'])
     work_dir.set(ini_entries['work_dir'])
     img_exif_on.set(ini_entries['img_exif_on'])
     img_histograms_on.set(ini_entries['img_histograms_on'])
-    co_theme_selector.current(theme_list.index(ini_entries['theme']))
     co_preview_selector_orig.current(preview_size_list.index(ini_entries['preview_orig']))
     co_preview_selector_new.current(preview_size_list.index(ini_entries['preview_new']))
     log_level.set(ini_entries['log_level'])
@@ -910,7 +909,7 @@ def ini_save_wraper():
                 'custom_on': img_custom_on.get(),
                 'work_dir': work_dir.get(), 'file_dir': file_dir_selector.get(),
                 'exif': img_exif_on.get(), 'preview_new': co_preview_selector_new.get(),
-                'histograms': img_histograms_on.get(), 'theme': co_theme_selector.get(),
+                'histograms': img_histograms_on.get(),
                 'log': log_level.get(), 'preview_orig': co_preview_selector_orig.get()}
     # resize
     resize = {'section': 'Resize', 'on': img_resize_on.get(),
@@ -1155,17 +1154,17 @@ def preview_logo_clear():
 
 
 def tools_set_event(event):
-    """tool set for event fot theme selector"""
+    """tool set for event """
     tools_set(1)
 
 
 def tools_set_on():
-    """tool set for event fot theme selector and preview original"""
+    """tool set for event """
     tools_set(1)
 
 
 def tools_set_off():
-    """tool set for event fot theme selector and no preview original"""
+    """tool set for event """
     tools_set(0)
 
 
@@ -1268,7 +1267,6 @@ def tools_set(preview_on):
     else:
         frame_mirror_vignette.grid()
 
-    style.theme_use(co_theme_selector.get())
     if preview_on:
         preview_orig()
 
@@ -1392,7 +1390,6 @@ except:
     pass
 
 style = ttk.Style()
-theme_list = style.theme_names()  # read available themes
 style.configure("Blue.TButton", foreground="blue")
 style.configure("Brown.TButton", foreground="#8B0000")
 style.configure("Blue.TLabelframe.Label", foreground="blue")
@@ -1465,7 +1462,7 @@ file_extension = (".jpeg", ".jpg", ".png", ".tif")
 ######################################################################
 main_menu = ttk.Frame()
 main_tools = ttk.Frame()
-main_paned = PanedWindow()
+main_paned = ttk.PanedWindow(orient=HORIZONTAL)
 main_progress = ttk.Frame()
 
 main_menu.pack(side=TOP, expand=0, fill=BOTH)
@@ -1560,6 +1557,7 @@ b_last_read.pack(padx=5, pady=1, anchor=W, side=LEFT)
 # main_tools row
 ####################################################################
 frame_tools_selection = ttk.Frame(main_paned)
+#frame_tools_selection = ttk.Frame()
 
 ############################
 # Tools selection
@@ -1624,11 +1622,6 @@ cb_histograms = ttk.Checkbutton(frame_tools_set, text=_("Histograms"),
                                 offvalue="0", onvalue="1",
                                 command=tools_set_off)
 
-l_theme_selector = ttk.Label(frame_tools_set, text=_("Theme:"))
-co_theme_selector = ttk.Combobox(frame_tools_set,
-                                 width=9, values=theme_list)
-co_theme_selector.configure(state='readonly')
-
 cb_crop.pack(padx=5, pady=1, anchor=W, side=LEFT)
 cb_mirror.pack(padx=5, pady=1, anchor=W, side=LEFT)
 cb_bw.pack(padx=5, pady=1, anchor=W, side=LEFT)
@@ -1643,8 +1636,6 @@ cb_logo.pack(padx=5, pady=1, anchor=W, side=LEFT)
 cb_custom.pack(padx=5, pady=1, anchor=W, side=LEFT)
 cb_exif.pack(padx=5, pady=1, anchor=W, side=LEFT)
 #cb_histograms.pack(padx=5, pady=1, anchor=W, side=LEFT)
-l_theme_selector.pack(padx=5, pady=1, anchor=W, side=LEFT)
-co_theme_selector.pack(padx=5, pady=1, anchor=W, side=LEFT)
 
 ####################################################################
 # main row
@@ -1652,7 +1643,8 @@ co_theme_selector.pack(padx=5, pady=1, anchor=W, side=LEFT)
 #####################################################
 # First column
 #####################################################
-frame_first_col = ttk.Frame(main_paned)
+#frame_first_col = ttk.Frame(main_paned)
+frame_first_col = ttk.Frame()
 
 ###########################
 # Label if no any tool selected
@@ -2259,7 +2251,8 @@ frame_custom.grid(row=11, column=1,          sticky=(N, W, S), padx=5, pady=1)
 #####################################################
 # Second column
 #####################################################
-frame_second_col = ttk.Frame(main_paned)
+#frame_second_col = ttk.Frame(main_paned)
+frame_second_col = ttk.Frame()
 
 ############################
 # Original preview
@@ -2297,7 +2290,8 @@ c_histogram_orig.grid(row=2, column=1, padx=10, pady=5)
 #####################################################
 # Third column
 #####################################################
-frame_third_col = ttk.Frame(main_paned)
+#frame_third_col = ttk.Frame(main_paned)
+frame_third_col = ttk.Frame()
 
 ##########################
 # Result preview
@@ -2343,7 +2337,6 @@ main_paned.add(frame_third_col)
 # bind
 ###############################################################################
 # binding commands to widgets
-co_theme_selector.bind("<<ComboboxSelected>>", tools_set_event)
 co_preview_selector_orig.bind("<<ComboboxSelected>>", preview_orig_refresh)
 co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
@@ -2390,7 +2383,6 @@ Hovertip(cb_vignette, _("Add vignette as on old photography or not the best lens
 Hovertip(cb_logo, _("Insert picture, eg. own logo, into picture"))
 Hovertip(cb_custom, _("Processing ImageMagick command.\nWorks only on Linux OS"))
 Hovertip(cb_exif, _("If ON keep EXIF data\nif OFF EXIF data will be removed"))
-Hovertip(co_theme_selector, _("Select theme"))
 # preview
 Hovertip(b_preview_orig_run, _("Display original image by IMdisplay or default image viewer of OS"))
 Hovertip(co_preview_selector_orig, _("Select size of preview"))

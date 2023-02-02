@@ -45,7 +45,7 @@ import entries
 import common
 
 
-def main(file_ini, theme_list, preview_size_list):
+def main(file_ini, preview_size_list):
     """ General settings """
 
     # słownik wyjściowy
@@ -84,12 +84,6 @@ def main(file_ini, theme_list, preview_size_list):
     except:
         histograms = "0"
     dict_return['img_histograms_on'] = entries.parse_list(histograms, (0, 1), 0)
-
-    try:
-        theme = config.get('Konfiguracja', 'theme')
-    except:
-        theme = "default"
-    dict_return['theme'] = entries.parse_list(theme, theme_list, "default")
 
     try:
         preview_orig = config.getint('Konfiguracja', 'preview_orig')

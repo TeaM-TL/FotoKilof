@@ -3,3 +3,4 @@ dist/*
 build/*
 .directory
 fotokilof/__pycache__/*
+.DS_Store

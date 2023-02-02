@@ -70,7 +70,6 @@ def save(ini_data):
     config.set(main['section'], 'file_dir', str(main['file_dir']))
     config.set(main['section'], 'exif', str(main['exif']))
     config.set(main['section'], 'histograms', str(main['histograms']))
-    config.set(main['section'], 'theme', main['theme'])
     config.set(main['section'], 'preview_orig', main['preview_orig'])
     config.set(main['section'], 'preview_new', main['preview_new'])
     config.set(main['section'], 'log', main['log'])

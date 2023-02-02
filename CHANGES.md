@@ -2,6 +2,8 @@
 
 ## 2023
 
+4.2.6 removed theme selector, better paned window
+
 4.2.5 very small polishing tkinter, F1 fixed, progressbar works
 
 4.2.4 fix gui, better handle open file, fix crop
