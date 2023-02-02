@@ -1462,7 +1462,7 @@ file_extension = (".jpeg", ".jpg", ".png", ".tif")
 ######################################################################
 main_menu = ttk.Frame()
 main_tools = ttk.Frame()
-main_paned = ttk.PanedWindow(orient=HORIZONTAL)
+main_paned = ttk.PanedWindow(orient=HORIZONTAL, width=5)
 main_progress = ttk.Frame()
 
 main_menu.pack(side=TOP, expand=0, fill=BOTH)
