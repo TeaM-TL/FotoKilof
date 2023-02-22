@@ -1,5 +1,5 @@
-![Miniature](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/mini.png)
-
+![Miniature](https://github.com/TeaM-TL/FotoKilof/blob/master/screenshots/mini.png)
+---
 # FotoKilof - GUI for ImageMagick
 
 GUI for the most used (by me) ImageMagick functionality for processing pictures. 
