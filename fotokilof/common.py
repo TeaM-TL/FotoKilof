@@ -89,10 +89,8 @@ def humansize(nbytes):
     return '%s %s' % (value, suffixes[i])
 
 
-def mouse_crop_calculation(width, height, size):
+def mouse_crop_calculation(x_orig, y_orig, size):
     """ recalculation pixels from previev original image """
-    x_orig = width
-    y_orig = height
 
     # x_max, y_max - size of preview, we know max: PREVIEW
     if x_orig > y_orig:
@@ -144,11 +142,9 @@ def preview_crop_gravity(coordinates, x_max, y_max):
     x_max, y_max
     return coordinates for drawing crop: x0, y0, x1, y1
     """
-    offset_x = coordinates[0]
-    offset_y = coordinates[1]
-    width = coordinates[2]
-    height = coordinates[3]
-    gravitation = coordinates[4]
+
+    offset_x, offset_y, width, height, gravitation = coordinates
+
     if gravitation == "NW":
         x0 = offset_x
         y0 = offset_y

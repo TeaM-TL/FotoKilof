@@ -116,9 +116,9 @@ def save_close_clone(clone, file_out, exif = 0):
     """ save and close clone after processing """
     if not exif:
         clone.strip()
+    log.write_log(" Save file: " + file_out)
     clone.save(filename=file_out)
     clone.close()
-    log.write_log(" Save file: " + file_out)
 
 
 def gravitation(gravity):
@@ -161,8 +161,10 @@ def pip(clone, logo, logo_data, image_height, image_width):
             with Drawing() as draw:
                 position = common.preview_crop_gravity(logo_data, image_height, image_width)
                 draw.composite(operator='over',
-                                left=common.empty(position[0]), top=common.empty(position[1]),
-                                width=common.empty(logo_data[2]), height=common.empty(logo_data[3]),
+                                left=common.empty(position[0]),
+                                top=common.empty(position[1]),
+                                width=common.empty(logo_data[2]),
+                                height=common.empty(logo_data[3]),
                                 image=logo_img)
                 draw(clone)
     log.write_log(" Conversion: logo")
@@ -338,8 +340,10 @@ def vignette(clone, dx, dy, radius, sigma):
     sigma - standard deviation for Gaussian blur
     color - color of corners
     """
-    clone.vignette(radius=common.empty(radius), sigma=common.empty(sigma),
-                    x=common.empty(dx), y=common.empty(dy))
+    clone.vignette(radius=common.empty(radius),
+                    sigma=common.empty(sigma),
+                    x=common.empty(dx),
+                    y=common.empty(dy))
     log.write_log(" Conversion: vigette")
 
 # EOF

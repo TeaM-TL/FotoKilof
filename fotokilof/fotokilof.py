@@ -29,7 +29,7 @@ THE SOFTWARE.
 nice GUI for ImageMagick command common used (by me)
 """
 
-from tkinter import Tk, ttk, Label, PhotoImage, PanedWindow, Canvas
+from tkinter import Tk, ttk, Label, PhotoImage, Canvas
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog, messagebox
 from tkinter import StringVar, IntVar, TclError, TkVersion
@@ -122,7 +122,7 @@ def preview_orig_clear():
     log.write_log("clear preview", "M")
     c_preview_orig_pi.delete('all')
     c_histogram_orig.delete('all')
-    # if no original, new previe should be clear too
+    # if no original, new preview should be clear too
     preview_new_clear()
 
 
@@ -545,30 +545,24 @@ def convert_logo_button():
 
 def open_file_logo():
     """ open logo file for inserting """
-    directory = os.path.dirname(file_logo_path.get())
-    if mswindows.windows() == 1:
-        filetypes = ((_("All graphics files"), ".JPG .JPEG .PNG .TIF .TIFF"),
-                     (_("JPG files"), ".JPG .JPEG"),
-                     (_("PNG files"), ".PNG"),
-                     (_("TIFF files"), ".TIF .TIFF"),
-                     (_("SVG files"), ".SVG"),
-                     (_("ALL types"), "*"))
-    else:
-        filetypes = ((_("All graphics files"),
-                    ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff"),
-                     (_("JPG files"), ".JPG .jpg .JPEG .jpeg"),
-                     (_("PNG files"), ".PNG .png"),
-                     (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
-                     (_("SVG files"), ".SVG .svg"),
-                     (_("ALL types"), "*"))
+    filename = open_file_dialog(os.path.dirname(file_logo_path.get()),
+                                _("Select logo picture for inserting"))
 
-    file_logo_path.set(filedialog.askopenfilename(initialdir=directory,
-                                                  filetypes=filetypes,
-                                                  title=_("Select logo picture for inserting")))
+    file_logo_path.set(filename)
+
     if os.path.isfile(file_logo_path.get()):
         preview_logo()
     else:
         preview_logo_clear()
+
+
+def open_file():
+    """ open image for processing """
+
+    dirname = os.path.dirname(file_in_path.get())
+    filename = open_file_dialog(dirname,
+                                _("Select picture for processing"))
+    open_file_common(dirname, filename)
 
 
 def open_file_common(cwd, filename):
@@ -590,16 +584,14 @@ def open_file_common(cwd, filename):
             log.write_log("Error in open_file_common", "E")
 
 
-def open_file():
-    """ open image for processing """
-    filename = None
-    dir_name = os.path.dirname(file_in_path.get())
+def open_file_dialog(dir_initial, title):
+    """ open file dialog function for image and logo """
     if mswindows.windows() == 1:
-        filetypes = ((_("All graphics files"), ".JPG .JPEG .PNG .TIF .TIFF"),
+        filetypes = ((_("All graphics files"),
+                    ".JPG .JPEG .PNG .TIF .TIFF"),
                      (_("JPG files"), ".JPG .JPEG"),
                      (_("PNG files"), ".PNG"),
                      (_("TIFF files"), ".TIF .TIFF"),
-                     (_("SVG files"), ".SVG"),
                      (_("ALL types"), "*"))
     else:
         filetypes = ((_("All graphics files"),
@@ -607,13 +599,13 @@ def open_file():
                      (_("JPG files"), ".JPG .jpg .JPEG .jpeg"),
                      (_("PNG files"), ".PNG .png"),
                      (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
-                     (_("SVG files"), ".SVG .svg"),
                      (_("ALL types"), "*"))
-
-    filename = filedialog.askopenfilename(initialdir=dir_name,
+    # Wand doesn't like SVG: (_("SVG files"), ".SVG .svg"),
+    filename = None
+    filename = filedialog.askopenfilename(initialdir=dir_initial,
                                         filetypes=filetypes,
-                                        title=_("Select picture for processing"))
-    open_file_common(dir_name, filename)
+                                        title=title)
+    return filename
 
 
 def open_file_last_key(event):
@@ -1557,7 +1549,6 @@ b_last_read.pack(padx=5, pady=1, anchor=W, side=LEFT)
 # main_tools row
 ####################################################################
 frame_tools_selection = ttk.Frame(main_paned)
-#frame_tools_selection = ttk.Frame()
 
 ############################
 # Tools selection
@@ -1643,7 +1634,6 @@ cb_exif.pack(padx=5, pady=1, anchor=W, side=LEFT)
 #####################################################
 # First column
 #####################################################
-#frame_first_col = ttk.Frame(main_paned)
 frame_first_col = ttk.Frame()
 
 ###########################
@@ -2251,7 +2241,6 @@ frame_custom.grid(row=11, column=1,          sticky=(N, W, S), padx=5, pady=1)
 #####################################################
 # Second column
 #####################################################
-#frame_second_col = ttk.Frame(main_paned)
 frame_second_col = ttk.Frame()
 
 ############################
@@ -2290,7 +2279,6 @@ c_histogram_orig.grid(row=2, column=1, padx=10, pady=5)
 #####################################################
 # Third column
 #####################################################
-#frame_third_col = ttk.Frame(main_paned)
 frame_third_col = ttk.Frame()
 
 ##########################
