@@ -89,9 +89,9 @@ def preview_wand(file_in, size, coord=""):
             clone = convert_wand.make_clone(file_in)
             width = str(clone.width)
             height = str(clone.height)
-
-            convert_wand.resize(clone, str(size) + "x" + str(size))
             clone.convert('ppm')
+            convert_wand.resize(clone, str(size) + "x" + str(size))
+            
 
             # write crop if coordinates are given
             if len(coord) == 4 :
