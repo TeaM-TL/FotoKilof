@@ -1462,7 +1462,7 @@ main_paned.pack(side=BOTTOM, expand=1, fill=BOTH)
 validation = main_paned.register(gui.only_numbers)  # Entry validation
 validationint = main_paned.register(gui.only_integer)  # Entry validation integer value
 ####################################################################
-progressbar = ttk.Progressbar(main_progress, orient=HORIZONTAL, mode='determinate',
+progressbar = ttk.Progressbar(main_progress, orient=HORIZONTAL, bootstyle="info", mode='determinate',
                                 variable=progressbar_var, maximum=100)
 progressbar.pack(side=BOTTOM, padx=0, pady=0, fill=X, expand=0, anchor=S)
 ####################################################################
