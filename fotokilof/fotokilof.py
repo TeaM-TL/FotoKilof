@@ -29,11 +29,9 @@ THE SOFTWARE.
 nice GUI for ImageMagick command common used (by me)
 """
 
-from tkinter import Tk, ttk, Label, PhotoImage, Canvas
-from tkinter.scrolledtext import ScrolledText
+from tkinter import PhotoImage, Canvas
 from tkinter import filedialog, messagebox
 from tkinter import StringVar, IntVar, TclError, TkVersion
-from tkinter import N, S, W, E, X, BOTH, LEFT, RIGHT, TOP, BOTTOM, END, DISABLED, NORMAL, HORIZONTAL
 
 try:
     from tkcolorpicker import askcolor
@@ -57,6 +55,10 @@ import platform
 import sys
 import tempfile
 from idlelib.tooltip import Hovertip
+
+import ttkbootstrap as ttk
+from ttkbootstrap.scrolled import ScrolledText
+from ttkbootstrap.constants import N, S, W, E, X, BOTH, LEFT, RIGHT, TOP, BOTTOM, END, DISABLED, NORMAL, HORIZONTAL
 
 # my modules
 import convert
@@ -748,7 +750,7 @@ def color_choose():
     color = askcolor(img_text_color.get())
     if color[1] is not None:
         img_text_color.set(color[1])
-        l_text_color.configure(fg=img_text_color.get())
+        ## l_text_color.configure(fg=img_text_color.get())
 
 
 def ini_read_wraper():
@@ -783,7 +785,7 @@ def ini_read_wraper():
     img_text_gravity_onoff.set(ini_entries['img_text_gravity_onoff'])
     img_text_box.set(ini_entries['text_box'])
     img_text_box_color.set(ini_entries['text_box_color'])
-    l_text_color.configure(fg=img_text_color.get(),bg=img_text_box_color.get())
+    ##l_text_color.configure(fg=img_text_color.get(),bg=img_text_box_color.get())
     img_text_rotate.set(ini_entries['text_rotate'])
     e_text.delete(0, "end")
     e_text.insert(0, ini_entries['text_text'])
@@ -802,7 +804,7 @@ def ini_read_wraper():
     e_rotate_own.delete(0, "end")
     e_rotate_own.insert(0, ini_entries['img_rotate_own'])
     img_rotate_color.set(ini_entries['img_rotate_color'])
-    l_rotate_color.configure(bg=img_rotate_color.get())
+    ##l_rotate_color.configure(bg=img_rotate_color.get())
     # crop
     ini_entries = ini_read.crop(FILE_INI)
     img_crop_on.set(ini_entries['img_crop_on'])
@@ -836,7 +838,7 @@ def ini_read_wraper():
     ini_entries = ini_read.border(FILE_INI)
     img_border_on.set(ini_entries['img_border_on'])
     img_border_color.set(ini_entries['img_border_color'])
-    l_border_color.configure(bg=img_border_color.get())
+    ##l_border_color.configure(bg=img_border_color.get())
     e_border_ns.delete(0, "end")
     e_border_ns.insert(0, ini_entries['img_border_size_x'])
     e_border_we.delete(0, "end")
@@ -845,7 +847,7 @@ def ini_read_wraper():
     ini_entries = ini_read.vignette(FILE_INI)
     img_vignette_on.set(ini_entries['on'])
     img_vignette_color.set(ini_entries['color'])
-    l_vignette_color.configure(bg=img_vignette_color.get())
+    ##l_vignette_color.configure(bg=img_vignette_color.get())
     e_vignette_dx.delete(0, "end")
     e_vignette_dx.insert(0, ini_entries['dx'])
     e_vignette_dy.delete(0, "end")
@@ -1363,7 +1365,8 @@ def text_tool_hide_show():
 # GUI main window
 ###############################################################################
 
-root = Tk()
+#root = Tk()
+root = ttk.Window()
 
 # hidden file
 # https://code.activestate.com/lists/python-tkinter-discuss/3723/
@@ -1480,20 +1483,20 @@ frame_file_select = ttk.Labelframe(main_menu, text=_("Image"),
 frame_file_select.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 
 b_file_select = ttk.Button(frame_file_select, text=_("File selection"),
-                           command=open_file, style="Blue.TButton")
+                           command=open_file)
 
 b_file_select_screenshot = ttk.Button(frame_file_select, text=_("Screenshot"),
-                                 command=open_screenshot)
+                                      command=open_screenshot)
 if mswindows.windows() or mswindows.macos():
     b_file_select_screenshot.configure(text=_("Clipboard"))
 
-b_file_select_first = ttk.Button(frame_file_select, text=_("First"),
+b_file_select_first = ttk.Button(frame_file_select, text=_("First"), bootstyle="outline",
                                  command=open_file_first)
-b_file_select_prev = ttk.Button(frame_file_select, text=_("Previous"),
+b_file_select_prev = ttk.Button(frame_file_select, text=_("Previous"), bootstyle="outline",
                                 command=open_file_prev)
-b_file_select_next = ttk.Button(frame_file_select, text=_("Next"),
+b_file_select_next = ttk.Button(frame_file_select, text=_("Next"), bootstyle="outline",
                                 command=open_file_next)
-b_file_select_last = ttk.Button(frame_file_select, text=_("Last"),
+b_file_select_last = ttk.Button(frame_file_select, text=_("Last"), bootstyle="outline",
                                 command=open_file_last)
 
 b_file_select.grid(column=1, row=1, padx=5, pady=5, sticky=W)
@@ -1520,8 +1523,7 @@ co_apply_type = ttk.Combobox(frame_apply, width=4, values=file_extension)
 co_apply_type.configure(state='readonly')
 co_apply_type.current(file_extension.index(".jpg"))
 b_apply_run = ttk.Button(frame_apply, text=_("Execute all"),
-                         command=apply_all_button,
-                         style="Blue.TButton")
+                         command=apply_all_button)
 
 b_apply_run.pack(side=LEFT, padx=5, pady=5, anchor=W)
 rb_apply_dir.pack(side=LEFT, pady=5, anchor=W)
@@ -1539,8 +1541,8 @@ frame_save = ttk.LabelFrame(main_menu, text=_("Settings"),
                        style="Fiolet.TLabelframe")
 frame_save.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
 
-b_last_save = ttk.Button(frame_save, text=_("Save"), command=ini_save_wraper)
-b_last_read = ttk.Button(frame_save, text=_("Load"), command=ini_read_wraper)
+b_last_save = ttk.Button(frame_save, text=_("Save"), command=ini_save_wraper, bootstyle="info-outline")
+b_last_read = ttk.Button(frame_save, text=_("Load"), command=ini_read_wraper, bootstyle="info-outline")
 
 b_last_save.pack(padx=5, pady=1, anchor=W, side=LEFT)
 b_last_read.pack(padx=5, pady=1, anchor=W, side=LEFT)
@@ -1668,7 +1670,7 @@ rb_resize_2 = ttk.Radiobutton(frame_resize_row2, text=_("Percent"),
 e2_resize = ttk.Entry(frame_resize_row2, width=3,
                       validate="key", validatecommand=(validation, '%S'))
 b_resize_run = ttk.Button(frame_resize_row2, text=_("Execute"),
-                          style="Brown.TButton",
+                          bootstyle="info",
                           command=convert_resize_button)
 
 rb_resize_3.pack(side=LEFT, padx=5)
@@ -1765,11 +1767,11 @@ rb_crop_SE = ttk.Radiobutton(frame_crop_gravity, text="SE",
 frame_crop_buttons = ttk.Frame(frame_crop)
 
 b_crop_show = ttk.Button(frame_crop_buttons, text=_("Preview"),
-                         command=preview_orig)
+                         command=preview_orig, bootstyle="info-outline")
 b_crop_read = ttk.Button(frame_crop_buttons, text=_("From image"),
-                         command=crop_read)
+                         command=crop_read, bootstyle="info-outline")
 b_crop_run = ttk.Button(frame_crop, text=_("Execute"),
-                        style="Brown.TButton",
+                        bootstyle="info",
                         command=convert_crop_button)
 
 rb1_crop.grid(row=2, column=1, sticky=W, padx=5, pady=5)
@@ -1885,14 +1887,14 @@ co_text_font = ttk.Combobox(frame_text, width=30,
 co_text_font.configure(state='readonly')
 e_text_size = ttk.Entry(frame_text, width=3,
                         validate="key", validatecommand=(validation, '%S'))
-l_text_color = Label(frame_text, text=_("Color test"))
+l_text_color = ttk.Label(frame_text, text=_("Color test"))
 b_text_color = ttk.Button(frame_text, text=_("Font"),
-                          command=color_choose)
+                          command=color_choose, bootstyle="info-outline")
 l_text_heght = ttk.Label(frame_text, text=_("Height"))
 b_text_box_color = ttk.Button(frame_text, text=_("Background"),
-                              command=color_choose_box)
+                              command=color_choose_box, bootstyle="info-outline")
 b_text_run = ttk.Button(frame_text, text=_("Execute"),
-                        style="Brown.TButton", command=convert_text_button)
+                        command=convert_text_button, bootstyle="info")
 
 l_text_color.grid(row=2, column=5, sticky=(W, E), padx=5, pady=1)
 b_text_color.grid(row=3, column=5, sticky=(W, E), padx=5, pady=1)
@@ -1939,12 +1941,11 @@ rb_rotate_own = ttk.Radiobutton(frame_rotate, text=_("Custom"),
                                 variable=img_rotate, value="0")
 e_rotate_own = ttk.Entry(frame_rotate, width=3, style='Rotate.TEntry',
                      validate="key", validatecommand=(validation, '%S'))
-l_rotate_color = Label(frame_rotate, text=_("  "))
+l_rotate_color = ttk.Label(frame_rotate, text=_("  "))
 b_rotate_color = ttk.Button(frame_rotate, text=_("Color"),
-                          command=color_choose_rotate)
+                          command=color_choose_rotate, bootstyle="info-outline")
 b_rotate_run = ttk.Button(frame_rotate, text=_("Execute"),
-                          style="Brown.TButton",
-                          command=convert_rotate_button)
+                          command=convert_rotate_button, bootstyle="info")
 
 rb_rotate_90.pack(side=LEFT, padx=5, pady=5)
 rb_rotate_180.pack(side=LEFT, padx=5, pady=5)
@@ -1968,7 +1969,7 @@ frame_border_normalize = ttk.Frame(frame_first_col)
 frame_border = ttk.Labelframe(frame_border_normalize, text=_("Border"),
                               style="Fiolet.TLabelframe")
 ###
-l_border_color = Label(frame_border, text=_("  "))
+l_border_color = ttk.Label(frame_border, text=_("  "))
 l_border_we = ttk.Label(frame_border, text="WE")
 e_border_we = ttk.Entry(frame_border, width=3,
                      validate="key", validatecommand=(validation, '%S'))
@@ -1976,10 +1977,9 @@ l_border_ns = ttk.Label(frame_border, text="NS")
 e_border_ns = ttk.Entry(frame_border, width=3,
                      validate="key", validatecommand=(validation, '%S'))
 b_border_color = ttk.Button(frame_border, text=_("Color"),
-                            command=color_choose_border)
+                            command=color_choose_border, bootstyle="info-outline")
 b_border_run = ttk.Button(frame_border, text=_("Execute"),
-                          style="Brown.TButton",
-                          command=convert_border_button)
+                          command=convert_border_button, bootstyle="info")
 
 l_border_we.grid(row=1, column=1, padx=5, pady=0)
 e_border_we.grid(row=1, column=2, padx=5, pady=0)
@@ -2003,8 +2003,7 @@ e_bw_sepia = ttk.Entry(frame_bw, width=3,
                        validate="key", validatecommand=(validation, '%S'))
 l_bw_sepia = ttk.Label(frame_bw, text="%")
 b_bw_run = ttk.Button(frame_bw, text=_("Execute"),
-                      style="Brown.TButton",
-                      command=convert_bw_button)
+                      command=convert_bw_button, bootstyle="info")
 
 rb2_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 e_bw_sepia.grid(row=1, column=2, padx=5, pady=5, sticky=E)
@@ -2031,8 +2030,7 @@ e2_contrast = ttk.Entry(frame_contrast, width=4)
 l1_contrast = ttk.Label(frame_contrast, text=_("Black"))
 l2_contrast = ttk.Label(frame_contrast, text=_("White"))
 b_contrast_run = ttk.Button(frame_contrast, text=_("Execute"),
-                            style="Brown.TButton",
-                            command=convert_contrast_button)
+                            command=convert_contrast_button, bootstyle="info")
 
 rb1_contrast.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 l1_contrast.grid(row=1, column=2, padx=5, pady=5, sticky=E)
@@ -2060,7 +2058,7 @@ co_normalize_channel = ttk.Combobox(frame_normalize, width=7,
                                     values=normalize_channels)
 co_normalize_channel.configure(state='readonly')
 b_normalize_run = ttk.Button(frame_normalize, text=_("Execute"),
-                             style="Brown.TButton",
+                             bootstyle="info",
                              command=convert_normalize_button)
 
 rb1_normalize.grid(row=1, column=1, padx=5, pady=0, sticky=W)
@@ -2082,7 +2080,7 @@ cb_mirror_flop = ttk.Checkbutton(frame_mirror, text="WE",
                                  variable=img_mirror_flop,
                                  offvalue="0", onvalue="1")
 b_mirror_run = ttk.Button(frame_mirror, text=_("Execute"),
-                          style="Brown.TButton",
+                          bootstyle="info",
                           command=convert_mirror_button)
 
 cb_mirror_flip.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
@@ -2107,11 +2105,11 @@ e_vignette_dx = ttk.Entry(frame_vignette, width=3,
 l_vignette_dy = ttk.Label(frame_vignette, text=_("dy"))
 e_vignette_dy = ttk.Entry(frame_vignette, width=3,
                      validate="key", validatecommand=(validationint, '%S'))
-l_vignette_color = Label(frame_vignette, text=_("  "))
+l_vignette_color = ttk.Label(frame_vignette, text=_("  "))
 b_vignette_color = ttk.Button(frame_vignette, text=_("Color"),
-                            command=color_choose_vignette)
+                            command=color_choose_vignette, bootstyle="info-outline")
 b_vignette_run = ttk.Button(frame_vignette, text=_("Execute"),
-                          style="Brown.TButton",
+                          bootstyle="info",
                           command=convert_vignette_button)
 l_vignette_radius.grid(row=1, column=1, padx=5, pady=0)
 e_vignette_radius.grid(row=1, column=2, padx=5, pady=0)
@@ -2132,11 +2130,10 @@ frame_logo = ttk.LabelFrame(frame_first_col, text=_("Logo"),
                             style="Fiolet.TLabelframe")
 
 b_logo_select = ttk.Button(frame_logo, text=_("File selection"),
-                           command=open_file_logo)
+                           command=open_file_logo, bootstyle="info-outline")
 
-b_logo_run = ttk.Button(frame_logo, text=_("Execute"),
-                        command=convert_logo_button,
-                        style="Brown.TButton")
+b_logo_run = ttk.Button(frame_logo, text=_("Execute"), bootstyle="info",
+                        command=convert_logo_button)
 l_logo_filename = ttk.Label(frame_logo, width=25)
 
 b_logo_select.grid(row=1, column=1, padx=5, pady=5)
@@ -2211,9 +2208,10 @@ frame_custom = ttk.LabelFrame(frame_first_col, text=_("Custom command"),
                               style="Fiolet.TLabelframe")
 
 b_custom_clear = ttk.Button(frame_custom, text=_("Clear"),
+                            bootstyle="warning",
                             command=convert_custom_clear)
 b_custom_run = ttk.Button(frame_custom, text=_("Execute"),
-                          style="Brown.TButton",
+                          bootstyle="info",
                           command=convert_custom_button)
 
 t_custom = ScrolledText(frame_custom, state=NORMAL,
@@ -2251,6 +2249,7 @@ frame_preview_orig = ttk.Labelframe(frame_second_col, text=_("Original"),
 frame_preview_orig.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 b_preview_orig_run = ttk.Button(frame_preview_orig, text=_("Preview"),
+                                bootstyle="secondary",
                                 command=preview_orig_button)
 l_preview_orig = ttk.Label(frame_preview_orig)
 co_preview_selector_orig = ttk.Combobox(frame_preview_orig, width=4,
@@ -2289,6 +2288,7 @@ frame_preview_new = ttk.Labelframe(frame_third_col, text=_("Result"),
 frame_preview_new.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
 ###
 b_preview_new_run = ttk.Button(frame_preview_new, text=_("Preview"),
+                               bootstyle="secondary",
                                command=preview_new_button)
 l_preview_new = ttk.Label(frame_preview_new)
 co_preview_selector_new = ttk.Combobox(frame_preview_new, width=4,
@@ -2483,7 +2483,7 @@ if IMAGEMAGICK_WAND is not None:
     tools_set(0)
     text_tool_hide_show()
     progress_files.set(_("Ready"))
-    l_border_color.configure(bg=img_border_color.get())
+    ##l_border_color.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
         open_file_common("", file_in_path.get())
     if img_logo_on.get() == 1:
