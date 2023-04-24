@@ -108,7 +108,7 @@ Available: Bulgarian, English, German, Indonesian, Polish and Turkish.
 
 Install requirements:
 ```bash
-apt-get install python3-pip python3-tk python3-wand idle imagemagick
+apt-get install python3-pip python3-tk python3-wand imagemagick
 ```
 
 Install as PyPi package by PIP:
