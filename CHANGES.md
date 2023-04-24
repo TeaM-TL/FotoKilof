@@ -2,7 +2,7 @@
 
 ## 2023
 
-4.2.7 less duplicated code, Wand doesn't like SVG :-(
+4.3.0 ttkbootstrap - solve many small annoying things, less duplicated code,
 
 4.2.6 removed theme selector, better paned window
 
