@@ -29,14 +29,9 @@ THE SOFTWARE.
 nice GUI for ImageMagick command common used (by me)
 """
 
-from tkinter import PhotoImage, Canvas
+from tkinter import PhotoImage, Canvas, Label
 from tkinter import filedialog, messagebox
 from tkinter import StringVar, IntVar, TclError, TkVersion
-
-try:
-    from tkcolorpicker import askcolor
-except:
-    from tkinter.colorchooser import askcolor
 
 try:
     from wand.version import MAGICK_VERSION, VERSION
@@ -56,8 +51,9 @@ import sys
 import tempfile
 
 import ttkbootstrap as ttk
-from ttkbootstrap.scrolled import ScrolledText
+from ttkbootstrap.scrolled import ScrolledText, ScrolledFrame
 from ttkbootstrap.tooltip import ToolTip
+from ttkbootstrap.dialogs.colorchooser import ColorChooserDialog
 from ttkbootstrap.constants import N, S, W, E, X, BOTH, LEFT, RIGHT, TOP, BOTTOM, END, DISABLED, NORMAL, HORIZONTAL
 
 # my modules
@@ -713,44 +709,53 @@ def open_screenshot():
         open_file_common(today_dir, filename)
 
 
+def askcolor(initial):
+    """ Use color widget ColorChooserDialog from ttkbootstrap"""
+    cd = ColorChooserDialog()
+    cd.show()
+    colors = cd.result
+    result = colors.hex
+    return result
+
+
 def color_choose_rotate():
     """ color selection for rotate"""
     color = askcolor(img_rotate_color.get())
-    if color[1] is not None:
-        img_rotate_color.set(color[1])
-        l_rotate_color.configure(bg=color[1])
+    if color is not None:
+        img_rotate_color.set(color)
+        l_rotate_color.configure(bg=color)
 
 
 def color_choose_border():
     """ Border color selection """
     color = askcolor(img_border_color.get())
-    if color[1] is not None:
-        img_border_color.set(color[1])
-        l_border_color.configure(bg=color[1])
+    if color is not None:
+        img_border_color.set(color)
+        l_border_color.configure(bg=color)
 
 
 def color_choose_vignette():
     """ color selection for rotate"""
     color = askcolor(img_vignette_color.get())
-    if color[1] is not None:
-        img_vignette_color.set(color[1])
-        l_vignette_color.configure(bg=color[1])
+    if color is not None:
+        img_vignette_color.set(color)
+        l_vignette_color.configure(bg=color)
 
 
 def color_choose_box():
     """ Background color selection """
     color = askcolor(img_text_color.get())
-    if color[1] is not None:
-        img_text_box_color.set(color[1])
+    if color is not None:
+        img_text_box_color.set(color)
         l_text_color.configure(bg=img_text_box_color.get())
 
 
 def color_choose():
     """ Color selection """
     color = askcolor(img_text_color.get())
-    if color[1] is not None:
-        img_text_color.set(color[1])
-        ## l_text_color.configure(fg=img_text_color.get())
+    if color is not None:
+        img_text_color.set(color)
+        l_text_color.configure(fg=img_text_color.get())
 
 
 def ini_read_wraper():
@@ -785,7 +790,7 @@ def ini_read_wraper():
     img_text_gravity_onoff.set(ini_entries['img_text_gravity_onoff'])
     img_text_box.set(ini_entries['text_box'])
     img_text_box_color.set(ini_entries['text_box_color'])
-    ##l_text_color.configure(fg=img_text_color.get(),bg=img_text_box_color.get())
+    l_text_color.configure(fg=img_text_color.get(),bg=img_text_box_color.get())
     img_text_rotate.set(ini_entries['text_rotate'])
     e_text.delete(0, "end")
     e_text.insert(0, ini_entries['text_text'])
@@ -804,7 +809,7 @@ def ini_read_wraper():
     e_rotate_own.delete(0, "end")
     e_rotate_own.insert(0, ini_entries['img_rotate_own'])
     img_rotate_color.set(ini_entries['img_rotate_color'])
-    ##l_rotate_color.configure(bg=img_rotate_color.get())
+    l_rotate_color.configure(bg=img_rotate_color.get())
     # crop
     ini_entries = ini_read.crop(FILE_INI)
     img_crop_on.set(ini_entries['img_crop_on'])
@@ -838,7 +843,7 @@ def ini_read_wraper():
     ini_entries = ini_read.border(FILE_INI)
     img_border_on.set(ini_entries['img_border_on'])
     img_border_color.set(ini_entries['img_border_color'])
-    ##l_border_color.configure(bg=img_border_color.get())
+    l_border_color.configure(bg=img_border_color.get())
     e_border_ns.delete(0, "end")
     e_border_ns.insert(0, ini_entries['img_border_size_x'])
     e_border_we.delete(0, "end")
@@ -847,7 +852,7 @@ def ini_read_wraper():
     ini_entries = ini_read.vignette(FILE_INI)
     img_vignette_on.set(ini_entries['on'])
     img_vignette_color.set(ini_entries['color'])
-    ##l_vignette_color.configure(bg=img_vignette_color.get())
+    l_vignette_color.configure(bg=img_vignette_color.get())
     e_vignette_dx.delete(0, "end")
     e_vignette_dx.insert(0, ini_entries['dx'])
     e_vignette_dy.delete(0, "end")
@@ -1640,7 +1645,7 @@ cb_exif.pack(padx=5, pady=5, anchor=W, side=LEFT)
 #####################################################
 # First column
 #####################################################
-frame_first_col = ttk.Frame()
+frame_first_col = ScrolledFrame(autohide=True)
 
 ###########################
 # Label if no any tool selected
@@ -1886,7 +1891,7 @@ co_text_font = ttk.Combobox(frame_text, width=30,
 co_text_font.configure(state='readonly')
 e_text_size = ttk.Entry(frame_text, width=3,
                         validate="key", validatecommand=(validation, '%S'))
-l_text_color = ttk.Label(frame_text, text=_("Color test"))
+l_text_color = Label(frame_text, text=_("Color test"))
 b_text_color = ttk.Button(frame_text, text=_("Font"),
                           command=color_choose, bootstyle="outline")
 l_text_heght = ttk.Label(frame_text, text=_("Height"))
@@ -1938,7 +1943,7 @@ rb_rotate_own = ttk.Radiobutton(frame_rotate, text=_("Custom"),
                                 variable=img_rotate, value="0")
 e_rotate_own = ttk.Entry(frame_rotate, width=3,
                      validate="key", validatecommand=(validation, '%S'))
-l_rotate_color = ttk.Label(frame_rotate, text=_("  "))
+l_rotate_color = Label(frame_rotate, text=_("  "))
 b_rotate_color = ttk.Button(frame_rotate, text=_("Color"),
                           command=color_choose_rotate, bootstyle="outline")
 b_rotate_run = ttk.Button(frame_rotate, text=_("Execute"), command=convert_rotate_button)
@@ -1964,7 +1969,7 @@ frame_border_normalize = ttk.Frame(frame_first_col)
 ###########################
 frame_border = ttk.Labelframe(frame_border_normalize, text=_("Border"))
 ###
-l_border_color = ttk.Label(frame_border, text=_("  "))
+l_border_color = Label(frame_border, text=_("  "))
 l_border_we = ttk.Label(frame_border, text="WE")
 e_border_we = ttk.Entry(frame_border, width=3,
                      validate="key", validatecommand=(validation, '%S'))
@@ -2090,7 +2095,7 @@ e_vignette_dx = ttk.Entry(frame_vignette, width=3,
 l_vignette_dy = ttk.Label(frame_vignette, text=_("dy"))
 e_vignette_dy = ttk.Entry(frame_vignette, width=3,
                      validate="key", validatecommand=(validationint, '%S'))
-l_vignette_color = ttk.Label(frame_vignette, text=_("  "))
+l_vignette_color = Label(frame_vignette, text=_("  "))
 b_vignette_color = ttk.Button(frame_vignette, text=_("Color"),
                             command=color_choose_vignette, bootstyle="outline")
 b_vignette_run = ttk.Button(frame_vignette, text=_("Execute"),
@@ -2206,6 +2211,8 @@ b_custom_clear.pack(side=RIGHT, padx=5, pady=5)
 ############################
 # Pack frames
 ############################
+frame_first_col.pack(fill=BOTH, expand=1)
+
 l_info_when_no_tool.grid(row=1, column=1, padx=5, pady=5)
 frame_crop.grid(row=2, column=1,             sticky=(N, W, S), padx=5, pady=1)
 frame_mirror_vignette.grid(row=3, column=1,  sticky=(N, W, S), padx=0, pady=1)
@@ -2297,7 +2304,7 @@ c_histogram_new.grid(row=2, column=1, padx=10, pady=5)
 ###############################################################################
 # Add Frames into PanedWindow
 ###############################################################################
-main_paned.add(frame_first_col)
+main_paned.add(frame_first_col.container)
 main_paned.add(frame_second_col)
 main_paned.add(frame_third_col)
 
@@ -2463,7 +2470,7 @@ if IMAGEMAGICK_WAND is not None:
     tools_set(0)
     text_tool_hide_show()
     progress_files.set(_("Ready"))
-    ##l_border_color.configure(bg=img_border_color.get())
+    l_border_color.configure(bg=img_border_color.get())
     if os.path.isfile(file_in_path.get()):
         open_file_common("", file_in_path.get())
     if img_logo_on.get() == 1:
