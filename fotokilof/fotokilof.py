@@ -711,7 +711,7 @@ def open_screenshot():
 
 def askcolor(initial):
     """ Use color widget ColorChooserDialog from ttkbootstrap"""
-    cd = ColorChooserDialog()
+    cd = ColorChooserDialog(initialcolor=initial)
     cd.show()
     colors = cd.result
     result = colors.hex
