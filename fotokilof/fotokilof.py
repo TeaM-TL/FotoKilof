@@ -29,9 +29,8 @@ THE SOFTWARE.
 nice GUI for ImageMagick command common used (by me)
 """
 
-from tkinter import PhotoImage, Canvas, Label
-from tkinter import filedialog, messagebox
-from tkinter import StringVar, IntVar, TclError, TkVersion
+from tkinter import PhotoImage, Canvas, Label, filedialog, \
+                    StringVar, IntVar, TclError, TkVersion
 
 try:
     from wand.version import MAGICK_VERSION, VERSION
@@ -54,6 +53,7 @@ import ttkbootstrap as ttk
 from ttkbootstrap.scrolled import ScrolledText, ScrolledFrame
 from ttkbootstrap.tooltip import ToolTip
 from ttkbootstrap.dialogs.colorchooser import ColorChooserDialog
+from ttkbootstrap.dialogs.dialogs import Messagebox
 from ttkbootstrap.constants import N, S, W, E, X, BOTH, LEFT, RIGHT, TOP, BOTTOM, END, \
                                     DISABLED, NORMAL, HORIZONTAL
 
@@ -986,7 +986,7 @@ def help_info(event):
         log.write_log("help_info: error during loading license file: " + license_file, "W")
         message = ("Copyright " + version.__copyright__ + " "
                     + version.__author__ + " under MIT license")
-    messagebox.showinfo(title=_("License"), message=message)
+    Messagebox.show_info(message, title=_("License"))
 
 
 def close_program():
@@ -2482,8 +2482,7 @@ if IMAGEMAGICK_WAND is not None:
             preview_logo()
 else:
     root.withdraw()
-    messagebox.showerror(title=_("Error"),
-                         message=_("ImageMagick nor GraphicsMagick are not installed in you system. Is impossible to process any graphics."))
+    Messagebox.show_error(_("ImageMagick nor GraphicsMagick are not installed in you system. Is impossible to process any graphics."), title=_("Error"))
     # disable processing buttons
     img_crop_on.set(0)
     img_normalize_on.set(0)
