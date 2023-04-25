@@ -2175,16 +2175,17 @@ rb_logo_S = ttk.Radiobutton(frame_logo_gravity, text="S",
                             variable=img_logo_gravity, value="S")
 rb_logo_SE = ttk.Radiobutton(frame_logo_gravity, text="SE",
                              variable=img_logo_gravity, value="SE")
-frame_logo_gravity.grid(row=2, column=3, padx=5, sticky=E)
-rb_logo_NW.grid(row=1, column=1, sticky=W, pady=1)
-rb_logo_N.grid(row=1, column=2, pady=1)
-rb_logo_NE.grid(row=1, column=3, sticky=W, pady=1)
-rb_logo_W.grid(row=2, column=1, sticky=W, pady=1)
-rb_logo_C.grid(row=2, column=2, pady=1)
-rb_logo_E.grid(row=2, column=3, sticky=W, pady=1)
-rb_logo_SW.grid(row=3, column=1, sticky=W, pady=1)
-rb_logo_S.grid(row=3, column=2, pady=1)
-rb_logo_SE.grid(row=3, column=3, sticky=W, pady=1)
+frame_logo_gravity.grid(row=2, column=3, padx=5, pady=5, sticky=(S,E))
+
+rb_logo_NW.grid(row=1, column=1, sticky=W, padx=3, pady=2)
+rb_logo_N.grid(row=1, column=2, padx=3, pady=2)
+rb_logo_NE.grid(row=1, column=3, sticky=W, padx=3, pady=2)
+rb_logo_W.grid(row=2, column=1, sticky=W, padx=3, pady=2)
+rb_logo_C.grid(row=2, column=2, padx=3, pady=2)
+rb_logo_E.grid(row=2, column=3, sticky=W, padx=3, pady=2)
+rb_logo_SW.grid(row=3, column=1, sticky=W, padx=3, pady=2)
+rb_logo_S.grid(row=3, column=2, padx=3, pady=2)
+rb_logo_SE.grid(row=3, column=3, sticky=W, padx=3, pady=2)
 
 ###
 frame_logo_preview = ttk.Frame(frame_logo)
