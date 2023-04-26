@@ -34,7 +34,7 @@ from tkinter import PhotoImage, Canvas, Label, filedialog, \
 
 try:
     from wand.version import MAGICK_VERSION, VERSION
-    IMAGEMAGICK_WAND_VERSION = "IM " + MAGICK_VERSION.split(' ')[1] + " : Wand " + VERSION
+    IMAGEMAGICK_WAND_VERSION = "IM " + MAGICK_VERSION.split(' ')[1] + ", Wand " + VERSION
     IMAGEMAGICK_WAND = "OK"
 except:
     print(" ImageMagick or Wand-py not found")
@@ -579,7 +579,7 @@ def open_file_common(cwd, filename):
     if filename is not None:
         try:
             file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
-            root.title(window_title + ' | ' + file_in_path.get())
+            root.title(window_title + file_in_path.get())
             image_size =  convert_wand.get_image_size(file_in_path.get())
             if image_size != (0, 0):
                 file_in_width.set(image_size[0])
@@ -1384,7 +1384,7 @@ def text_tool_hide_show():
 # GUI main window
 ###############################################################################
 
-title_begin = version.__author__ + " : " + version.__appname__ + " " + version.__version__
+title_begin = version.__author__ + " : " + version.__appname__ + " " + version.__version__ + " | "
 root = ttk.Window(resizable=(1,1), title=title_begin)
 ttk.Sizegrip()
 style = ttk.Style()
@@ -2476,8 +2476,8 @@ ToolTip(b_logo_run, text=_("Execute only add logo on current picture"))
 # Run functions
 #
 
-Python_version = "Py " + platform.python_version() + " Tk " + str(TkVersion)
-window_title = title_begin + IMAGEMAGICK_WAND_VERSION + " : " + Python_version + " | "
+Python_version = "Py " + platform.python_version() + ", Tk " + str(TkVersion)
+window_title = title_begin + IMAGEMAGICK_WAND_VERSION + ", " + Python_version + " | "
 root.title(window_title )
 if IMAGEMAGICK_WAND is not None:
     img_text_font_dict = fonts()    # Reading available fonts

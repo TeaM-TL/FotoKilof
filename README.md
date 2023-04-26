@@ -1,6 +1,6 @@
 # FotoKilof - GUI for ImageMagick
 
-GUI for the most used (by me) ImageMagick functionality for processing pictures. 
+GUI for the most used (by me) ImageMagick functionality for processing pictures.
 
 ## Screenshots
 
@@ -8,9 +8,9 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
 
 ![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_linux.png)
 
-### Mac OSX
+### Linux dark mode
 
-![Screenshot MacOS](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_macos.png)
+![Screenshot](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/fotokilof_linux_dark.png)
 
 ### Windows
 
@@ -64,6 +64,9 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - histograms of original and result pictures (temporary disabled),
  - fast file navigation: First, Prev, Next, Last or keys: Home, PgUp, PgDn, End,
  - command editor: possible to use ImageMagick commands for convert: eg. *-gaussian-blur 10x10* or *-monochrome*, etc.
+- dark and light mode
+
+---
 
 ## Processing
 
@@ -92,6 +95,8 @@ Processed is always on clone of picture in memory. Originals are not touched.
 ## Available translations
 
 Available: Bulgarian, English, German, Indonesian, Polish and Turkish.
+
+---
 
 ## Install and run
 
@@ -128,13 +133,8 @@ python -m pip install pywin32 fotokilof
 #### MacOS
 Install requirements:
 ```bash
-brew install imagemagick python@3.10 python-tk@3.10
+brew install imagemagick python@3.11 python-tk@3.11
 ```
-Newer MacOS, add to .zshrc eg.:
-```bash
-export MAGICK_HOME=/opt/homebrew/Cellar/imagemagick/7.1.0-55
-```
-of course, be sure that path to Cellar is correct, and version of ImageMagick
 
 ### Upgrade
 
@@ -151,6 +151,12 @@ or
 ```bash
 python -m fotokilof
 ```
+
+### Dark or Light mode
+
+Press F2 to toggle from Light to Dark or opposite.
+
+---
 
 ## Thanks
 
@@ -169,3 +175,5 @@ python -m fotokilof
 ---
 
 ![Python powered](python-powered.png)
+
+[ttkbootstrap](https://github.com/israel-dryer/ttkbootstrap)
