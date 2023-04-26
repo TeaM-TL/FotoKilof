@@ -106,6 +106,16 @@ preview_size_list = (300, 350, 400, 450, 500, 550, 600, 650, 700, 800,
 ###################
 
 
+def change_ttk_theme(event):
+    """ Press F2 to change ttkbootstrap theme """
+
+    if style.theme.name == 'litera':
+        new = 'darkly'
+    else:
+        new = 'litera'
+    style.theme_use(new)
+
+
 def print_command(cmd):
     """ print command in custom window """
     t_custom.insert(END, cmd + " ")
@@ -569,7 +579,7 @@ def open_file_common(cwd, filename):
     if filename is not None:
         try:
             file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
-            root.title(window_title + file_in_path.get())
+            root.title(window_title + ' | ' + file_in_path.get())
             image_size =  convert_wand.get_image_size(file_in_path.get())
             if image_size != (0, 0):
                 file_in_width.set(image_size[0])
@@ -1377,6 +1387,7 @@ def text_tool_hide_show():
 title_begin = version.__author__ + " : " + version.__appname__ + " " + version.__version__
 root = ttk.Window(resizable=(1,1), title=title_begin)
 ttk.Sizegrip()
+style = ttk.Style()
 # hidden file
 # https://code.activestate.com/lists/python-tkinter-discuss/3723/
 try:
@@ -2328,8 +2339,8 @@ if mswindows.macos():
 else:
     c_preview_orig_pi.bind("<Button-3>", mouse_crop_se)
 root.bind("<F1>", help_info)
+root.bind("<F2>", change_ttk_theme)
 root.protocol("WM_DELETE_WINDOW", close_program)
-
 root.bind("<Prior>", open_file_prev_key)
 root.bind("<Next>", open_file_next_key)
 root.bind("<Home>", open_file_first_key)
@@ -2467,7 +2478,7 @@ ToolTip(b_logo_run, text=_("Execute only add logo on current picture"))
 
 Python_version = "Py " + platform.python_version() + " Tk " + str(TkVersion)
 window_title = title_begin + IMAGEMAGICK_WAND_VERSION + " : " + Python_version + " | "
-root.title(window_title)
+root.title(window_title )
 if IMAGEMAGICK_WAND is not None:
     img_text_font_dict = fonts()    # Reading available fonts
     ini_read_wraper()  # Loading settings from config file
