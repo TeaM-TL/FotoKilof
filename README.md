@@ -174,6 +174,7 @@ Press F2 to toggle from Light to Dark or opposite.
 
 ---
 
-![Python powered](python-powered.png)
+## Powered by
 
-Powered by [ttkbootstrap](https://github.com/israel-dryer/ttkbootstrap)
+- ![Python powered](python-powered.png)
+- [ttkbootstrap](https://github.com/israel-dryer/ttkbootstrap)
