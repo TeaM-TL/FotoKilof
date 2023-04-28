@@ -89,8 +89,8 @@ Processed is always on clone of picture in memory. Originals are not touched.
 
 ## User manual, a bit outdated
 
-- PDF: [English](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/en/fotokilof.pdf), [Polish](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/doc/pl/fotokilof.pdf).
-- MD: [English](doc/en/fotokilof.md), [Polish](doc/pl/fotokilof.md).
+- [English](doc/en/fotokilof.md),
+- [Polish](doc/pl/fotokilof.md).
 
 ## Available translations
 
@@ -135,6 +135,10 @@ Install requirements:
 ```bash
 brew install imagemagick python@3.11 python-tk@3.11
 ```
+
+#### FreeBSD
+
+FotoKilof is available via [ports](https://www.freshports.org/graphics/py-fotokilof/)
 
 ### Upgrade
 
