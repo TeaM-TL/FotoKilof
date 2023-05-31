@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # MYPATH - path to FotoKilof python source
-MAIN=fotokilof.py
+MAIN=__main__.py
 MYPATH="${0%/*}"
 cd $MYPATH
 
