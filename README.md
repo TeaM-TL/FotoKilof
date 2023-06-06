@@ -175,6 +175,7 @@ Press F2 to toggle from Light to Dark or opposite.
  - Olm - testing on Windows,
  - Carbene Hu - idea to fix issue
  - Mert Cobanov - Turkish translation
+ - Giancarlo Dessì - Italian translation, Slackware package
 
 ---
 
