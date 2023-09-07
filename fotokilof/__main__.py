@@ -1460,6 +1460,7 @@ img_custom_on = IntVar()  # Custom
 img_exif_on = IntVar()
 img_vignette_on = IntVar()
 img_vignette_color = StringVar()
+img_compose_on = IntVar()
 progress_var = IntVar()  # progressbar
 progressbar_var = IntVar()
 progress_files = StringVar()
@@ -1640,6 +1641,11 @@ cb_histograms = ttk.Checkbutton(frame_tools_set, text=_("Histograms"),
                                 variable=img_histograms_on,
                                 offvalue="0", onvalue="1",
                                 command=tools_set_off)
+cb_compose = ttk.Checkbutton(frame_tools_set, text=_("Compose"),
+                                bootstyle="info",
+                                variable=img_compose_on,
+                                offvalue="0", onvalue="1",
+                                command=tools_set_off)
 
 cb_crop.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_mirror.pack(padx=5, pady=5, anchor=W, side=LEFT)
@@ -1655,6 +1661,7 @@ cb_logo.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_custom.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_exif.pack(padx=5, pady=5, anchor=W, side=LEFT)
 #cb_histograms.pack(padx=5, pady=1, anchor=W, side=LEFT)
+cb_compose.pack(padx=5, pady=5, anchor=W, side=LEFT)
 
 ####################################################################
 # main row
