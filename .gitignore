@@ -1,6 +1,7 @@
 fotokilof/locale/**/*.mo
 dist/*
 build/*
+tests/*
 .directory
 fotokilof/__pycache__/*
 .DS_Store
