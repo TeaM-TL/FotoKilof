@@ -2,6 +2,8 @@
 
 ## 2023
 
+4.4.0 Added compose two pictures, removed histogram from code
+
 4.3.3 Italian translation, __main__.py instead fotokilof.py
 
 4.3.2 more ttkbootstrap: dark and light mode, licence window
