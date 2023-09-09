@@ -173,6 +173,7 @@ def save(ini_data):
     config.set(compose['section'], 'autoresize', str(compose['autoresize']))
     config.set(compose['section'], 'color', compose['color'])
     config.set(compose['section'], 'gravity', compose['gravity'])
+    config.set(compose['section'], 'preview', compose['preview'])
 
     # save to a file
     try:

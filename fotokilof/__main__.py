@@ -194,6 +194,13 @@ def preview_new_button():
         convert_wand.display_image(path_to_file_out(resized.get()))
 
 
+def compose_preview_button():
+    """ preview picture for compose """
+    # to define file_compose
+    if os.path.isfile(path_to_file_out(resized.get())):
+        convert_wand.display_image(path_to_file_out(resized.get()))
+
+
 def extension_from_file():
     """ set extension in ComboBox same as opened file"""
     path = os.path.splitext(file_in_path.get())
@@ -950,14 +957,14 @@ def ini_read_wraper():
     img_mirror_flip.set(ini_entries['img_mirror_flip'])
     img_mirror_flop.set(ini_entries['img_mirror_flop'])
     # compose
-    ini_entries = ini_read.compose(FILE_INI)
+    ini_entries = ini_read.compose(FILE_INI, preview_size_list)
     img_compose_on.set(ini_entries['compose_on'])
     img_compose_file.set(ini_entries['compose_filename'])
     img_compose_right.set(ini_entries['compose_right'])
     img_compose_autoresize.set(ini_entries['compose_autoresize'])
     img_compose_color.set(ini_entries['compose_color'])
     img_compose_gravity.set(ini_entries['compose_gravity'])
-
+    co_compose_preview_selector.current(preview_size_list.index(ini_entries['preview']))
 
 def ini_save_wraper():
     """ Write variables into config file INI """
@@ -1069,7 +1076,8 @@ def ini_save_wraper():
                 'right': img_compose_right.get(),
                 'autoresize': img_compose_autoresize.get(),
                 'color': img_compose_color.get(),
-                'gravity': img_compose_gravity.get()}
+                'gravity': img_compose_gravity.get(),
+                'preview': co_compose_preview_selector.get()}
 
     ini_save_data = (FILE_INI, config, resize, text, rotate, crop, border,
                     color, normalize, contrast, mirror, vignette, logo, compose)
@@ -2395,12 +2403,12 @@ b_compose_preview_run = ttk.Button(frame_compose_preview, text=_("Preview"),
                                bootstyle="secondary",
                                command=compose_preview_button)
 l_compose_preview = ttk.Label(frame_compose_preview)
-co_preview_selector_new = ttk.Combobox(frame_compose_preview, width=4, bootstyle="secondary",
+co_compose_preview_selector = ttk.Combobox(frame_compose_preview, width=4, bootstyle="secondary",
                                        values=preview_size_list)
-co_preview_selector_new.configure(state='readonly')
+co_compose_preview_selector.configure(state='readonly')
 pi_compose_preview = PhotoImage()
 c_compose_preview_pi = Canvas(frame_compose_preview)
-c_preview_orig_pi.create_image(0, 0, image=pi_preview_orig, anchor='ne')
+c_compose_preview_pi.create_image(0, 0, image=pi_compose_preview, anchor='ne')
 
 c_compose_preview_pi.pack(side=BOTTOM, anchor=W)
 b_compose_preview_run.pack(side=LEFT, padx=5, pady=5)

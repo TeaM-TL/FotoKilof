@@ -661,7 +661,7 @@ def mirror(file_ini):
     return dict_return
 
 
-def compose(file_ini):
+def compose(file_ini, preview_size_list):
     """ Compose congiguration """
 
     # output dictionary
@@ -707,5 +707,11 @@ def compose(file_ini):
     dict_return['compose_gravity'] = entries.parse_list(gravity,
             ("N", "W", "C", "E", "S"), "C")
 
+    try:
+        preview = config.getint('Compose', 'preview')
+    except:
+        preview = 400
+    dict_return['preview'] = entries.parse_list(preview,
+                                                     preview_size_list, 400)
     return dict_return
 # EOF
