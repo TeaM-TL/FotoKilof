@@ -2365,15 +2365,15 @@ b_compose_color = ttk.Button(frame_compose_autoresize, text=_("Color"),
                             bootstyle="outline",
                             command=color_choose_compose)
 l_compose_color = Label(frame_compose_autoresize, text=_("  "))
-rb_compose_N = ttk.Radiobutton(frame_compose_autoresize, text="N",
+rb_compose_N = ttk.Radiobutton(frame_compose_autoresize, text="Top",
                             variable=img_compose_gravity, value="N")
-rb_compose_W = ttk.Radiobutton(frame_compose_autoresize, text="W",
+rb_compose_W = ttk.Radiobutton(frame_compose_autoresize, text="Left",
                             variable=img_compose_gravity, value="W")
 rb_compose_C = ttk.Radiobutton(frame_compose_autoresize, text=_("Center"),
                             variable=img_compose_gravity, value="C")
-rb_compose_E = ttk.Radiobutton(frame_compose_autoresize, text="E",
+rb_compose_E = ttk.Radiobutton(frame_compose_autoresize, text="Right",
                             variable=img_compose_gravity, value="E")
-rb_compose_S = ttk.Radiobutton(frame_compose_autoresize, text="S",
+rb_compose_S = ttk.Radiobutton(frame_compose_autoresize, text="Bottom",
                             variable=img_compose_gravity, value="S")
 
 b_compose_color.grid(padx=5, pady=5, row=1, column=1)
@@ -2622,6 +2622,21 @@ ToolTip(e_logo_dx, text=_("Horizontal offset from gravity point"))
 ToolTip(e_logo_dy, text=_("Vertical offset from gravity point"))
 ToolTip(frame_logo_gravity, text=_("Use gravity for putting picture"))
 ToolTip(b_logo_run, text=_("Execute only add logo on current picture"))
+# Compose
+ToolTip(b_compose_select, text=_("Select picture to compose with main picture"))
+ToolTip(rb_compose_bottom, text=_("Join picture at bottom"))
+ToolTip(rb_compose_right, text=_("Join picture at right"))
+ToolTip(cb_compose_autoresize, text=_("Autoresize picture if dimensions are not equal"))
+ToolTip(l_compose_color, text=_("Selected color to fill gap"))
+ToolTip(b_compose_color, text=_("Select color of gap"))
+ToolTip(rb_compose_N, text=_("Join picture on right and move to top"))
+ToolTip(rb_compose_W, text=_("Join picture at bottom and move to left"))
+ToolTip(rb_compose_C, text=_("Join picture and move to center"))
+ToolTip(rb_compose_E, text=_("Join picture at bottom and move to right"))
+ToolTip(rb_compose_S, text=_("Join picture on right and move to bottom"))
+ToolTip(b_compose_run, text=_("Execute compose picture with current main picture"))
+
+
 
 ##########################################
 # Run functions
