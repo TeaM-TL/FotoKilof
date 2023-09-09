@@ -36,7 +36,7 @@ Every function read part of config file
 - normalize
 - contrast
 - logo
-- custom
+- compose
 """
 
 import configparser
@@ -48,7 +48,7 @@ import common
 def main(file_ini, preview_size_list):
     """ General settings """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -56,51 +56,51 @@ def main(file_ini, preview_size_list):
 
     # read values from a section
     try:
-        file_in = config.get('Konfiguracja', 'path')
+        file_in = config.get('Main', 'path')
     except:
         file_in = ""
     dict_return['file_in_path'] = file_in
 
     try:
-        dir_work = config.get('Konfiguracja', 'work_dir')
+        dir_work = config.get('Main', 'work_dir')
     except:
         dir_work = "FotoKilof"
     dict_return['work_dir'] = dir_work
 
     try:
-        file_dir_select = config.getint('Konfiguracja', 'file_dir')
+        file_dir_select = config.getint('Main', 'file_dir')
     except:
         file_dir_select = "0"
     dict_return['file_dir_selector'] = entries.parse_list(file_dir_select, (0, 1), 0)
 
     try:
-        exif = config.getint('Konfiguracja', 'exif')
+        exif = config.getint('Main', 'exif')
     except:
         exif = "0"
     dict_return['img_exif_on'] = entries.parse_list(exif, (0, 1), 0)
 
     try:
-        histograms = config.getint('Konfiguracja', 'histograms')
+        custom = config.getint('Main', 'custom')
     except:
-        histograms = "0"
-    dict_return['img_histograms_on'] = entries.parse_list(histograms, (0, 1), 0)
+        custom = 0
+    dict_return['img_custom_on'] = entries.parse_list(custom, (0, 1), 0)
 
     try:
-        preview_orig = config.getint('Konfiguracja', 'preview_orig')
+        preview_orig = config.getint('Main', 'preview_orig')
     except:
         preview_orig = 400
     dict_return['preview_orig'] = entries.parse_list(preview_orig,
                                                      preview_size_list, 400)
 
     try:
-        preview_new = config.getint('Konfiguracja', 'preview_new')
+        preview_new = config.getint('Main', 'preview_new')
     except:
         preview_new = 400
     dict_return['preview_new'] = entries.parse_list(preview_new,
                                                     preview_size_list, 400)
 
     try:
-        log_level = config.get('Konfiguracja', 'log_level')
+        log_level = config.get('Main', 'log_level')
     except:
         log_level = "E"
     dict_return['log_level'] = entries.parse_list(log_level,
@@ -113,7 +113,7 @@ def main(file_ini, preview_size_list):
 def resize(file_ini):
     """ Resize/scalling """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -155,7 +155,7 @@ def resize(file_ini):
 def text(file_ini, fonts_dict):
     """ Text configuration """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -252,7 +252,7 @@ def text(file_ini, fonts_dict):
 def rotate(file_ini):
     """ Rotate configuration """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -288,7 +288,7 @@ def rotate(file_ini):
 def crop(file_ini):
     """ Crop configuration """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -391,7 +391,7 @@ def crop(file_ini):
 def border(file_ini):
     """ Border congiguration """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -427,7 +427,7 @@ def border(file_ini):
 def vignette(file_ini):
     """ Vignette congiguration """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -475,7 +475,7 @@ def vignette(file_ini):
 def colors(file_ini):
     """ Color configuration """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -505,7 +505,7 @@ def colors(file_ini):
 def normalize(file_ini, channels):
     """ Normalize """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -535,7 +535,7 @@ def normalize(file_ini, channels):
 def contrast(file_ini, contrast_selection_valid_list):
     """ Contrast configuration """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -579,7 +579,7 @@ def contrast(file_ini, contrast_selection_valid_list):
 def logo(file_ini):
     """ Logo cofiguration """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -634,7 +634,7 @@ def logo(file_ini):
 def mirror(file_ini):
     """ Rotate configuration """
 
-    # słownik wyjściowy
+    # output dictionary
     dict_return = {}
 
     config = configparser.ConfigParser()
@@ -660,4 +660,52 @@ def mirror(file_ini):
 
     return dict_return
 
+
+def compose(file_ini):
+    """ Compose congiguration """
+
+    # output dictionary
+    dict_return = {}
+
+    config = configparser.ConfigParser()
+    config.read(file_ini, encoding="utf8")
+
+    try:
+        on = config.getint('Compose', 'on')
+    except:
+        on = "0"
+    dict_return['compose_on'] = entries.parse_list(on, (0, 1), 0)
+
+    try:
+        file = config.get('Compose', 'filename')
+    except:
+        file = ""
+    dict_return['compose_filename'] = file
+
+    try:
+        right = config.getint('Compose', 'right')
+    except:
+        right = 0
+    dict_return['compose_right'] = entries.parse_list(right, (0, 1), 0)
+
+    try:
+        autoresize = config.getint('Compose', 'autoresize')
+    except:
+        autoresize = 1
+    dict_return['compose_autoresize'] = entries.parse_list(autoresize, (0, 1), 1)
+
+    try:
+        color = config.get('Compose', 'color')
+    except:
+        color = "#FFFFFF"
+    dict_return['compose_color'] = entries.parse_color(color, '#FFFFFF')
+
+    try:
+        gravity = config.get('Compose', 'gravity')
+    except:
+        gravity = "C"
+    dict_return['compose_gravity'] = entries.parse_list(gravity,
+            ("N", "W", "C", "E", "S"), "C")
+
+    return dict_return
 # EOF

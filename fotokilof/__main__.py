@@ -130,7 +130,6 @@ def preview_orig_clear():
     """ clear every preview if doesn't choose file """
     log.write_log("clear preview", "M")
     c_preview_orig_pi.delete('all')
-    c_histogram_orig.delete('all')
     # if no original, new preview should be clear too
     preview_new_clear()
 
@@ -139,7 +138,6 @@ def preview_new_clear():
     """ clear every preview if doesn't choose file """
     log.write_log("clear preview", "M")
     c_preview_new_pi.delete('all')
-    c_histogram_new.delete('all')
 
 
 def preview_new_refresh(event):
@@ -176,14 +174,6 @@ def preview_new(file_out):
 
         gui.copy_to_clipboard(file_out)
 
-        if img_histograms_on.get() == 1:
-            try:
-                pi_histogram_new.configure(file=preview.preview_histogram(file_out))
-                c_histogram_new.delete('all')
-                #c_histogram_orig.configure(width=400, height=400)
-                c_histogram_new.create_image(0, 0, image=pi_histogram_new, anchor='nw')
-            except:
-                log.write_log("previe_new: errot in preview histogram_new", "E")
     else:
         preview_new_clear()
 
@@ -537,6 +527,33 @@ def font_selected(event):
     img_text_font.set(co_text_font.get())
 
 
+def convert_compose_button():
+    """ Compose button """
+    return None
+
+
+def compose_autoresize():
+    """ If autoresize is on, turn off next row with options """
+    if img_compose_autoresize.get():
+        frame_compose_autoresize.grid_remove()
+    else:
+        frame_compose_autoresize.grid()
+
+
+def compose_autoresize_gravity():
+    """ Select N, C, S or W, C, E gravity for compose """
+    if img_compose_right.get():
+        rb_compose_W.grid_remove()
+        rb_compose_E.grid_remove()
+        rb_compose_N.grid()
+        rb_compose_S.grid()
+    else:
+        rb_compose_N.grid_remove()
+        rb_compose_S.grid_remove()
+        rb_compose_W.grid()
+        rb_compose_E.grid()
+
+
 def convert_logo_button():
     """ Logo button """
     progress_files.set(_("Processing"))
@@ -550,6 +567,18 @@ def convert_logo_button():
         convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
+
+
+def open_file_compose():
+    """ open file to append and compose """
+    filename = open_file_dialog(os.path.dirname(img_compose_file.get()),
+                                _("Select picture for composing"))
+    img_compose_file.set(filename)
+
+    # if os.path.isfile(file_logo_path.get()):
+    #     preview_logo()
+    # else:
+    #     preview_logo_clear()
 
 
 def open_file_logo():
@@ -771,6 +800,13 @@ def color_choose():
         img_text_color.set(color)
         l_text_color.configure(fg=img_text_color.get())
 
+def color_choose_compose():
+    """ color selection for compose"""
+    color = ask_color(img_compose_color.get())
+    if color is not None:
+        img_compose_color.set(color)
+        l_compose_color.configure(bg=color)
+
 
 def ini_read_wraper():
     """ Read config INI file """
@@ -780,10 +816,10 @@ def ini_read_wraper():
     file_dir_selector.set(ini_entries['file_dir_selector'])
     work_dir.set(ini_entries['work_dir'])
     img_exif_on.set(ini_entries['img_exif_on'])
-    img_histograms_on.set(ini_entries['img_histograms_on'])
     co_preview_selector_orig.current(preview_size_list.index(ini_entries['preview_orig']))
     co_preview_selector_new.current(preview_size_list.index(ini_entries['preview_new']))
     log_level.set(ini_entries['log_level'])
+    img_custom_on.set(ini_entries['img_custom_on'])
     # resize
     ini_entries = ini_read.resize(FILE_INI)
     img_resize_on.set(ini_entries['img_resize_on'])
@@ -913,73 +949,130 @@ def ini_read_wraper():
     img_mirror_on.set(ini_entries['img_mirror_on'])
     img_mirror_flip.set(ini_entries['img_mirror_flip'])
     img_mirror_flop.set(ini_entries['img_mirror_flop'])
+    # compose
+    ini_entries = ini_read.compose(FILE_INI)
+    img_compose_on.set(ini_entries['compose_on'])
+    img_compose_file.set(ini_entries['compose_filename'])
+    img_compose_right.set(ini_entries['compose_right'])
+    img_compose_autoresize.set(ini_entries['compose_autoresize'])
+    img_compose_color.set(ini_entries['compose_color'])
+    img_compose_gravity.set(ini_entries['compose_gravity'])
 
 
 def ini_save_wraper():
     """ Write variables into config file INI """
     # main
-    config = {'section': 'Konfiguracja', 'path': file_in_path.get(),
+    config = {'section': 'Main',
+                'path': file_in_path.get(),
                 'custom_on': img_custom_on.get(),
-                'work_dir': work_dir.get(), 'file_dir': file_dir_selector.get(),
-                'exif': img_exif_on.get(), 'preview_new': co_preview_selector_new.get(),
-                'histograms': img_histograms_on.get(),
-                'log': log_level.get(), 'preview_orig': co_preview_selector_orig.get()}
+                'work_dir': work_dir.get(),
+                'file_dir': file_dir_selector.get(),
+                'exif': img_exif_on.get(),
+                'preview_new': co_preview_selector_new.get(),
+                'preview_orig': co_preview_selector_orig.get(),
+                'log': log_level.get()}
     # resize
-    resize = {'section': 'Resize', 'on': img_resize_on.get(),
-                'resize': img_resize.get(), 'size_percent': e2_resize.get(),
-                'size_pixel_x': e1_resize_x.get(), 'size_pixel_y': e1_resize_y.get()}
+    resize = {'section': 'Resize',
+                'on': img_resize_on.get(),
+                'resize': img_resize.get(),
+                'size_percent': e2_resize.get(),
+                'size_pixel_x': e1_resize_x.get(),
+                'size_pixel_y': e1_resize_y.get()}
     # text
-    text = {'section': 'Text', 'on': img_text_on.get(),
-            'inout': img_text_inout.get(), 'text': e_text.get(),
-            'gravity': img_text_gravity.get(),
-            'gravity_onoff': img_text_gravity_onoff.get(),
-            'font': img_text_font.get(), 'size': e_text_size.get(),
-            'color': img_text_color.get(), 'box': img_text_box.get(),
-            'box_color': img_text_box_color.get(),
-            'x': e_text_x.get(), 'y': e_text_y.get(),
-            'text_rotate': img_text_rotate.get(), 'text_rotate_own': e_text_angle.get()}
+    text = {'section': 'Text',
+                'on': img_text_on.get(),
+                'inout': img_text_inout.get(),
+                'text': e_text.get(),
+                'gravity': img_text_gravity.get(),
+                'gravity_onoff': img_text_gravity_onoff.get(),
+                'font': img_text_font.get(),
+                'size': e_text_size.get(),
+                'color': img_text_color.get(),
+                'box': img_text_box.get(),
+                'box_color': img_text_box_color.get(),
+                'x': e_text_x.get(),
+                'y': e_text_y.get(),
+                'text_rotate': img_text_rotate.get(),
+                'text_rotate_own': e_text_angle.get()}
     # rotate
-    rotate = {'section': 'Rotate', 'on': img_rotate_on.get(),
-                'rotate': img_rotate.get(), 'own': e_rotate_own.get(),
+    rotate = {'section': 'Rotate',
+                'on': img_rotate_on.get(),
+                'rotate': img_rotate.get(),
+                'own': e_rotate_own.get(),
                 'color': img_rotate_color.get()}
     # crop
-    crop = {'section': 'Crop', 'on': img_crop_on.get(), 'crop': img_crop.get(),
-            '1_x1': e1_crop_1.get(), '1_y1': e2_crop_1.get(),
-            '1_x2': e3_crop_1.get(), '1_y2': e4_crop_1.get(),
-            '2_x1': e1_crop_2.get(), '2_y1': e2_crop_2.get(),
-            '2_width': e3_crop_2.get(), '2_height': e4_crop_2.get(),
-            '3_dx': e1_crop_3.get(), '3_dy': e2_crop_3.get(),
-            '3_width': e3_crop_3.get(), '3_height': e4_crop_3.get(),
-            'gravity': img_crop_gravity.get()}
+    crop = {'section': 'Crop',
+                'on': img_crop_on.get(),
+                'crop': img_crop.get(),
+                '1_x1': e1_crop_1.get(),
+                '1_y1': e2_crop_1.get(),
+                '1_x2': e3_crop_1.get(),
+                '1_y2': e4_crop_1.get(),
+                '2_x1': e1_crop_2.get(),
+                '2_y1': e2_crop_2.get(),
+                '2_width': e3_crop_2.get(),
+                '2_height': e4_crop_2.get(),
+                '3_dx': e1_crop_3.get(),
+                '3_dy': e2_crop_3.get(),
+                '3_width': e3_crop_3.get(),
+                '3_height': e4_crop_3.get(),
+                'gravity': img_crop_gravity.get()}
     # border
-    border = {'section': 'Border', 'on': img_border_on.get(), 'color': img_border_color.get(),
-                'size_x': e_border_ns.get(), 'size_y': e_border_we.get()}
+    border = {'section': 'Border',
+                'on': img_border_on.get(),
+                'color': img_border_color.get(),
+                'size_x': e_border_ns.get(),
+                'size_y': e_border_we.get()}
     # color
-    color = {'section': 'Color', 'on': img_bw_on.get(),
-                'black-white': img_bw.get(), 'sepia': e_bw_sepia.get()}
+    color = {'section': 'Color',
+                'on': img_bw_on.get(),
+                'black-white': img_bw.get(),
+                'sepia': e_bw_sepia.get()}
     # normalize
-    normalize = {'section': 'Normalize', 'on': img_normalize_on.get(),
-                 'normalize': img_normalize.get(), 'channel': co_normalize_channel.get()}
+    normalize = {'section': 'Normalize',
+                'on': img_normalize_on.get(),
+                'normalize': img_normalize.get(),
+                'channel': co_normalize_channel.get()}
     # contrast
-    contrast = {'section': 'Contrast', 'on': img_contrast_on.get(),
-                'contrast': img_contrast.get(), 'selection': co_contrast_selection.get(),
-                'contrast_stretch_1': e1_contrast.get(), 'contrast_stretch_2': e2_contrast.get()}
+    contrast = {'section': 'Contrast',
+                'on': img_contrast_on.get(),
+                'contrast': img_contrast.get(),
+                'selection': co_contrast_selection.get(),
+                'contrast_stretch_1': e1_contrast.get(),
+                'contrast_stretch_2': e2_contrast.get()}
     # mirror
-    mirror = {'section': 'Mirror', 'on': img_mirror_on.get(),
-                'flip': img_mirror_flip.get(), 'flop': img_mirror_flop.get()}
+    mirror = {'section': 'Mirror',
+                'on': img_mirror_on.get(),
+                'flip': img_mirror_flip.get(),
+                'flop': img_mirror_flop.get()}
     # vignette
-    vignette = {'section': 'Vignette', 'on': img_vignette_on.get(),
-                'color': img_vignette_color.get(),
-                'dx': e_vignette_dx.get(), 'dy': e_vignette_dy.get(),
-                'radius': e_vignette_radius.get(), 'sigma': e_vignette_sigma.get()}
+    vignette = {'section': 'Vignette',
+                'on': img_vignette_on.get(),
+                'dx': e_vignette_dx.get(),
+                'dy': e_vignette_dy.get(),
+                'radius': e_vignette_radius.get(),
+                'sigma': e_vignette_sigma.get(),
+                'color': img_vignette_color.get()}
     # logo
-    logo = { 'section': 'Logo', 'on': img_logo_on.get(),
-                'logo': file_logo_path.get(), 'gravity': img_logo_gravity.get(),
-                'width': e_logo_width.get(), 'height': e_logo_height.get(),
-                'dx': e_logo_dx.get(), 'dy': e_logo_dy.get()}
+    logo = { 'section': 'Logo',
+                'on': img_logo_on.get(),
+                'logo': file_logo_path.get(),
+                'gravity': img_logo_gravity.get(),
+                'width': e_logo_width.get(),
+                'height': e_logo_height.get(),
+                'dx': e_logo_dx.get(),
+                'dy': e_logo_dy.get()}
+    # compose
+    compose = {'section': 'Compose',
+                'on': img_compose_on.get(),
+                'filename': img_compose_file.get(),
+                'right': img_compose_right.get(),
+                'autoresize': img_compose_autoresize.get(),
+                'color': img_compose_color.get(),
+                'gravity': img_compose_gravity.get()}
 
     ini_save_data = (FILE_INI, config, resize, text, rotate, crop, border,
-                    color, normalize, contrast, mirror, vignette, logo)
+                    color, normalize, contrast, mirror, vignette, logo, compose)
     ini_save.save(ini_save_data)
 
 
@@ -1131,13 +1224,6 @@ def preview_orig():
                                      + preview_picture['size'])
             except:
                 log.write_log("preview_orig: Cannot load image size", "E")
-
-            if img_histograms_on.get() == 1:
-                pi_histogram_orig.configure(
-                        file=preview.preview_histogram(file_in_path.get()))
-                c_histogram_orig.delete('all')
-                #c_histogram_orig.configure(width=400, height=400)
-                c_histogram_orig.create_image(0, 0, image=pi_histogram_orig, anchor='nw')
         else:
             preview_orig_clear()
     progress_files.set(_("Ready"))
@@ -1185,100 +1271,110 @@ def tools_set(preview_on):
     """ selection tools for showing """
     l_info_when_no_tool.grid()
 
-    if img_crop_on.get() == 0:
+    if img_compose_on.get():
         frame_crop.grid_remove()
-    else:
-        frame_crop.grid()
-        crop_tool_hide_show()
-        l_info_when_no_tool.grid_remove()
-
-    if img_mirror_on.get() == 0:
         frame_mirror.grid_remove()
-    else:
-        frame_mirror.grid(row=1, column=1, sticky=(W, N, S), padx=5)
-        l_info_when_no_tool.grid_remove()
-
-    if img_bw_on.get() == 0:
         frame_bw.grid_remove()
-    else:
-        frame_bw.grid(row=1, column=1, sticky=W, padx=5)
-        l_info_when_no_tool.grid_remove()
-
-    if img_contrast_on.get() == 0:
         frame_contrast.grid_remove()
-    else:
-        frame_contrast.grid(row=1, column=2, sticky=W, padx=5)
-        l_info_when_no_tool.grid_remove()
-
-    if img_normalize_on.get() == 0:
         frame_normalize.grid_remove()
-    else:
-        frame_normalize.grid(row=1, column=2, sticky=W, padx=5)
-        l_info_when_no_tool.grid_remove()
-
-    if img_vignette_on.get() == 0:
         frame_vignette.grid_remove()
-    else:
-        frame_vignette.grid(row=1, column=2, sticky=W, padx=5)
-        l_info_when_no_tool.grid_remove()
-
-    if img_border_on.get() == 0:
         frame_border.grid_remove()
-    else:
-        frame_border.grid(row=1, column=1, sticky=W, padx=5)
-        l_info_when_no_tool.grid_remove()
-
-    if img_rotate_on.get() == 0:
         frame_rotate.grid_remove()
-    else:
-        frame_rotate.grid()
-        l_info_when_no_tool.grid_remove()
-
-    if img_resize_on.get() == 0:
         frame_resize.grid_remove()
-    else:
-        frame_resize.grid()
-        l_info_when_no_tool.grid_remove()
-
-    if img_text_on.get() == 0:
         frame_text.grid_remove()
-    else:
-        frame_text.grid()
-        l_info_when_no_tool.grid_remove()
-
-    if img_logo_on.get() == 0:
         frame_logo.grid_remove()
-    else:
-        frame_logo.grid()
-        l_info_when_no_tool.grid_remove()
-
-    if img_custom_on.get() == 0:
         frame_custom.grid_remove()
-    else:
-        frame_custom.grid()
         l_info_when_no_tool.grid_remove()
-
-    if img_histograms_on.get() == 0:
-        frame_histogram_orig.grid_remove()
-        frame_histogram_new.grid_remove()
+        frame_compose.grid()
     else:
-        frame_histogram_orig.grid()
-        frame_histogram_new.grid()
+        frame_compose.grid_remove()
+        if img_crop_on.get():
+            frame_crop.grid()
+            crop_tool_hide_show()
+            l_info_when_no_tool.grid_remove()
+        else:
+            frame_crop.grid_remove()
 
-    if (img_bw_on.get() == 0) and (img_contrast_on.get() == 0):
-        frame_bw_contrast.grid_remove()
-    else:
-        frame_bw_contrast.grid()
+        if img_mirror_on.get():
+            frame_mirror.grid(row=1, column=1, sticky=(W, N, S), padx=5)
+            l_info_when_no_tool.grid_remove()
+        else:
+            frame_mirror.grid_remove()
 
-    if (img_border_on.get() == 0) and (img_normalize_on.get() == 0):
-        frame_border_normalize.grid_remove()
-    else:
-        frame_border_normalize.grid()
+        if img_bw_on.get() == 0:
+            frame_bw.grid_remove()
+        else:
+            frame_bw.grid(row=1, column=1, sticky=W, padx=5)
+            l_info_when_no_tool.grid_remove()
 
-    if (img_mirror_on.get() == 0) and (img_vignette_on.get() == 0):
-        frame_mirror_vignette.grid_remove()
-    else:
-        frame_mirror_vignette.grid()
+        if img_contrast_on.get() == 0:
+            frame_contrast.grid_remove()
+        else:
+            frame_contrast.grid(row=1, column=2, sticky=W, padx=5)
+            l_info_when_no_tool.grid_remove()
+
+        if img_normalize_on.get() == 0:
+            frame_normalize.grid_remove()
+        else:
+            frame_normalize.grid(row=1, column=2, sticky=W, padx=5)
+            l_info_when_no_tool.grid_remove()
+
+        if img_vignette_on.get() == 0:
+            frame_vignette.grid_remove()
+        else:
+            frame_vignette.grid(row=1, column=2, sticky=W, padx=5)
+            l_info_when_no_tool.grid_remove()
+
+        if img_border_on.get() == 0:
+            frame_border.grid_remove()
+        else:
+            frame_border.grid(row=1, column=1, sticky=W, padx=5)
+            l_info_when_no_tool.grid_remove()
+
+        if img_rotate_on.get() == 0:
+            frame_rotate.grid_remove()
+        else:
+            frame_rotate.grid()
+            l_info_when_no_tool.grid_remove()
+
+        if img_resize_on.get() == 0:
+            frame_resize.grid_remove()
+        else:
+            frame_resize.grid()
+            l_info_when_no_tool.grid_remove()
+
+        if img_text_on.get() == 0:
+            frame_text.grid_remove()
+        else:
+            frame_text.grid()
+            l_info_when_no_tool.grid_remove()
+
+        if img_logo_on.get():
+            frame_logo.grid()
+            l_info_when_no_tool.grid_remove()
+        else:
+            frame_logo.grid_remove()
+
+        if img_custom_on.get():
+            frame_custom.grid()
+            l_info_when_no_tool.grid_remove()
+        else:
+            frame_custom.grid_remove()
+
+        if (img_bw_on.get() == 0) and (img_contrast_on.get() == 0):
+            frame_bw_contrast.grid_remove()
+        else:
+            frame_bw_contrast.grid()
+
+        if (img_border_on.get() == 0) and (img_normalize_on.get() == 0):
+            frame_border_normalize.grid_remove()
+        else:
+            frame_border_normalize.grid()
+
+        if (img_mirror_on.get() == 0) and (img_vignette_on.get() == 0):
+            frame_mirror_vignette.grid_remove()
+        else:
+            frame_mirror_vignette.grid()
 
     if preview_on:
         preview_orig()
@@ -1417,7 +1513,6 @@ file_in_path = StringVar()  # fullpath original picture
 file_in_width = IntVar() # width original picture
 file_in_height = IntVar() # height original picture
 file_in_size = IntVar() # size original picture (bytes)
-img_histograms_on = IntVar()
 img_logo_on = IntVar()  # Logo
 file_logo_path = StringVar()  # fullpath logo file
 img_logo_gravity = StringVar()
@@ -1460,7 +1555,12 @@ img_custom_on = IntVar()  # Custom
 img_exif_on = IntVar()
 img_vignette_on = IntVar()
 img_vignette_color = StringVar()
-img_compose_on = IntVar()
+img_compose_on = IntVar()  # Compose
+img_compose_file = StringVar()  # fullpath file for compose
+img_compose_right = IntVar()
+img_compose_autoresize = IntVar()
+img_compose_color = StringVar()
+img_compose_gravity = StringVar()
 progress_var = IntVar()  # progressbar
 progressbar_var = IntVar()
 progress_files = StringVar()
@@ -1624,7 +1724,7 @@ cb_logo = ttk.Checkbutton(frame_tools_set, text=_("Logo"),
 cb_custom = ttk.Checkbutton(frame_tools_set, text=_("Custom"),
                             bootstyle="info",
                             variable=img_custom_on,
-                            offvalue="0", onvalue="1",
+                            offvalue=0, onvalue=1,
                             command=tools_set_off)
 cb_vignette = ttk.Checkbutton(frame_tools_set, text=_("Vignette"),
                             bootstyle="info",
@@ -1634,11 +1734,6 @@ cb_vignette = ttk.Checkbutton(frame_tools_set, text=_("Vignette"),
 cb_exif = ttk.Checkbutton(frame_tools_set, text=_("EXIF"),
                                 bootstyle="info",
                                 variable=img_exif_on,
-                                offvalue="0", onvalue="1",
-                                command=tools_set_off)
-cb_histograms = ttk.Checkbutton(frame_tools_set, text=_("Histograms"),
-                                bootstyle="info",
-                                variable=img_histograms_on,
                                 offvalue="0", onvalue="1",
                                 command=tools_set_off)
 cb_compose = ttk.Checkbutton(frame_tools_set, text=_("Compose"),
@@ -1660,7 +1755,6 @@ cb_text.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_logo.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_custom.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_exif.pack(padx=5, pady=5, anchor=W, side=LEFT)
-#cb_histograms.pack(padx=5, pady=1, anchor=W, side=LEFT)
 cb_compose.pack(padx=5, pady=5, anchor=W, side=LEFT)
 
 ####################################################################
@@ -2233,6 +2327,77 @@ t_custom.pack(expand=1, fill=BOTH, padx=5, pady=5)
 b_custom_run.pack(side=RIGHT, padx=5, pady=5)
 b_custom_clear.pack(side=RIGHT, padx=5, pady=5)
 
+###########################
+# Compose
+###########################
+frame_compose = ttk.LabelFrame(frame_first_col, text=_("Compose"))
+
+### Main
+frame_compose_main = ttk.Frame(frame_compose)
+b_compose_select = ttk.Button(frame_compose_main, text=_("File selection"),
+                            command=open_file_compose, bootstyle="outline")
+rb_compose_bottom = ttk.Radiobutton(frame_compose_main, text=_("Bottom"),
+                            variable=img_compose_right, value="0",
+                            command=compose_autoresize_gravity)
+rb_compose_right = ttk.Radiobutton(frame_compose_main, text=_("Right"),
+                            variable=img_compose_right, value="1",
+                            command=compose_autoresize_gravity)
+cb_compose_autoresize = ttk.Checkbutton(frame_compose_main, text=_("Autoresize"),
+                            variable=img_compose_autoresize,
+                            onvalue="1", offvalue="0",
+                            command=compose_autoresize)
+
+b_compose_run = ttk.Button(frame_compose_main, text=_("Execute"),
+                            command=convert_compose_button)
+
+b_compose_select.pack(padx=5, pady=5, anchor=W, side=LEFT)
+rb_compose_bottom.pack(padx=5, pady=5, anchor=W, side=LEFT)
+rb_compose_right.pack(padx=5, pady=5, anchor=W, side=LEFT)
+cb_compose_autoresize.pack(padx=5, pady=5, anchor=W, side=LEFT)
+b_compose_run.pack(padx=5, pady=5, anchor=W, side=LEFT)
+
+frame_compose_main.grid(row=1, padx=5, pady=5, sticky=W)
+
+### Autoresize
+frame_compose_autoresize = ttk.Frame(frame_compose)
+
+b_compose_color = ttk.Button(frame_compose_autoresize, text=_("Color"),
+                            bootstyle="outline",
+                            command=color_choose_compose)
+l_compose_color = Label(frame_compose_autoresize, text=_("  "))
+rb_compose_N = ttk.Radiobutton(frame_compose_autoresize, text="N",
+                            variable=img_compose_gravity, value="N")
+rb_compose_W = ttk.Radiobutton(frame_compose_autoresize, text="W",
+                            variable=img_compose_gravity, value="W")
+rb_compose_C = ttk.Radiobutton(frame_compose_autoresize, text=_("Center"),
+                            variable=img_compose_gravity, value="C")
+rb_compose_E = ttk.Radiobutton(frame_compose_autoresize, text="E",
+                            variable=img_compose_gravity, value="E")
+rb_compose_S = ttk.Radiobutton(frame_compose_autoresize, text="S",
+                            variable=img_compose_gravity, value="S")
+
+b_compose_color.grid(padx=5, pady=5, row=1, column=1)
+l_compose_color.grid(padx=5, pady=5, row=1, column=2)
+rb_compose_N.grid(padx=5, pady=5, row=1, column=3)
+rb_compose_W.grid(padx=5, pady=5, row=1, column=3)
+rb_compose_C.grid(padx=5, pady=5, row=1, column=4)
+rb_compose_E.grid(padx=5, pady=5, row=1, column=5)
+rb_compose_S.grid(padx=5, pady=5, row=1, column=5)
+
+frame_compose_autoresize.grid(row=2, padx=5, pady=5, sticky=W)
+
+### Preview
+frame_compose_preview = ttk.Frame(frame_compose)
+#l_compose_filename = ttk.Label(frame_compose_preview, width=25)
+#l_compose_filename.grid(row=1, column=2, padx=5, pady=5, sticky=W)
+
+frame_compose_preview.grid(row=3, padx=5, pady=5, sticky=W)
+pi_compose_preview = PhotoImage()
+l_compose_preview_pi = ttk.Label(frame_compose_preview, image=pi_compose_preview)
+l_compose_preview = ttk.Label(frame_compose_preview)
+l_compose_preview_pi.grid(row=2, column=1, padx=5, pady=1)
+l_compose_preview.grid(row=1, column=1, padx=5, pady=1)
+
 ############################
 # Pack frames
 ############################
@@ -2248,6 +2413,7 @@ frame_resize.grid(row=8, column=1,           sticky=(N, W, S), padx=5, pady=5)
 frame_text.grid(row=9, column=1,             sticky=(N, W, S), padx=5, pady=1)
 frame_logo.grid(row=10, column=1,            sticky=(N, W, S), padx=5, pady=1)
 frame_custom.grid(row=11, column=1,          sticky=(N, W, S), padx=5, pady=1)
+frame_compose.grid(row=12, column=1,          sticky=(N, W, S), padx=5, pady=1)
 
 #####################################################
 # Second column
@@ -2276,17 +2442,6 @@ b_preview_orig_run.pack(side=LEFT, padx=5, pady=5)
 l_preview_orig.pack(side=LEFT, padx=5, pady=5)
 co_preview_selector_orig.pack(side=LEFT, padx=5, pady=1)
 
-###########################
-# Histogram original
-###########################
-frame_histogram_orig = ttk.LabelFrame(frame_second_col, text=_("Histogram"))
-frame_histogram_orig.grid(row=2, column=1, sticky=(N, W, E, S), padx=5, pady=5)
-###
-pi_histogram_orig = PhotoImage()
-c_histogram_orig = Canvas(frame_histogram_orig)
-c_preview_orig_pi.create_image(0, 0, image=pi_histogram_orig, anchor='ne')
-c_histogram_orig.grid(row=2, column=1, padx=10, pady=5)
-
 #####################################################
 # Third column
 #####################################################
@@ -2314,17 +2469,6 @@ c_preview_new_pi.pack(side=BOTTOM, anchor=W)
 b_preview_new_run.pack(side=LEFT, padx=5, pady=5)
 l_preview_new.pack(side=LEFT, padx=5, pady=5)
 co_preview_selector_new.pack(side=LEFT, padx=5, pady=1)
-
-###########################
-# Histogram new
-###########################
-frame_histogram_new = ttk.LabelFrame(frame_third_col, text=_("Histogram"))
-frame_histogram_new.grid(row=2, column=1, sticky=(N, W, E, S), padx=5, pady=5)
-###
-pi_histogram_new = PhotoImage()
-c_histogram_new = Canvas(frame_histogram_new)
-c_histogram_new.create_image(0, 0, image=pi_histogram_new, anchor='ne')
-c_histogram_new.grid(row=2, column=1, padx=10, pady=5)
 
 ###############################################################################
 # Add Frames into PanedWindow
@@ -2499,6 +2643,9 @@ if IMAGEMAGICK_WAND is not None:
         if os.path.isfile(file_logo_path.get()):
             # Load preview logo
             preview_logo()
+
+    compose_autoresize()
+    l_compose_color.configure(bg=img_compose_color.get())
 else:
     root.withdraw()
     Messagebox.show_error(_("ImageMagick nor GraphicsMagick are not installed in you system. Is impossible to process any graphics."), title=_("Error"))
@@ -2508,7 +2655,6 @@ else:
     img_contrast_on.set(0)
     img_logo_on.set(0)
     img_custom_on.set(0)
-    img_histograms_on.set(0)
     b_logo_run.configure(state=DISABLED)
     b_resize_run.configure(state=DISABLED)
     b_crop_read.configure(state=DISABLED)
@@ -2531,10 +2677,6 @@ else:
     b_file_select_screenshot.configure(state=DISABLED)
     root.deiconify()
 
-# -------------------------------------------------------
-# Lock in 4.0.0, will be unlocked or removed in next releases
-img_histograms_on.set(0)
-cb_histograms.configure(state=DISABLED)
 # -------------------------------------------------------
 
 root.mainloop()

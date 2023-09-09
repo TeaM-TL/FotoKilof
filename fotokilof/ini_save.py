@@ -36,7 +36,7 @@ Every function save part of config file
 - normalize
 - contrast
 - logo
-- custom
+- compose
 """
 
 import configparser
@@ -61,6 +61,7 @@ def save(ini_data):
     mirror = ini_data[10]
     vignette = ini_data[11]
     logo = ini_data[12]
+    compose = ini_data[13]
     # content preparing
     config = configparser.ConfigParser()
     # main
@@ -69,7 +70,7 @@ def save(ini_data):
     config.set(main['section'], 'work_dir', main['work_dir'])
     config.set(main['section'], 'file_dir', str(main['file_dir']))
     config.set(main['section'], 'exif', str(main['exif']))
-    config.set(main['section'], 'histograms', str(main['histograms']))
+    config.set(main['section'], 'custom', str(main['custom_on']))
     config.set(main['section'], 'preview_orig', main['preview_orig'])
     config.set(main['section'], 'preview_new', main['preview_new'])
     config.set(main['section'], 'log', main['log'])
@@ -164,6 +165,14 @@ def save(ini_data):
     config.set(logo['section'], 'height', logo['height'])
     config.set(logo['section'], 'dx', logo['dx'])
     config.set(logo['section'], 'dy', logo['dy'])
+    # compose
+    config.add_section(compose['section'])
+    config.set(compose['section'], 'on', str(compose['on']))
+    config.set(compose['section'], 'filename', compose['filename'])
+    config.set(compose['section'], 'right', str(compose['right']))
+    config.set(compose['section'], 'autoresize', str(compose['autoresize']))
+    config.set(compose['section'], 'color', compose['color'])
+    config.set(compose['section'], 'gravity', compose['gravity'])
 
     # save to a file
     try:

@@ -22,8 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-module contains function for generating preview and histogram:
-- preview_histogram - preview histogram
+module contains function for generating preview:
 - preview_wand - for preview pictures
 """
 
@@ -40,33 +39,6 @@ import convert_wand
 import log
 import magick
 import mswindows
-
-def preview_histogram(file_in):
-    """
-    histogram generation
-    file_in - fullname image file
-    dir_temp - fullname temporary directory
-    --
-    return: fullname of histogram
-    """
-
-    if mswindows.windows():
-        cmd_magick = "magick.exe convert"
-    else:
-        cmd_magick = "convert"
-
-    file_histogram = os.path.join(tempfile.gettempdir(), "fotokilof_histogram.ppm")
-    command = " -define histogram:unique-colors=false histogram:"
-    command = " histogram:"
-
-    magick.magick(command, file_in, file_histogram, cmd_magick)
-    try:
-        os.system(command)
-        return file_histogram
-    except:
-        log.write_log("Error in convert_histogram: " + command, "E")
-
-    return 'none'
 
 
 def preview_wand(file_in, size, coord=""):
