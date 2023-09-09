@@ -371,8 +371,26 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                 resize_width = compose_image.width * clone.height / compose_image.height
                 resize_height = clone.height
                 # for no autoresize
-                position_x = clone.width
-                position_y = 0
+                position_x1 = 0
+                position_x2 = clone.width
+                if clone.height >= compose_image.height:
+                    # orig > compose
+                    position_y1 = 0
+                    if gravity == "N":
+                        position_y2 = 0
+                    elif gravity == "S":
+                        position_y2 = canvas_height - compose_image.height
+                    else:
+                        position_y2 = canvas_height / 2 - compose_image.height / 2
+                else:
+                    # orig < compose
+                    position_y2 = 0
+                    if gravity == "N":
+                        position_y1 = 0
+                    elif gravity == "S":
+                        position_y1 = canvas_height - clone.height
+                    else:
+                        position_y1 = canvas_height / 2 - clone.height / 2
             else:
                 stacked=True
                 # for canvas
@@ -385,8 +403,26 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                 resize_width = clone.width
                 resize_height = compose_image.height * clone.width / compose_image.width
                 # for no autoresize
-                position_x = 0
-                position_y = clone.height
+                position_y1 = 0
+                position_y2 = clone.height
+                if clone.width >= compose_image.width:
+                    # orig > compose
+                    position_x1 = 0
+                    if gravity == "W":
+                        position_x2 = 0
+                    elif gravity == "E":
+                        position_x2 = canvas_width - compose_image.width
+                    else:
+                        position_x2 = canvas_width / 2 - compose_image.width / 2
+                else:
+                    # orig < compose
+                    position_x2 = 0
+                    if gravity == "W":
+                        position_x1 = 0
+                    elif gravity == "E":
+                        position_x1 = canvas_width - clone.width
+                    else:
+                        position_x1 = canvas_width / 2 - clone.width / 2
 
             if autoresize:
                 # autoresize, no problem
@@ -397,28 +433,25 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
             else:
                 # no autoresize
                 with Image(width=canvas_width, height=canvas_height, background=color) as canvas:
-                    # original
                     with Drawing() as draw:
+                        # original picture
                         draw.composite(operator='over',
-                                left=0,
-                                top=0,
+                                left=position_x1,
+                                top=position_y1,
                                 width=clone.width,
                                 height=clone.height,
                                 image=clone)
                         draw(canvas)
-                    # picture to join
-                    #with Drawing() as draw:
+                        # picture to join
                         draw.composite(operator='over',
-                                left=position_x,
-                                top=position_y,
+                                left=position_x2,
+                                top=position_y2,
                                 width=compose_image.width,
                                 height=compose_image.height,
                                 image=compose_image)
                         draw(canvas)
                     clone.image_set(canvas)
 
-
     log.write_log(" Conversion: compose")
-    print('fix it: convert_wand.compose')
 
 # EOF
