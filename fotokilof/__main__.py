@@ -95,10 +95,12 @@ _ = translate.gettext
 if mswindows.windows() == 1:
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
+    PREVIEW_COMPOSE = 400  # preview compose
     PREVIEW_LOGO = 80  # preview logo
 else:
     PREVIEW_ORIG = 450
     PREVIEW_NEW = 450
+    PREVIEW_COMPOSE = 450  # preview compose
     PREVIEW_LOGO = 100
 
 preview_size_list = (300, 350, 400, 450, 500, 550, 600, 650, 700, 800,
@@ -134,10 +136,19 @@ def preview_orig_clear():
     preview_new_clear()
 
 
+def preview_compose_clear():
+    """ clear preview compose if doesn't choose file """
+    log.write_log("clear preview", "M")
+    c_compose_preview_pi.delete('all')
+    l_compose_preview.configure(text='')
+
+
 def preview_new_clear():
     """ clear every preview if doesn't choose file """
     log.write_log("clear preview", "M")
     c_preview_new_pi.delete('all')
+
+
 
 
 def preview_new_refresh(event):
@@ -196,9 +207,11 @@ def preview_new_button():
 
 def compose_preview_button():
     """ preview picture for compose """
-    # to define file_compose
-    if os.path.isfile(path_to_file_out(resized.get())):
-        convert_wand.display_image(path_to_file_out(resized.get()))
+    try:
+        convert_wand.display_image(img_compose_file.get())
+    except:
+        log.write_log("No compose picture to preview", "W")
+    print('fix it: compose_preview_button')
 
 
 def extension_from_file():
@@ -439,6 +452,23 @@ def convert_vignette_button():
     progress_files.set(_("done"))
 
 
+def convert_compose_button():
+    """ Compose button """
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+    clone = convert_wand.make_clone(file_in_path.get())
+    if clone is not None:
+        convert_wand.compose(clone,
+                img_compose_file.get(),
+                img_compose_right.get(),
+                img_compose_autoresize.get(),
+                img_compose_color.get(),
+                img_compose_gravity.get())
+        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        preview_new(path_to_file_out(0))
+    progress_files.set(_("done"))
+
+
 def crop_read():
     """ Read size of picture and load into crop widget """
     if file_in_path.get() is not None:
@@ -534,11 +564,6 @@ def font_selected(event):
     img_text_font.set(co_text_font.get())
 
 
-def convert_compose_button():
-    """ Compose button """
-    return None
-
-
 def compose_autoresize():
     """ If autoresize is on, turn off next row with options """
     if img_compose_autoresize.get():
@@ -581,11 +606,10 @@ def open_file_compose():
     filename = open_file_dialog(os.path.dirname(img_compose_file.get()),
                                 _("Select picture for composing"))
     img_compose_file.set(filename)
-
-    # if os.path.isfile(file_logo_path.get()):
-    #     preview_logo()
-    # else:
-    #     preview_logo_clear()
+    if os.path.isfile(img_compose_file.get()):
+        preview_compose()
+    else:
+        preview_compose_clear()
 
 
 def open_file_logo():
@@ -1258,6 +1282,28 @@ def preview_logo_clear():
     l_logo_filename.configure(text=_("No file selected"))
     pi_logo_preview.configure(file="")
     l_logo_preview.configure(text="")
+
+
+def preview_compose():
+    """ generating compose preview """
+    if os.path.isfile(img_compose_file.get()):
+        l_compose_preview.configure(text=os.path.basename(img_compose_file.get()))
+        preview_picture = preview.preview_wand(img_compose_file.get(), PREVIEW_COMPOSE)
+
+        try:
+            pi_compose_preview.configure(file=preview_picture['filename'])
+        except:
+            log.write_log("Preview_compose: Cannot display file", "E")
+
+        l_compose_preview.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
+    else:
+        log.write_log("Preview_compose: Cannot load file", "E")
+
+
+def preview_compose_refresh(event):
+    """ callback after selection of size preview"""
+    # to define file_out
+    preview_compose()
 
 
 def tools_set_event(event):
@@ -2499,6 +2545,7 @@ main_paned.add(frame_third_col)
 ###############################################################################
 # binding commands to widgets
 co_preview_selector_orig.bind("<<ComboboxSelected>>", preview_orig_refresh)
+co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 c_preview_orig_pi.bind("<Button-1>", mouse_crop_nw)

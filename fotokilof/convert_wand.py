@@ -42,6 +42,7 @@ Converters
 - contrast - modify contrast
 - crop - crop picture
 - vignete - add vignete into picture
+- compose - join two pictures
 """
 
 import os
@@ -345,5 +346,79 @@ def vignette(clone, dx, dy, radius, sigma):
                     x=common.empty(dx),
                     y=common.empty(dy))
     log.write_log(" Conversion: vigette")
+
+
+def compose(clone, compose_file, right, autoresize, color, gravity):
+    """ join two pictures
+    clone - clone of image for processing
+    compose_file - file to join
+    right - join on right or bottom side
+    autoresize - autoresize picture or not
+    color - color to fill gap if no autoresize
+    gravity - position if no autoresize
+    """
+    if len(compose_file):
+        with Image(filename=compose_file) as compose_image:
+            if right:
+                stacked=False
+                # for canvas
+                canvas_width = clone.width + compose_image.width
+                if clone.height >= compose_image.height:
+                    canvas_height = clone.height
+                else:
+                    canvas_height = compose_image.height
+                # for autoresize
+                resize_width = compose_image.width * clone.height / compose_image.height
+                resize_height = clone.height
+                # for no autoresize
+                position_x = clone.width
+                position_y = 0
+            else:
+                stacked=True
+                # for canvas
+                if clone.width >= compose_image.width:
+                    canvas_width = clone.width
+                else:
+                    canvas_width = compose_image.width
+                canvas_height = clone.height + compose_image.height
+                # for autoresize
+                resize_width = clone.width
+                resize_height = compose_image.height * clone.width / compose_image.width
+                # for no autoresize
+                position_x = 0
+                position_y = clone.height
+
+            if autoresize:
+                # autoresize, no problem
+                resize_value = str(resize_width) + 'x' + str(resize_height)
+                compose_image.transform(crop='', resize=resize_value)
+                clone.sequence.append(compose_image)
+                clone.concat(stacked=stacked)
+            else:
+                # no autoresize
+                with Image(width=canvas_width, height=canvas_height, background=color) as canvas:
+                    # original
+                    with Drawing() as draw:
+                        draw.composite(operator='over',
+                                left=0,
+                                top=0,
+                                width=clone.width,
+                                height=clone.height,
+                                image=clone)
+                        draw(canvas)
+                    # picture to join
+                    #with Drawing() as draw:
+                        draw.composite(operator='over',
+                                left=position_x,
+                                top=position_y,
+                                width=compose_image.width,
+                                height=compose_image.height,
+                                image=compose_image)
+                        draw(canvas)
+                    clone.image_set(canvas)
+
+
+    log.write_log(" Conversion: compose")
+    print('fix it: convert_wand.compose')
 
 # EOF
