@@ -261,56 +261,86 @@ def apply_all_button():
 
         file_list_len = len(files_list)
         for file_in in files_list:
-            clone = convert_wand.make_clone(file_in, img_vignette_color.get())
-            if img_crop_on.get():
-                convert_wand.crop(file_in, clone, img_crop.get(),
-                                    img_crop_gravity.get(), convert_crop_entries())
-            if img_mirror_on.get():
-                convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
-            if img_bw_on.get():
-                convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
-            if img_contrast_on.get():
-                convert_wand.contrast(clone, img_contrast.get(),
-                                        co_contrast_selection.get(),
-                                        e1_contrast.get(), e2_contrast.get())
-            if img_normalize_on.get():
-                convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
-            if img_vignette_on.get():
-                convert_wand.vignette(clone, e_vignette_dx.get(), e_vignette_dy.get(),
-                                e_vignette_radius.get(), e_vignette_radius.get())
-            if img_rotate_on.get():
-                convert_wand.rotate(clone, img_rotate.get(),
-                                    img_rotate_color.get(), e_rotate_own.get())
-            if img_border_on.get():
-                convert_wand.border(clone, img_border_color.get(),
-                                    e_border_we.get(), e_border_ns.get())
-            if img_resize_on.get():
-                #  subdir for results if resize
-                subdir_command = common.resize_subdir(img_resize.get(),
-                                                        common.empty(e1_resize_x.get()),
-                                                        common.empty(e1_resize_y.get()),
-                                                        common.empty(e2_resize.get()))
-                subdir = os.path.join(work_dir.get(), subdir_command[0])
-                convert_wand.resize(clone, subdir_command[1])
-                resized.set(1)
+            if img_compose_on.get():
+                # compose
+                clone = convert_wand.make_clone(file_in)
+                if clone is not None:
+                    convert_wand.compose(clone,
+                                        img_compose_file.get(),
+                                        img_compose_right.get(),
+                                        img_compose_autoresize.get(),
+                                        img_compose_color.get(),
+                                        img_compose_gravity.get())
+                    subdir = work_dir.get()
             else:
-                resized.set(0)
-                # standard subdir for result picture
-                subdir = work_dir.get()
-            if img_text_on.get():
-                convert_text_data = (clone, img_text_inout.get(), e_text_angle.get(),
-                            img_text_rotate.get(), img_text_color.get(), img_text_font.get(),
-                            e_text_size.get(), img_text_gravity_onoff.get(), img_text_gravity.get(),
-                            img_text_box.get(), img_text_box_color.get(),
-                            e_text_x.get(), e_text_y.get(), e_text.get())
-                convert_wand.text(convert_text_data)
-            if img_logo_on.get():
-                coordinates = (common.empty(e_logo_dx.get()), common.empty(e_logo_dy.get()),
-                                common.empty(e_logo_width.get()), common.empty(e_logo_height.get()),
-                                img_logo_gravity.get())
-                height = clone.height
-                width = clone.width
-                convert_wand.pip(clone, file_logo_path.get(), coordinates, width, height)
+                # other conversions
+                clone = convert_wand.make_clone(file_in, img_vignette_color.get())
+                if img_crop_on.get():
+                    convert_wand.crop(file_in, clone,
+                                        img_crop.get(),
+                                        img_crop_gravity.get(),
+                                        convert_crop_entries())
+                if img_mirror_on.get():
+                    convert_wand.mirror(clone,
+                                        img_mirror_flip.get(),
+                                        img_mirror_flop.get())
+                if img_bw_on.get():
+                    convert_wand.bw(clone,
+                                        img_bw.get(),
+                                        e_bw_sepia.get())
+                if img_contrast_on.get():
+                    convert_wand.contrast(clone,
+                                        img_contrast.get(),
+                                        co_contrast_selection.get(),
+                                        e1_contrast.get(),
+                                        e2_contrast.get())
+                if img_normalize_on.get():
+                    convert_wand.normalize(clone,
+                                        img_normalize.get(),
+                                        co_normalize_channel.get())
+                if img_vignette_on.get():
+                    convert_wand.vignette(clone,
+                                        e_vignette_dx.get(),
+                                        e_vignette_dy.get(),
+                                        e_vignette_radius.get(),
+                                        e_vignette_radius.get())
+                if img_rotate_on.get():
+                    convert_wand.rotate(clone,
+                                        img_rotate.get(),
+                                        img_rotate_color.get(),
+                                        e_rotate_own.get())
+                if img_border_on.get():
+                    convert_wand.border(clone,
+                                        img_border_color.get(),
+                                        e_border_we.get(),
+                                        e_border_ns.get())
+                if img_resize_on.get():
+                    #  subdir for results if resize
+                    subdir_command = common.resize_subdir(img_resize.get(),
+                                                            common.empty(e1_resize_x.get()),
+                                                            common.empty(e1_resize_y.get()),
+                                                            common.empty(e2_resize.get()))
+                    subdir = os.path.join(work_dir.get(), subdir_command[0])
+                    convert_wand.resize(clone, subdir_command[1])
+                    resized.set(1)
+                else:
+                    resized.set(0)
+                    # standard subdir for result picture
+                    subdir = work_dir.get()
+                if img_text_on.get():
+                    convert_text_data = (clone, img_text_inout.get(), e_text_angle.get(),
+                                img_text_rotate.get(), img_text_color.get(), img_text_font.get(),
+                                e_text_size.get(), img_text_gravity_onoff.get(), img_text_gravity.get(),
+                                img_text_box.get(), img_text_box_color.get(),
+                                e_text_x.get(), e_text_y.get(), e_text.get())
+                    convert_wand.text(convert_text_data)
+                if img_logo_on.get():
+                    coordinates = (common.empty(e_logo_dx.get()), common.empty(e_logo_dy.get()),
+                                    common.empty(e_logo_width.get()), common.empty(e_logo_height.get()),
+                                    img_logo_gravity.get())
+                    height = clone.height
+                    width = clone.width
+                    convert_wand.pip(clone, file_logo_path.get(), coordinates, width, height)
 
             file_out = convert.out_full_filename(file_in, subdir, co_apply_type.get())
             convert_wand.save_close_clone(clone, file_out, img_exif_on.get())
@@ -1287,17 +1317,22 @@ def preview_logo_clear():
 def preview_compose():
     """ generating compose preview """
     if os.path.isfile(img_compose_file.get()):
-        l_compose_preview.configure(text=os.path.basename(img_compose_file.get()))
-        preview_picture = preview.preview_wand(img_compose_file.get(), PREVIEW_COMPOSE)
+        # l_compose_preview.configure(text=os.path.basename(img_compose_file.get()))
+        preview_picture = preview.preview_wand(img_compose_file.get(),
+                                        int(co_compose_preview_selector.get()))
 
         try:
             pi_compose_preview.configure(file=preview_picture['filename'])
+            c_compose_preview_pi.delete('all')
+            c_compose_preview_pi.configure(width=preview_picture['preview_width'],
+                                        height=preview_picture['preview_height'])
+            c_compose_preview_pi.create_image(0, 0, image=pi_compose_preview, anchor='nw')
         except:
             log.write_log("Preview_compose: Cannot display file", "E")
 
         l_compose_preview.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
     else:
-        log.write_log("Preview_compose: Cannot load file", "E")
+        log.write_log("Preview_compose: Cannot load compose file", "E")
 
 
 def preview_compose_refresh(event):
@@ -2755,8 +2790,6 @@ else:
     b_file_select.configure(state=DISABLED)
     b_file_select_screenshot.configure(state=DISABLED)
     root.deiconify()
-
-# -------------------------------------------------------
 
 root.mainloop()
 
