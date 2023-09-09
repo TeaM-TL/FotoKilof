@@ -2388,15 +2388,24 @@ frame_compose_autoresize.grid(row=2, padx=5, pady=5, sticky=W)
 
 ### Preview
 frame_compose_preview = ttk.Frame(frame_compose)
-#l_compose_filename = ttk.Label(frame_compose_preview, width=25)
-#l_compose_filename.grid(row=1, column=2, padx=5, pady=5, sticky=W)
-
 frame_compose_preview.grid(row=3, padx=5, pady=5, sticky=W)
-pi_compose_preview = PhotoImage()
-l_compose_preview_pi = ttk.Label(frame_compose_preview, image=pi_compose_preview)
+
+###
+b_compose_preview_run = ttk.Button(frame_compose_preview, text=_("Preview"),
+                               bootstyle="secondary",
+                               command=compose_preview_button)
 l_compose_preview = ttk.Label(frame_compose_preview)
-l_compose_preview_pi.grid(row=2, column=1, padx=5, pady=1)
-l_compose_preview.grid(row=1, column=1, padx=5, pady=1)
+co_preview_selector_new = ttk.Combobox(frame_compose_preview, width=4, bootstyle="secondary",
+                                       values=preview_size_list)
+co_preview_selector_new.configure(state='readonly')
+pi_compose_preview = PhotoImage()
+c_compose_preview_pi = Canvas(frame_compose_preview)
+c_preview_orig_pi.create_image(0, 0, image=pi_preview_orig, anchor='ne')
+
+c_compose_preview_pi.pack(side=BOTTOM, anchor=W)
+b_compose_preview_run.pack(side=LEFT, padx=5, pady=5)
+l_compose_preview.pack(side=LEFT, padx=5, pady=5)
+co_compose_preview_selector.pack(side=LEFT, padx=5, pady=1)
 
 ############################
 # Pack frames
