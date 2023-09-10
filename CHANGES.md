@@ -2,6 +2,8 @@
 
 ## 2023
 
+4.4.2 Faster opening picture in system viewer under Windows and Macos
+
 4.4.1 Fix compose preview, update fotokilof.pot and pl translations
 
 4.4.0 Added compose two pictures, removed histogram from code
