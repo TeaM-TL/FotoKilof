@@ -24,6 +24,7 @@ function for GUI:
 - copy_to_clipboard - copy result into clipboard (only Windows)
 - only_numbers - validate only natural values
 - only_integer - validate integer values
+- show_picture - display picture in system viewer, PIL version
 """
 
 from io import BytesIO
@@ -69,5 +70,12 @@ def only_integer(char):
     else:
         result = False
     return result
+
+
+def show_picture(filename):
+    """ display picture in system viewer, PIL version """
+    #image = Image.open(filename")
+    with Image.open(filename) as image:
+        image.show()
 
 # EOF

@@ -193,7 +193,10 @@ def preview_orig_button():
     """ original preview """
     # global file_in_path
     try:
-        convert_wand.display_image(file_in_path.get())
+        if mswindows.windows() or mswindows.macos():
+            gui.show_picture(file_in_path.get())
+        else:
+            convert_wand.display_image(file_in_path.get())
     except:
         log.write_log("No orig picture to preview", "W")
 
@@ -202,8 +205,12 @@ def preview_new_button():
     """ preview new picture """
     # to define file_out
     try:
-        if os.path.isfile(path_to_file_out(resized.get())):
-            convert_wand.display_image(path_to_file_out(resized.get()))
+        filename = path_to_file_out(resized.get())
+        if os.path.isfile(filename):
+            if mswindows.windows() or mswindows.macos():
+                gui.show_picture(filename)
+            else:
+                convert_wand.display_image(filename)
     except:
         log.write_log("No result picture to preview", "W")
 
@@ -211,7 +218,10 @@ def preview_new_button():
 def compose_preview_button():
     """ preview picture for compose """
     try:
-        convert_wand.display_image(img_compose_file.get())
+        if mswindows.windows() or mswindows.macos():
+            gui.show_picture(img_compose_file.get())
+        else:
+            convert_wand.display_image(img_compose_file.get())
     except:
         log.write_log("No compose picture to preview", "W")
 
