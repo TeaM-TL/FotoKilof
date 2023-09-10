@@ -1,12 +1,12 @@
 # Polish translation of FotoKilof
-# Copyright (C) 2019-2022 Tomasz Łuczak
-# Tomasz Łuczak <tlu@team-tl.pl>, 2022.
+# Copyright (C) 2019-2023 Tomasz Łuczak
+# Tomasz Łuczak <tlu@team-tl.pl>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: FotoKilof\n"
 "POT-Creation-Date: 2021-08-22 23:52+0200\n"
-"PO-Revision-Date: 2021-08-22 23:53+0200\n"
+"PO-Revision-Date: 2023-09-10 21:53+0200\n"
 "Last-Translator: Tomasz Łuczak\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -60,13 +60,17 @@ msgstr "Pliki SVG"
 msgid "ALL types"
 msgstr "Wszystkie pliki"
 
+#: __main__.py:637
+msgid "Select picture for composing"
+msgstr "Wybierz plik do dołączenia"
+
 #: fotokilof.py:515
 msgid "Select logo picture for inserting"
 msgstr "Wybierz plik logo"
 
 #: fotokilof.py:543
 msgid "Select picture for processing"
-msgstr "Wybierz plik do mielenia"
+msgstr "Wybierz plik do przetwarzania"
 
 #: fotokilof.py:992
 msgid "License"
@@ -208,9 +212,9 @@ msgstr "Winieta"
 msgid "EXIF"
 msgstr "EXIF"
 
-#: fotokilof.py:1582
-msgid "Histograms"
-msgstr "Histogramy"
+#: __main__.py:1828 __main__.py:2422
+msgid "Compose"
+msgstr "Kompozycja"
 
 #: fotokilof.py:1587
 msgid "Theme:"
@@ -405,13 +409,29 @@ msgstr "Własne polecenia"
 msgid "Clear"
 msgstr "Wyczyść"
 
-#: fotokilof.py:2272
+#: __main__.py:2428
+msgid "Bottom"
+msgstr "Dół"
+
+#: __main__.py:2431
+msgid "Right"
+msgstr "Prawo"
+
+#: __main__.py:2434
+msgid "Autoresize"
+msgstr "Autoskalowanie"
+
+#: __main__.py:2457
+msgid "Top"
+msgstr "Góra"
+
+#: __main__.py:2459
+msgid "Left"
+msgstr "Lewo"
+
+#: __main__.py:2524
 msgid "Original"
 msgstr "Oryginał"
-
-#: fotokilof.py:2294 fotokilof.py:2331
-msgid "Histogram"
-msgstr "Histogram"
 
 #: fotokilof.py:2311
 msgid "Result"
@@ -581,11 +601,63 @@ msgstr "Wybór motywu graficznego"
 
 #: fotokilof.py:2307
 msgid "Display original image by IMdisplay or default image viewer of OS"
-msgstr "Wyświetla oryginalny obrazek z programie IMdisplay lub w domyślnej przeglądarce obrazków"
+msgstr "Wyświetla oryginalny obrazek w programie IMdisplay lub w domyślnej przeglądarce obrazków"
 
 #: fotokilof.py:2321 fotokilof.py:2362
 msgid "Execute only resize conversion on current picture"
 msgstr "Wykonaj tylko przeskalowanie bieżącego obrazka"
+
+#: __main__.py:2725
+msgid "Select picture to compose with main picture"
+msgstr "Wybór obrazka do kompozycji z głównym obrazkiem"
+
+#: __main__.py:2726
+msgid "Join picture at bottom"
+msgstr "Dołącz obrazek od dołu"
+
+#: __main__.py:2727
+msgid "Join picture at right"
+msgstr "Dołącz obrazek z prawej"
+
+#: __main__.py:2728
+msgid "Autoresize picture if dimensions are not equal"
+msgstr "Automatyczne skalowanie jeśli obrazki nie są tych samych rozmiarów"
+
+#: __main__.py:2729
+msgid "Selected color to fill gap"
+msgstr "Wybrany kolor tła do wypełnienia pustego obszaru"
+
+#: __main__.py:2730
+msgid "Select color of gap"
+msgstr "Wybierz kolor tła do wypełnienia pustego obszaru"
+
+#: __main__.py:2731
+msgid "Join picture on right and move to top"
+msgstr "Dołącz obrazek z prawej strony i dosuń do góry"
+
+#: __main__.py:2732
+msgid "Join picture at bottom and move to left"
+msgstr "Dołącz obrazek od dołu i przesuń do lewej"
+
+#: __main__.py:2733
+msgid "Join picture and move to center"
+msgstr "Dołącz obrazek i ustaw na środku"
+
+#: __main__.py:2734
+msgid "Join picture at bottom and move to right"
+msgstr "Dołącz obrazek od dołu i przesuń do prawej"
+
+#: __main__.py:2735
+msgid "Join picture on right and move to bottom"
+msgstr "Dołącz obrazek z prawej strony i dosuń do dołu"
+
+#: __main__.py:2736
+msgid "Execute compose picture with current main picture"
+msgstr "Wykonaj komponowanie tylko z bieżącym obrazkiem"
+
+#: __main__.py:2737
+msgid "Display image to join by IMdisplay or default image viewer of OS"
+msgstr "Wyświetla obrazek do dołączenia w programie IMdisplay lub w domyślnej przeglądarce obrazków"
 
 #: fotokilof.py:2308 fotokilof.py:2310
 msgid "Select size of preview"
@@ -593,7 +665,7 @@ msgstr "Wybór wielkość podglądu"
 
 #: fotokilof.py:2309
 msgid "Display result image by IMdisplay or default image viewer of OS"
-msgstr "Wyświetla wynikowy obrazek z programie IMdisplay lub w domyślnej przeglądarce obrazków"
+msgstr "Wyświetla wynikowy obrazek w programie IMdisplay lub w domyślnej przeglądarce obrazków"
 
 #: fotokilof.py:2313
 msgid ""
@@ -938,10 +1010,6 @@ msgid "Error"
 msgstr "Błąd"
 
 #: fotokilof.py:2398
-msgid ""
-"ImageMagick nor GraphicsMagick are not installed in you system. Is impossible "
-"to process any graphics."
-msgstr ""
-"ImageMagick ani GraphicsMagick nie zostały znalezione w Twoim systemie. "
-"Niestety nie można przetwarzać obrazków."
+msgid "ImageMagick nor GraphicsMagick are not installed in you system. Is impossible to process any graphics."
+msgstr "ImageMagick ani GraphicsMagick nie zostały znalezione w Twoim systemie. Niestety nie można przetwarzać obrazków."
 

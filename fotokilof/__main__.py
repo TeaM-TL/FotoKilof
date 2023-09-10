@@ -201,8 +201,11 @@ def preview_orig_button():
 def preview_new_button():
     """ preview new picture """
     # to define file_out
-    if os.path.isfile(path_to_file_out(resized.get())):
-        convert_wand.display_image(path_to_file_out(resized.get()))
+    try:
+        if os.path.isfile(path_to_file_out(resized.get())):
+            convert_wand.display_image(path_to_file_out(resized.get()))
+    except:
+        log.write_log("No result picture to preview", "W")
 
 
 def compose_preview_button():
@@ -211,7 +214,6 @@ def compose_preview_button():
         convert_wand.display_image(img_compose_file.get())
     except:
         log.write_log("No compose picture to preview", "W")
-    print('fix it: compose_preview_button')
 
 
 def extension_from_file():
@@ -600,6 +602,7 @@ def compose_autoresize():
         frame_compose_autoresize.grid_remove()
     else:
         frame_compose_autoresize.grid()
+        compose_autoresize_gravity()
 
 
 def compose_autoresize_gravity():
@@ -2454,15 +2457,15 @@ b_compose_color = ttk.Button(frame_compose_autoresize, text=_("Color"),
                             bootstyle="outline",
                             command=color_choose_compose)
 l_compose_color = Label(frame_compose_autoresize, text=_("  "))
-rb_compose_N = ttk.Radiobutton(frame_compose_autoresize, text="Top",
+rb_compose_N = ttk.Radiobutton(frame_compose_autoresize, text=_("Top"),
                             variable=img_compose_gravity, value="N")
-rb_compose_W = ttk.Radiobutton(frame_compose_autoresize, text="Left",
+rb_compose_W = ttk.Radiobutton(frame_compose_autoresize, text=_("Left"),
                             variable=img_compose_gravity, value="W")
 rb_compose_C = ttk.Radiobutton(frame_compose_autoresize, text=_("Center"),
                             variable=img_compose_gravity, value="C")
-rb_compose_E = ttk.Radiobutton(frame_compose_autoresize, text="Right",
+rb_compose_E = ttk.Radiobutton(frame_compose_autoresize, text=_("Right"),
                             variable=img_compose_gravity, value="E")
-rb_compose_S = ttk.Radiobutton(frame_compose_autoresize, text="Bottom",
+rb_compose_S = ttk.Radiobutton(frame_compose_autoresize, text=_("Bottom"),
                             variable=img_compose_gravity, value="S")
 
 b_compose_color.grid(padx=5, pady=5, row=1, column=1)
@@ -2581,7 +2584,7 @@ main_paned.add(frame_third_col)
 # binding commands to widgets
 co_preview_selector_orig.bind("<<ComboboxSelected>>", preview_orig_refresh)
 co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
-co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
+co_compose_preview_selector.bind("<<ComboboxSelected>>", preview_compose_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 c_preview_orig_pi.bind("<Button-1>", mouse_crop_nw)
 if mswindows.macos():
@@ -2734,8 +2737,7 @@ ToolTip(rb_compose_C, text=_("Join picture and move to center"))
 ToolTip(rb_compose_E, text=_("Join picture at bottom and move to right"))
 ToolTip(rb_compose_S, text=_("Join picture on right and move to bottom"))
 ToolTip(b_compose_run, text=_("Execute compose picture with current main picture"))
-
-
+ToolTip(b_preview_new_run, text=_("Display image to join by IMdisplay or default image viewer of OS"))
 
 ##########################################
 # Run functions
