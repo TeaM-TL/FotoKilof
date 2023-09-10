@@ -29,6 +29,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - color auto-level or equalize,
  - vignette
  - adding logo image on picture,
+ - compose two image in one picture
  - file formats: JPG, PNG, TIFF, SVG
  - format conversion into JPG, PNG, TIFF.
 
@@ -61,7 +62,11 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
    - corners can be filled by selected color,
    - offset in both direction
  - logo position by gravity, size and offset,
- - histograms of original and result pictures (temporary disabled),
+ - compose:
+   - add picture on right side
+   - add picture on bottom
+   - autoresize picture
+   - fill color if no autoresize
  - fast file navigation: First, Prev, Next, Last or keys: Home, PgUp, PgDn, End,
  - command editor: possible to use ImageMagick commands for convert: eg. *-gaussian-blur 10x10* or *-monochrome*, etc.
 - dark and light mode
