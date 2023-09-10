@@ -42,6 +42,7 @@ Converters
 - contrast - modify contrast
 - crop - crop picture
 - vignete - add vignete into picture
+- compose - join two pictures
 """
 
 import os
@@ -345,5 +346,112 @@ def vignette(clone, dx, dy, radius, sigma):
                     x=common.empty(dx),
                     y=common.empty(dy))
     log.write_log(" Conversion: vigette")
+
+
+def compose(clone, compose_file, right, autoresize, color, gravity):
+    """ join two pictures
+    clone - clone of image for processing
+    compose_file - file to join
+    right - join on right or bottom side
+    autoresize - autoresize picture or not
+    color - color to fill gap if no autoresize
+    gravity - position if no autoresize
+    """
+    if len(compose_file):
+        with Image(filename=compose_file) as compose_image:
+            if right:
+                stacked=False
+                # for canvas
+                canvas_width = clone.width + compose_image.width
+                if clone.height >= compose_image.height:
+                    canvas_height = clone.height
+                else:
+                    canvas_height = compose_image.height
+                # for autoresize
+                resize_width = compose_image.width * clone.height / compose_image.height
+                resize_height = clone.height
+                # for no autoresize
+                position_x1 = 0
+                position_x2 = clone.width
+                if clone.height >= compose_image.height:
+                    # orig > compose
+                    position_y1 = 0
+                    if gravity == "N":
+                        position_y2 = 0
+                    elif gravity == "S":
+                        position_y2 = canvas_height - compose_image.height
+                    else:
+                        position_y2 = canvas_height / 2 - compose_image.height / 2
+                else:
+                    # orig < compose
+                    position_y2 = 0
+                    if gravity == "N":
+                        position_y1 = 0
+                    elif gravity == "S":
+                        position_y1 = canvas_height - clone.height
+                    else:
+                        position_y1 = canvas_height / 2 - clone.height / 2
+            else:
+                stacked=True
+                # for canvas
+                if clone.width >= compose_image.width:
+                    canvas_width = clone.width
+                else:
+                    canvas_width = compose_image.width
+                canvas_height = clone.height + compose_image.height
+                # for autoresize
+                resize_width = clone.width
+                resize_height = compose_image.height * clone.width / compose_image.width
+                # for no autoresize
+                position_y1 = 0
+                position_y2 = clone.height
+                if clone.width >= compose_image.width:
+                    # orig > compose
+                    position_x1 = 0
+                    if gravity == "W":
+                        position_x2 = 0
+                    elif gravity == "E":
+                        position_x2 = canvas_width - compose_image.width
+                    else:
+                        position_x2 = canvas_width / 2 - compose_image.width / 2
+                else:
+                    # orig < compose
+                    position_x2 = 0
+                    if gravity == "W":
+                        position_x1 = 0
+                    elif gravity == "E":
+                        position_x1 = canvas_width - clone.width
+                    else:
+                        position_x1 = canvas_width / 2 - clone.width / 2
+
+            if autoresize:
+                # autoresize, no problem
+                resize_value = str(resize_width) + 'x' + str(resize_height)
+                compose_image.transform(crop='', resize=resize_value)
+                clone.sequence.append(compose_image)
+                clone.concat(stacked=stacked)
+            else:
+                # no autoresize
+                with Image(width=canvas_width, height=canvas_height, background=color) as canvas:
+                    with Drawing() as draw:
+                        # original picture
+                        draw.composite(operator='over',
+                                left=position_x1,
+                                top=position_y1,
+                                width=clone.width,
+                                height=clone.height,
+                                image=clone)
+                        draw(canvas)
+                        # picture to join
+                        draw.composite(operator='over',
+                                left=position_x2,
+                                top=position_y2,
+                                width=compose_image.width,
+                                height=compose_image.height,
+                                image=compose_image)
+                        draw(canvas)
+                    clone.image_set(canvas)
+
+    log.write_log(" Conversion: compose")
 
 # EOF
