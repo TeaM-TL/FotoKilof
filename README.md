@@ -141,6 +141,11 @@ Install requirements:
 brew install imagemagick python@3.11 python-tk@3.11
 ```
 
+Install as PyPi package by PIP:
+```bash
+python3 -m pip install fotokilof
+```
+
 #### FreeBSD
 
 FotoKilof is available via [ports](https://www.freshports.org/graphics/py-fotokilof/)
@@ -181,6 +186,12 @@ Press F2 to toggle from Light to Dark or opposite.
  - Carbene Hu - idea to fix issue
  - Mert Cobanov - Turkish translation
  - Giancarlo Dessì - Italian translation, Slackware package
+
+---
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=TeaM-TL/FotoKilof&type=Date)](https://star-history.com/#TeaM-TL/FotoKilof&Date)
 
 ---
 
