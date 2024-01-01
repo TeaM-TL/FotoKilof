@@ -29,10 +29,9 @@ setup(
     include_package_data=True,
     packages=find_packages(),
     install_requires=['pillow','wand','ttkbootstrap'],
-#    entry_points = {
-#        "gui_scripts": [
-#            "fotokilof = fotokilof:__main__",
-#        ]
-#    },
+    entry_points = {
+        "gui_scripts": [
+            "fotokilof = fotokilof:__main__",
+        ]
+    },
 )
-

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2024
+
+4.4.3 entrypoint to easier run by execution fotokilof
+
 ## 2023
 
 4.4.2 Faster opening picture in system viewer under Windows and Macos
