@@ -45,6 +45,7 @@ Converters
 - compose - join two pictures
 """
 
+import logging
 import os
 
 try:
@@ -57,7 +58,6 @@ except:
 
 # my modules
 import common
-import log
 
 
 # ------------------------------------ Info
@@ -82,7 +82,7 @@ def get_image_size(file_in):
                 with Image(filename=file_in) as image:
                     size = image.size
             except:
-                log.write_log(" Error read file " + file_in, "E")
+                logging.error(" Error read file: %s", file_in)
     return size
 
 
@@ -94,10 +94,10 @@ def display_image(file_in):
             display(image)
 
     except:
-        log.write_log(" Error display file: " + file_in, "E")
+        logging.error(" Error display file: %s", file_in)
         result = None
     else:
-        log.write_log(" Display file: " + file_in)
+        logging.info(" Display file: %s", file_in)
         result = "OK"
 
     return result
@@ -117,7 +117,7 @@ def save_close_clone(clone, file_out, exif = 0):
     """ save and close clone after processing """
     if not exif:
         clone.strip()
-    log.write_log(" Save file: " + file_out)
+    logging.info(" Save file: %s", file_out)
     clone.save(filename=file_out)
     clone.close()
 
@@ -168,7 +168,7 @@ def pip(clone, logo, logo_data, image_height, image_width):
                                 height=common.empty(logo_data[3]),
                                 image=logo_img)
                 draw(clone)
-    log.write_log(" Conversion: logo")
+    logging.info(" Conversion: logo")
 
 
 def rotate(clone, angle, color, own):
@@ -180,7 +180,7 @@ def rotate(clone, angle, color, own):
     else:
         color = None
     clone.rotate(angle, background=color)
-    log.write_log(" Conversion: rotate " + str(angle))
+    logging.info(" Conversion: rotate %s", str(angle))
 
 
 def mirror(clone, flip, flop):
@@ -189,13 +189,13 @@ def mirror(clone, flip, flop):
         clone.flip()
     if flop:
         clone.flop()
-    log.write_log(" Conversion: mirror")
+    logging.info(" Conversion: mirror")
 
 
 def border(clone, color, x, y):
     """ mirror: flip and flop """
     clone.border(color, common.empty(x), common.empty(y))
-    log.write_log(" Conversion: border")
+    logging.info(" Conversion: border")
 
 
 def text(convert_data):
@@ -252,7 +252,7 @@ def text(convert_data):
                 canvas.annotate(text_string, draw)
                 clone.sequence.append(canvas)
                 clone.concat(stacked=True)
-    log.write_log(" Conversion: text " + str(in_out))
+    logging.info(" Conversion: text %s", str(in_out))
 
 
 def bw(clone, bw_variant, sepia):
@@ -263,13 +263,13 @@ def bw(clone, bw_variant, sepia):
     else:
         # sepia
         clone.sepia_tone(threshold=common.empty(sepia)/100)
-    log.write_log(" Conversion: black-white/sepia " + str(bw_variant))
+    logging.info(" Conversion: black-white/sepia %s", str(bw_variant))
 
 
 def resize(clone, command):
     """ resize picture """
     clone.transform(crop='', resize=command)
-    log.write_log(" Conversion: resize")
+    logging.info(" Conversion: resize")
 
 
 def normalize(clone, normalize_variant, channel):
@@ -282,7 +282,7 @@ def normalize(clone, normalize_variant, channel):
             clone.normalize()
     else:
         clone.auto_level()
-    log.write_log(" Conversion: normalize " + str(normalize_variant))
+    logging.info(" Conversion: normalize %s", str(normalize_variant))
 
 
 def contrast(clone, contrast_variant, selection, black, white):
@@ -303,7 +303,7 @@ def contrast(clone, contrast_variant, selection, black, white):
             while iteration < abs(int(selection)):
                 iteration += 1
                 clone.contrast(sharpen=sharpen)
-    log.write_log(" Conversion: contrast " + str(contrast_variant))
+    logging.info(" Conversion: contrast %s", str(contrast_variant))
 
 
 def crop(file_in, clone, crop_variant, gravity, entries):
@@ -330,7 +330,7 @@ def crop(file_in, clone, crop_variant, gravity, entries):
             clone.crop(left=entries['three_dx'], top=entries['three_dy'],
                         width=entries['three_width'], height=entries['three_height'],
                         gravity=gravitation(gravity))
-    log.write_log(" Conversion: crop " + str(crop_variant))
+    logging.info(" Conversion: crop %s", str(crop_variant))
 
 
 def vignette(clone, dx, dy, radius, sigma):
@@ -345,7 +345,7 @@ def vignette(clone, dx, dy, radius, sigma):
                     sigma=common.empty(sigma),
                     x=common.empty(dx),
                     y=common.empty(dy))
-    log.write_log(" Conversion: vigette")
+    logging.info(" Conversion: vigette")
 
 
 def compose(clone, compose_file, right, autoresize, color, gravity):
@@ -452,6 +452,6 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                         draw(canvas)
                     clone.image_set(canvas)
 
-    log.write_log(" Conversion: compose")
+    logging.info(" Conversion: compose")
 
 # EOF

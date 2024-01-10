@@ -42,7 +42,7 @@ Every function save part of config file
 import configparser
 
 import common
-import log
+import logging
 
 
 def save(ini_data):
@@ -180,4 +180,4 @@ def save(ini_data):
         with open(file_ini, 'w', encoding='utf-8', buffering=1) as configfile:
             config.write(configfile)
     except:
-        log.write_log("ini_save: cannot save config file: " + file_ini, "E")
+        logging.error("ini_save: cannot save config file: %s", file_ini)

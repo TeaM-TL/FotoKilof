@@ -26,10 +26,10 @@ module to run ImageMagick:
 - magick - picture conversion
 """
 
+import logging
 import os
 
 import common
-import log
 import mswindows
 
 
@@ -52,16 +52,16 @@ def magick(cmd, file_in, file_out, command):
             else:
                 prefix_cmd = ""
             command_exec = prefix_cmd + command + " " + file_in  + " " + cmd + " " + file_out
-            log.write_log("Execute: " + command_exec, "M")
+            logging.info("Execute: %s", command_exec)
             try:
                 os.system(command_exec)
             except:
-                log.write_log("Errot in imagick: " + command_exec, "E")
+                logging.error("Errot in imagick: %s", command_exec)
                 result = None
             else:
                 result = "OK"
         else:
-            log.write_log("imagick: No file for imagick", "W")
+            logging.warning("imagick: No file for imagick")
             result = None
     else:
         result = None
