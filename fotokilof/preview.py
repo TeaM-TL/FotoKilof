@@ -36,7 +36,6 @@ except:
 
 import common
 import convert_wand
-import log
 import magick
 import mswindows
 

@@ -44,6 +44,7 @@ except:
 # standard modules
 import datetime
 import gettext
+import logging
 import os
 import platform
 import sys
@@ -64,14 +65,20 @@ import common
 import gui
 import ini_read
 import ini_save
-import log
 import magick
 import mswindows
 import preview
 import version
 
+logging.basicConfig(
+    filename = os.path.join(os.path.expanduser("~"), ".fotokilof.log"),
+    filemode="a",
+    format="%(asctime)s.%(msecs)03d :%(levelname)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+
 # Start logging
-log.write_log('Start', "M", "w", 1)
+logging.info("Start")
 
 if mswindows.windows() or mswindows.macos():
     from PIL import ImageGrab
@@ -84,7 +91,7 @@ if mswindows.windows():
 localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
 if not os.path.isdir(localedir):
     localedir = os.path.join(os.getcwd(), 'locale')
-log.write_log(str("Locale directory: " + localedir), "M")
+logging.info("Locale directory: %s", localedir)
 
 translate = gettext.translation('fotokilof', localedir, fallback=True)
 gettext.install('fotokilof', localedir)
@@ -130,7 +137,7 @@ def convert_custom_clear():
 
 def preview_orig_clear():
     """ clear every preview if doesn't choose file """
-    log.write_log("clear preview", "M")
+    logging.info("clear preview")
     c_preview_orig_pi.delete('all')
     # if no original, new preview should be clear too
     preview_new_clear()
@@ -138,14 +145,14 @@ def preview_orig_clear():
 
 def preview_compose_clear():
     """ clear preview compose if doesn't choose file """
-    log.write_log("clear preview", "M")
+    logging.info("clear preview")
     c_compose_preview_pi.delete('all')
     l_compose_preview.configure(text='')
 
 
 def preview_new_clear():
     """ clear every preview if doesn't choose file """
-    log.write_log("clear preview", "M")
+    logging.info("clear preview")
     c_preview_new_pi.delete('all')
 
 
@@ -181,7 +188,7 @@ def preview_new(file_out):
                                 + " - " \
                                 + preview_picture['size'])
         except:
-            log.write_log("preview_new: Cannot read preview", "E")
+            logging.error("preview_new: Cannot read preview")
 
         gui.copy_to_clipboard(file_out)
 
@@ -198,7 +205,7 @@ def preview_orig_button():
         else:
             convert_wand.display_image(file_in_path.get())
     except:
-        log.write_log("No orig picture to preview", "W")
+        logging.warning("No orig picture to preview")
 
 
 def preview_new_button():
@@ -212,7 +219,7 @@ def preview_new_button():
             else:
                 convert_wand.display_image(filename)
     except:
-        log.write_log("No result picture to preview", "W")
+        logging.warning("No result picture to preview")
 
 
 def compose_preview_button():
@@ -223,7 +230,7 @@ def compose_preview_button():
         else:
             convert_wand.display_image(img_compose_file.get())
     except:
-        log.write_log("No compose picture to preview", "W")
+        logging.warning("No compose picture to preview")
 
 
 def extension_from_file():
@@ -233,7 +240,7 @@ def extension_from_file():
     try:
         co_apply_type.current(file_extension.index(extension))
     except:
-        log.write_log("extension_from_file: wrong extension", "W")
+        logging.warning("extension_from_file: wrong extension")
         co_apply_type.current(file_extension.index(".jpg"))
 
 
@@ -373,7 +380,7 @@ def apply_all_button():
         root.update_idletasks()
         #work_sub_dir.set("")  # reset subdir name for next processing
     else:
-        log.write_log("No file selected", "M")
+        logging.info("No file selected")
 
 
 def convert_custom_button():
@@ -693,7 +700,7 @@ def open_file_common(cwd, filename):
             else:
                 preview_orig_clear()
         except:
-            log.write_log("Error in open_file_common", "E")
+            logging.error("Error in open_file_common")
 
 
 def open_file_dialog(dir_initial, title):
@@ -801,7 +808,7 @@ def open_screenshot():
         try:
             os.mkdir(today_dir)
         except:
-            log.write_log("Error in open_screenshot, make today directory", "E")
+            logging.error("Error in open_screenshot, make today directory")
 
     filename = now.strftime("%F_%H-%M-%S_%f") + ".png"
     out_file = os.path.normpath(os.path.join(today_dir, filename))
@@ -811,13 +818,13 @@ def open_screenshot():
         try:
             screenshot.save(out_file, 'PNG')
         except:
-            log.write_log('open_screenshot(), error save from clipboards', 'E')
+            logging.error('open_screenshot(), error save from clipboards')
             do_it = 0
     else:
         try:
             magick.magick(" ", "-quiet", out_file, "import")
         except:
-            log.write_log('open_screenshot(), error in make screeshot ', 'E')
+            logging.error('open_screenshot(), error in make screeshot ')
             do_it = 1
     if do_it:
         open_file_common(today_dir, filename)
@@ -893,6 +900,11 @@ def ini_read_wraper():
     co_preview_selector_orig.current(preview_size_list.index(ini_entries['preview_orig']))
     co_preview_selector_new.current(preview_size_list.index(ini_entries['preview_new']))
     log_level.set(ini_entries['log_level'])
+    logging.getLogger().setLevel(
+        logging.ERROR if log_level.get() == "E" else
+        logging.WARNING if log_level.get() == "W" else
+        logging.INFO
+    )
     img_custom_on.set(ini_entries['img_custom_on'])
     # resize
     ini_entries = ini_read.resize(FILE_INI)
@@ -1161,7 +1173,7 @@ def help_info(event):
             for line in license_fh:
                 message = message + line
     except:
-        log.write_log("help_info: error during loading license file: " + license_file, "W")
+        logging.warning("help_info: error during loading license file: %s", license_file)
         message = ("Copyright " + version.__copyright__ + " "
                     + version.__author__ + " under MIT license")
     Messagebox.show_info(message, title=_("License"))
@@ -1169,7 +1181,7 @@ def help_info(event):
 
 def close_program():
     """ close program window """
-    log.write_log("closed", "M")
+    logging.info("closed")
     root.quit()
     root.destroy()
     sys.exit()
@@ -1290,7 +1302,7 @@ def preview_orig():
                                             height=preview_picture['preview_height'])
                 c_preview_orig_pi.create_image(0, 0, image=pi_preview_orig, anchor='nw')
             except:
-                log.write_log("preview_orig: Cannot load preview", "E")
+                logging.error("preview_orig: Cannot load preview")
 
             try:
                 l_preview_orig.configure(text=preview_picture['width'] + "x" \
@@ -1298,7 +1310,7 @@ def preview_orig():
                                      + " - " \
                                      + preview_picture['size'])
             except:
-                log.write_log("preview_orig: Cannot load image size", "E")
+                logging.error("preview_orig: Cannot load image size")
         else:
             preview_orig_clear()
     progress_files.set(_("Ready"))
@@ -1313,11 +1325,11 @@ def preview_logo():
         try:
             pi_logo_preview.configure(file=preview_picture['filename'])
         except:
-            log.write_log("Preview_logo: Cannot display file", "E")
+            logging.error("Preview_logo: Cannot display file")
 
         l_logo_preview.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
     else:
-        log.write_log("Preview_logo: Cannot load file", "E")
+        logging.error("Preview_logo: Cannot load file")
 
 
 def preview_logo_clear():
@@ -1341,11 +1353,11 @@ def preview_compose():
                                         height=preview_picture['preview_height'])
             c_compose_preview_pi.create_image(0, 0, image=pi_compose_preview, anchor='nw')
         except:
-            log.write_log("Preview_compose: Cannot display file", "E")
+            logging.error("Preview_compose: Cannot display file")
 
         l_compose_preview.configure(text=preview_picture['width'] + "x" + preview_picture['height'])
     else:
-        log.write_log("Preview_compose: Cannot load compose file", "E")
+        logging.error("Preview_compose: Cannot load compose file")
 
 
 def preview_compose_refresh(event):
