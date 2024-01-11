@@ -2,6 +2,8 @@
 
 ## 2024
 
+4.4.4 logging in proper way
+
 4.4.3 entrypoint to easier run by execution fotokilof
 
 ## 2023

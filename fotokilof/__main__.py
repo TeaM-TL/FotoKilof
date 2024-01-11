@@ -6,7 +6,7 @@
 # pylint disable=invalid-name
 
 """
-Copyright (c) 2019-2023 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2024 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -72,9 +72,11 @@ import version
 
 logging.basicConfig(
     filename = os.path.join(os.path.expanduser("~"), ".fotokilof.log"),
+    encoding='utf-8',
     filemode="a",
     format="%(asctime)s.%(msecs)03d :%(levelname)s: %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
+    datefmt="%Y-%m-%d %H:%M:%S",
+    level=logging.DEBUG
 )
 
 # Start logging
