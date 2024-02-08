@@ -114,7 +114,7 @@ Available: Bulgarian, English, German, Indonesian, Polish and Turkish.
 - Windows, Linux, MacOS X, BSD,
 - FullHD screen for comfort work,
 - [ImageMagick](https://imagemagick.org/), remember to add path into `%PATH%` environment variable, enable install libraries!
-- [Python3](https://www.python.org/), remember to add path into `%PATH%` environment variable.
+- [Python3.9+](https://www.python.org/), remember to add path into `%PATH%` environment variable.
 
 ### Install
 
