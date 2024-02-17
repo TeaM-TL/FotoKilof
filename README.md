@@ -132,7 +132,7 @@ python3 -m pip install fotokilof
 
 #### Windows
 Download and install requirements:
-- [Python3](https://www.python.org/) - add path into `%PATH%` environment variable,
+- [Python3.9+](https://www.python.org/) - add path into `%PATH%` environment variable,
 - [ImageMagick](https://imagemagick.org/script/download.php#windows) - add path into `%PATH%` environment variable, enable install libraries!
 
 ```bash

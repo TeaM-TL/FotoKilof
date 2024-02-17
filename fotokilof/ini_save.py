@@ -40,9 +40,9 @@ Every function save part of config file
 """
 
 import configparser
+import logging
 
 import common
-import logging
 
 
 def save(ini_data):
@@ -73,7 +73,8 @@ def save(ini_data):
     config.set(main['section'], 'custom', str(main['custom_on']))
     config.set(main['section'], 'preview_orig', main['preview_orig'])
     config.set(main['section'], 'preview_new', main['preview_new'])
-    config.set(main['section'], 'log', main['log'])
+    config.set(main['section'], 'log_level', main['log_level'])
+    config.set(main['section'], 'check_version', main['check_version'])
     # resize
     config.add_section(resize['section'])
     config.set(resize['section'], 'on', str(resize['on']))

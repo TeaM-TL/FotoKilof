@@ -107,6 +107,12 @@ def main(file_ini, preview_size_list):
                                                   ("E", "W", "M"),
                                                   "E")
 
+    try:
+        check_version = config.getint('Main', 'check_version')
+    except:
+        check_version = 1
+    dict_return['check_version'] = entries.parse_list(check_version, (0, 1), 0)
+
     return dict_return
 
 

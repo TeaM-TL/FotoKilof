@@ -59,6 +59,7 @@ from ttkbootstrap.constants import N, S, W, E, X, BOTH, LEFT, RIGHT, TOP, BOTTOM
                                     DISABLED, NORMAL, HORIZONTAL
 
 # my modules
+import check_new_version
 import convert
 import convert_wand
 import common
@@ -908,6 +909,7 @@ def ini_read_wraper():
         logging.INFO
     )
     img_custom_on.set(ini_entries['img_custom_on'])
+    check_version.set(ini_entries['check_version'])
     # resize
     ini_entries = ini_read.resize(FILE_INI)
     img_resize_on.set(ini_entries['img_resize_on'])
@@ -1052,20 +1054,21 @@ def ini_save_wraper():
     # main
     config = {'section': 'Main',
                 'path': file_in_path.get(),
-                'custom_on': img_custom_on.get(),
                 'work_dir': work_dir.get(),
                 'file_dir': file_dir_selector.get(),
                 'exif': img_exif_on.get(),
-                'preview_new': co_preview_selector_new.get(),
+                'custom_on': img_custom_on.get(),
                 'preview_orig': co_preview_selector_orig.get(),
-                'log': log_level.get()}
+                'preview_new': co_preview_selector_new.get(),
+                'log_level': log_level.get(),
+                'check_version': check_version.get()}
     # resize
     resize = {'section': 'Resize',
                 'on': img_resize_on.get(),
                 'resize': img_resize.get(),
-                'size_percent': e2_resize.get(),
                 'size_pixel_x': e1_resize_x.get(),
-                'size_pixel_y': e1_resize_y.get()}
+                'size_pixel_y': e1_resize_y.get(),
+                'size_percent': e2_resize.get()}
     # text
     text = {'section': 'Text',
                 'on': img_text_on.get(),
@@ -1621,6 +1624,7 @@ except:
 FILE_INI = os.path.join(os.path.expanduser("~"), ".fotokilof.ini")
 PWD = os.getcwd()
 log_level = StringVar() # E(rror), W(arning), M(essage)
+check_version = IntVar() # allow to check new version
 work_dir = StringVar()  # default: "FotoKilof"
 work_sub_dir = StringVar()  # subdir for resized pictures
 work_sub_dir.set("")  # default none
@@ -2816,6 +2820,12 @@ else:
     b_file_select.configure(state=DISABLED)
     b_file_select_screenshot.configure(state=DISABLED)
     root.deiconify()
+
+
+if check_version.get():
+    if check_new_version.check_version(version.__version__)[0]:
+        Messagebox.show_warning(_('New version of FotoKilof is available.\nCurrent: ' + version.__version__ +', New: ' + check_new_version.check_version(version.__version__)[1] + '\nRun command:\npython3 -m pip install --upgrade fotokilof'),
+                                title=_('New version of FotoKilof is available'))
 
 root.mainloop()
 

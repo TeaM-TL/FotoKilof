@@ -2,6 +2,8 @@
 
 ## 2024
 
+4.4.5 checking new version of FotoKilof
+
 4.4.4 logging in proper way
 
 4.4.3 entrypoint to easier run by execution fotokilof
