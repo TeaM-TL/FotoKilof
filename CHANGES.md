@@ -2,6 +2,8 @@
 
 ## 2024
 
+4.4.6 fix save settings
+
 4.4.5 checking new version of FotoKilof
 
 4.4.4 logging in proper way

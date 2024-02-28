@@ -53,6 +53,13 @@ def preview_wand(file_in, size, coord=""):
     - width and height
     """
 
+    result = {'filename': None,
+        'size': '0',
+        'width': '0',
+        'height': '0',
+        'preview_width': '0',
+        'preview_height': '0'}
+
     if file_in is not None:
         if os.path.isfile(file_in):
             filesize = common.humansize(os.path.getsize(file_in))
@@ -87,13 +94,6 @@ def preview_wand(file_in, size, coord=""):
                           'preview_width': preview_width,
                           'preview_height': preview_height
                     }
-    else:
-        result = {'filename': None,
-            'size': '0',
-            'width': '0',
-            'height': '0',
-            'preview_width': '0',
-            'preview_height': '0'}
 
     return result
 
