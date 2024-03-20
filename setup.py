@@ -28,7 +28,7 @@ setup(
     python_requires='>=3.6',
     include_package_data=True,
     packages=find_packages(),
-    install_requires=['pillow','wand','ttkbootstrap'],
+    install_requires=['pillow','wand','ttkbootstrap','json','requests'],
     entry_points = {
         "gui_scripts": [
             "fotokilof = fotokilof:__main__",

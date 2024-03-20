@@ -2,6 +2,8 @@
 
 ## 2024
 
+4.4.7 fix requrements
+
 4.4.6 fix save settings
 
 4.4.5 checking new version of FotoKilof
