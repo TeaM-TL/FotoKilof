@@ -145,6 +145,11 @@ Install requirements:
 brew install imagemagick python@3.11 python-tk@3.11
 ```
 
+For Apple Silicon (M1, M2, M3) based Macs, the default Homebrew install directory differs from that on Homebrew Intel installs. The following environment variable allows FotoKilof to correctly locate the Homebrew-installed ImageMagick on Apple Silicon Macs:
+```bash
+export MAGICK_HOME=/opt/homebrew
+```
+
 Install as PyPi package by PIP:
 ```bash
 python3 -m pip install fotokilof
