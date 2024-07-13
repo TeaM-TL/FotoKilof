@@ -142,7 +142,7 @@ python -m pip install pywin32 fotokilof
 #### MacOS
 Install requirements:
 ```bash
-brew install imagemagick python@3.11 python-tk@3.11
+brew install imagemagick python@3.12 python-tk@3.12
 ```
 
 For Apple Silicon (M1, M2, M3) based Macs, the default Homebrew install directory differs from that on Homebrew Intel installs. The following environment variable allows FotoKilof to correctly locate the Homebrew-installed ImageMagick on Apple Silicon Macs:
