@@ -211,7 +211,7 @@ def preview_orig_button():
         logging.warning("No orig picture to preview")
 
 
-def preview_new_button():
+def preview_new_button(event=None):
     """ preview new picture """
     # to define file_out
     try:
@@ -2619,6 +2619,7 @@ if mswindows.macos():
     c_preview_orig_pi.bind("<Button-2>", mouse_crop_se)
 else:
     c_preview_orig_pi.bind("<Button-3>", mouse_crop_se)
+c_preview_new_pi.bind("<Button-1>",preview_new_button)
 root.bind("<F1>", help_info)
 root.bind("<F2>", change_ttk_theme)
 root.protocol("WM_DELETE_WINDOW", close_program)

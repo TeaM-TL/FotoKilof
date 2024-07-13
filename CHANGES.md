@@ -2,6 +2,8 @@
 
 ## 2024
 
+4.4.9 preview new when click on picture
+
 4.4.8 fix requirements
 
 4.4.7 fix requrements
