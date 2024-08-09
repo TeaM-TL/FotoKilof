@@ -41,6 +41,8 @@ except:
     IMAGEMAGICK_WAND_VERSION = "Missing ImageMagick"
     IMAGEMAGICK_WAND = None
 
+PILLOW = 0
+
 # standard modules
 import datetime
 import gettext
@@ -62,6 +64,8 @@ from ttkbootstrap.constants import N, S, W, E, X, BOTH, LEFT, RIGHT, TOP, BOTTOM
 import check_new_version
 import convert
 import convert_wand
+import convert_pillow
+import convert_common
 import common
 import gui
 import ini_read
@@ -203,10 +207,7 @@ def preview_orig_button():
     """ original preview """
     # global file_in_path
     try:
-        if mswindows.windows() or mswindows.macos():
-            gui.show_picture(file_in_path.get())
-        else:
-            convert_wand.display_image(file_in_path.get())
+        convert_common.display_image(file_in_path.get(), PILLOW)
     except:
         logging.warning("No orig picture to preview")
 
@@ -217,10 +218,7 @@ def preview_new_button(event=None):
     try:
         filename = path_to_file_out(resized.get())
         if os.path.isfile(filename):
-            if mswindows.windows() or mswindows.macos():
-                gui.show_picture(filename)
-            else:
-                convert_wand.display_image(filename)
+            convert_common.display_image(filename, PILLOW)
     except:
         logging.warning("No result picture to preview")
 
@@ -228,10 +226,7 @@ def preview_new_button(event=None):
 def compose_preview_button():
     """ preview picture for compose """
     try:
-        if mswindows.windows() or mswindows.macos():
-            gui.show_picture(img_compose_file.get())
-        else:
-            convert_wand.display_image(img_compose_file.get())
+        convert_common.display_image(img_compose_file.get(), PILLOW)
     except:
         logging.warning("No compose picture to preview")
 
@@ -441,10 +436,10 @@ def convert_rotate_button():
     """ Rotate button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_wand.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get())
-        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        convert_common.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get(), PILLOW)
+        convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -525,7 +520,7 @@ def crop_read():
     """ Read size of picture and load into crop widget """
     if file_in_path.get() is not None:
         if os.path.isfile(file_in_path.get()):
-            image_size_xy = convert_wand.get_image_size(file_in_path.get())
+            image_size_xy = convert_common.get_image_size(file_in_path.get(), PILLOW)
             if image_size_xy != (0, 0):
                 width = image_size_xy[0]
                 height = image_size_xy[1]
@@ -693,7 +688,7 @@ def open_file_common(cwd, filename):
         try:
             file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
             root.title(window_title + file_in_path.get())
-            image_size =  convert_wand.get_image_size(file_in_path.get())
+            image_size = convert_common.get_image_size(file_in_path.get(), PILLOW)
             if image_size != (0, 0):
                 file_in_width.set(image_size[0])
                 file_in_height.set(image_size[1])
@@ -2772,7 +2767,7 @@ ToolTip(b_preview_new_run, text=_("Display image to join by IMdisplay or default
 # Run functions
 #
 
-Python_version = "Py " + platform.python_version() + ", Tk " + str(TkVersion)
+Python_version = "Py " + platform.python_version() + ", Tk " + str(TkVersion) + ", PIL " + convert_pillow.version()
 window_title = title_begin + IMAGEMAGICK_WAND_VERSION + ", " + Python_version + " | "
 root.title(window_title )
 if IMAGEMAGICK_WAND is not None:

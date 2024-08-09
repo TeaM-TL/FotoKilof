@@ -36,6 +36,8 @@ except:
 
 import common
 import convert_wand
+import convert_pillow
+import convert_common
 import magick
 import mswindows
 
@@ -64,7 +66,7 @@ def preview_wand(file_in, size, coord=""):
         if os.path.isfile(file_in):
             filesize = common.humansize(os.path.getsize(file_in))
 
-            clone = convert_wand.make_clone(file_in)
+            clone = convert_common.make_clone(file_in, 0)
             width = str(clone.width)
             height = str(clone.height)
             clone.convert('ppm')

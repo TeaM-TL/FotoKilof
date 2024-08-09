@@ -2,7 +2,7 @@
 # pylint: disable=bare-except
 
 """
-Copyright (c) 2022-2024 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2024 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,14 +45,13 @@ Converters
 
 import logging
 import os
+from PIL import Image
 
 try:
     from wand.drawing import Drawing
-    from wand.image import Image
     from wand.version import fonts as fontsList
-    from wand.display import display
 except:
-    print(" ImageMagick or Wand-py not found")
+    print("Wand not found")
 
 # my modules
 import common
@@ -60,6 +59,10 @@ import convert_common
 
 
 # ------------------------------------ Info
+def version():
+    return Image.__version__
+
+
 def fonts_list():
     """ list of available fonts """
     return fontsList()
