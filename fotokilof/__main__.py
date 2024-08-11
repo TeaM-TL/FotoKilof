@@ -42,6 +42,7 @@ except:
     IMAGEMAGICK_WAND = None
 
 PILLOW = 0
+print(PILLOW)
 
 # standard modules
 import datetime
@@ -72,7 +73,6 @@ import ini_read
 import ini_save
 import magick
 import mswindows
-import preview
 import version
 
 logging.basicConfig(
@@ -81,7 +81,7 @@ logging.basicConfig(
     filemode="a",
     format="%(asctime)s.%(msecs)03d :%(levelname)s: %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
-    level=logging.DEBUG
+    level=logging.INFO
 )
 
 # Start logging
@@ -180,8 +180,8 @@ def preview_new_refresh(event):
 def preview_new(file_out):
     """ generate result preview """
     if co_preview_selector_new.get() != "none":
-        preview_picture = preview.preview_wand(file_out,
-                                int(co_preview_selector_new.get()))
+        preview_picture = convert_common.preview(file_out,
+                                int(co_preview_selector_new.get()), PILLOW)
 
         try:
             pi_preview_new.configure(file=preview_picture['filename'])
@@ -280,7 +280,7 @@ def apply_all_button():
         for file_in in files_list:
             if img_compose_on.get():
                 # compose
-                clone = convert_wand.make_clone(file_in)
+                clone = convert_common.make_clone(file_in, PILLOW)
                 if clone is not None:
                     convert_wand.compose(clone,
                                         img_compose_file.get(),
@@ -291,16 +291,16 @@ def apply_all_button():
                     subdir = work_dir.get()
             else:
                 # other conversions
-                clone = convert_wand.make_clone(file_in, img_vignette_color.get())
+                clone = convert_common.make_clone(file_in, PILLOW, img_vignette_color.get())
                 if img_crop_on.get():
                     convert_wand.crop(file_in, clone,
                                         img_crop.get(),
                                         img_crop_gravity.get(),
                                         convert_crop_entries())
                 if img_mirror_on.get():
-                    convert_wand.mirror(clone,
+                    convert_common.mirror(clone,
                                         img_mirror_flip.get(),
-                                        img_mirror_flop.get())
+                                        img_mirror_flop.get(), PILLOW)
                 if img_bw_on.get():
                     convert_wand.bw(clone,
                                         img_bw.get(),
@@ -322,10 +322,10 @@ def apply_all_button():
                                         e_vignette_radius.get(),
                                         e_vignette_radius.get())
                 if img_rotate_on.get():
-                    convert_wand.rotate(clone,
+                    convert_common.rotate(clone,
                                         img_rotate.get(),
                                         img_rotate_color.get(),
-                                        e_rotate_own.get())
+                                        e_rotate_own.get(), PILLOW)
                 if img_border_on.get():
                     convert_wand.border(clone,
                                         img_border_color.get(),
@@ -360,7 +360,7 @@ def apply_all_button():
                     convert_wand.pip(clone, file_logo_path.get(), coordinates, width, height)
 
             file_out = convert.out_full_filename(file_in, subdir, co_apply_type.get())
-            convert_wand.save_close_clone(clone, file_out, img_exif_on.get())
+            convert_common.save_close_clone(clone, file_out, img_exif_on.get(), PILLOW)
             preview_new(file_out)
             # progressbar
             i = i + 1
@@ -399,11 +399,11 @@ def convert_contrast_button():
     """ contrast button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
         convert_wand.contrast(clone, img_contrast.get(), co_contrast_selection.get(),
                                 e1_contrast.get(), e2_contrast.get())
-        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -412,10 +412,10 @@ def convert_bw_button():
     """ black-white or sepia button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
         convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
-        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -424,10 +424,10 @@ def convert_normalize_button():
     """ normalize button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
         convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
-        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -448,10 +448,10 @@ def convert_mirror_button():
     """ Mirror button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_wand.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get())
-        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        convert_common.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get(), PILLOW)
+        convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -466,10 +466,10 @@ def convert_resize_button():
                                             common.empty(e1_resize_y.get()),
                                             common.empty(e2_resize.get()))
     file_out = path_to_file_out(1)
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
         convert_wand.resize(clone, resize_command[1])
-        convert_wand.save_close_clone(clone, file_out, img_exif_on.get())
+        convert_common.save_close_clone(clone, file_out, img_exif_on.get(), PILLOW)
         preview_new(file_out)
     progress_files.set(_("done"))
 
@@ -478,10 +478,10 @@ def convert_border_button():
     """ Border button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
         convert_wand.border(clone, img_border_color.get(), e_border_we.get(), e_border_ns.get())
-        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -490,11 +490,11 @@ def convert_vignette_button():
     """ Vignette button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_wand.make_clone(file_in_path.get(), img_vignette_color.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW, img_vignette_color.get())
     if clone is not None:
         convert_wand.vignette(clone, e_vignette_dx.get(), e_vignette_dy.get(),
                                 e_vignette_radius.get(), e_vignette_radius.get())
-        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -503,7 +503,7 @@ def convert_compose_button():
     """ Compose button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
         convert_wand.compose(clone,
                 img_compose_file.get(),
@@ -511,7 +511,7 @@ def convert_compose_button():
                 img_compose_autoresize.get(),
                 img_compose_color.get(),
                 img_compose_gravity.get())
-        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -573,11 +573,11 @@ def convert_crop_button():
     """ Crop button """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
         convert_wand.crop(file_in_path.get(), clone, img_crop.get(),
                             img_crop_gravity.get(), convert_crop_entries())
-        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -586,7 +586,7 @@ def convert_text_button():
     """ add text """
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
         convert_text_data = (clone, img_text_inout.get(), e_text_angle.get(), img_text_rotate.get(),
                             img_text_color.get(), img_text_font.get(), e_text_size.get(),
@@ -594,7 +594,7 @@ def convert_text_button():
                             img_text_box.get(), img_text_box_color.get(),
                             e_text_x.get(), e_text_y.get(), e_text.get())
         convert_wand.text(convert_text_data)
-        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -641,10 +641,10 @@ def convert_logo_button():
     coordinates = (common.empty(e_logo_dx.get()), common.empty(e_logo_dy.get()),
                     common.empty(e_logo_width.get()), common.empty(e_logo_height.get()),
                     img_logo_gravity.get())
-    clone = convert_wand.make_clone(file_in_path.get())
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
         convert_wand.pip(clone, file_logo_path.get(), coordinates, clone.width, clone.height )
-        convert_wand.save_close_clone(clone, path_to_file_out(0), img_exif_on.get())
+        convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
 
@@ -1291,8 +1291,9 @@ def preview_orig():
             else:
                 crop_rectangle = ""
 
-            preview_picture = preview.preview_wand(file_in_path.get(),
+            preview_picture = convert_common.preview(file_in_path.get(),
                                                   int(co_preview_selector_orig.get()),
+                                                  PILLOW,
                                                   crop_rectangle)
 
             try:
@@ -1320,7 +1321,7 @@ def preview_logo():
     """ generating logo preview """
     if os.path.isfile(file_logo_path.get()):
         l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
-        preview_picture = preview.preview_wand(file_logo_path.get(), PREVIEW_LOGO)
+        preview_picture = convert_common.preview(file_logo_path.get(), PREVIEW_LOGO, PILLOW)
 
         try:
             pi_logo_preview.configure(file=preview_picture['filename'])
@@ -1343,8 +1344,9 @@ def preview_compose():
     """ generating compose preview """
     if os.path.isfile(img_compose_file.get()):
         # l_compose_preview.configure(text=os.path.basename(img_compose_file.get()))
-        preview_picture = preview.preview_wand(img_compose_file.get(),
-                                        int(co_compose_preview_selector.get()))
+        preview_picture = convert_common.preview(img_compose_file.get(),
+                                        int(co_compose_preview_selector.get()),
+                                        PILLOW)
 
         try:
             pi_compose_preview.configure(file=preview_picture['filename'])

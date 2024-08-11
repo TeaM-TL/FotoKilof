@@ -41,16 +41,18 @@ Converters
 - crop - crop picture
 - vignete - add vignete into picture
 - compose - join two pictures
+- preview_wand - preview done by Wand
 """
 
 import logging
 import os
+import tempfile
+import time
 
 try:
     from wand.drawing import Drawing
     from wand.image import Image
     from wand.version import fonts as fontsList
-    from wand.display import display
 except:
     print(" ImageMagick or Wand-py not found")
 
@@ -126,13 +128,11 @@ def pip(clone, logo, logo_data, image_height, image_width):
     logging.info(" Conversion: logo")
 
 
-def rotate(clone, angle, color, own):
+def rotate(clone, angle, color, angle_own):
     """ rotate """
     if angle == 0:
-        angle = common.empty(own)
-        if angle == 0:
-            color = None
-    else:
+        angle = common.empty(angle_own)
+    if angle == 0:
         color = None
     clone.rotate(angle, background=color)
     logging.info(" Conversion: rotate %s", str(angle))
@@ -408,5 +408,65 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                     clone.image_set(canvas)
 
     logging.info(" Conversion: compose")
+
+
+# ------------------------------------ Preview
+def preview(file_in, size, coord=""):
+    """
+    preview generation by Wand
+    file_in - fullname image file
+    size - required size of image
+    coord - coordinates for crop
+    --
+    return:
+    - filename - path to PPM file
+    - file size
+    - width and height
+    """
+
+    result = {'filename': None,
+        'size': '0',
+        'width': '0',
+        'height': '0',
+        'preview_width': '0',
+        'preview_height': '0'}
+
+    if file_in is not None:
+        if os.path.isfile(file_in):
+            filesize = common.humansize(os.path.getsize(file_in))
+
+            clone = convert_common.make_clone(file_in, 0)
+            width = str(clone.width)
+            height = str(clone.height)
+            start_time = time.time()
+            clone.convert('ppm')
+            resize(clone, str(size) + "x" + str(size))
+            print("ppm, resize: " + str(time.time() - start_time))
+            # write crop if coordinates are given
+            if len(coord) == 4 :
+                with Drawing() as draw:
+                    left_top = (coord[0], coord[1])
+                    left_bottom = (coord[0], coord[3])
+                    right_top = (coord[2], coord[1])
+                    right_bottom = (coord[2], coord[3])
+                    draw.fill_color = '#FFFF00'
+                    draw.line(left_top, right_top)
+                    draw.line(left_top, left_bottom)
+                    draw.line(left_bottom, right_bottom)
+                    draw.line(right_top, right_bottom)
+                    draw(clone)
+            preview_width = str(clone.width)
+            preview_height = str(clone.height)
+            file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
+            save_close_clone(clone, file_preview)
+            result = {'filename': common.spacja(file_preview),
+                          'size': filesize,
+                          'width': width,
+                          'height': height,
+                          'preview_width': preview_width,
+                          'preview_height': preview_height
+                    }
+
+    return result
 
 # EOF
