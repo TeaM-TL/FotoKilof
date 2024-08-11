@@ -33,7 +33,6 @@ Info
 """
 
 import logging
-import os
 import time
 
 import PIL
@@ -57,7 +56,7 @@ def display_image(file_to_display, set_pillow):
     else:
         with Image(filename=file_in) as image:
             display(image)
-    logging.debug("display_image: " + str(time.time() - start_time))
+    logging.debug("display_image: %ss", str(time.time() - start_time))
     # except:
     #     logging.error(" Error display file: %s", file_in)
     #     result = None
@@ -74,49 +73,36 @@ def get_image_size(file_in, set_pillow):
     input: file name
     output: size (width, height)
     """
-
-    size = (0, 0)
-    if file_in is not None:
-        if os.path.isfile(file_in):
-            try:
-                if set_pillow:
-                    with PIL.Image(filename=file_in) as image:
-                        size = image.size
-                else:
-                    with Image(filename=file_in) as image:
-                        size = image.size
-            except:
-                logging.error(" Error read file: %s", file_in)
+    start_time = time.time()
+    if set_pillow:
+        size = convert_pillow.get_image_size(file_in)
+    else:
+        size = convert_wand.get_image_size(file_in)
+    logging.debug("get_image_size: %ss", str(time.time() - start_time))
     return size
+
 
 def preview(file_logo, size, set_pillow, coord=""):
     """ preview """
     start_time = time.time()
     if set_pillow:
-        # result = convert_pillow.preview(file_logo, size, coord)
-        print("preview_pillow - not ready yet")
-        result = None
+        result = convert_pillow.preview(file_logo, size, coord)
     else:
         result = convert_wand.preview(file_logo, size, coord)
-    logging.debug("preview: " + str(time.time() - start_time))
+    logging.debug("preview: %s s", str(time.time() - start_time))
     logging.debug(result)
     return result
 
 
 def make_clone(file_to_clone, set_pillow, color = None):
     """ open picture and make clone for processing """
-    if len(file_to_clone) > 0:
-        start_time = time.time()
-        if set_pillow:
-            with PIL.Image(file_to_clone) as image:
-                clone = image.copy()
-        else:
-            with Image(filename=file_to_clone, background=color) as image:
-                clone = image.clone()
-        logging.debug("Make clone: " + str(time.time() - start_time))
+    start_time = time.time()
+    if set_pillow:
+        result = convert_pillow.make_clone(file_to_clone, color)
     else:
-        clone = None
-    return clone
+        result = convert_wand.make_clone(file_to_clone, color)
+    logging.debug("Make clone: %ss", str(time.time() - start_time))
+    return result
 
 
 def save_close_clone(clone, file_out, exif_on, set_pillow):
@@ -126,24 +112,28 @@ def save_close_clone(clone, file_out, exif_on, set_pillow):
         convert_pillow.save_close_clone(clone, file_out, exif_on)
     else:
         convert_wand.save_close_clone(clone, file_out, exif_on)
-    logging.debug("Save clone: " + str(time.time() - start_time))
+    logging.debug("Save clone: %ss", str(time.time() - start_time))
 
 
 def rotate(clone, angle, color, angle_own, set_pillow):
     """ rotate """
     start_time = time.time()
     if set_pillow:
-        convert_pillow.rotate(clone, angle, color, angle_own)
+        result = convert_pillow.rotate(clone, angle, color, angle_own)
     else:
         convert_wand.rotate(clone, angle, color, angle_own)
-    logging.debug("Rotate: " + str(time.time() - start_time))
+        result = clone
+    logging.debug("Rotate: %ss", str(time.time() - start_time))
+    return result
 
 
 def mirror(clone, flip, flop, set_pillow):
     """ mirror: flip and flop """
     start_time = time.time()
     if set_pillow:
-        convert_pillow.mirror(clone, flip, flop)
+        result = convert_pillow.mirror(clone, flip, flop)
     else:
         convert_wand.mirror(clone, flip, flop)
-    logging.debug("Mirror: " + str(time.time() - start_time))
+        result = clone
+    logging.debug("Mirror: %ss", str(time.time() - start_time))
+    return result

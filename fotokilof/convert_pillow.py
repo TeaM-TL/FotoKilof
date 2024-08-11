@@ -44,22 +44,17 @@ Converters
 """
 
 import logging
+import tempfile
 import os
 from PIL import Image
 
-try:
-    from wand.drawing import Drawing
-    from wand.version import fonts as fontsList
-except:
-    print("Wand not found")
-
 # my modules
 import common
-import convert_common
 
 
 # ------------------------------------ Info
 def version():
+    """ version of PIL """
     return Image.__version__
 
 
@@ -69,15 +64,41 @@ def fonts_list():
 
 
 # ------------------------------------ Common
+def make_clone(file_to_clone, color = None):
+    """ open picture and make clone for processing """
+    if len(file_to_clone) > 0:
+        with Image.open(file_to_clone) as image:
+            clone = image.copy()
+    else:
+        clone = None
+    return clone
 
 
-def save_close_clone(clone, file_out, exif = 0):
+def save_close_clone(clone, file_out, ppm = 0, exif = 0):
     """ save and close clone after processing """
-    if not exif:
-        clone.strip()
+    # if not exif:
+    #     clone.strip()
     logging.info(" Save file: %s", file_out)
-    clone.save(filename=file_out)
+    clone.save(file_out)
     clone.close()
+
+
+def get_image_size(filename):
+    """
+    identify width and height of picture
+    input: file name
+    output: size (width, height)
+    """
+    size = (0, 0)
+    if filename is not None:
+        if os.path.isfile(filename):
+            try:
+                with Image.open(filename) as image:
+                    size = image.size
+            except:
+                logging.error(" Error read file: %s", filename)
+    logging.debug("get_image_size: %s, %s", filename, str(size))
+    return size
 
 
 def gravitation(gravity):
@@ -137,18 +158,27 @@ def rotate(clone, angle, color, own):
             color = None
     else:
         color = None
-    clone.rotate(angle, background=color)
+    if angle == 90:
+        result = clone.transpose(Image.Transpose.ROTATE_90)
+    elif angle == 180:
+        result = clone.transpose(Image.Transpose.ROTATE_180)
+    elif angle == 270:
+        result = clone.transpose(Image.Transpose.ROTATE_270)
+    else:
+        result = clone
+        logging.debug("rotate: only 90 180 and 270, %s not allowed", str(angle))
+    #clone.rotate(angle)
     logging.info(" Conversion: rotate %s", str(angle))
-
+    return result
 
 def mirror(clone, flip, flop):
     """ mirror: flip and flop """
     if flip:
-        clone.flip()
+        result = clone.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
     if flop:
-        clone.flop()
+        result = clone.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
     logging.info(" Conversion: mirror")
-
+    return result
 
 def border(clone, color, x, y):
     """ mirror: flip and flop """
@@ -224,9 +254,9 @@ def bw(clone, bw_variant, sepia):
     logging.info(" Conversion: black-white/sepia %s", str(bw_variant))
 
 
-def resize(clone, command):
+def resize(clone, width, height):
     """ resize picture """
-    clone.transform(crop='', resize=command)
+    clone.resize(width, height)
     logging.info(" Conversion: resize")
 
 
@@ -269,7 +299,7 @@ def crop(file_in, clone, crop_variant, gravity, entries):
     crop picture
     entries are as dictionary
     """
-    image_size = convert_common.get_image_size(file_in)
+    image_size = get_image_size(file_in)
 
     if crop_variant == 1:
         if (entries['one_x1'] < entries['one_x2']) and (entries['one_y1'] < entries['one_y2']):
@@ -411,5 +441,65 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                     clone.image_set(canvas)
 
     logging.info(" Conversion: compose")
+
+# ------------------------------------ Preview
+def preview(file_in, max_size, coord=""):
+    """
+    preview generation by Wand
+    file_in - fullname image file
+    max_size - required size of image
+    coord - coordinates for crop
+    --
+    return:
+    - filename - path to PPM file
+    - file size
+    - width and height
+    """
+
+    result = {'filename': None,
+        'size': '0',
+        'width': '0',
+        'height': '0',
+        'preview_width': '0',
+        'preview_height': '0'}
+
+    if file_in is not None:
+        if os.path.isfile(file_in):
+            filesize = common.humansize(os.path.getsize(file_in))
+            clone = make_clone(file_in)
+            width, height = clone.size
+            if width > height:
+                preview_width, preview_height = (max_size, int(height * (max_size / width)))
+            elif width < height:
+                preview_width, preview_height = (int(width * (max_size / height)), max_size)
+            else:
+                preview_width, preview_height = (max_size, max_size)
+            size = (preview_width, preview_height)
+            clone = clone.resize(size)
+            # write crop if coordinates are given
+            if len(coord) == 4 :
+                with Drawing() as draw:
+                    left_top = (coord[0], coord[1])
+                    left_bottom = (coord[0], coord[3])
+                    right_top = (coord[2], coord[1])
+                    right_bottom = (coord[2], coord[3])
+                    draw.fill_color = '#FFFF00'
+                    draw.line(left_top, right_top)
+                    draw.line(left_top, left_bottom)
+                    draw.line(left_bottom, right_bottom)
+                    draw.line(right_top, right_bottom)
+                    draw(clone)
+            preview_width, preview_height = clone.size
+            file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
+            save_close_clone(clone, file_preview)
+            result = {'filename': common.spacja(file_preview),
+                          'size': filesize,
+                          'width': str(width),
+                          'height': str(height),
+                          'preview_width': str(preview_width),
+                          'preview_height': str(preview_height)
+                    }
+            logging.debug("preview: " + str(result))
+    return result
 
 # EOF

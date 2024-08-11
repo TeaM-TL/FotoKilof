@@ -28,22 +28,6 @@ THE SOFTWARE.
 
 nice GUI for ImageMagick command common used (by me)
 """
-
-from tkinter import PhotoImage, Canvas, Label, filedialog, \
-                    StringVar, IntVar, TclError, TkVersion
-
-try:
-    from wand.version import MAGICK_VERSION, VERSION
-    IMAGEMAGICK_WAND_VERSION = "IM " + MAGICK_VERSION.split(' ')[1] + ", Wand " + VERSION
-    IMAGEMAGICK_WAND = "OK"
-except:
-    print(" ImageMagick or Wand-py not found")
-    IMAGEMAGICK_WAND_VERSION = "Missing ImageMagick"
-    IMAGEMAGICK_WAND = None
-
-PILLOW = 0
-print(PILLOW)
-
 # standard modules
 import datetime
 import gettext
@@ -60,6 +44,20 @@ from ttkbootstrap.dialogs.colorchooser import ColorChooserDialog
 from ttkbootstrap.dialogs.dialogs import Messagebox
 from ttkbootstrap.constants import N, S, W, E, X, BOTH, LEFT, RIGHT, TOP, BOTTOM, END, \
                                     DISABLED, NORMAL, HORIZONTAL
+
+from tkinter import PhotoImage, Canvas, Label, filedialog, \
+                    StringVar, IntVar, TclError, TkVersion
+
+try:
+    from wand.version import MAGICK_VERSION, VERSION
+    IMAGEMAGICK_WAND_VERSION = "IM " + MAGICK_VERSION.split(' ')[1] + ", Wand " + VERSION
+    IMAGEMAGICK_WAND = "OK"
+except:
+    print(" ImageMagick or Wand-py not found")
+    IMAGEMAGICK_WAND_VERSION = "Missing ImageMagick"
+    IMAGEMAGICK_WAND = None
+
+PILLOW = 1
 
 # my modules
 import check_new_version
@@ -81,11 +79,15 @@ logging.basicConfig(
     filemode="a",
     format="%(asctime)s.%(msecs)03d :%(levelname)s: %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
-    level=logging.INFO
+    level=logging.DEBUG
 )
 
 # Start logging
 logging.info("Start")
+if PILLOW:
+    logging.debug("PILLOW will be in use")
+else:
+    logging.debug("Wand will be in use")
 
 if mswindows.windows() or mswindows.macos():
     from PIL import ImageGrab
@@ -181,8 +183,8 @@ def preview_new(file_out):
     """ generate result preview """
     if co_preview_selector_new.get() != "none":
         preview_picture = convert_common.preview(file_out,
-                                int(co_preview_selector_new.get()), PILLOW)
-
+                                int(co_preview_selector_new.get()),
+                                PILLOW)
         try:
             pi_preview_new.configure(file=preview_picture['filename'])
             c_preview_new_pi.delete('all')
@@ -438,7 +440,7 @@ def convert_rotate_button():
     root.update_idletasks()
     clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_common.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get(), PILLOW)
+        clone = convert_common.rotate(clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get(), PILLOW)
         convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))
@@ -450,7 +452,7 @@ def convert_mirror_button():
     root.update_idletasks()
     clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_common.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get(), PILLOW)
+        clone = convert_common.mirror(clone, img_mirror_flip.get(), img_mirror_flop.get(), PILLOW)
         convert_common.save_close_clone(clone, path_to_file_out(0), img_exif_on.get(), PILLOW)
         preview_new(path_to_file_out(0))
     progress_files.set(_("done"))

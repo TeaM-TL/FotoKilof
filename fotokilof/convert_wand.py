@@ -27,6 +27,7 @@ Info
 Common
 - make_clone - open origal picture and make clone for processing
 - save_close_clone - save clone into file and close clone
+- get_image_size - get size from image
 - gravitation - translate eg. NS to Northsouth as Wand-py expect
 Converters
 - pip - picture in picture, for inserting logo
@@ -58,7 +59,6 @@ except:
 
 # my modules
 import common
-import convert_common
 
 
 # ------------------------------------ Info
@@ -68,6 +68,14 @@ def fonts_list():
 
 
 # ------------------------------------ Common
+def make_clone(file_to_clone, color = None):
+    """ open picture and make clone for processing """
+    if len(file_to_clone) > 0:
+        with Image(filename=file_to_clone, background=color) as image:
+            clone = image.clone()
+    else:
+        clone = None
+    return clone
 
 
 def save_close_clone(clone, file_out, exif = 0):
@@ -77,6 +85,23 @@ def save_close_clone(clone, file_out, exif = 0):
     logging.info(" Save file: %s", file_out)
     clone.save(filename=file_out)
     clone.close()
+
+
+def get_image_size(filename):
+    """
+    identify width and height of picture
+    input: file name
+    output: size (width, height)
+    """
+    size = (0, 0)
+    if filename is not None:
+        if os.path.isfile(filename):
+            try:
+                with Image(filename=filename) as image:
+                    size = image.size
+            except:
+                logging.error(" Error read file: %s", filename)
+    return size
 
 
 def gravitation(gravity):
@@ -266,7 +291,7 @@ def crop(file_in, clone, crop_variant, gravity, entries):
     crop picture
     entries are as dictionary
     """
-    image_size = convert_common.get_image_size(file_in)
+    image_size = get_image_size(file_in)
 
     if crop_variant == 1:
         if (entries['one_x1'] < entries['one_x2']) and (entries['one_y1'] < entries['one_y2']):
@@ -435,7 +460,7 @@ def preview(file_in, size, coord=""):
         if os.path.isfile(file_in):
             filesize = common.humansize(os.path.getsize(file_in))
 
-            clone = convert_common.make_clone(file_in, 0)
+            clone = make_clone(file_in)
             width = str(clone.width)
             height = str(clone.height)
             start_time = time.time()
