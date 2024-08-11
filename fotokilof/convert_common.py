@@ -36,8 +36,11 @@ import logging
 import time
 
 import PIL
-from wand.image import Image
-from wand.display import display
+try:
+    from wand.image import Image
+    from wand.display import display
+except:
+    print(" ImageMagick or Wand-py not found")
 
 import common
 import mswindows
@@ -46,9 +49,9 @@ import convert_wand
 
 
 def display_image(file_to_display, set_pillow):
-    """ display image """
+    """display image"""
     file_in = common.spacja(file_to_display)
-    #try:
+    # try:
     start_time = time.time()
     if set_pillow or mswindows.windows() or mswindows.macos():
         with PIL.Image.open(file_in) as image:
@@ -83,7 +86,7 @@ def get_image_size(file_in, set_pillow):
 
 
 def preview(file_logo, size, set_pillow, coord=""):
-    """ preview """
+    """preview"""
     start_time = time.time()
     if set_pillow:
         result = convert_pillow.preview(file_logo, size, coord)
@@ -94,8 +97,8 @@ def preview(file_logo, size, set_pillow, coord=""):
     return result
 
 
-def make_clone(file_to_clone, set_pillow, color = None):
-    """ open picture and make clone for processing """
+def make_clone(file_to_clone, set_pillow, color=None):
+    """open picture and make clone for processing"""
     start_time = time.time()
     if set_pillow:
         result = convert_pillow.make_clone(file_to_clone, color)
@@ -106,7 +109,7 @@ def make_clone(file_to_clone, set_pillow, color = None):
 
 
 def save_close_clone(clone, file_out, exif_on, set_pillow):
-    """ save_close_clone """
+    """save_close_clone"""
     start_time = time.time()
     if set_pillow:
         convert_pillow.save_close_clone(clone, file_out, exif_on)
@@ -116,7 +119,7 @@ def save_close_clone(clone, file_out, exif_on, set_pillow):
 
 
 def rotate(clone, angle, color, angle_own, set_pillow):
-    """ rotate """
+    """rotate"""
     start_time = time.time()
     if set_pillow:
         result = convert_pillow.rotate(clone, angle, color, angle_own)
@@ -128,7 +131,7 @@ def rotate(clone, angle, color, angle_own, set_pillow):
 
 
 def mirror(clone, flip, flop, set_pillow):
-    """ mirror: flip and flop """
+    """mirror: flip and flop"""
     start_time = time.time()
     if set_pillow:
         result = convert_pillow.mirror(clone, flip, flop)

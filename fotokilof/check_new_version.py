@@ -33,13 +33,14 @@ except ImportError:
     from pip._vendor.packaging.version import parse
 
 
-URL_PATTERN = 'https://pypi.python.org/pypi/{package}/json'
+URL_PATTERN = "https://pypi.python.org/pypi/{package}/json"
+
 
 def get_version(url_pattern=URL_PATTERN):
     """Return version of package on pypi.python.org using json."""
 
-    package = 'FotoKilof'
-    version = parse('0')
+    package = "FotoKilof"
+    version = parse("0")
     try:
         req = requests.get(url_pattern.format(package=package), timeout=2.50)
         request_success = 1
@@ -48,12 +49,13 @@ def get_version(url_pattern=URL_PATTERN):
 
     if request_success and req.status_code == requests.codes.ok:
         j = json.loads(req.text.encode(req.encoding))
-        releases = j.get('releases', [])
+        releases = j.get("releases", [])
         for release in releases:
             ver = parse(release)
             if not ver.is_prerelease:
                 version = max(version, ver)
     return (request_success, str(version))
+
 
 def check_version(current_version):
     """

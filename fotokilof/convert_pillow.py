@@ -54,18 +54,18 @@ import common
 
 # ------------------------------------ Info
 def version():
-    """ version of PIL """
+    """version of PIL"""
     return Image.__version__
 
 
 def fonts_list():
-    """ list of available fonts """
+    """list of available fonts"""
     return fontsList()
 
 
 # ------------------------------------ Common
-def make_clone(file_to_clone, color = None):
-    """ open picture and make clone for processing """
+def make_clone(file_to_clone, color=None):
+    """open picture and make clone for processing"""
     if len(file_to_clone) > 0:
         with Image.open(file_to_clone) as image:
             clone = image.copy()
@@ -74,8 +74,8 @@ def make_clone(file_to_clone, color = None):
     return clone
 
 
-def save_close_clone(clone, file_out, ppm = 0, exif = 0):
-    """ save and close clone after processing """
+def save_close_clone(clone, file_out, ppm=0, exif=0):
+    """save and close clone after processing"""
     # if not exif:
     #     clone.strip()
     logging.info(" Save file: %s", file_out)
@@ -102,7 +102,7 @@ def get_image_size(filename):
 
 
 def gravitation(gravity):
-    """ translate gravitation name from Tk to Wand-py specification"""
+    """translate gravitation name from Tk to Wand-py specification"""
 
     if gravity == "N":
         result = "north"
@@ -130,7 +130,7 @@ def gravitation(gravity):
 
 # ------------------------------------ Converters
 def pip(clone, logo, logo_data, image_height, image_width):
-    """ put picture on picture
+    """put picture on picture
     clone - clone of image for processing
     logo - filename of logo
     logo_data = offset_x, offset_y, width, height, gravitation
@@ -139,19 +139,23 @@ def pip(clone, logo, logo_data, image_height, image_width):
     if len(logo):
         with Image(filename=logo) as logo_img:
             with Drawing() as draw:
-                position = common.preview_crop_gravity(logo_data, image_height, image_width)
-                draw.composite(operator='over',
-                                left=common.empty(position[0]),
-                                top=common.empty(position[1]),
-                                width=common.empty(logo_data[2]),
-                                height=common.empty(logo_data[3]),
-                                image=logo_img)
+                position = common.preview_crop_gravity(
+                    logo_data, image_height, image_width
+                )
+                draw.composite(
+                    operator="over",
+                    left=common.empty(position[0]),
+                    top=common.empty(position[1]),
+                    width=common.empty(logo_data[2]),
+                    height=common.empty(logo_data[3]),
+                    image=logo_img,
+                )
                 draw(clone)
     logging.info(" Conversion: logo")
 
 
 def rotate(clone, angle, color, own):
-    """ rotate """
+    """rotate"""
     if angle == 0:
         angle = common.empty(own)
         if angle == 0:
@@ -167,27 +171,30 @@ def rotate(clone, angle, color, own):
     else:
         result = clone
         logging.debug("rotate: only 90 180 and 270, %s not allowed", str(angle))
-    #clone.rotate(angle)
+    # clone.rotate(angle)
     logging.info(" Conversion: rotate %s", str(angle))
     return result
 
+
 def mirror(clone, flip, flop):
-    """ mirror: flip and flop """
+    """mirror: flip and flop"""
+    result = clone
     if flip:
         result = clone.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
     if flop:
-        result = clone.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        result = result.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
     logging.info(" Conversion: mirror")
     return result
 
+
 def border(clone, color, x, y):
-    """ mirror: flip and flop """
+    """mirror: flip and flop"""
     clone.border(color, common.empty(x), common.empty(y))
     logging.info(" Conversion: border")
 
 
 def text(convert_data):
-    """ add text into picture """
+    """add text into picture"""
     clone = convert_data[0]
     in_out = convert_data[1]
     own = convert_data[2]
@@ -207,7 +214,7 @@ def text(convert_data):
         if in_out == 0:
             # inside
             if gravity_onoff == 0:
-                draw_gravity = 'forget'
+                draw_gravity = "forget"
             if angle == -1:
                 angle = common.empty(own)
         else:
@@ -230,13 +237,21 @@ def text(convert_data):
 
         if in_out == 0:
             # inside
-            clone.annotate(text_string, draw, angle=common.empty(angle),
-                    left=common.empty(text_x), baseline=common.empty(text_y))
+            clone.annotate(
+                text_string,
+                draw,
+                angle=common.empty(angle),
+                left=common.empty(text_x),
+                baseline=common.empty(text_y),
+            )
         else:
             # outside
             metrics = draw.get_font_metrics(clone, text_string, multiline=False)
-            with Image(width=clone.width, height=int(metrics.text_height),
-                        background=backgroud_color) as canvas:
+            with Image(
+                width=clone.width,
+                height=int(metrics.text_height),
+                background=backgroud_color,
+            ) as canvas:
                 canvas.annotate(text_string, draw)
                 clone.sequence.append(canvas)
                 clone.concat(stacked=True)
@@ -244,24 +259,24 @@ def text(convert_data):
 
 
 def bw(clone, bw_variant, sepia):
-    """ black and white or sepia """
+    """black and white or sepia"""
     if bw_variant == 1:
         # black-white
-        clone.type = 'grayscale'
+        clone.type = "grayscale"
     else:
         # sepia
-        clone.sepia_tone(threshold=common.empty(sepia)/100)
+        clone.sepia_tone(threshold=common.empty(sepia) / 100)
     logging.info(" Conversion: black-white/sepia %s", str(bw_variant))
 
 
 def resize(clone, width, height):
-    """ resize picture """
+    """resize picture"""
     clone.resize(width, height)
     logging.info(" Conversion: resize")
 
 
 def normalize(clone, normalize_variant, channel):
-    """ normalize levels of colors """
+    """normalize levels of colors"""
     if normalize_variant == 1:
         if channel != "None":
             clone.alpha_channel = True
@@ -274,7 +289,7 @@ def normalize(clone, normalize_variant, channel):
 
 
 def contrast(clone, contrast_variant, selection, black, white):
-    """ normalize levels of colors """
+    """normalize levels of colors"""
     if int(contrast_variant) == 1:
         if float(black) > 1:
             black = 0
@@ -302,42 +317,58 @@ def crop(file_in, clone, crop_variant, gravity, entries):
     image_size = get_image_size(file_in)
 
     if crop_variant == 1:
-        if (entries['one_x1'] < entries['one_x2']) and (entries['one_y1'] < entries['one_y2']):
-            if entries['one_x2'] > image_size[0]:
-                entries['one_x2'] = image_size[0]
-            if entries['one_y2'] > image_size[1]:
-                entries['one_y2'] = image_size[1]
-            clone.crop(left=entries['one_x1'], top=entries['one_y1'],
-                    right=entries['one_x2'], bottom=entries['one_y2'])
+        if (entries["one_x1"] < entries["one_x2"]) and (
+            entries["one_y1"] < entries["one_y2"]
+        ):
+            if entries["one_x2"] > image_size[0]:
+                entries["one_x2"] = image_size[0]
+            if entries["one_y2"] > image_size[1]:
+                entries["one_y2"] = image_size[1]
+            clone.crop(
+                left=entries["one_x1"],
+                top=entries["one_y1"],
+                right=entries["one_x2"],
+                bottom=entries["one_y2"],
+            )
     if crop_variant == 2:
-        if (entries['two_width'] > 0) and (entries['two_height'] > 0):
-            clone.crop(left=entries['two_x1'], top=entries['two_y1'],
-                        width=entries['two_width'], height=entries['two_height'])
+        if (entries["two_width"] > 0) and (entries["two_height"] > 0):
+            clone.crop(
+                left=entries["two_x1"],
+                top=entries["two_y1"],
+                width=entries["two_width"],
+                height=entries["two_height"],
+            )
     if crop_variant == 3:
-        if (entries['three_width'] > 0) and (entries['three_height'] > 0):
-            clone.crop(left=entries['three_dx'], top=entries['three_dy'],
-                        width=entries['three_width'], height=entries['three_height'],
-                        gravity=gravitation(gravity))
+        if (entries["three_width"] > 0) and (entries["three_height"] > 0):
+            clone.crop(
+                left=entries["three_dx"],
+                top=entries["three_dy"],
+                width=entries["three_width"],
+                height=entries["three_height"],
+                gravity=gravitation(gravity),
+            )
     logging.info(" Conversion: crop %s", str(crop_variant))
 
 
 def vignette(clone, dx, dy, radius, sigma):
-    """ add vignette into picture
+    """add vignette into picture
     clone - clone of image for processing
     dx, dy - offset from border
     radius - radius of Gaussian blur
     sigma - standard deviation for Gaussian blur
     color - color of corners
     """
-    clone.vignette(radius=common.empty(radius),
-                    sigma=common.empty(sigma),
-                    x=common.empty(dx),
-                    y=common.empty(dy))
+    clone.vignette(
+        radius=common.empty(radius),
+        sigma=common.empty(sigma),
+        x=common.empty(dx),
+        y=common.empty(dy),
+    )
     logging.info(" Conversion: vigette")
 
 
 def compose(clone, compose_file, right, autoresize, color, gravity):
-    """ join two pictures
+    """join two pictures
     clone - clone of image for processing
     compose_file - file to join
     right - join on right or bottom side
@@ -348,7 +379,7 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
     if len(compose_file):
         with Image(filename=compose_file) as compose_image:
             if right:
-                stacked=False
+                stacked = False
                 # for canvas
                 canvas_width = clone.width + compose_image.width
                 if clone.height >= compose_image.height:
@@ -380,7 +411,7 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                     else:
                         position_y1 = canvas_height / 2 - clone.height / 2
             else:
-                stacked=True
+                stacked = True
                 # for canvas
                 if clone.width >= compose_image.width:
                     canvas_width = clone.width
@@ -414,33 +445,40 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
 
             if autoresize:
                 # autoresize, no problem
-                resize_value = str(resize_width) + 'x' + str(resize_height)
-                compose_image.transform(crop='', resize=resize_value)
+                resize_value = str(resize_width) + "x" + str(resize_height)
+                compose_image.transform(crop="", resize=resize_value)
                 clone.sequence.append(compose_image)
                 clone.concat(stacked=stacked)
             else:
                 # no autoresize
-                with Image(width=canvas_width, height=canvas_height, background=color) as canvas:
+                with Image(
+                    width=canvas_width, height=canvas_height, background=color
+                ) as canvas:
                     with Drawing() as draw:
                         # original picture
-                        draw.composite(operator='over',
-                                left=position_x1,
-                                top=position_y1,
-                                width=clone.width,
-                                height=clone.height,
-                                image=clone)
+                        draw.composite(
+                            operator="over",
+                            left=position_x1,
+                            top=position_y1,
+                            width=clone.width,
+                            height=clone.height,
+                            image=clone,
+                        )
                         draw(canvas)
                         # picture to join
-                        draw.composite(operator='over',
-                                left=position_x2,
-                                top=position_y2,
-                                width=compose_image.width,
-                                height=compose_image.height,
-                                image=compose_image)
+                        draw.composite(
+                            operator="over",
+                            left=position_x2,
+                            top=position_y2,
+                            width=compose_image.width,
+                            height=compose_image.height,
+                            image=compose_image,
+                        )
                         draw(canvas)
                     clone.image_set(canvas)
 
     logging.info(" Conversion: compose")
+
 
 # ------------------------------------ Preview
 def preview(file_in, max_size, coord=""):
@@ -456,12 +494,14 @@ def preview(file_in, max_size, coord=""):
     - width and height
     """
 
-    result = {'filename': None,
-        'size': '0',
-        'width': '0',
-        'height': '0',
-        'preview_width': '0',
-        'preview_height': '0'}
+    result = {
+        "filename": None,
+        "size": "0",
+        "width": "0",
+        "height": "0",
+        "preview_width": "0",
+        "preview_height": "0",
+    }
 
     if file_in is not None:
         if os.path.isfile(file_in):
@@ -469,21 +509,27 @@ def preview(file_in, max_size, coord=""):
             clone = make_clone(file_in)
             width, height = clone.size
             if width > height:
-                preview_width, preview_height = (max_size, int(height * (max_size / width)))
+                preview_width, preview_height = (
+                    max_size,
+                    int(height * (max_size / width)),
+                )
             elif width < height:
-                preview_width, preview_height = (int(width * (max_size / height)), max_size)
+                preview_width, preview_height = (
+                    int(width * (max_size / height)),
+                    max_size,
+                )
             else:
                 preview_width, preview_height = (max_size, max_size)
             size = (preview_width, preview_height)
             clone = clone.resize(size)
             # write crop if coordinates are given
-            if len(coord) == 4 :
+            if len(coord) == 4:
                 with Drawing() as draw:
                     left_top = (coord[0], coord[1])
                     left_bottom = (coord[0], coord[3])
                     right_top = (coord[2], coord[1])
                     right_bottom = (coord[2], coord[3])
-                    draw.fill_color = '#FFFF00'
+                    draw.fill_color = "#FFFF00"
                     draw.line(left_top, right_top)
                     draw.line(left_top, left_bottom)
                     draw.line(left_bottom, right_bottom)
@@ -492,13 +538,14 @@ def preview(file_in, max_size, coord=""):
             preview_width, preview_height = clone.size
             file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
             save_close_clone(clone, file_preview)
-            result = {'filename': common.spacja(file_preview),
-                          'size': filesize,
-                          'width': str(width),
-                          'height': str(height),
-                          'preview_width': str(preview_width),
-                          'preview_height': str(preview_height)
-                    }
+            result = {
+                "filename": common.spacja(file_preview),
+                "size": filesize,
+                "width": str(width),
+                "height": str(height),
+                "preview_width": str(preview_width),
+                "preview_height": str(preview_height),
+            }
             logging.debug("preview: " + str(result))
     return result
 

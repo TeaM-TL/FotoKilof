@@ -31,6 +31,7 @@ import re
 from PIL import Image
 
 import mswindows
+
 if mswindows.windows() == 1:
     import win32clipboard
 
@@ -58,16 +59,17 @@ def copy_to_clipboard(file_in):
 
 
 def only_numbers(char):
-    """  Validation entry widgets: only digits """
+    """Validation entry widgets: only digits"""
     return char.isdigit()
 
 
 def only_integer(char):
-    """  Validation entry widgets: only digits """
-    if re.match('^[-]{0,1}[0-9]{,6}$', str(char)):
+    """Validation entry widgets: only digits"""
+    if re.match("^[-]{0,1}[0-9]{,6}$", str(char)):
         result = True
     else:
         result = False
     return result
+
 
 # EOF
