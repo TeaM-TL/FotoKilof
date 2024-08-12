@@ -2,7 +2,7 @@
 
 ## 2024
 
-4.5.0 use PILLOW if ImageMagick or Wand are unavailable
+5.0.0 use PILLOW if ImageMagick or Wand are unavailable
 
 4.4.9 preview new when click on picture
 
