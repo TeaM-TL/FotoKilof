@@ -269,10 +269,37 @@ def bw(clone, bw_variant, sepia):
     logging.info(" Conversion: black-white/sepia %s", str(bw_variant))
 
 
-def resize(clone, width, height):
+def resize(clone, size):
     """resize picture"""
-    clone.resize(width, height)
+    image_width, image_height = clone.size
+
+    if 'x' in size:
+        width, height = size.split("x")
+        if int(width) > int(height):
+            max_size = int(width)
+        else:
+            max_size = int(height)
+
+        if image_width > image_height:
+            final_width, final_height = (
+                max_size,
+                int(image_height * (max_size / image_width)),
+            )
+        elif image_width < image_height:
+            final_width, final_height = (
+                int(image_width * (max_size / image_height)),
+                max_size,
+            )
+        else:
+            final_width, final_height = (max_size, max_size)
+    else:
+        max_size = int(size.split('%')[0])
+        final_width = max_size * image_width / 100
+        final_height = max_size * image_height /100
+
+    result = clone.resize((int(final_width), int(final_height)))
     logging.info(" Conversion: resize")
+    return result
 
 
 def normalize(clone, normalize_variant, channel):
@@ -548,5 +575,6 @@ def preview(file_in, max_size, coord=""):
             }
             logging.debug("preview: " + str(result))
     return result
+
 
 # EOF

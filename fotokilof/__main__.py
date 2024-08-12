@@ -403,7 +403,7 @@ def apply_all_button():
                         common.empty(e2_resize.get()),
                     )
                     subdir = os.path.join(work_dir.get(), subdir_command[0])
-                    convert_wand.resize(clone, subdir_command[1])
+                    clone = convert_common.resize(clone, subdir_command[1], PILLOW)
                     resized.set(1)
                 else:
                     resized.set(0)
@@ -571,7 +571,7 @@ def convert_resize_button():
     file_out = path_to_file_out(1)
     clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_wand.resize(clone, resize_command[1])
+        clone = convert_common.resize(clone, resize_command[1], PILLOW)
         convert_common.save_close_clone(clone, file_out, img_exif_on.get(), PILLOW)
         preview_new(file_out)
     progress_files.set(_("done"))

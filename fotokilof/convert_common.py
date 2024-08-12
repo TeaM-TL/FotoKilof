@@ -140,3 +140,15 @@ def mirror(clone, flip, flop, set_pillow):
         result = clone
     logging.debug("Mirror: %ss", str(time.time() - start_time))
     return result
+
+
+def resize(clone, command, set_pillow):
+    """resize picture"""
+    start_time = time.time()
+    if set_pillow:
+        result = convert_pillow.resize(clone, command)
+    else:
+        convert_wand.resize(clone, command)
+        result = clone
+    logging.debug("Resize: %ss", str(time.time() - start_time))
+    return result
