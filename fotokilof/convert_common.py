@@ -36,6 +36,7 @@ import logging
 import time
 
 import PIL
+
 try:
     from wand.image import Image
     from wand.display import display
@@ -149,6 +150,18 @@ def resize(clone, command, set_pillow):
         result = convert_pillow.resize(clone, command)
     else:
         convert_wand.resize(clone, command)
+        result = clone
+    logging.debug("Resize: %ss", str(time.time() - start_time))
+    return result
+
+
+def border(clone, color, x, y, set_pillow):
+    """mirror: flip and flop"""
+    start_time = time.time()
+    if set_pillow:
+        result = convert_pillow.border(clone, color, x, y)
+    else:
+        convert_wand.border(clone, color, x, y)
         result = clone
     logging.debug("Resize: %ss", str(time.time() - start_time))
     return result

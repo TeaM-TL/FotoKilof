@@ -177,7 +177,7 @@ def mirror(clone, flip, flop):
 
 
 def border(clone, color, x, y):
-    """mirror: flip and flop"""
+    """border: color, x, y"""
     clone.border(color, common.empty(x), common.empty(y))
     logging.info(" Conversion: border")
 

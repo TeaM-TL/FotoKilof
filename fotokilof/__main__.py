@@ -388,11 +388,12 @@ def apply_all_button():
                         PILLOW,
                     )
                 if img_border_on.get():
-                    convert_wand.border(
+                    clone = convert_common.border(
                         clone,
                         img_border_color.get(),
                         e_border_we.get(),
                         e_border_ns.get(),
+                        PILLOW
                     )
                 if img_resize_on.get():
                     #  subdir for results if resize
@@ -583,8 +584,8 @@ def convert_border_button():
     root.update_idletasks()
     clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_wand.border(
-            clone, img_border_color.get(), e_border_we.get(), e_border_ns.get()
+        clone = convert_common.border(
+            clone, img_border_color.get(), e_border_we.get(), e_border_ns.get(), PILLOW
         )
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW

@@ -46,7 +46,7 @@ Converters
 import logging
 import tempfile
 import os
-from PIL import Image
+from PIL import Image, ImageOps
 
 # my modules
 import common
@@ -188,9 +188,10 @@ def mirror(clone, flip, flop):
 
 
 def border(clone, color, x, y):
-    """mirror: flip and flop"""
-    clone.border(color, common.empty(x), common.empty(y))
-    logging.info(" Conversion: border")
+    """border: color, x, y"""
+    result = ImageOps.expand(clone, (int(x), int(y)), color)
+    logging.info("Conversion: border")
+    return result
 
 
 def text(convert_data):
@@ -273,7 +274,7 @@ def resize(clone, size):
     """resize picture"""
     image_width, image_height = clone.size
 
-    if 'x' in size:
+    if "x" in size:
         width, height = size.split("x")
         if int(width) > int(height):
             max_size = int(width)
@@ -293,9 +294,9 @@ def resize(clone, size):
         else:
             final_width, final_height = (max_size, max_size)
     else:
-        max_size = int(size.split('%')[0])
+        max_size = int(size.split("%")[0])
         final_width = max_size * image_width / 100
-        final_height = max_size * image_height /100
+        final_height = max_size * image_height / 100
 
     result = clone.resize((int(final_width), int(final_height)))
     logging.info(" Conversion: resize")
