@@ -165,3 +165,27 @@ def border(clone, color, x, y, set_pillow):
         result = clone
     logging.debug("Resize: %ss", str(time.time() - start_time))
     return result
+
+
+def normalize(clone, normalize_variant, channel, set_pillow):
+    """normalize levels of colors"""
+    start_time = time.time()
+    if set_pillow:
+        result = convert_pillow.normalize(clone, normalize_variant, channel)
+    else:
+        convert_wand.normalize(clone, normalize_variant, channel)
+        result = clone
+    logging.info("Normalize %ss", str(time.time() - start_time))
+    return result
+
+
+def bw(clone, bw_variant, sepia, set_pillow):
+    """black and white or sepia"""
+    start_time = time.time()
+    if set_pillow:
+        result = convert_pillow.bw(clone, bw_variant, sepia)
+    else:
+        convert_wand.bw(clone, bw_variant, sepia)
+        result = clone
+    logging.info("Black-white/sepia %ss", str(time.time() - start_time))
+    return result

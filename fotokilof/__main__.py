@@ -220,7 +220,7 @@ def preview_new_refresh(event):
 
 def preview_new(file_out):
     """generate result preview"""
-    if co_preview_selector_new.get() == "none" or co_preview_selector_new.get() == '':
+    if co_preview_selector_new.get() == "none" or co_preview_selector_new.get() == "":
         preview_new_clear()
     else:
         preview_picture = convert_common.preview(
@@ -358,7 +358,9 @@ def apply_all_button():
                         clone, img_mirror_flip.get(), img_mirror_flop.get(), PILLOW
                     )
                 if img_bw_on.get():
-                    convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
+                    clone = convert_common.bw(
+                        clone, img_bw.get(), e_bw_sepia.get(), PILLOW
+                    )
                 if img_contrast_on.get():
                     convert_wand.contrast(
                         clone,
@@ -393,7 +395,7 @@ def apply_all_button():
                         img_border_color.get(),
                         e_border_we.get(),
                         e_border_ns.get(),
-                        PILLOW
+                        PILLOW,
                     )
                 if img_resize_on.get():
                     #  subdir for results if resize
@@ -504,7 +506,7 @@ def convert_bw_button():
     root.update_idletasks()
     clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_wand.bw(clone, img_bw.get(), e_bw_sepia.get())
+        clone = convert_common.bw(clone, img_bw.get(), e_bw_sepia.get(), PILLOW)
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW
         )
@@ -3416,19 +3418,19 @@ if not PILLOW:
     img_text_font_dict = fonts()  # Reading available fonts
 else:
     root.withdraw()
-    Messagebox.show_error(
-        _(
-            "ImageMagick nor GraphicsMagick are not installed in you system. Is impossible to process any graphics."
-        ),
-        title=_("Error"),
-    )
+    # Messagebox.show_error(
+    #     _(
+    #         "ImageMagick or Wand are not installed in your system. Functionality will be limited."
+    #     ),
+    #     title=_("Error"),
+    # )
     # disable processing buttons
     img_crop_on.set(0)
     cb_crop.configure(state=DISABLED)
     img_text_on.set(0)
     cb_text.configure(state=DISABLED)
-    img_normalize_on.set(0)
-    cb_normalize.configure(state=DISABLED)
+    # img_normalize_on.set(0)
+    # cb_normalize.configure(state=DISABLED)
     img_contrast_on.set(0)
     cb_contrast.configure(state=DISABLED)
     img_logo_on.set(0)

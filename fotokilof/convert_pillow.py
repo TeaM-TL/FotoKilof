@@ -263,11 +263,13 @@ def bw(clone, bw_variant, sepia):
     """black and white or sepia"""
     if bw_variant == 1:
         # black-white
-        clone.type = "grayscale"
+        result = ImageOps.grayscale(clone)
     else:
+        print("not ready yet")
         # sepia
-        clone.sepia_tone(threshold=common.empty(sepia) / 100)
+        # clone.sepia_tone(threshold=common.empty(sepia) / 100)
     logging.info(" Conversion: black-white/sepia %s", str(bw_variant))
+    return result
 
 
 def resize(clone, size):
