@@ -180,9 +180,11 @@ def mirror(clone, flip, flop):
     """mirror: flip and flop"""
     result = clone
     if flip:
-        result = clone.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+        # result = clone.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+        result = ImageOps.flip(clone)
     if flop:
-        result = result.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        #result = result.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        result = ImageOps.mirror(result)
     logging.info(" Conversion: mirror")
     return result
 
@@ -308,24 +310,27 @@ def resize(clone, size):
 def normalize(clone, normalize_variant, channel):
     """normalize levels of colors"""
     if normalize_variant == 1:
-        if channel != "None":
-            clone.alpha_channel = True
-            clone.normalize(channel=channel)
-        else:
-            clone.normalize()
+        result = ImageOps.autocontrast(clone)
+        # if channel != "None":
+        #     clone.alpha_channel = True
+        #     clone.normalize(channel=channel)
+        # else:
+        #     clone.normalize()
     else:
-        clone.auto_level()
+        result = ImageOps.equalize(clone)
     logging.info(" Conversion: normalize %s", str(normalize_variant))
+    return result
 
 
 def contrast(clone, contrast_variant, selection, black, white):
     """normalize levels of colors"""
     if int(contrast_variant) == 1:
-        if float(black) > 1:
-            black = 0
-        if float(white) > 1:
-            white = None
-        clone.contrast_stretch(black_point=float(black), white_point=float(white))
+        if float(black) > 100:
+            black = 100
+        if float(white) > 100:
+            white = 100
+        # clone.contrast_stretch(black_point=float(black), white_point=float(white))
+        result = ImageOps.autocontrast(clone, (float(black), float(white)))
     else:
         if int(selection) != 0:
             if int(selection) > 0:
@@ -337,6 +342,7 @@ def contrast(clone, contrast_variant, selection, black, white):
                 iteration += 1
                 clone.contrast(sharpen=sharpen)
     logging.info(" Conversion: contrast %s", str(contrast_variant))
+    return result
 
 
 def crop(file_in, clone, crop_variant, gravity, entries):

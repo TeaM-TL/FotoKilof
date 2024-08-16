@@ -189,3 +189,19 @@ def bw(clone, bw_variant, sepia, set_pillow):
         result = clone
     logging.info("Black-white/sepia %ss", str(time.time() - start_time))
     return result
+
+
+def contrast(clone, contrast_variant, selection, black, white, set_pillow):
+    """black and white or sepia"""
+    start_time = time.time()
+    if black == '' or black == None:
+        black = 0
+    if white == '' or white == None:
+        white = 0
+    if set_pillow:
+        result = convert_pillow.contrast(clone, contrast_variant, selection, black, white)
+    else:
+        convert_wand.contrast(clone, contrast_variant, selection, black, white)
+        result = clone
+    logging.info("Contrast %ss", str(time.time() - start_time))
+    return result

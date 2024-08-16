@@ -362,16 +362,17 @@ def apply_all_button():
                         clone, img_bw.get(), e_bw_sepia.get(), PILLOW
                     )
                 if img_contrast_on.get():
-                    convert_wand.contrast(
+                    clone = convert_common.contrast(
                         clone,
                         img_contrast.get(),
                         co_contrast_selection.get(),
                         e1_contrast.get(),
                         e2_contrast.get(),
+                        PILLOW
                     )
                 if img_normalize_on.get():
-                    convert_wand.normalize(
-                        clone, img_normalize.get(), co_normalize_channel.get()
+                    clone = convert_common.normalize(
+                        clone, img_normalize.get(), co_normalize_channel.get(), PILLOW
                     )
                 if img_vignette_on.get():
                     convert_wand.vignette(
@@ -486,12 +487,13 @@ def convert_contrast_button():
     root.update_idletasks()
     clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_wand.contrast(
+        clone = convert_common.contrast(
             clone,
             img_contrast.get(),
             co_contrast_selection.get(),
             e1_contrast.get(),
             e2_contrast.get(),
+            PILLOW
         )
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW
@@ -520,7 +522,7 @@ def convert_normalize_button():
     root.update_idletasks()
     clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_wand.normalize(clone, img_normalize.get(), co_normalize_channel.get())
+        clone = convert_common.normalize(clone, img_normalize.get(), co_normalize_channel.get(), PILLOW)
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW
         )
@@ -2678,9 +2680,10 @@ e_bw_sepia = ttk.Entry(
 l_bw_sepia = ttk.Label(frame_bw, text="%")
 b_bw_run = ttk.Button(frame_bw, text=_("Execute"), command=convert_bw_button)
 
-rb2_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
-e_bw_sepia.grid(row=1, column=2, padx=5, pady=5, sticky=E)
-l_bw_sepia.grid(row=1, column=3, padx=5, pady=5, sticky=W)
+if not PILLOW:
+    rb2_bw.grid(row=1, column=1, padx=5, pady=5, sticky=W)
+    e_bw_sepia.grid(row=1, column=2, padx=5, pady=5, sticky=E)
+    l_bw_sepia.grid(row=1, column=3, padx=5, pady=5, sticky=W)
 rb1_bw.grid(row=2, column=1, padx=5, pady=0, sticky=W)
 b_bw_run.grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky=E)
 
@@ -2711,8 +2714,9 @@ l1_contrast.grid(row=1, column=2, padx=5, pady=5, sticky=E)
 e1_contrast.grid(row=1, column=3, padx=5, pady=5, sticky=E)
 l2_contrast.grid(row=1, column=4, padx=5, pady=5, sticky=W)
 e2_contrast.grid(row=1, column=5, padx=5, pady=5, sticky=W)
-rb2_contrast.grid(row=2, column=1, padx=5, pady=5, sticky=W)
-co_contrast_selection.grid(row=2, column=2, padx=5, pady=5, sticky=W)
+if not PILLOW:
+    rb2_contrast.grid(row=2, column=1, padx=5, pady=5, sticky=W)
+    co_contrast_selection.grid(row=2, column=2, padx=5, pady=5, sticky=W)
 b_contrast_run.grid(row=2, column=3, padx=5, pady=5, columnspan=3, sticky=E)
 
 ############################
@@ -2734,8 +2738,9 @@ b_normalize_run = ttk.Button(
 )
 
 rb1_normalize.grid(row=1, column=1, padx=5, pady=0, sticky=W)
-l_normalize_channel.grid(row=1, column=2, padx=5, pady=4, sticky=E)
-co_normalize_channel.grid(row=1, column=3, padx=5, pady=4, sticky=E)
+if not PILLOW:
+    l_normalize_channel.grid(row=1, column=2, padx=5, pady=4, sticky=E)
+    co_normalize_channel.grid(row=1, column=3, padx=5, pady=4, sticky=E)
 rb2_normalize.grid(row=2, column=1, padx=5, pady=4, sticky=W)
 b_normalize_run.grid(row=2, column=2, columnspan=2, padx=5, pady=4, sticky=E)
 
@@ -3431,8 +3436,8 @@ else:
     cb_text.configure(state=DISABLED)
     # img_normalize_on.set(0)
     # cb_normalize.configure(state=DISABLED)
-    img_contrast_on.set(0)
-    cb_contrast.configure(state=DISABLED)
+    # img_contrast_on.set(0)
+    # cb_contrast.configure(state=DISABLED)
     img_logo_on.set(0)
     cb_logo.configure(state=DISABLED)
     img_custom_on.set(0)
