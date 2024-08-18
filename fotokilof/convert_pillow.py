@@ -80,7 +80,7 @@ def save_close_clone(clone, file_out, ppm=0, exif=0):
     """save and close clone after processing"""
     # if not exif:
     #     clone.strip()
-    module_logger.info(" Save file: %s", file_out)
+    module_logger.debug(" Save file: %s", file_out)
     clone.save(file_out)
     clone.close()
 
@@ -153,7 +153,7 @@ def pip(clone, logo, logo_data, image_height, image_width):
                     image=logo_img,
                 )
                 draw(clone)
-    module_logger.info(" Conversion: logo")
+    module_logger.debug(" Conversion: logo")
 
 
 def rotate(clone, angle, color, own):
@@ -174,7 +174,7 @@ def rotate(clone, angle, color, own):
         result = clone
         module_logger.debug("rotate: only 90 180 and 270, %s not allowed", str(angle))
     # clone.rotate(angle)
-    module_logger.info(" Conversion: rotate %s", str(angle))
+    module_logger.debug(" Conversion: rotate %s", str(angle))
     return result
 
 
@@ -187,14 +187,14 @@ def mirror(clone, flip, flop):
     if flop:
         # result = result.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
         result = ImageOps.mirror(result)
-    module_logger.info(" Conversion: mirror")
+    module_logger.debug(" Conversion: mirror")
     return result
 
 
 def border(clone, color, x, y):
     """border: color, x, y"""
     result = ImageOps.expand(clone, (int(x), int(y)), color)
-    module_logger.info("Conversion: border")
+    module_logger.debug("Conversion: border")
     return result
 
 
@@ -260,7 +260,7 @@ def text(convert_data):
                 canvas.annotate(text_string, draw)
                 clone.sequence.append(canvas)
                 clone.concat(stacked=True)
-    module_logger.info(" Conversion: text %s", str(in_out))
+    module_logger.debug(" Conversion: text %s", str(in_out))
 
 
 def bw(clone, bw_variant, sepia):
@@ -269,10 +269,10 @@ def bw(clone, bw_variant, sepia):
         # black-white
         result = ImageOps.grayscale(clone)
     else:
-        print("not ready yet")
+        module_logger.warning("Black-white/sepia not available for PILLOW, install ImageMagick")
         # sepia
         # clone.sepia_tone(threshold=common.empty(sepia) / 100)
-    module_logger.info(" Conversion: black-white/sepia %s", str(bw_variant))
+    module_logger.debug(" Conversion: black-white/sepia %s", str(bw_variant))
     return result
 
 
@@ -305,7 +305,7 @@ def resize(clone, size):
         final_height = max_size * image_height / 100
 
     result = clone.resize((int(final_width), int(final_height)))
-    module_logger.info(" Conversion: resize")
+    module_logger.debug(" Conversion: resize")
     return result
 
 
@@ -320,7 +320,7 @@ def normalize(clone, normalize_variant, channel):
         #     clone.normalize()
     else:
         result = ImageOps.equalize(clone)
-    module_logger.info(" Conversion: normalize %s", str(normalize_variant))
+    module_logger.debug(" Conversion: normalize %s", str(normalize_variant))
     return result
 
 
@@ -344,7 +344,7 @@ def contrast(clone, contrast_variant, selection, black, white):
     #         while iteration < abs(int(selection)):
     #             iteration += 1
     #             clone.contrast(sharpen=sharpen)
-    module_logger.info(" Conversion: contrast %s", str(contrast_variant))
+    module_logger.debug(" Conversion: contrast %s", str(contrast_variant))
     return result
 
 
@@ -386,7 +386,7 @@ def crop(file_in, clone, crop_variant, gravity, entries):
                 height=entries["three_height"],
                 gravity=gravitation(gravity),
             )
-    module_logger.info(" Conversion: crop %s", str(crop_variant))
+    module_logger.debug(" Conversion: crop %s", str(crop_variant))
 
 
 def vignette(clone, dx, dy, radius, sigma):
@@ -397,13 +397,14 @@ def vignette(clone, dx, dy, radius, sigma):
     sigma - standard deviation for Gaussian blur
     color - color of corners
     """
-    clone.vignette(
-        radius=common.empty(radius),
-        sigma=common.empty(sigma),
-        x=common.empty(dx),
-        y=common.empty(dy),
-    )
-    module_logger.info(" Conversion: vigette")
+    # clone.vignette(
+    #     radius=common.empty(radius),
+    #     sigma=common.empty(sigma),
+    #     x=common.empty(dx),
+    #     y=common.empty(dy),
+    # )
+    # module_logger.debug(" Conversion: vigette")
+    module_logger.warning("vigette not available for PILLOW, install ImageMagick")
 
 
 def compose(clone, compose_file, right, autoresize, color, gravity):
@@ -516,7 +517,7 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                         draw(canvas)
                     clone.image_set(canvas)
 
-    module_logger.info(" Conversion: compose")
+    module_logger.debug(" Conversion: compose")
 
 
 # ------------------------------------ Preview

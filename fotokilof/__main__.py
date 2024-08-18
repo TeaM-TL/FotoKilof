@@ -109,7 +109,7 @@ logging.basicConfig(
 )
 # Start logging
 logging.info("Start")
-logging.debug(IMAGEMAGICK_WAND_VERSION)
+logging.info(IMAGEMAGICK_WAND_VERSION)
 
 if mswindows.windows() or mswindows.macos():
     from PIL import ImageGrab
@@ -123,7 +123,7 @@ if mswindows.windows():
 localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "locale")
 if not os.path.isdir(localedir):
     localedir = os.path.join(os.getcwd(), "locale")
-logging.info("Locale directory: %s", localedir)
+logging.debug("Locale directory: %s", localedir)
 
 translate = gettext.translation("fotokilof", localedir, fallback=True)
 gettext.install("fotokilof", localedir)
@@ -187,7 +187,7 @@ def convert_custom_clear():
 
 def preview_orig_clear():
     """clear every preview if doesn't choose file"""
-    logging.info("clear preview")
+    logging.debug("clear preview")
     c_preview_orig_pi.delete("all")
     # if no original, new preview should be clear too
     preview_new_clear()
@@ -195,14 +195,14 @@ def preview_orig_clear():
 
 def preview_compose_clear():
     """clear preview compose if doesn't choose file"""
-    logging.info("clear preview")
+    logging.debug("clear preview")
     c_compose_preview_pi.delete("all")
     l_compose_preview.configure(text="")
 
 
 def preview_new_clear():
     """clear every preview if doesn't choose file"""
-    logging.info("clear preview")
+    logging.debug("clear preview")
     c_preview_new_pi.delete("all")
 
 
@@ -464,7 +464,7 @@ def apply_all_button():
         root.update_idletasks()
         # work_sub_dir.set("")  # reset subdir name for next processing
     else:
-        logging.info("No file selected")
+        logging.debug("No file selected")
 
 
 def convert_custom_button():
@@ -1056,13 +1056,6 @@ def ini_read_wraper():
     )
     co_preview_selector_new.current(preview_size_list.index(ini_entries["preview_new"]))
     log_level.set(ini_entries["log_level"])
-    # logging.getLogger().setLevel(
-    #     logging.ERROR if log_level.get() == "E" else
-    #     logging.WARNING if log_level.get() == "W" else
-    #     logging.INFO if log_level.get() == "I" else
-    #     logging.DEBUG
-    # )
-    print(log_level.get())
     if log_level.get() == "E":
         logging.getLogger().setLevel(logging.ERROR)
     elif log_level.get() == "W":
@@ -1071,7 +1064,6 @@ def ini_read_wraper():
         logging.getLogger().setLevel(logging.INFO)
     else:
         logging.getLogger().setLevel(logging.DEBUG)
-    print(logging.getLogger())
     img_custom_on.set(ini_entries["img_custom_on"])
     check_version.set(ini_entries["check_version"])
     # resize
@@ -1400,7 +1392,7 @@ def help_info(event):
 
 def close_program():
     """close program window"""
-    logging.info("closed")
+    logging.debug("closed")
     root.quit()
     root.destroy()
     sys.exit()

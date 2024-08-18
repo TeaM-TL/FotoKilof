@@ -48,7 +48,6 @@ Converters
 import logging
 import os
 import tempfile
-import time
 
 try:
     from wand.drawing import Drawing
@@ -84,7 +83,7 @@ def save_close_clone(clone, file_out, exif=0):
     """save and close clone after processing"""
     if not exif:
         clone.strip()
-    module_logger.info(" Save file: %s", file_out)
+    module_logger.debug(" Save file: %s", file_out)
     clone.save(filename=file_out)
     clone.close()
 
@@ -156,7 +155,7 @@ def pip(clone, logo, logo_data, image_height, image_width):
                     image=logo_img,
                 )
                 draw(clone)
-    module_logger.info(" Conversion: logo")
+    module_logger.debug(" Conversion: logo")
 
 
 def rotate(clone, angle, color, angle_own):
@@ -166,7 +165,7 @@ def rotate(clone, angle, color, angle_own):
     if angle == 0:
         color = None
     clone.rotate(angle, background=color)
-    module_logger.info(" Conversion: rotate %s", str(angle))
+    module_logger.debug(" Conversion: rotate %s", str(angle))
 
 
 def mirror(clone, flip, flop):
@@ -175,13 +174,13 @@ def mirror(clone, flip, flop):
         clone.flip()
     if flop:
         clone.flop()
-    module_logger.info(" Conversion: mirror")
+    module_logger.debug(" Conversion: mirror")
 
 
 def border(clone, color, x, y):
     """border: color, x, y"""
     clone.border(color, common.empty(x), common.empty(y))
-    module_logger.info(" Conversion: border")
+    module_logger.debug(" Conversion: border")
 
 
 def text(convert_data):
@@ -246,7 +245,7 @@ def text(convert_data):
                 canvas.annotate(text_string, draw)
                 clone.sequence.append(canvas)
                 clone.concat(stacked=True)
-    module_logger.info(" Conversion: text %s", str(in_out))
+    module_logger.debug(" Conversion: text %s", str(in_out))
     return clone
 
 
@@ -258,13 +257,13 @@ def bw(clone, bw_variant, sepia):
     else:
         # sepia
         clone.sepia_tone(threshold=common.empty(sepia) / 100)
-    module_logger.info(" Conversion: black-white/sepia %s", str(bw_variant))
+    module_logger.debug(" Conversion: black-white/sepia %s", str(bw_variant))
 
 
 def resize(clone, command):
     """resize picture"""
     clone.transform(crop="", resize=command)
-    module_logger.info(" Conversion: resize")
+    module_logger.debug(" Conversion: resize")
 
 
 def normalize(clone, normalize_variant, channel):
@@ -277,7 +276,7 @@ def normalize(clone, normalize_variant, channel):
             clone.normalize()
     else:
         clone.auto_level()
-    module_logger.info(" Conversion: normalize %s", str(normalize_variant))
+    module_logger.debug(" Conversion: normalize %s", str(normalize_variant))
 
 
 def contrast(clone, contrast_variant, selection, black, white):
@@ -298,7 +297,7 @@ def contrast(clone, contrast_variant, selection, black, white):
             while iteration < abs(int(selection)):
                 iteration += 1
                 clone.contrast(sharpen=sharpen)
-    module_logger.info(" Conversion: contrast %s", str(contrast_variant))
+    module_logger.debug(" Conversion: contrast %s", str(contrast_variant))
 
 
 def crop(file_in, clone, crop_variant, gravity, entries):
@@ -339,7 +338,7 @@ def crop(file_in, clone, crop_variant, gravity, entries):
                 height=entries["three_height"],
                 gravity=gravitation(gravity),
             )
-    module_logger.info(" Conversion: crop %s", str(crop_variant))
+    module_logger.debug(" Conversion: crop %s", str(crop_variant))
 
 
 def vignette(clone, dx, dy, radius, sigma):
@@ -356,7 +355,7 @@ def vignette(clone, dx, dy, radius, sigma):
         x=common.empty(dx),
         y=common.empty(dy),
     )
-    module_logger.info(" Conversion: vigette")
+    module_logger.debug(" Conversion: vigette")
 
 
 def compose(clone, compose_file, right, autoresize, color, gravity):
@@ -469,7 +468,7 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                         draw(canvas)
                     clone.image_set(canvas)
 
-    module_logger.info(" Conversion: compose")
+    module_logger.debug(" Conversion: compose")
 
 
 # ------------------------------------ Preview
@@ -502,10 +501,8 @@ def preview(file_in, size, coord=""):
             clone = make_clone(file_in)
             width = str(clone.width)
             height = str(clone.height)
-            start_time = time.time()
             clone.convert("ppm")
             resize(clone, str(size) + "x" + str(size))
-            module_logger.debug("ppm, resize: %s", str(time.time() - start_time))
             # write crop if coordinates are given
             if len(coord) == 4:
                 with Drawing() as draw:
