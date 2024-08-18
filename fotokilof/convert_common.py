@@ -67,7 +67,7 @@ def display_image(file_to_display, set_pillow):
         module_logger.error(" Error display file: %s", file_in)
         result = None
     else:
-        module_logger.info(" Display file: %s", file_in)
+        module_logger.debug(" Display file: %s", file_in)
     result = "OK"
 
     return result

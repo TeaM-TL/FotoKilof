@@ -25,15 +25,18 @@ From https://stackoverflow.com/questions/28774852/pypi-api-how-to-get-stable-pac
 """
 
 import json
+import logging
 import requests
+import time
 
 try:
     from packaging.version import parse
 except ImportError:
     from pip._vendor.packaging.version import parse
 
+module_logger = logging.getLogger(__name__)
 
-URL_PATTERN = "https://pypi.python.org/pypi/{package}/json"
+URL_PATTERN = "https://pypi.org/pypi/{package}/json"
 
 
 def get_version(url_pattern=URL_PATTERN):
@@ -63,8 +66,10 @@ def check_version(current_version):
     return 1 - get new
     return 0 - there are no new
     """
+    start_time = time.time()
     result = 0
-    if get_version()[0] and get_version()[1] > current_version:
+    result_success, result_version = get_version()
+    if result_success and result_version > current_version:
         result = 1
-
-    return (result, get_version()[1])
+    module_logger.info("check_version: %ss", str(time.time() - start_time))
+    return (result, result_version)
