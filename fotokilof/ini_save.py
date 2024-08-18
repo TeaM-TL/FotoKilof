@@ -44,6 +44,8 @@ import logging
 
 import common
 
+module_logger = logging.getLogger(__name__)
+
 
 def save(ini_data):
     """save values into INI file"""
@@ -185,4 +187,4 @@ def save(ini_data):
         with open(file_ini, "w", encoding="utf-8", buffering=1) as configfile:
             config.write(configfile)
     except:
-        logging.error("ini_save: cannot save config file: %s", file_ini)
+        module_logger.error("ini_save: cannot save config file: %s", file_ini)

@@ -3,7 +3,7 @@
 # pylint: disable=too-many-branches
 
 """
-Copyright (c) 2019-2023 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2024 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -103,7 +103,7 @@ def main(file_ini, preview_size_list):
         log_level = config.get("Main", "log_level")
     except:
         log_level = "E"
-    dict_return["log_level"] = entries.parse_list(log_level, ("E", "W", "M"), "E")
+    dict_return["log_level"] = entries.parse_list(log_level, ("E", "W", "I", "D"), "W")
 
     try:
         check_version = config.getint("Main", "check_version")

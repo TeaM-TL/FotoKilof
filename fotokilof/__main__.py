@@ -71,15 +71,18 @@ from ttkbootstrap.constants import (
 )
 
 try:
-    from wand.version import MAGICK_VERSION, VERSION
-
-    IMAGEMAGICK_WAND_VERSION = (
-        "IM " + MAGICK_VERSION.split(" ")[1] + ", Wand " + VERSION
-    )
+    from wand.version import VERSION
+    IMAGEMAGICK_WAND_VERSION = "Wand " + VERSION
     PILLOW = 0
 except:
-    IMAGEMAGICK_WAND_VERSION = "IM -"
+    IMAGEMAGICK_WAND_VERSION = "Wand - missing"
     PILLOW = 1
+else:
+    try:
+        from wand.version import MAGICK_VERSION
+        IMAGEMAGICK_WAND_VERSION += ", IM " + MAGICK_VERSION.split(" ")[1]
+    except:
+        IMAGEMAGICK_WAND_VERSION += ", IM - missing"
 
 # my modules
 import check_new_version
@@ -95,6 +98,7 @@ import magick
 import mswindows
 import version
 
+#logger = logging.getLogger(__name__)
 logging.basicConfig(
     filename=os.path.join(os.path.expanduser("~"), ".fotokilof.log"),
     encoding="utf-8",
@@ -103,13 +107,9 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     level=logging.DEBUG,
 )
-
 # Start logging
 logging.info("Start")
-if PILLOW:
-    logging.debug("PILLOW will be in use")
-else:
-    logging.debug("Wand will be in use")
+logging.debug(IMAGEMAGICK_WAND_VERSION)
 
 if mswindows.windows() or mswindows.macos():
     from PIL import ImageGrab
@@ -1056,11 +1056,22 @@ def ini_read_wraper():
     )
     co_preview_selector_new.current(preview_size_list.index(ini_entries["preview_new"]))
     log_level.set(ini_entries["log_level"])
-    logging.getLogger().setLevel(
-        logging.ERROR
-        if log_level.get() == "E"
-        else logging.WARNING if log_level.get() == "W" else logging.INFO
-    )
+    # logging.getLogger().setLevel(
+    #     logging.ERROR if log_level.get() == "E" else
+    #     logging.WARNING if log_level.get() == "W" else
+    #     logging.INFO if log_level.get() == "I" else
+    #     logging.DEBUG
+    # )
+    print(log_level.get())
+    if log_level.get() == "E":
+        logging.getLogger().setLevel(logging.ERROR)
+    elif log_level.get() == "W":
+        logging.getLogger().setLevel(logging.WARNING)
+    elif log_level.get() == "I":
+        logging.getLogger().setLevel(logging.INFO)
+    else:
+        logging.getLogger().setLevel(logging.DEBUG)
+    print(logging.getLogger())
     img_custom_on.set(ini_entries["img_custom_on"])
     check_version.set(ini_entries["check_version"])
     # resize
@@ -3432,10 +3443,10 @@ else:
     #     title=_("Error"),
     # )
     # disable processing buttons
-    img_crop_on.set(0)
-    cb_crop.configure(state=DISABLED)
-    img_text_on.set(0)
-    cb_text.configure(state=DISABLED)
+    # img_crop_on.set(0)
+    # cb_crop.configure(state=DISABLED)
+    # img_text_on.set(0)
+    # cb_text.configure(state=DISABLED)
     # img_normalize_on.set(0)
     # cb_normalize.configure(state=DISABLED)
     # img_contrast_on.set(0)

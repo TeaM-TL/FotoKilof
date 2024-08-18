@@ -48,6 +48,8 @@ import mswindows
 import convert_pillow
 import convert_wand
 
+module_logger = logging.getLogger(__name__)
+
 
 def display_image(file_to_display, set_pillow):
     """display image"""
@@ -60,12 +62,12 @@ def display_image(file_to_display, set_pillow):
     else:
         with Image(filename=file_in) as image:
             display(image)
-    logging.debug("display_image: %ss", str(time.time() - start_time))
+    module_logger.debug("display_image: %ss", str(time.time() - start_time))
     # except:
-    #     logging.error(" Error display file: %s", file_in)
+    #     module_logger.error(" Error display file: %s", file_in)
     #     result = None
     # else:
-    #     logging.info(" Display file: %s", file_in)
+    #     module_logger.info(" Display file: %s", file_in)
     result = "OK"
 
     return result
@@ -82,7 +84,7 @@ def get_image_size(file_in, set_pillow):
         size = convert_pillow.get_image_size(file_in)
     else:
         size = convert_wand.get_image_size(file_in)
-    logging.debug("get_image_size: %ss", str(time.time() - start_time))
+    module_logger.debug("get_image_size: %ss", str(time.time() - start_time))
     return size
 
 
@@ -93,8 +95,8 @@ def preview(file_logo, size, set_pillow, coord=""):
         result = convert_pillow.preview(file_logo, size, coord)
     else:
         result = convert_wand.preview(file_logo, size, coord)
-    logging.debug("preview: %s s", str(time.time() - start_time))
-    logging.debug(result)
+    module_logger.debug("preview: %s s", str(time.time() - start_time))
+    module_logger.debug(result)
     return result
 
 
@@ -105,7 +107,7 @@ def make_clone(file_to_clone, set_pillow, color=None):
         result = convert_pillow.make_clone(file_to_clone, color)
     else:
         result = convert_wand.make_clone(file_to_clone, color)
-    logging.debug("Make clone: %ss", str(time.time() - start_time))
+    module_logger.debug("Make clone: %ss", str(time.time() - start_time))
     return result
 
 
@@ -116,7 +118,7 @@ def save_close_clone(clone, file_out, exif_on, set_pillow):
         convert_pillow.save_close_clone(clone, file_out, exif_on)
     else:
         convert_wand.save_close_clone(clone, file_out, exif_on)
-    logging.debug("Save clone: %ss", str(time.time() - start_time))
+    module_logger.debug("Save clone: %ss", str(time.time() - start_time))
 
 
 def rotate(clone, angle, color, angle_own, set_pillow):
@@ -127,7 +129,7 @@ def rotate(clone, angle, color, angle_own, set_pillow):
     else:
         convert_wand.rotate(clone, angle, color, angle_own)
         result = clone
-    logging.debug("Rotate: %ss", str(time.time() - start_time))
+    module_logger.debug("Rotate: %ss", str(time.time() - start_time))
     return result
 
 
@@ -139,7 +141,7 @@ def mirror(clone, flip, flop, set_pillow):
     else:
         convert_wand.mirror(clone, flip, flop)
         result = clone
-    logging.debug("Mirror: %ss", str(time.time() - start_time))
+    module_logger.debug("Mirror: %ss", str(time.time() - start_time))
     return result
 
 
@@ -151,7 +153,7 @@ def resize(clone, command, set_pillow):
     else:
         convert_wand.resize(clone, command)
         result = clone
-    logging.debug("Resize: %ss", str(time.time() - start_time))
+    module_logger.debug("Resize: %ss", str(time.time() - start_time))
     return result
 
 
@@ -163,7 +165,7 @@ def border(clone, color, x, y, set_pillow):
     else:
         convert_wand.border(clone, color, x, y)
         result = clone
-    logging.debug("Resize: %ss", str(time.time() - start_time))
+    module_logger.debug("Resize: %ss", str(time.time() - start_time))
     return result
 
 
@@ -175,7 +177,7 @@ def normalize(clone, normalize_variant, channel, set_pillow):
     else:
         convert_wand.normalize(clone, normalize_variant, channel)
         result = clone
-    logging.info("Normalize %ss", str(time.time() - start_time))
+    module_logger.info("Normalize %ss", str(time.time() - start_time))
     return result
 
 
@@ -187,7 +189,7 @@ def bw(clone, bw_variant, sepia, set_pillow):
     else:
         convert_wand.bw(clone, bw_variant, sepia)
         result = clone
-    logging.info("Black-white/sepia %ss", str(time.time() - start_time))
+    module_logger.info("Black-white/sepia %ss", str(time.time() - start_time))
     return result
 
 
@@ -205,7 +207,7 @@ def contrast(clone, contrast_variant, selection, black, white, set_pillow):
     else:
         convert_wand.contrast(clone, contrast_variant, selection, black, white)
         result = clone
-    logging.info("Contrast %ss", str(time.time() - start_time))
+    module_logger.info("Contrast %ss", str(time.time() - start_time))
     return result
 
 
@@ -218,7 +220,7 @@ def crop(file_in, clone, crop_variant, gravity, entries, set_pillow):
     else:
         convert_wand.crop(file_in, clone, crop_variant, gravity, entries)
         result = clone
-    logging.info("Crop %ss", str(time.time() - start_time))
+    module_logger.info("Crop %ss", str(time.time() - start_time))
     return result
 
 
@@ -230,5 +232,5 @@ def text(convert_data, set_pillow):
         # result = convert_pillow.text(convert_data)
     else:
         result = convert_wand.text(convert_data)
-    logging.info("Text %ss", str(time.time() - start_time))
+    module_logger.info("Text %ss", str(time.time() - start_time))
     return result

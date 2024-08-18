@@ -30,6 +30,8 @@ import os
 
 import logging
 
+module_logger = logging.getLogger(__name__)
+
 
 def out_full_filename(file_in, destination, extension):
     """
@@ -49,18 +51,18 @@ def out_full_filename(file_in, destination, extension):
                 try:
                     os.mkdir(out_dir)
                 except FileExistsError:
-                    logging.error("pre_imagick: FileExistsError %s", out_dir)
+                    module_logger.error("pre_imagick: FileExistsError %s", out_dir)
                 except FileNotFoundError:
                     try:
                         os.mkdir(os.path.dirname(out_dir))
                     except FileNotFoundError:
-                        logging.error(
+                        module_logger.error(
                             "pre_imagick: Cannot make directory for output pictures %s",
                             os.path.dirname(out_dir),
                         )
                         result = None
                     except:
-                        logging.error(
+                        module_logger.error(
                             "pre_imagick: other problem to create %s",
                             os.path.dirname(out_dir),
                         )
@@ -69,20 +71,20 @@ def out_full_filename(file_in, destination, extension):
                         try:
                             os.mkdir(out_dir)
                         except FileExistsError:
-                            logging.error("pre_imagick: FileExistsError %s", out_dir)
+                            module_logger.error("pre_imagick: FileExistsError %s", out_dir)
                         except FileNotFoundError:
-                            logging.error(
+                            module_logger.error(
                                 "pre_imagick: FileExistsError %s",
                                 os.path.dirname(out_dir),
                             )
                             result = None
                         except:
-                            logging.error(
+                            module_logger.error(
                                 "pre_imagick: other problem to create %s", out_dir
                             )
                             result = None
                 except:
-                    logging.error("pre_imagick: other problem to create %s", out_dir)
+                    module_logger.error("pre_imagick: other problem to create %s", out_dir)
                     result = None
 
         else:
