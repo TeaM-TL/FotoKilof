@@ -194,14 +194,41 @@ def bw(clone, bw_variant, sepia, set_pillow):
 def contrast(clone, contrast_variant, selection, black, white, set_pillow):
     """black and white or sepia"""
     start_time = time.time()
-    if black == '' or black == None:
+    if black == "" or black is None:
         black = 0
-    if white == '' or white == None:
+    if white == "" or white is None:
         white = 0
     if set_pillow:
-        result = convert_pillow.contrast(clone, contrast_variant, selection, black, white)
+        result = convert_pillow.contrast(
+            clone, contrast_variant, selection, black, white
+        )
     else:
         convert_wand.contrast(clone, contrast_variant, selection, black, white)
         result = clone
     logging.info("Contrast %ss", str(time.time() - start_time))
+    return result
+
+
+def crop(file_in, clone, crop_variant, gravity, entries, set_pillow):
+    """black and white or sepia"""
+    start_time = time.time()
+    if set_pillow:
+        print("Not ready yet")
+        # result = convert_pillow.crop(file_in, clone, crop_variant, gravity, entries)
+    else:
+        convert_wand.crop(file_in, clone, crop_variant, gravity, entries)
+        result = clone
+    logging.info("Crop %ss", str(time.time() - start_time))
+    return result
+
+
+def text(convert_data, set_pillow):
+    """black and white or sepia"""
+    start_time = time.time()
+    if set_pillow:
+        print("Not ready yet")
+        # result = convert_pillow.text(convert_data)
+    else:
+        result = convert_wand.text(convert_data)
+    logging.info("Text %ss", str(time.time() - start_time))
     return result

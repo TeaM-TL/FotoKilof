@@ -183,7 +183,7 @@ def mirror(clone, flip, flop):
         # result = clone.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
         result = ImageOps.flip(clone)
     if flop:
-        #result = result.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        # result = result.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
         result = ImageOps.mirror(result)
     logging.info(" Conversion: mirror")
     return result
@@ -324,6 +324,7 @@ def normalize(clone, normalize_variant, channel):
 
 def contrast(clone, contrast_variant, selection, black, white):
     """normalize levels of colors"""
+    result = None
     if int(contrast_variant) == 1:
         if float(black) > 100:
             black = 100
@@ -331,16 +332,16 @@ def contrast(clone, contrast_variant, selection, black, white):
             white = 100
         # clone.contrast_stretch(black_point=float(black), white_point=float(white))
         result = ImageOps.autocontrast(clone, (float(black), float(white)))
-    else:
-        if int(selection) != 0:
-            if int(selection) > 0:
-                sharpen = True
-            else:
-                sharpen = False
-            iteration = 0
-            while iteration < abs(int(selection)):
-                iteration += 1
-                clone.contrast(sharpen=sharpen)
+    # else:
+    #     if int(selection) != 0:
+    #         if int(selection) > 0:
+    #             sharpen = True
+    #         else:
+    #             sharpen = False
+    #         iteration = 0
+    #         while iteration < abs(int(selection)):
+    #             iteration += 1
+    #             clone.contrast(sharpen=sharpen)
     logging.info(" Conversion: contrast %s", str(contrast_variant))
     return result
 
@@ -582,7 +583,7 @@ def preview(file_in, max_size, coord=""):
                 "preview_width": str(preview_width),
                 "preview_height": str(preview_height),
             }
-            logging.debug("preview: " + str(result))
+            logging.debug("preview: %s", str(result))
     return result
 
 

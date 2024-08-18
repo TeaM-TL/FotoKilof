@@ -245,6 +245,7 @@ def text(convert_data):
                 clone.sequence.append(canvas)
                 clone.concat(stacked=True)
     logging.info(" Conversion: text %s", str(in_out))
+    return clone
 
 
 def bw(clone, bw_variant, sepia):

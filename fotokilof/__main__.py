@@ -346,7 +346,7 @@ def apply_all_button():
                     file_in, PILLOW, img_vignette_color.get()
                 )
                 if img_crop_on.get():
-                    convert_wand.crop(
+                    clone = convert_common.crop(
                         file_in,
                         clone,
                         img_crop.get(),
@@ -368,7 +368,7 @@ def apply_all_button():
                         co_contrast_selection.get(),
                         e1_contrast.get(),
                         e2_contrast.get(),
-                        PILLOW
+                        PILLOW,
                     )
                 if img_normalize_on.get():
                     clone = convert_common.normalize(
@@ -430,7 +430,7 @@ def apply_all_button():
                         e_text_y.get(),
                         e_text.get(),
                     )
-                    convert_wand.text(convert_text_data)
+                    clone = convert_common.text(convert_text_data)
                 if img_logo_on.get():
                     coordinates = (
                         common.empty(e_logo_dx.get()),
@@ -493,7 +493,7 @@ def convert_contrast_button():
             co_contrast_selection.get(),
             e1_contrast.get(),
             e2_contrast.get(),
-            PILLOW
+            PILLOW,
         )
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW
@@ -522,7 +522,9 @@ def convert_normalize_button():
     root.update_idletasks()
     clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        clone = convert_common.normalize(clone, img_normalize.get(), co_normalize_channel.get(), PILLOW)
+        clone = convert_common.normalize(
+            clone, img_normalize.get(), co_normalize_channel.get(), PILLOW
+        )
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW
         )
@@ -700,7 +702,7 @@ def convert_crop_button():
     root.update_idletasks()
     clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_wand.crop(
+        clone = convert_common.crop(
             file_in_path.get(),
             clone,
             img_crop.get(),
@@ -736,7 +738,7 @@ def convert_text_button():
             e_text_y.get(),
             e_text.get(),
         )
-        convert_wand.text(convert_text_data)
+        clone = convert_common.text(convert_text_data)
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW
         )
