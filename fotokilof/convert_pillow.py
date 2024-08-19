@@ -46,7 +46,7 @@ Converters
 import logging
 import tempfile
 import os
-from PIL import Image, ImageOps
+from PIL import Image, ImageDraw, ImageOps
 
 # my modules
 import common
@@ -560,21 +560,17 @@ def preview(file_in, max_size, coord=""):
             else:
                 preview_width, preview_height = (max_size, max_size)
             size = (preview_width, preview_height)
+            # clone = resize(clone, str(max_size) + 'x' + str(max_size))
             clone = clone.resize(size)
             # write crop if coordinates are given
             if len(coord) == 4:
-                with Drawing() as draw:
-                    left_top = (coord[0], coord[1])
-                    # left_bottom = (coord[0], coord[3])
-                    # right_top = (coord[2], coord[1])
-                    right_bottom = (coord[2], coord[3])
-                    outline_color = "#FFFF00"
-                    clone = ImageDraw.Draw.rectangle((left_top, right_bottom), outline=outline_color, fill=None, width=0)
-                    # draw.line(left_top, right_top)
-                    # draw.line(left_top, left_bottom)
-                    # draw.line(left_bottom, right_bottom)
-                    # draw.line(right_top, right_bottom)
-                    # draw(clone)
+                left_top = (coord[0], coord[1])
+                right_bottom = (coord[2], coord[3])
+                rectangle = (left_top, right_bottom)
+                outline_color = "#FFFF00"
+                if coord[0] < coord[2] and coord[1] < coord[3]:
+                    draw = ImageDraw.Draw(clone)
+                    draw.rectangle(rectangle, outline=outline_color, fill=None, width=2)
             preview_width, preview_height = clone.size
             file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
             save_close_clone(clone, file_preview)
