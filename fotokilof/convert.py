@@ -30,6 +30,8 @@ import os
 
 import logging
 
+module_logger = logging.getLogger(__name__)
+
 
 def out_full_filename(file_in, destination, extension):
     """
@@ -49,29 +51,40 @@ def out_full_filename(file_in, destination, extension):
                 try:
                     os.mkdir(out_dir)
                 except FileExistsError:
-                    logging.error("pre_imagick: FileExistsError %s", out_dir)
+                    module_logger.error("pre_imagick: FileExistsError %s", out_dir)
                 except FileNotFoundError:
                     try:
                         os.mkdir(os.path.dirname(out_dir))
                     except FileNotFoundError:
-                        logging.error("pre_imagick: Cannot make directory for output pictures %s", os.path.dirname(out_dir))
+                        module_logger.error(
+                            "pre_imagick: Cannot make directory for output pictures %s",
+                            os.path.dirname(out_dir),
+                        )
                         result = None
                     except:
-                        logging.error("pre_imagick: other problem to create %s", os.path.dirname(out_dir))
+                        module_logger.error(
+                            "pre_imagick: other problem to create %s",
+                            os.path.dirname(out_dir),
+                        )
                         result = None
                     if result == "OK":
                         try:
                             os.mkdir(out_dir)
                         except FileExistsError:
-                            logging.error("pre_imagick: FileExistsError %s", out_dir)
+                            module_logger.error("pre_imagick: FileExistsError %s", out_dir)
                         except FileNotFoundError:
-                            logging.error("pre_imagick: FileExistsError %s", os.path.dirname(out_dir))
+                            module_logger.error(
+                                "pre_imagick: FileExistsError %s",
+                                os.path.dirname(out_dir),
+                            )
                             result = None
                         except:
-                            logging.error("pre_imagick: other problem to create %s", out_dir)
+                            module_logger.error(
+                                "pre_imagick: other problem to create %s", out_dir
+                            )
                             result = None
                 except:
-                    logging.error("pre_imagick: other problem to create %s", out_dir)
+                    module_logger.error("pre_imagick: other problem to create %s", out_dir)
                     result = None
 
         else:
@@ -82,11 +95,12 @@ def out_full_filename(file_in, destination, extension):
     if result == "OK":
         # preparing output filename
         file_in_without_ext = os.path.splitext(file_in)
-        file_out = os.path.join(out_dir,
-                                os.path.basename(file_in_without_ext[0] \
-                                                 + extension))
+        file_out = os.path.join(
+            out_dir, os.path.basename(file_in_without_ext[0] + extension)
+        )
     else:
         file_out = None
     return file_out
+
 
 # EOF

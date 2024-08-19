@@ -24,7 +24,6 @@ function for GUI:
 - copy_to_clipboard - copy result into clipboard (only Windows)
 - only_numbers - validate only natural values
 - only_integer - validate integer values
-- show_picture - display picture in system viewer, PIL version
 """
 
 from io import BytesIO
@@ -32,6 +31,7 @@ import re
 from PIL import Image
 
 import mswindows
+
 if mswindows.windows() == 1:
     import win32clipboard
 
@@ -59,23 +59,17 @@ def copy_to_clipboard(file_in):
 
 
 def only_numbers(char):
-    """  Validation entry widgets: only digits """
+    """Validation entry widgets: only digits"""
     return char.isdigit()
 
 
 def only_integer(char):
-    """  Validation entry widgets: only digits """
-    if re.match('^[-]{0,1}[0-9]{,6}$', str(char)):
+    """Validation entry widgets: only digits"""
+    if re.match("^[-]{0,1}[0-9]{,6}$", str(char)):
         result = True
     else:
         result = False
     return result
 
-
-def show_picture(filename):
-    """ display picture in system viewer, PIL version """
-    #image = Image.open(filename")
-    with Image.open(filename) as image:
-        image.show()
 
 # EOF
