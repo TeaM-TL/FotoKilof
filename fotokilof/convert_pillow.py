@@ -141,9 +141,7 @@ def pip(clone, logo, logo_data, image_height, image_width):
     if len(logo):
         with Image(filename=logo) as logo_img:
             with Drawing() as draw:
-                position = common.crop_gravity(
-                    logo_data, image_height, image_width
-                )
+                position = common.crop_gravity(logo_data, image_height, image_width)
                 draw.composite(
                     operator="over",
                     left=common.empty(position[0]),
@@ -164,16 +162,7 @@ def rotate(clone, angle, color, own):
             color = None
     else:
         color = None
-    if angle == 90:
-        result = clone.transpose(Image.Transpose.ROTATE_90)
-    elif angle == 180:
-        result = clone.transpose(Image.Transpose.ROTATE_180)
-    elif angle == 270:
-        result = clone.transpose(Image.Transpose.ROTATE_270)
-    else:
-        result = clone
-        module_logger.debug("rotate: only 90 180 and 270, %s not allowed", str(angle))
-    # clone.rotate(angle)
+    result = clone.rotate(angle=angle, fillcolor=color, expand=True)
     module_logger.debug(" Conversion: rotate %s", str(angle))
     return result
 
@@ -269,7 +258,9 @@ def bw(clone, bw_variant, sepia):
         # black-white
         result = ImageOps.grayscale(clone)
     else:
-        module_logger.warning("Black-white/sepia not available for PILLOW, install ImageMagick")
+        module_logger.warning(
+            "Black-white/sepia not available for PILLOW, install ImageMagick"
+        )
         # sepia
         # clone.sepia_tone(threshold=common.empty(sepia) / 100)
     module_logger.debug(" Conversion: black-white/sepia %s", str(bw_variant))
@@ -377,16 +368,20 @@ def crop(file_in, clone, crop_variant, gravity, entries):
             result = clone.crop((left, top, right, bottom))
     if crop_variant == 3:
         if (entries["three_width"] > 0) and (entries["three_height"] > 0):
-            clone = clone.crop(common.crop_gravity((
-                entries["three_dx"],
-                entries["three_dy"],
-                entries["three_width"],
-                entries["three_height"],
-                gravity),
-                image_size[0],
-                image_size[1]
-            ))
-        result = clone 
+            clone = clone.crop(
+                common.crop_gravity(
+                    (
+                        entries["three_dx"],
+                        entries["three_dy"],
+                        entries["three_width"],
+                        entries["three_height"],
+                        gravity,
+                    ),
+                    image_size[0],
+                    image_size[1],
+                )
+            )
+        result = clone
     module_logger.debug(" Conversion: crop %s", str(crop_variant))
     return result
 

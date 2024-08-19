@@ -72,6 +72,7 @@ from ttkbootstrap.constants import (
 
 try:
     from wand.version import VERSION
+
     IMAGEMAGICK_WAND_VERSION = "Wand " + VERSION
     PILLOW = 0
 except:
@@ -80,6 +81,7 @@ except:
 else:
     try:
         from wand.version import MAGICK_VERSION
+
         IMAGEMAGICK_WAND_VERSION += ", IM " + MAGICK_VERSION.split(" ")[1]
     except:
         IMAGEMAGICK_WAND_VERSION += ", IM - missing"
@@ -98,7 +100,7 @@ import magick
 import mswindows
 import version
 
-#logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 logging.basicConfig(
     filename=os.path.join(os.path.expanduser("~"), ".fotokilof.log"),
     encoding="utf-8",
@@ -352,7 +354,7 @@ def apply_all_button():
                         img_crop.get(),
                         img_crop_gravity.get(),
                         convert_crop_entries(),
-                        PILLOW
+                        PILLOW,
                     )
                 if img_mirror_on.get():
                     clone = convert_common.mirror(
@@ -431,7 +433,7 @@ def apply_all_button():
                         e_text_y.get(),
                         e_text.get(),
                     )
-                    clone = convert_common.text(convert_text_data)
+                    clone = convert_common.text(convert_text_data, PILLOW)
                 if img_logo_on.get():
                     coordinates = (
                         common.empty(e_logo_dx.get()),
@@ -709,7 +711,7 @@ def convert_crop_button():
             img_crop.get(),
             img_crop_gravity.get(),
             convert_crop_entries(),
-            PILLOW
+            PILLOW,
         )
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW
@@ -740,7 +742,7 @@ def convert_text_button():
             e_text_y.get(),
             e_text.get(),
         )
-        clone = convert_common.text(convert_text_data)
+        clone = convert_common.text(convert_text_data, PILLOW)
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW
         )
@@ -3429,22 +3431,10 @@ l_compose_color.configure(bg=img_compose_color.get())
 if not PILLOW:
     img_text_font_dict = fonts()  # Reading available fonts
 else:
-    root.withdraw()
-    # Messagebox.show_error(
-    #     _(
-    #         "ImageMagick or Wand are not installed in your system. Functionality will be limited."
-    #     ),
-    #     title=_("Error"),
-    # )
+    # root.withdraw()
     # disable processing buttons
-    # img_crop_on.set(0)
-    # cb_crop.configure(state=DISABLED)
-    # img_text_on.set(0)
-    # cb_text.configure(state=DISABLED)
-    # img_normalize_on.set(0)
-    # cb_normalize.configure(state=DISABLED)
-    # img_contrast_on.set(0)
-    # cb_contrast.configure(state=DISABLED)
+    img_text_on.set(0)
+    cb_text.configure(state=DISABLED)
     img_logo_on.set(0)
     cb_logo.configure(state=DISABLED)
     img_custom_on.set(0)
@@ -3453,7 +3443,7 @@ else:
     cb_vignette.configure(state=DISABLED)
     cb_exif.configure(state=DISABLED)
     # b_file_select_screenshot.configure(state=DISABLED)
-    root.deiconify()
+    # root.deiconify()
 
 tools_set(0)
 text_tool_hide_show()

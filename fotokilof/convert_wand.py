@@ -143,9 +143,7 @@ def pip(clone, logo, logo_data, image_height, image_width):
     if len(logo):
         with Image(filename=logo) as logo_img:
             with Drawing() as draw:
-                position = common.crop_gravity(
-                    logo_data, image_height, image_width
-                )
+                position = common.crop_gravity(logo_data, image_height, image_width)
                 draw.composite(
                     operator="over",
                     left=common.empty(position[0]),
