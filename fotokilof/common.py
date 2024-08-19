@@ -27,7 +27,7 @@ module contains common functions:
 - humansize - converts B to kB or MB
 - mouse_crop_calculation - recalculation pixels from previev original image
 - spacja - escaping space and special char in pathname
-- preview_crop_gravity - convert coordinates for crop3 and logo position
+- crop_gravity - convert coordinates for crop3 and logo position
 - list_of_images - sorted list images in cwd
 - file_from_list_of_images - return filename from file_list depends of request
 """
@@ -134,7 +134,7 @@ def spacja(file_path):
     return result
 
 
-def preview_crop_gravity(coordinates, x_max, y_max):
+def crop_gravity(coordinates, x_max, y_max):
     """
     convert corrdinates from crop3:
     offset_x, offset_y, width, height, gravitation

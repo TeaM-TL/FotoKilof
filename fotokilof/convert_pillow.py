@@ -141,7 +141,7 @@ def pip(clone, logo, logo_data, image_height, image_width):
     if len(logo):
         with Image(filename=logo) as logo_img:
             with Drawing() as draw:
-                position = common.preview_crop_gravity(
+                position = common.crop_gravity(
                     logo_data, image_height, image_width
                 )
                 draw.composite(
@@ -375,15 +375,18 @@ def crop(file_in, clone, crop_variant, gravity, entries):
             right = left + entries["two_width"]
             bottom = top + entries["two_height"]
             result = clone.crop((left, top, right, bottom))
-    # if crop_variant == 3:
-    #     if (entries["three_width"] > 0) and (entries["three_height"] > 0):
-    #         clone.crop(
-    #             left=entries["three_dx"],
-    #             top=entries["three_dy"],
-    #             width=entries["three_width"],
-    #             height=entries["three_height"],
-    #             gravity=gravitation(gravity),
-    #         )
+    if crop_variant == 3:
+        if (entries["three_width"] > 0) and (entries["three_height"] > 0):
+            clone = clone.crop(common.crop_gravity((
+                entries["three_dx"],
+                entries["three_dy"],
+                entries["three_width"],
+                entries["three_height"],
+                gravity),
+                image_size[0],
+                image_size[1]
+            ))
+        result = clone 
     module_logger.debug(" Conversion: crop %s", str(crop_variant))
     return result
 
@@ -560,7 +563,6 @@ def preview(file_in, max_size, coord=""):
             else:
                 preview_width, preview_height = (max_size, max_size)
             size = (preview_width, preview_height)
-            # clone = resize(clone, str(max_size) + 'x' + str(max_size))
             clone = clone.resize(size)
             # write crop if coordinates are given
             if len(coord) == 4:

@@ -1488,7 +1488,7 @@ def preview_orig():
                         common.empty(e4_crop_3.get()),
                         img_crop_gravity.get(),
                     )
-                    coord = common.preview_crop_gravity(
+                    coord = common.crop_gravity(
                         coord_for_crop, xy_max["x_orig"], xy_max["y_orig"]
                     )
                     x0 = coord[0]
