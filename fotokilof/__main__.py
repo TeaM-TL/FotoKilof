@@ -352,6 +352,7 @@ def apply_all_button():
                         img_crop.get(),
                         img_crop_gravity.get(),
                         convert_crop_entries(),
+                        PILLOW
                     )
                 if img_mirror_on.get():
                     clone = convert_common.mirror(
@@ -708,6 +709,7 @@ def convert_crop_button():
             img_crop.get(),
             img_crop_gravity.get(),
             convert_crop_entries(),
+            PILLOW
         )
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW

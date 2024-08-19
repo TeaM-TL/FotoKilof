@@ -363,30 +363,29 @@ def crop(file_in, clone, crop_variant, gravity, entries):
                 entries["one_x2"] = image_size[0]
             if entries["one_y2"] > image_size[1]:
                 entries["one_y2"] = image_size[1]
-            clone.crop(
-                left=entries["one_x1"],
-                top=entries["one_y1"],
-                right=entries["one_x2"],
-                bottom=entries["one_y2"],
-            )
+            left = entries["one_x1"]
+            top = entries["one_y1"]
+            right = entries["one_x2"]
+            bottom = entries["one_y2"]
+            result = clone.crop((left, top, right, bottom))
     if crop_variant == 2:
         if (entries["two_width"] > 0) and (entries["two_height"] > 0):
-            clone.crop(
-                left=entries["two_x1"],
-                top=entries["two_y1"],
-                width=entries["two_width"],
-                height=entries["two_height"],
-            )
-    if crop_variant == 3:
-        if (entries["three_width"] > 0) and (entries["three_height"] > 0):
-            clone.crop(
-                left=entries["three_dx"],
-                top=entries["three_dy"],
-                width=entries["three_width"],
-                height=entries["three_height"],
-                gravity=gravitation(gravity),
-            )
+            left = entries["two_x1"]
+            top = entries["two_y1"]
+            right = left + entries["two_width"]
+            bottom = top + entries["two_height"]
+            result = clone.crop((left, top, right, bottom))
+    # if crop_variant == 3:
+    #     if (entries["three_width"] > 0) and (entries["three_height"] > 0):
+    #         clone.crop(
+    #             left=entries["three_dx"],
+    #             top=entries["three_dy"],
+    #             width=entries["three_width"],
+    #             height=entries["three_height"],
+    #             gravity=gravitation(gravity),
+    #         )
     module_logger.debug(" Conversion: crop %s", str(crop_variant))
+    return result
 
 
 def vignette(clone, dx, dy, radius, sigma):

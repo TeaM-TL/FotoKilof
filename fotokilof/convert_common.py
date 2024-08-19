@@ -214,8 +214,7 @@ def crop(file_in, clone, crop_variant, gravity, entries, set_pillow):
     """black and white or sepia"""
     start_time = time.time()
     if set_pillow:
-        print("Not ready yet")
-        # result = convert_pillow.crop(file_in, clone, crop_variant, gravity, entries)
+        result = convert_pillow.crop(file_in, clone, crop_variant, gravity, entries)
     else:
         convert_wand.crop(file_in, clone, crop_variant, gravity, entries)
         result = clone
