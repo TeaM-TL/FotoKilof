@@ -28,7 +28,7 @@ import platform
 
 
 def windows():
-    """ checking: system Windows or no """
+    """checking: system Windows or no"""
     if platform.system() == "Windows":
         result = 1
     else:
@@ -37,7 +37,7 @@ def windows():
 
 
 def macos():
-    """ checking: system MacOS or no """
+    """checking: system MacOS or no"""
     if platform.system() == "Darwin":
         result = 1
     else:

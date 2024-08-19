@@ -2,7 +2,7 @@
 # pylint: disable=bare-except
 
 """
-Copyright (c) 2022-2024 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2024 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,6 @@ Info
 Common
 - make_clone - open origal picture and make clone for processing
 - save_close_clone - save clone into file and close clone
-- get_image_size - get size from image
 - gravitation - translate eg. NS to Northsouth as Wand-py expect
 Converters
 - pip - picture in picture, for inserting logo
@@ -42,19 +41,12 @@ Converters
 - crop - crop picture
 - vignete - add vignete into picture
 - compose - join two pictures
-- preview_wand - preview done by Wand
 """
 
 import logging
-import os
 import tempfile
-
-try:
-    from wand.drawing import Drawing
-    from wand.image import Image
-    from wand.version import fonts as fontsList
-except:
-    print(" ImageMagick or Wand-py not found")
+import os
+from PIL import Image, ImageDraw, ImageOps
 
 # my modules
 import common
@@ -63,6 +55,11 @@ module_logger = logging.getLogger(__name__)
 
 
 # ------------------------------------ Info
+def version():
+    """version of PIL"""
+    return Image.__version__
+
+
 def fonts_list():
     """list of available fonts"""
     return fontsList()
@@ -72,19 +69,19 @@ def fonts_list():
 def make_clone(file_to_clone, color=None):
     """open picture and make clone for processing"""
     if len(file_to_clone) > 0:
-        with Image(filename=file_to_clone, background=color) as image:
-            clone = image.clone()
+        with Image.open(file_to_clone) as image:
+            clone = image.copy()
     else:
         clone = None
     return clone
 
 
-def save_close_clone(clone, file_out, exif=0):
+def save_close_clone(clone, file_out, ppm=0, exif=0):
     """save and close clone after processing"""
-    if not exif:
-        clone.strip()
+    # if not exif:
+    #     clone.strip()
     module_logger.debug(" Save file: %s", file_out)
-    clone.save(filename=file_out)
+    clone.save(file_out)
     clone.close()
 
 
@@ -98,10 +95,11 @@ def get_image_size(filename):
     if filename is not None:
         if os.path.isfile(filename):
             try:
-                with Image(filename=filename) as image:
+                with Image.open(filename) as image:
                     size = image.size
             except:
                 module_logger.error(" Error read file: %s", filename)
+    module_logger.debug("get_image_size: %s, %s", filename, str(size))
     return size
 
 
@@ -156,29 +154,37 @@ def pip(clone, logo, logo_data, image_height, image_width):
     module_logger.debug(" Conversion: logo")
 
 
-def rotate(clone, angle, color, angle_own):
+def rotate(clone, angle, color, own):
     """rotate"""
     if angle == 0:
-        angle = common.empty(angle_own)
-    if angle == 0:
+        angle = common.empty(own)
+        if angle == 0:
+            color = None
+    else:
         color = None
-    clone.rotate(angle, background=color)
+    result = clone.rotate(angle=angle, fillcolor=color, expand=True)
     module_logger.debug(" Conversion: rotate %s", str(angle))
+    return result
 
 
 def mirror(clone, flip, flop):
     """mirror: flip and flop"""
+    result = clone
     if flip:
-        clone.flip()
+        # result = clone.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+        result = ImageOps.flip(clone)
     if flop:
-        clone.flop()
+        # result = result.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        result = ImageOps.mirror(result)
     module_logger.debug(" Conversion: mirror")
+    return result
 
 
 def border(clone, color, x, y):
     """border: color, x, y"""
-    clone.border(color, common.empty(x), common.empty(y))
-    module_logger.debug(" Conversion: border")
+    result = ImageOps.expand(clone, (int(x), int(y)), color)
+    module_logger.debug("Conversion: border")
+    return result
 
 
 def text(convert_data):
@@ -244,58 +250,93 @@ def text(convert_data):
                 clone.sequence.append(canvas)
                 clone.concat(stacked=True)
     module_logger.debug(" Conversion: text %s", str(in_out))
-    return clone
 
 
 def bw(clone, bw_variant, sepia):
     """black and white or sepia"""
     if bw_variant == 1:
         # black-white
-        clone.type = "grayscale"
+        result = ImageOps.grayscale(clone)
     else:
+        module_logger.warning(
+            "Black-white/sepia not available for PILLOW, install ImageMagick"
+        )
         # sepia
-        clone.sepia_tone(threshold=common.empty(sepia) / 100)
+        # clone.sepia_tone(threshold=common.empty(sepia) / 100)
     module_logger.debug(" Conversion: black-white/sepia %s", str(bw_variant))
+    return result
 
 
-def resize(clone, command):
+def resize(clone, size):
     """resize picture"""
-    clone.transform(crop="", resize=command)
+    image_width, image_height = clone.size
+
+    if "x" in size:
+        width, height = size.split("x")
+        if int(width) > int(height):
+            max_size = int(width)
+        else:
+            max_size = int(height)
+
+        if image_width > image_height:
+            final_width, final_height = (
+                max_size,
+                int(image_height * (max_size / image_width)),
+            )
+        elif image_width < image_height:
+            final_width, final_height = (
+                int(image_width * (max_size / image_height)),
+                max_size,
+            )
+        else:
+            final_width, final_height = (max_size, max_size)
+    else:
+        max_size = int(size.split("%")[0])
+        final_width = max_size * image_width / 100
+        final_height = max_size * image_height / 100
+
+    result = clone.resize((int(final_width), int(final_height)))
     module_logger.debug(" Conversion: resize")
+    return result
 
 
 def normalize(clone, normalize_variant, channel):
     """normalize levels of colors"""
     if normalize_variant == 1:
-        if channel != "None":
-            clone.alpha_channel = True
-            clone.normalize(channel=channel)
-        else:
-            clone.normalize()
+        result = ImageOps.autocontrast(clone)
+        # if channel != "None":
+        #     clone.alpha_channel = True
+        #     clone.normalize(channel=channel)
+        # else:
+        #     clone.normalize()
     else:
-        clone.auto_level()
+        result = ImageOps.equalize(clone)
     module_logger.debug(" Conversion: normalize %s", str(normalize_variant))
+    return result
 
 
 def contrast(clone, contrast_variant, selection, black, white):
     """normalize levels of colors"""
+    result = None
     if int(contrast_variant) == 1:
-        if float(black) > 1:
-            black = 0
-        if float(white) > 1:
-            white = None
-        clone.contrast_stretch(black_point=float(black), white_point=float(white))
-    else:
-        if int(selection) != 0:
-            if int(selection) > 0:
-                sharpen = True
-            else:
-                sharpen = False
-            iteration = 0
-            while iteration < abs(int(selection)):
-                iteration += 1
-                clone.contrast(sharpen=sharpen)
+        if float(black) > 100:
+            black = 100
+        if float(white) > 100:
+            white = 100
+        # clone.contrast_stretch(black_point=float(black), white_point=float(white))
+        result = ImageOps.autocontrast(clone, (float(black), float(white)))
+    # else:
+    #     if int(selection) != 0:
+    #         if int(selection) > 0:
+    #             sharpen = True
+    #         else:
+    #             sharpen = False
+    #         iteration = 0
+    #         while iteration < abs(int(selection)):
+    #             iteration += 1
+    #             clone.contrast(sharpen=sharpen)
     module_logger.debug(" Conversion: contrast %s", str(contrast_variant))
+    return result
 
 
 def crop(file_in, clone, crop_variant, gravity, entries):
@@ -313,30 +354,36 @@ def crop(file_in, clone, crop_variant, gravity, entries):
                 entries["one_x2"] = image_size[0]
             if entries["one_y2"] > image_size[1]:
                 entries["one_y2"] = image_size[1]
-            clone.crop(
-                left=entries["one_x1"],
-                top=entries["one_y1"],
-                right=entries["one_x2"],
-                bottom=entries["one_y2"],
-            )
+            left = entries["one_x1"]
+            top = entries["one_y1"]
+            right = entries["one_x2"]
+            bottom = entries["one_y2"]
+            result = clone.crop((left, top, right, bottom))
     if crop_variant == 2:
         if (entries["two_width"] > 0) and (entries["two_height"] > 0):
-            clone.crop(
-                left=entries["two_x1"],
-                top=entries["two_y1"],
-                width=entries["two_width"],
-                height=entries["two_height"],
-            )
+            left = entries["two_x1"]
+            top = entries["two_y1"]
+            right = left + entries["two_width"]
+            bottom = top + entries["two_height"]
+            result = clone.crop((left, top, right, bottom))
     if crop_variant == 3:
         if (entries["three_width"] > 0) and (entries["three_height"] > 0):
-            clone.crop(
-                left=entries["three_dx"],
-                top=entries["three_dy"],
-                width=entries["three_width"],
-                height=entries["three_height"],
-                gravity=gravitation(gravity),
+            clone = clone.crop(
+                common.crop_gravity(
+                    (
+                        entries["three_dx"],
+                        entries["three_dy"],
+                        entries["three_width"],
+                        entries["three_height"],
+                        gravity,
+                    ),
+                    image_size[0],
+                    image_size[1],
+                )
             )
+        result = clone
     module_logger.debug(" Conversion: crop %s", str(crop_variant))
+    return result
 
 
 def vignette(clone, dx, dy, radius, sigma):
@@ -347,13 +394,14 @@ def vignette(clone, dx, dy, radius, sigma):
     sigma - standard deviation for Gaussian blur
     color - color of corners
     """
-    clone.vignette(
-        radius=common.empty(radius),
-        sigma=common.empty(sigma),
-        x=common.empty(dx),
-        y=common.empty(dy),
-    )
-    module_logger.debug(" Conversion: vigette")
+    # clone.vignette(
+    #     radius=common.empty(radius),
+    #     sigma=common.empty(sigma),
+    #     x=common.empty(dx),
+    #     y=common.empty(dy),
+    # )
+    # module_logger.debug(" Conversion: vigette")
+    module_logger.warning("vigette not available for PILLOW, install ImageMagick")
 
 
 def compose(clone, compose_file, right, autoresize, color, gravity):
@@ -470,11 +518,11 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
 
 
 # ------------------------------------ Preview
-def preview(file_in, size, coord=""):
+def preview(file_in, max_size, coord=""):
     """
-    preview generation by Wand
+    preview generation by Pillow
     file_in - fullname image file
-    size - required size of image
+    max_size - required size of image
     coord - coordinates for crop
     --
     return:
@@ -495,38 +543,43 @@ def preview(file_in, size, coord=""):
     if file_in is not None:
         if os.path.isfile(file_in):
             filesize = common.humansize(os.path.getsize(file_in))
-
             clone = make_clone(file_in)
-            width = str(clone.width)
-            height = str(clone.height)
-            clone.convert("ppm")
-            resize(clone, str(size) + "x" + str(size))
+            width, height = clone.size
+            if width > height:
+                preview_width, preview_height = (
+                    max_size,
+                    int(height * (max_size / width)),
+                )
+            elif width < height:
+                preview_width, preview_height = (
+                    int(width * (max_size / height)),
+                    max_size,
+                )
+            else:
+                preview_width, preview_height = (max_size, max_size)
+            size = (preview_width, preview_height)
+            clone = clone.resize(size)
             # write crop if coordinates are given
             if len(coord) == 4:
-                with Drawing() as draw:
-                    left_top = (coord[0], coord[1])
-                    left_bottom = (coord[0], coord[3])
-                    right_top = (coord[2], coord[1])
-                    right_bottom = (coord[2], coord[3])
-                    draw.fill_color = "#FFFF00"
-                    draw.line(left_top, right_top)
-                    draw.line(left_top, left_bottom)
-                    draw.line(left_bottom, right_bottom)
-                    draw.line(right_top, right_bottom)
-                    draw(clone)
-            preview_width = str(clone.width)
-            preview_height = str(clone.height)
+                left_top = (coord[0], coord[1])
+                right_bottom = (coord[2], coord[3])
+                rectangle = (left_top, right_bottom)
+                outline_color = "#FFFF00"
+                if coord[0] < coord[2] and coord[1] < coord[3]:
+                    draw = ImageDraw.Draw(clone)
+                    draw.rectangle(rectangle, outline=outline_color, fill=None, width=2)
+            preview_width, preview_height = clone.size
             file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
             save_close_clone(clone, file_preview)
             result = {
                 "filename": common.spacja(file_preview),
                 "size": filesize,
-                "width": width,
-                "height": height,
-                "preview_width": preview_width,
-                "preview_height": preview_height,
+                "width": str(width),
+                "height": str(height),
+                "preview_width": str(preview_width),
+                "preview_height": str(preview_height),
             }
-
+            module_logger.debug("preview: %s", str(result))
     return result
 
 

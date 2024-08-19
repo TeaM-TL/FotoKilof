@@ -28,7 +28,8 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - border around picture,
  - rotation,
  - mirroring (vertical or horizontal)
- - black-white or sepia,
+ - black-white
+ - sepia - only with Wand and ImageMagick,
  - contrast increase/decrease or normalize or histogram stretching,
  - color auto-level or equalize,
  - vignette
@@ -57,7 +58,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - text position:
    - outside: bottom, left/center/right
    - inside: by gravity or by position and rotate
- - customized sepia,
+ - customized sepia - only with Wand and ImageMagick,
  - equalize by channel,
  - contrast between -5 and +5,
  - customized contrast stretching,
