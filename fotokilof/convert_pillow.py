@@ -522,7 +522,7 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
 # ------------------------------------ Preview
 def preview(file_in, max_size, coord=""):
     """
-    preview generation by Wand
+    preview generation by Pillow
     file_in - fullname image file
     max_size - required size of image
     coord - coordinates for crop
@@ -565,15 +565,16 @@ def preview(file_in, max_size, coord=""):
             if len(coord) == 4:
                 with Drawing() as draw:
                     left_top = (coord[0], coord[1])
-                    left_bottom = (coord[0], coord[3])
-                    right_top = (coord[2], coord[1])
+                    # left_bottom = (coord[0], coord[3])
+                    # right_top = (coord[2], coord[1])
                     right_bottom = (coord[2], coord[3])
-                    draw.fill_color = "#FFFF00"
-                    draw.line(left_top, right_top)
-                    draw.line(left_top, left_bottom)
-                    draw.line(left_bottom, right_bottom)
-                    draw.line(right_top, right_bottom)
-                    draw(clone)
+                    outline_color = "#FFFF00"
+                    clone = ImageDraw.Draw.rectangle((left_top, right_bottom), outline=outline_color, fill=None, width=0)
+                    # draw.line(left_top, right_top)
+                    # draw.line(left_top, left_bottom)
+                    # draw.line(left_bottom, right_bottom)
+                    # draw.line(right_top, right_bottom)
+                    # draw(clone)
             preview_width, preview_height = clone.size
             file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
             save_close_clone(clone, file_preview)
