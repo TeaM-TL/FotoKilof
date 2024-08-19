@@ -84,15 +84,16 @@ Processing order for all selected conversion:
 
 - crop,
 - mirror,
-- black-white/sepia,
+- black-white,
+- sepia - only with Wand and ImageMagick,
 - contrast,
 - color normalize,
-- vignette,
+- vignette - only with Wand and ImageMagick,
 - rotate,
 - border,
 - resize,
-- text,
-- logo.
+- text - only with Wand and ImageMagick,
+- logo - only with Wand and ImageMagick.
 
 Processed is always on clone of picture in memory. Originals are not touched.
 
