@@ -34,21 +34,24 @@ Info
 
 import logging
 import time
-
 import PIL
 
 try:
     from wand.image import Image
     from wand.display import display
+
+    WAND_TEXT = "Wand found"
 except:
-    print(" ImageMagick or Wand-py not found")
+    WAND_TEXT = "ImageMagick or Wand-py not found"
 
 import common
 import mswindows
 import convert_pillow
 import convert_wand
 
+
 module_logger = logging.getLogger(__name__)
+module_logger.info(WAND_TEXT)
 
 
 def display_image(file_to_display, set_pillow):
@@ -227,7 +230,7 @@ def text(convert_data, set_pillow):
     start_time = time.time()
     if set_pillow:
         print("Not ready yet")
-        # result = convert_pillow.text(convert_data)
+        result = convert_pillow.text(convert_data)
     else:
         result = convert_wand.text(convert_data)
     module_logger.info("Text %ss", str(time.time() - start_time))

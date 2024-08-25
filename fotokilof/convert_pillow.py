@@ -305,7 +305,9 @@ def resize(clone, size):
         final_height = max_size * image_height / 100
 
     result = clone.resize((int(final_width), int(final_height)))
-    module_logger.debug(" Conversion: resize %s x %s", str(final_width), str(final_height))
+    module_logger.debug(
+        " Conversion: resize %s x %s", str(final_width), str(final_height)
+    )
     return result
 
 

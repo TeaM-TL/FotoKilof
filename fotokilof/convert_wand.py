@@ -53,13 +53,17 @@ try:
     from wand.drawing import Drawing
     from wand.image import Image
     from wand.version import fonts as fontsList
+
+    WAND_TEXT = "Wand and ImageMagics found"
 except:
-    print(" ImageMagick or Wand-py not found")
+    WAND_TEXT = "ImageMagick or Wand-py not found"
 
 # my modules
 import common
 
+
 module_logger = logging.getLogger(__name__)
+module_logger.info(WAND_TEXT)
 
 
 # ------------------------------------ Info
