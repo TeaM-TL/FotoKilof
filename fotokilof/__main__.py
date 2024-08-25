@@ -3463,13 +3463,11 @@ if img_logo_on.get() == 1:
 if check_version.get():
     if check_new_version.check_version(version.__version__)[0]:
         Messagebox.show_warning(
-            _(
-                "New version of FotoKilof is available.\nCurrent: "
-                + version.__version__
-                + ", New: "
-                + check_new_version.check_version(version.__version__)[1]
-                + "\nRun command:\npython3 -m pip install --upgrade fotokilof"
-            ),
+            "New version of FotoKilof is available.\nCurrent: "
+            + version.__version__
+            + ", New: "
+            + check_new_version.check_version(version.__version__)[1]
+            + "\nRun command:\npython3 -m pip install --upgrade fotokilof",
             title=_("New version of FotoKilof is available"),
         )
 
