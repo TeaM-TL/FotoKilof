@@ -270,33 +270,42 @@ def bw(clone, bw_variant, sepia):
 def resize(clone, size):
     """resize picture"""
     image_width, image_height = clone.size
-
     if "x" in size:
         width, height = size.split("x")
-        if int(width) > int(height):
-            max_size = int(width)
-        else:
-            max_size = int(height)
+        width = int(width)
+        height = int(height)
 
-        if image_width > image_height:
+        if width > height:
+            max_size = width
+        else:
+            max_size = height
+
+        ratio = 1
+        if width > height:
             final_width, final_height = (
                 max_size,
                 int(image_height * (max_size / image_width)),
             )
-        elif image_width < image_height:
+            if final_height > height:
+                ratio = height / final_height
+        elif width < height:
             final_width, final_height = (
                 int(image_width * (max_size / image_height)),
                 max_size,
             )
+            if final_width > width:
+                ratio = width / final_width
         else:
             final_width, final_height = (max_size, max_size)
+        final_width = int(final_width * ratio)
+        final_height = int(final_height * ratio)
     else:
         max_size = int(size.split("%")[0])
         final_width = max_size * image_width / 100
         final_height = max_size * image_height / 100
 
     result = clone.resize((int(final_width), int(final_height)))
-    module_logger.debug(" Conversion: resize")
+    module_logger.debug(" Conversion: resize %s x %s", str(final_width), str(final_height))
     return result
 
 
