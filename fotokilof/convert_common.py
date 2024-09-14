@@ -39,7 +39,6 @@ import PIL
 try:
     from wand.image import Image
     from wand.display import display
-
     WAND_TEXT = "Wand found"
 except:
     WAND_TEXT = "ImageMagick or Wand-py not found"
@@ -56,21 +55,21 @@ module_logger.info(WAND_TEXT)
 
 def display_image(file_to_display, set_pillow):
     """display image"""
-    file_in = common.spacja(file_to_display)
+    # file_in = common.spacja(file_to_display)
+    module_logger.info(" Display file: %s", file_to_display)
     try:
         start_time = time.time()
-        if set_pillow or mswindows.windows() or mswindows.macos():
-            with PIL.Image.open(file_in) as image:
+        if set_pillow:
+            with PIL.Image.open(file_to_display) as image:
                 image.show()
         else:
-            with Image(filename=file_in) as image:
+            with Image(filename=file_to_display) as image:
                 display(image)
-        module_logger.info("display_image: %ss", str(time.time() - start_time))
+            module_logger.info("Display_image: %ss", str(time.time() - start_time))
     except:
-        module_logger.error(" Error display file: %s", file_in)
+        module_logger.error(" Error display file: %s", file_to_display)
         result = None
-    else:
-        module_logger.debug(" Display file: %s", file_in)
+
     result = "OK"
 
     return result

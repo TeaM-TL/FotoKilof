@@ -253,10 +253,7 @@ def preview_new(file_out):
 def preview_orig_button():
     """original preview"""
     # global file_in_path
-    try:
-        convert_common.display_image(file_in_path.get(), PILLOW)
-    except:
-        logging.warning("No orig picture to preview")
+    convert_common.display_image(file_in_path.get(), PILLOW)
 
 
 def preview_new_button(event=None):
