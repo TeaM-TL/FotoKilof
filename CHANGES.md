@@ -2,6 +2,8 @@
 
 ## 2024
 
+5.0.1 fix display image in system viewer
+
 5.0.0 use PILLOW if ImageMagick or Wand are unavailable
 
 4.4.9 preview new when click on picture
