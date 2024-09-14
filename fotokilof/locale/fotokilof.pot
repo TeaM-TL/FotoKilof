@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-08-25 18:11+0200\n"
+"POT-Creation-Date: 2024-08-25 18:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -914,7 +914,7 @@ msgstr ""
 msgid "Display image to join by IMdisplay or default image viewer of OS"
 msgstr ""
 
-#: __main__.py:3467
+#: __main__.py:3471
 msgid "New version of FotoKilof is available"
 msgstr ""
 
