@@ -27,35 +27,59 @@ function for GUI:
 """
 
 from io import BytesIO
+import logging
 import re
 from PIL import Image
 
 import mswindows
 
-if mswindows.windows() == 1:
+if mswindows.windows():
     import win32clipboard
+
+if mswindows.macos():
+    import subprocess
+
+module_logger = logging.getLogger(__name__)
 
 
 def copy_to_clipboard(file_in):
     """
-    Copy results into clipboard
+    Copy results into clipboard for Windows
     https://stackoverflow.com/questions/34322132/copy-image-to-clipboard
-    Copy to clipboard works for Windows only
-
+    Copy results into clipboard for Macos
+    https://stackoverflow.com/questions/54008175/copy-an-image-to-macos-clipboard-using-python?rq=4
     debug needed!
     """
-    if mswindows.windows() == 1:
-        image = Image.open(file_in)
-
-        output = BytesIO()
-        image.convert("RGB").save(output, "BMP")
-        data = output.getvalue()[14:]
-        output.close()
+    image = Image.open(file_in)
+    # Create an in-memory file-like object
+    image_buffer = BytesIO()
+    if mswindows.windows():
+        image.convert("RGB").save(image_buffer, "BMP")
+        data = image_buffer.getvalue()[14:]
 
         win32clipboard.OpenClipboard()
         win32clipboard.EmptyClipboard()
         win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
         win32clipboard.CloseClipboard()
+        image_buffer.close()
+    elif mswindows.macos():
+        try:
+            subprocess.run(
+                [
+                    "osascript",
+                    "-e",
+                    'set the clipboard to (read (POSIX file "'
+                    + file_in
+                    + '") as JPEG picture)',
+                ]
+            )
+            module_logger.debug(
+                "Successful copied result into clipboard under MacOS: %s", file_in
+            )
+        except:
+            module_logger.debug(
+                "Failed copied result into clipboard under MacOS: %s", file_in
+            )
 
 
 def only_numbers(char):

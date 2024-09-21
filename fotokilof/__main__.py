@@ -979,7 +979,7 @@ def open_screenshot():
             magick.magick(" ", "-quiet", out_file, "import")
         except:
             logging.error("open_screenshot(), error in make screeshot ")
-            do_it = 1
+            do_it = 0
     if do_it:
         open_file_common(today_dir, filename)
 
@@ -1893,7 +1893,7 @@ img_crop_gravity = StringVar()
 img_border_on = IntVar()  # Border
 img_border_color = StringVar()
 img_normalize_on = IntVar()  # Normalize
-img_normalize = IntVar()  #  (1,2,3)
+img_normalize = IntVar()  # (1,2,3)
 normalize_channels = (
     "None",
     "Red",
@@ -2925,7 +2925,7 @@ b_custom_clear.pack(side=RIGHT, padx=5, pady=5)
 ###########################
 frame_compose = ttk.LabelFrame(frame_first_col, text=_("Compose"))
 
-### Main
+# ## Main
 frame_compose_main = ttk.Frame(frame_compose)
 b_compose_select = ttk.Button(
     frame_compose_main,
