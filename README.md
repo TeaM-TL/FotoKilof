@@ -44,7 +44,7 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - processing picture in the fly, originals are safe,
  - processing single file or whole directory,
  - take screenshot (Linux) or get picture from clipboard (Windows and MacOS) and use it as source picture,
- - after processing results is copied into clipboard (Windows),
+ - after processing results is copied into clipboard (Windows and MacOS),
  - display selected tools,
  - tools selection,
  - preview orignal and result,
