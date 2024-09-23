@@ -1,6 +1,7 @@
 # FotoKilof - GUI for ImageMagick
 
 GUI for the most used (by me) ImageMagick functionality for processing pictures.
+If ImageMagick or Wand are unavailable, Pillow is in use. There some limitation, but works in general.
 
 ## Screenshots
 
@@ -27,15 +28,15 @@ GUI for the most used (by me) ImageMagick functionality for processing pictures.
  - text annotation, inside or outside of picture (mems generator),
  - border around picture,
  - rotation,
- - mirroring (vertical or horizontal)
- - black-white
+ - mirroring (vertical or horizontal),
+ - black-white,
  - sepia - only with Wand and ImageMagick,
  - contrast increase/decrease or normalize or histogram stretching,
  - color auto-level or equalize,
- - vignette
+ - vignette - only with Wand and ImageMagick,
  - adding logo image on picture,
- - compose two image in one picture
- - file formats: JPG, PNG, TIFF, SVG
+ - compose two image in one picture,
+ - file formats: JPG, PNG, TIFF, SVG,
  - format conversion into JPG, PNG, TIFF.
 
 ## Functionality:
@@ -93,7 +94,8 @@ Processing order for all selected conversion:
 - rotate,
 - border,
 - resize,
-- text - only with Wand and ImageMagick,
+- text,
+- compose two image in one picture,
 - logo - only with Wand and ImageMagick.
 
 Processed is always on clone of picture in memory. Originals are not touched.
