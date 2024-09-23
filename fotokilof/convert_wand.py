@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Info
-- font_list - get list of available fonts
+- fonts_list - get list of available fonts
 Common
 - make_clone - open origal picture and make clone for processing
 - save_close_clone - save clone into file and close clone

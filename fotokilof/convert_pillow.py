@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Info
-- font_list - get list of available fonts
+- fonts_list - get list of available fonts
 Common
 - make_clone - open origal picture and make clone for processing
 - save_close_clone - save clone into file and close clone
@@ -46,10 +46,15 @@ Converters
 import logging
 import tempfile
 import os
-from PIL import Image, ImageDraw, ImageOps
+import os.path
+from PIL import Image, ImageDraw, ImageOps, ImageFont
 
 # my modules
 import common
+import mswindows
+
+if not mswindows.windows():
+    from fclist import fclist
 
 module_logger = logging.getLogger(__name__)
 
@@ -62,7 +67,27 @@ def version():
 
 def fonts_list():
     """list of available fonts"""
-    return fontsList()
+    result = []
+    if mswindows.windows():
+        paths = [
+            os.path.join(os.environ["WINDIR"], "fonts"),
+            os.path.join(os.path.expanduser("~"))
+            + "\\AppData\\Local\\Microsoft\\Windows\\Fonts",
+        ]
+        for path in paths:
+            result.append(os.path.listdir(path))
+    else:
+        for font in fclist(fontformat="TrueType"):
+            result.append(font.file)
+    result.sort()
+    result_uniq = []
+    for font in result:
+        if not result_uniq:
+            result_uniq.append(font)
+        else:
+            if font != result_uniq[-1]:
+                result_uniq.append(font)
+    return result_uniq
 
 
 # ------------------------------------ Common
@@ -104,26 +129,26 @@ def get_image_size(filename):
 
 
 def gravitation(gravity):
-    """translate gravitation name from Tk to Wand-py specification"""
+    """translate gravitation name from Tk to Pillow specification"""
 
     if gravity == "N":
-        result = "north"
+        result = "ma"
     if gravity == "NW":
-        result = "north_west"
+        result = "la"
     if gravity == "NE":
-        result = "north_east"
+        result = "ra"
     if gravity == "W":
-        result = "west"
+        result = "lm"
     if gravity == "C":
-        result = "center"
+        result = "mm"
     if gravity == "E":
-        result = "east"
+        result = "rm"
     if gravity == "SW":
-        result = "south_west"
+        result = "ld"
     if gravity == "S":
-        result = "south"
+        result = "ld"
     if gravity == "SE":
-        result = "south_east"
+        result = "rd"
     if gravity == "0":
         result = "0"
 
@@ -193,63 +218,100 @@ def text(convert_data):
     in_out = convert_data[1]
     own = convert_data[2]
     angle = convert_data[3]
+    angle = 0
     text_color = convert_data[4]
     font = convert_data[5]
-    text_size = convert_data[6]
+    text_size = int(convert_data[6])
     gravity_onoff = convert_data[7]
     gravity = convert_data[8]
     box = convert_data[9]
+    box = 0
     box_color = convert_data[10]
-    text_x = convert_data[11]
-    text_y = convert_data[12]
+    text_x = int(common.empty(convert_data[11]))
+    text_y = int(common.empty(convert_data[12]))
     text_string = convert_data[13]
+
+    image_width, image_height = clone.size
+    font = ImageFont.truetype(font, text_size)
+
     if len(text_string) > 0:
-        draw_gravity = gravitation(gravity)
         if in_out == 0:
             # inside
             if gravity_onoff == 0:
-                draw_gravity = "forget"
-            if angle == -1:
-                angle = common.empty(own)
-        else:
-            # outside
-            if box:
-                backgroud_color = box_color
+                draw_gravity = "lt"
             else:
-                backgroud_color = "#FFFFFF"
-            angle = 0
-            text_x = 0
-            text_y = 0
-
-        draw = Drawing()
-        if box and not in_out:
-            draw.text_under_color = box_color
-        draw.fill_color = text_color
-        draw.font = font
-        draw.font_size = common.empty(text_size)
-        draw.gravity = draw_gravity
-
-        if in_out == 0:
-            # inside
-            clone.annotate(
+                if gravity == "NW":
+                    draw_gravity = "lt"
+                elif gravity == "N":
+                    draw_gravity = "mt"
+                    text_x += image_width / 2
+                elif gravity == "NE":
+                    draw_gravity = "rt"
+                    text_x = image_width - text_x
+                elif gravity == "W":
+                    draw_gravity = "lm"
+                    text_y += image_height / 2
+                elif gravity == "C":
+                    draw_gravity = "mm"
+                    text_x += image_width / 2
+                    text_y += image_height / 2
+                elif gravity == "E":
+                    draw_gravity = "rm"
+                    text_x = image_width - text_x
+                    text_y += image_height / 2
+                elif gravity == "SW":
+                    draw_gravity = "lb"
+                    text_y = image_height - text_y
+                elif gravity == "S":
+                    draw_gravity = "mb"
+                    text_x += image_width / 2
+                    text_y = image_height - text_y
+                elif gravity == "SE":
+                    draw_gravity = "rb"
+                    text_x = image_width - text_x
+                    text_y = image_height - text_y
+            draw_text = ImageDraw.Draw(clone)
+            draw_text.text(
+                (text_x, text_y),
                 text_string,
-                draw,
-                angle=common.empty(angle),
-                left=common.empty(text_x),
-                baseline=common.empty(text_y),
+                fill=text_color,
+                font=font,
+                anchor=draw_gravity,
             )
+            result = clone
+            module_logger.debug(" Conversion: text inside")
         else:
             # outside
-            metrics = draw.get_font_metrics(clone, text_string, multiline=False)
-            with Image(
-                width=clone.width,
-                height=int(metrics.text_height),
-                background=backgroud_color,
-            ) as canvas:
-                canvas.annotate(text_string, draw)
-                clone.sequence.append(canvas)
-                clone.concat(stacked=True)
-    module_logger.debug(" Conversion: text %s", str(in_out))
+            left, top, right, bottom = font.getbbox(text_string)
+            if gravity == "W":
+                text_x = 0
+                draw_gravity = "lt"
+            elif gravity == "C":
+                text_x = image_width / 2
+                draw_gravity = "mt"
+            elif gravity == "E":
+                text_x = image_width
+                draw_gravity = "rt"
+            else:
+                text_x = 0
+                draw_gravity = "lt"
+            image_text = Image.new("RGB", (image_width, bottom), box_color)
+            draw_outside_text = ImageDraw.Draw(image_text)
+            draw_outside_text.text(
+                (text_x, top / 2),
+                text_string,
+                fill=text_color,
+                font=font,
+                anchor=draw_gravity,
+            )
+            image_outside = Image.new("RGBA", (image_width, image_height + bottom))
+            image_outside.paste(clone)
+            image_outside.paste(image_text, (0, image_height))
+            result = image_outside
+            module_logger.debug(" Conversion: text outside")
+
+        module_logger.debug(" Conversion: text")
+    return result
 
 
 def bw(clone, bw_variant, sepia):

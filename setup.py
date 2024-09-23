@@ -28,7 +28,7 @@ setup(
     python_requires='>=3.9',
     include_package_data=True,
     packages=find_packages(),
-    install_requires=['pillow','wand','ttkbootstrap','requests'],
+    install_requires=['fclist-cffi','pillow','requests','ttkbootstrap','wand'],
     entry_points = {
         "gui_scripts": [
             "fotokilof = fotokilof:__main__",

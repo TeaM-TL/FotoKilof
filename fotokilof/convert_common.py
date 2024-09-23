@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Info
+- fonts_list - fonts list
 - display_image - display image
 - get_image_size - identify picture: width and height
 - preview - preview image
@@ -43,14 +44,24 @@ try:
 except:
     WAND_TEXT = "ImageMagick or Wand-py not found"
 
-import common
-import mswindows
 import convert_pillow
 import convert_wand
 
 
 module_logger = logging.getLogger(__name__)
 module_logger.info(WAND_TEXT)
+
+
+def fonts_list(set_pillow):
+    """list of available fonts"""
+    start_time = time.time()
+    if set_pillow:
+        result = convert_pillow.fonts_list()
+    else:
+        result = convert_wand.fonts_list()
+    module_logger.info("Get fonts list: %ss", str(time.time() - start_time))
+    print(len(result))
+    return result
 
 
 def display_image(file_to_display, set_pillow):
@@ -228,7 +239,6 @@ def text(convert_data, set_pillow):
     """black and white or sepia"""
     start_time = time.time()
     if set_pillow:
-        print("Not ready yet")
         result = convert_pillow.text(convert_data)
     else:
         result = convert_wand.text(convert_data)

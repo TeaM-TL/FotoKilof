@@ -119,7 +119,7 @@ def spacja(file_path):
         result = file_path
     else:
         file_path = os.path.normpath(file_path)
-        if mswindows.windows() == 1:
+        if mswindows.windows():
             czy_spacja = re.search(" ", file_path)
             if czy_spacja is not None:
                 file_path = '"' + file_path + '"'
@@ -207,7 +207,7 @@ def list_of_images(cwd):
     list_of_files = os.listdir(cwd)
     file_list = []
     patterns = ("*.JPG", "*.JPEG", "*.PNG", "*.TIF", "*.TIFF")
-    if mswindows.windows() == 0:
+    if not mswindows.windows():
         patterns = patterns + ("*.jpg", "*.jpeg", "*.png", "*.tif", "*.tiff")
 
     for pattern in patterns:

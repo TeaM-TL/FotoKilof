@@ -748,8 +748,8 @@ def convert_text_button():
 
 
 def fonts():
-    """preparing font names for ImageMagick and load into listbox"""
-    result = convert_wand.fonts_list()
+    """preparing font names for ImageMagick or Pillow and load into listbox"""
+    result = convert_common.fonts_list(PILLOW)
     co_text_font["values"] = result
     return result
 
@@ -2503,7 +2503,8 @@ e_text_y = ttk.Entry(
 
 rb_text_out.grid(row=2, column=1, sticky=W, padx=5, pady=1)
 rb_text_in.grid(row=3, column=1, sticky=W, padx=5, pady=1)
-cb_text_box.grid(row=4, column=1, sticky=W, padx=5, pady=1)
+if not PILLOW:
+    cb_text_box.grid(row=4, column=1, sticky=W, padx=5, pady=1)
 cb_text_gravity.grid(row=2, column=3, columnspan=2, sticky=W, pady=1)
 
 l_text_xy_x.grid(row=3, column=3, sticky=W, padx=5, pady=1)
@@ -2594,13 +2595,14 @@ rb_text_rotate_own = ttk.Radiobutton(
 e_text_angle = ttk.Entry(
     frame_text_rotate, width=3, validate="key", validatecommand=(validation, "%S")
 )
-rb_text_rotate_0.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
-rb_text_rotate_90.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
-rb_text_rotate_180.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
-rb_text_rotate_270.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
-rb_text_rotate_own.grid(row=1, column=5, sticky=(N, W, E, S), padx=5, pady=5)
-e_text_angle.grid(row=1, column=6, sticky=(N, W, E, S), padx=5, pady=5)
-frame_text_rotate.grid(row=6, column=1, columnspan=6, sticky=W, padx=5)
+if not PILLOW:
+    rb_text_rotate_0.grid(row=1, column=1, sticky=(N, W, E, S), padx=5, pady=5)
+    rb_text_rotate_90.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
+    rb_text_rotate_180.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
+    rb_text_rotate_270.grid(row=1, column=4, sticky=(N, W, E, S), padx=5, pady=5)
+    rb_text_rotate_own.grid(row=1, column=5, sticky=(N, W, E, S), padx=5, pady=5)
+    e_text_angle.grid(row=1, column=6, sticky=(N, W, E, S), padx=5, pady=5)
+    frame_text_rotate.grid(row=6, column=1, columnspan=6, sticky=W, padx=5)
 
 ###########################
 # Rotate
@@ -3425,13 +3427,9 @@ root.title(window_title)
 ini_read_wraper()  # Loading settings from config file
 l_border_color.configure(bg=img_border_color.get())
 l_compose_color.configure(bg=img_compose_color.get())
-if not PILLOW:
-    img_text_font_dict = fonts()  # Reading available fonts
-else:
-    # root.withdraw()
+img_text_font_dict = fonts()  # Reading available fonts
+if PILLOW:
     # disable processing buttons
-    img_text_on.set(0)
-    cb_text.configure(state=DISABLED)
     img_logo_on.set(0)
     cb_logo.configure(state=DISABLED)
     img_custom_on.set(0)
@@ -3442,8 +3440,6 @@ else:
     cb_vignette.configure(state=DISABLED)
     img_exif_on.set(0)
     cb_exif.configure(state=DISABLED)
-    # b_file_select_screenshot.configure(state=DISABLED)
-    # root.deiconify()
 
 tools_set(0)
 text_tool_hide_show()
