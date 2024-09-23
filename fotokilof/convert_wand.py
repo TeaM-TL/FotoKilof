@@ -46,8 +46,9 @@ Converters
 """
 
 import logging
-import os
 import tempfile
+import os
+import os.path
 
 try:
     from wand.drawing import Drawing
@@ -85,11 +86,14 @@ def make_clone(file_to_clone, color=None):
 
 def save_close_clone(clone, file_out, exif=0):
     """save and close clone after processing"""
-    if not exif:
-        clone.strip()
-    module_logger.debug(" Save file: %s", file_out)
-    clone.save(filename=file_out)
-    clone.close()
+    if clone is None:
+        module_logger.error(" Clone for %s is None", file_out)
+    else:
+        if not exif:
+            clone.strip()
+        module_logger.debug(" Save file: %s", file_out)
+        clone.save(filename=file_out)
+        clone.close()
 
 
 def get_image_size(filename):
@@ -369,7 +373,7 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
     color - color to fill gap if no autoresize
     gravity - position if no autoresize
     """
-    if len(compose_file):
+    if os.path.exists(compose_file):
         clone_width, clone_height = clone.size
         with Image(filename=compose_file) as compose_image:
             compose_image_width, compose_image_height = compose_image.size
@@ -382,7 +386,9 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                 else:
                     canvas_height = compose_image_height
                 # for autoresize
-                resize_width = compose_image_width * clone_height / compose_image_height
+                resize_width = int(
+                    compose_image_width * clone_height / compose_image_height
+                )
                 resize_height = clone_height
                 # for no autoresize
                 position_x1 = 0
@@ -393,18 +399,18 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                     if gravity == "N":
                         position_y2 = 0
                     elif gravity == "S":
-                        position_y2 = canvas_height - compose_image_height
+                        position_y2 = int(canvas_height - compose_image_height)
                     else:
-                        position_y2 = canvas_height / 2 - compose_image_height / 2
+                        position_y2 = int(canvas_height / 2 - compose_image_height / 2)
                 else:
                     # orig < compose
                     position_y2 = 0
                     if gravity == "N":
                         position_y1 = 0
                     elif gravity == "S":
-                        position_y1 = canvas_height - clone_height
+                        position_y1 = int(canvas_height - clone_height)
                     else:
-                        position_y1 = canvas_height / 2 - clone_height / 2
+                        position_y1 = int(canvas_height / 2 - clone_height / 2)
             else:
                 stacked = True
                 # for canvas
@@ -412,10 +418,12 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                     canvas_width = clone_width
                 else:
                     canvas_width = compose_image_width
-                canvas_height = clone_height + compose_image_height
+                canvas_height = int(clone_height + compose_image_height)
                 # for autoresize
                 resize_width = clone_width
-                resize_height = compose_image_height * clone_width / compose_image_width
+                resize_height = int(
+                    compose_image_height * clone_width / compose_image_width
+                )
                 # for no autoresize
                 position_y1 = 0
                 position_y2 = clone_height
@@ -425,18 +433,18 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                     if gravity == "W":
                         position_x2 = 0
                     elif gravity == "E":
-                        position_x2 = canvas_width - compose_image_width
+                        position_x2 = int(canvas_width - compose_image_width)
                     else:
-                        position_x2 = canvas_width / 2 - compose_image_width / 2
+                        position_x2 = int(canvas_width / 2 - compose_image_width / 2)
                 else:
                     # orig < compose
                     position_x2 = 0
                     if gravity == "W":
                         position_x1 = 0
                     elif gravity == "E":
-                        position_x1 = canvas_width - clone_width
+                        position_x1 = int(canvas_width - clone_width)
                     else:
-                        position_x1 = canvas_width / 2 - clone_width / 2
+                        position_x1 = int(canvas_width / 2 - clone_width / 2)
 
             if autoresize:
                 # autoresize, no problem
@@ -471,8 +479,11 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                         )
                         draw(canvas)
                     clone.image_set(canvas)
+    else:
+        module_logger.warning(" Conversion: compose - missing file to compose")
 
     module_logger.debug(" Conversion: compose")
+    return clone
 
 
 # ------------------------------------ Preview

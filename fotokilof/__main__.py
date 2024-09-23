@@ -330,13 +330,14 @@ def apply_all_button():
                 # compose
                 clone = convert_common.make_clone(file_in, PILLOW)
                 if clone is not None:
-                    convert_wand.compose(
+                    clone = convert_common.compose(
                         clone,
                         img_compose_file.get(),
                         img_compose_right.get(),
                         img_compose_autoresize.get(),
                         img_compose_color.get(),
                         img_compose_gravity.get(),
+                        PILLOW
                     )
                     subdir = work_dir.get()
             else:
@@ -628,13 +629,14 @@ def convert_compose_button():
     root.update_idletasks()
     clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_wand.compose(
+        clone = convert_common.compose(
             clone,
             img_compose_file.get(),
             img_compose_right.get(),
             img_compose_autoresize.get(),
             img_compose_color.get(),
             img_compose_gravity.get(),
+            PILLOW
         )
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW

@@ -103,11 +103,14 @@ def make_clone(file_to_clone, color=None):
 
 def save_close_clone(clone, file_out, ppm=0, exif=0):
     """save and close clone after processing"""
-    # if not exif:
-    #     clone.strip()
-    module_logger.debug(" Save file: %s", file_out)
-    clone.save(file_out)
-    clone.close()
+    if clone is None:
+        module_logger.error(" Clone for %s is None", file_out)
+    else:
+        # if not exif:
+        #     clone.strip()
+        module_logger.debug(" Save file: %s", file_out)
+        clone.save(file_out)
+        clone.close()
 
 
 def get_image_size(filename):
@@ -486,20 +489,22 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
     color - color to fill gap if no autoresize
     gravity - position if no autoresize
     """
-    if len(compose_file):
+    result = None
+    if os.path.exists(compose_file):
         clone_width, clone_height = clone.size
-        with Image(filename=compose_file) as compose_image:
+        with Image.open(compose_file) as compose_image:
             compose_image_width, compose_image_height = compose_image.size
             if right:
-                stacked = False
                 # for canvas
-                canvas_width = clone_width + compose_image_width
+                new_image_width = clone_width + compose_image_width
                 if clone_height >= compose_image_height:
-                    canvas_height = clone_height
+                    new_image_height = clone_height
                 else:
-                    canvas_height = compose_image_height
+                    new_image_height = compose_image_height
                 # for autoresize
-                resize_width = compose_image_width * clone_height / compose_image_height
+                resize_width = int(
+                    compose_image_width * clone_height / compose_image_height
+                )
                 resize_height = clone_height
                 # for no autoresize
                 position_x1 = 0
@@ -510,29 +515,32 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                     if gravity == "N":
                         position_y2 = 0
                     elif gravity == "S":
-                        position_y2 = canvas_height - compose_image_height
+                        position_y2 = int(new_image_height - compose_image_height)
                     else:
-                        position_y2 = canvas_height / 2 - compose_image_height / 2
+                        position_y2 = int(
+                            new_image_height / 2 - compose_image_height / 2
+                        )
                 else:
                     # orig < compose
                     position_y2 = 0
                     if gravity == "N":
                         position_y1 = 0
                     elif gravity == "S":
-                        position_y1 = canvas_height - clone_height
+                        position_y1 = int(new_image_height - clone_height)
                     else:
-                        position_y1 = canvas_height / 2 - clone_height / 2
+                        position_y1 = int(new_image_height / 2 - clone_height / 2)
             else:
-                stacked = True
                 # for canvas
                 if clone_width >= compose_image_width:
-                    canvas_width = clone_width
+                    new_image_width = clone_width
                 else:
-                    canvas_width = compose_image_width
-                canvas_height = clone_height + compose_image_height
+                    new_image_width = compose_image_width
+                new_image_height = int(clone_height + compose_image_height)
                 # for autoresize
                 resize_width = clone_width
-                resize_height = compose_image_height * clone_width / compose_image_width
+                resize_height = int(
+                    compose_image_height * clone_width / compose_image_width
+                )
                 # for no autoresize
                 position_y1 = 0
                 position_y2 = clone_height
@@ -542,55 +550,30 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                     if gravity == "W":
                         position_x2 = 0
                     elif gravity == "E":
-                        position_x2 = canvas_width - compose_image_width
+                        position_x2 = int(new_image_width - compose_image_width)
                     else:
-                        position_x2 = canvas_width / 2 - compose_image_width / 2
+                        position_x2 = int(new_image_width / 2 - compose_image_width / 2)
                 else:
                     # orig < compose
                     position_x2 = 0
                     if gravity == "W":
                         position_x1 = 0
                     elif gravity == "E":
-                        position_x1 = canvas_width - clone_width
+                        position_x1 = int(new_image_width - clone_width)
                     else:
-                        position_x1 = canvas_width / 2 - clone_width / 2
+                        position_x1 = int(new_image_width / 2 - clone_width / 2)
 
             if autoresize:
-                pass
-                # # autoresize, no problem
-                # resize_value = str(resize_width) + "x" + str(resize_height)
-                # compose_image.transform(crop="", resize=resize_value)
-                # clone.sequence.append(compose_image)
-                # clone.concat(stacked=stacked)
-            else:
-                # no autoresize
-                with Image(
-                    width=canvas_width, height=canvas_height, background=color
-                ) as canvas:
-                    with Drawing() as draw:
-                        # original picture
-                        draw.composite(
-                            operator="over",
-                            left=position_x1,
-                            top=position_y1,
-                            width=clone_width,
-                            height=clone_height,
-                            image=clone,
-                        )
-                        draw(canvas)
-                        # picture to join
-                        draw.composite(
-                            operator="over",
-                            left=position_x2,
-                            top=position_y2,
-                            width=compose_image_width,
-                            height=compose_image_height,
-                            image=compose_image,
-                        )
-                        draw(canvas)
-                    clone.image_set(canvas)
+                compose_image = compose_image.resize((resize_width, resize_height))
 
+            image_new = Image.new("RGB", (new_image_width, new_image_height), color)
+            image_new.paste(clone, (position_x1, position_y1))
+            image_new.paste(compose_image, (position_x2, position_y2))
+            result = image_new
+    else:
+        module_logger.warning(" Conversion: compose - missing file to compose")
     module_logger.debug(" Conversion: compose")
+    return result
 
 
 # ------------------------------------ Preview

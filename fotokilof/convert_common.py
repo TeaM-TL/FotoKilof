@@ -31,6 +31,14 @@ Info
 - save_close_clone
 - rotate
 - mirror
+- resize
+- border
+- nornalize
+- bw
+- contrast
+- crop
+- text
+- compose
 """
 
 import logging
@@ -243,4 +251,14 @@ def text(convert_data, set_pillow):
     else:
         result = convert_wand.text(convert_data)
     module_logger.info("Text %ss", str(time.time() - start_time))
+    return result
+
+def compose(clone, compose_file, right, autoresize, color, gravity, set_pillow):
+    """join two pictures"""
+    start_time = time.time()
+    if set_pillow:
+        result = convert_pillow.compose(clone, compose_file, right, autoresize, color, gravity)
+    else:
+        result = convert_wand.compose(clone, compose_file, right, autoresize, color, gravity)
+    module_logger.info("Compose %ss", str(time.time() - start_time))
     return result
