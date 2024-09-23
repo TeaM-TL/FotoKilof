@@ -40,6 +40,7 @@ import PIL
 try:
     from wand.image import Image
     from wand.display import display
+
     WAND_TEXT = "Wand found"
 except:
     WAND_TEXT = "ImageMagick or Wand-py not found"
@@ -60,7 +61,6 @@ def fonts_list(set_pillow):
     else:
         result = convert_wand.fonts_list()
     module_logger.info("Get fonts list: %ss", str(time.time() - start_time))
-    print(len(result))
     return result
 
 

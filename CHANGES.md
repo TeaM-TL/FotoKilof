@@ -2,7 +2,7 @@
 
 ## 2024
 
-5.0.3 text conversion works with Pillow (without background)
+5.0.3 compose and text conversion works with Pillow
 
 5.0.2 copy result into clipboard under macos
 

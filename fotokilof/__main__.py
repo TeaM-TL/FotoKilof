@@ -3434,8 +3434,6 @@ if PILLOW:
     cb_logo.configure(state=DISABLED)
     img_custom_on.set(0)
     cb_custom.configure(state=DISABLED)
-    img_compose_on.set(0)
-    cb_compose.configure(state=DISABLED)
     img_vignette_on.set(0)
     cb_vignette.configure(state=DISABLED)
     img_exif_on.set(0)
