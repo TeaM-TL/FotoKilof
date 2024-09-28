@@ -205,7 +205,7 @@ def text(file_ini, fonts_dict):
     elif mswindows.macos:
         default_font = "Helvetica"
     else:
-        default_font = "DejaVu Sans"
+        default_font = "DejaVu-Sans"
     try:
         text_font = config.get("Text", "font")
     except:
