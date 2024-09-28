@@ -36,6 +36,7 @@ import os
 import platform
 import sys
 import tempfile
+import time
 
 from tkinter import (
     PhotoImage,
@@ -110,7 +111,8 @@ logging.basicConfig(
     level=logging.DEBUG,
 )
 # Start logging
-logging.info("Start")
+start_time = time.time()
+logging.info("Start: %s", start_time)
 logging.info(IMAGEMAGICK_WAND_VERSION)
 
 if mswindows.windows() or mswindows.macos():
@@ -337,7 +339,7 @@ def apply_all_button():
                         img_compose_autoresize.get(),
                         img_compose_color.get(),
                         img_compose_gravity.get(),
-                        PILLOW
+                        PILLOW,
                     )
                     subdir = work_dir.get()
             else:
@@ -636,7 +638,7 @@ def convert_compose_button():
             img_compose_autoresize.get(),
             img_compose_color.get(),
             img_compose_gravity.get(),
-            PILLOW
+            PILLOW,
         )
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW
@@ -1832,7 +1834,7 @@ def text_tool_hide_show():
 ###############################################################################
 # GUI main window
 ###############################################################################
-
+logging.info("GUI: %ss", str(time.time() - start_time))
 title_begin = (
     version.__author__ + " : " + version.__appname__ + " " + version.__version__ + " | "
 )
@@ -3411,7 +3413,7 @@ ToolTip(
     b_preview_new_run,
     text=_("Display image to join by IMdisplay or default image viewer of OS"),
 )
-
+logging.debug("End GUI: %ss", str(time.time() - start_time))
 ##########################################
 # Run functions
 #
@@ -3426,10 +3428,10 @@ Python_version = (
 )
 window_title = title_begin + IMAGEMAGICK_WAND_VERSION + ", " + Python_version + " | "
 root.title(window_title)
+img_text_font_dict = fonts()  # Reading available fonts
 ini_read_wraper()  # Loading settings from config file
 l_border_color.configure(bg=img_border_color.get())
 l_compose_color.configure(bg=img_compose_color.get())
-img_text_font_dict = fonts()  # Reading available fonts
 if PILLOW:
     # disable processing buttons
     img_logo_on.set(0)
@@ -3464,6 +3466,7 @@ if check_version.get():
             title=_("New version of FotoKilof is available"),
         )
 
+logging.info("End start: %ss", str(time.time() - start_time))
 root.mainloop()
 
 # EOF

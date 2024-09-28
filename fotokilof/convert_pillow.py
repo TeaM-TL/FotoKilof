@@ -584,15 +584,6 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
     else:
         module_logger.warning(" Conversion: compose - missing file to compose")
     module_logger.debug(" Conversion: compose")
-    print(
-        clone_width,
-        clone_height,
-        compose_image_width,
-        compose_image_height,
-        new_image_width,
-        new_image_height,
-    )
-    print(position_x1, position_y1, position_x2, position_y2)
     return result
 
 
