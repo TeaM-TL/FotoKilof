@@ -98,7 +98,6 @@ import gui
 import ini_read
 import ini_save
 import magick
-import mswindows
 import version
 
 # logger = logging.getLogger(__name__)
@@ -115,10 +114,18 @@ start_time = time.time()
 logging.info("Start: %s", start_time)
 logging.info(IMAGEMAGICK_WAND_VERSION)
 
-if mswindows.windows() or mswindows.macos():
+if platform.system() == "Windows":
+    OS = "Windows"
+elif platform.system() == "Darwin":
+    OS = "MACOS"
+else:
+    OS = "UNIX"
+
+
+if OS != "UNIX":
     from PIL import ImageGrab
 # set locale and clipboard for Windows
-if mswindows.windows():
+if OS == "Windows":
     import locale
 
     if os.getenv("LANG") is None:
@@ -135,7 +142,7 @@ _ = translate.gettext
 
 ###################
 # CONSTANTS
-if mswindows.windows() == 1:
+if OS == "Windows":
     PREVIEW_ORIG = 400  # preview original
     PREVIEW_NEW = 400  # preview result
     PREVIEW_COMPOSE = 400  # preview compose
@@ -228,7 +235,7 @@ def preview_new(file_out):
         preview_new_clear()
     else:
         preview_picture = convert_common.preview(
-            file_out, int(co_preview_selector_new.get()), PILLOW
+            file_out, int(co_preview_selector_new.get()), PILLOW, OS
         )
         try:
             pi_preview_new.configure(file=preview_picture["filename"])
@@ -249,7 +256,7 @@ def preview_new(file_out):
         except:
             logging.error("preview_new: Cannot read preview")
 
-        gui.copy_to_clipboard(file_out)
+        gui.copy_to_clipboard(file_out, OS)
 
 
 def preview_orig_button():
@@ -321,7 +328,7 @@ def apply_all_button():
             files_list = [file_in_path.get()]
         else:
             dirname = os.path.dirname(file_in_path.get())
-            files_list_short = common.list_of_images(dirname)
+            files_list_short = common.list_of_images(dirname, OS)
             files_list = []
             for filename_short in files_list_short:
                 files_list.append(os.path.join(dirname, filename_short))
@@ -478,7 +485,7 @@ def convert_custom_button():
         file_in_path.get(), work_dir.get(), co_apply_type.get()
     )
     cmd = t_custom.get("1.0", "end-1c")
-    result = magick.magick(cmd, file_in_path.get(), out_file, "convert")
+    result = magick.magick(cmd, file_in_path.get(), out_file, "convert", OS)
     if result == "OK":
         preview_new(out_file)
     progress_files.set(_("done"))
@@ -753,7 +760,7 @@ def convert_text_button():
 
 def fonts():
     """preparing font names for ImageMagick or Pillow and load into listbox"""
-    result = convert_common.fonts_list(PILLOW)
+    result = convert_common.fonts_list(PILLOW, OS)
     co_text_font["values"] = result
     return result
 
@@ -864,7 +871,7 @@ def open_file_common(cwd, filename):
 
 def open_file_dialog(dir_initial, title):
     """open file dialog function for image and logo"""
-    if mswindows.windows() == 1:
+    if OS == "Windows":
         filetypes = (
             (_("All graphics files"), ".JPG .JPEG .PNG .TIF .TIFF"),
             (_("JPG files"), ".JPG .JPEG"),
@@ -901,7 +908,7 @@ def open_file_last():
     if file_in_path.get():
         if os.path.isfile(file_in_path.get()):
             dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name)
+            file_list = common.list_of_images(dir_name, OS)
             current_file = os.path.basename(file_in_path.get())
             filename = common.file_from_list_of_images(file_list, current_file, "last")
             open_file_common(dir_name, filename)
@@ -917,7 +924,7 @@ def open_file_next():
     if file_in_path.get():
         if os.path.isfile(file_in_path.get()):
             dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name)
+            file_list = common.list_of_images(dir_name, OS)
             current_file = os.path.basename(file_in_path.get())
             filename = common.file_from_list_of_images(file_list, current_file, "next")
             open_file_common(dir_name, filename)
@@ -933,7 +940,7 @@ def open_file_first():
     if file_in_path.get():
         if os.path.isfile(file_in_path.get()):
             dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name)
+            file_list = common.list_of_images(dir_name, OS)
             current_file = os.path.basename(file_in_path.get())
             filename = common.file_from_list_of_images(file_list, current_file, "first")
             open_file_common(dir_name, filename)
@@ -949,7 +956,7 @@ def open_file_prev():
     if file_in_path.get():
         if os.path.isfile(file_in_path.get()):
             dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name)
+            file_list = common.list_of_images(dir_name, OS)
             current_file = os.path.basename(file_in_path.get())
             filename = common.file_from_list_of_images(
                 file_list, current_file, "previous"
@@ -971,18 +978,18 @@ def open_screenshot():
     filename = now.strftime("%F_%H-%M-%S_%f") + ".png"
     out_file = os.path.normpath(os.path.join(today_dir, filename))
     do_it = 1
-    if mswindows.windows() or mswindows.macos():
+    if OS == "UNIX":
+        try:
+            magick.magick(" ", "-quiet", out_file, "import", OS)
+        except:
+            logging.error("open_screenshot(), error in make screeshot ")
+            do_it = 0
+    else:
         screenshot = ImageGrab.grabclipboard()
         try:
             screenshot.save(out_file, "PNG")
         except:
             logging.error("open_screenshot(), error save from clipboards")
-            do_it = 0
-    else:
-        try:
-            magick.magick(" ", "-quiet", out_file, "import")
-        except:
-            logging.error("open_screenshot(), error in make screeshot ")
             do_it = 0
     if do_it:
         open_file_common(today_dir, filename)
@@ -1082,7 +1089,7 @@ def ini_read_wraper():
     e2_resize.delete(0, "end")
     e2_resize.insert(0, ini_entries["resize_size_percent"])
     # text
-    ini_entries = ini_read.text(FILE_INI, img_text_font_dict)
+    ini_entries = ini_read.text(FILE_INI, img_text_font_dict, OS)
     img_text_on.set(ini_entries["img_text_on"])
     img_text_inout.set(ini_entries["img_text_inout"])
     img_text_font.set(ini_entries["text_font"])
@@ -1517,6 +1524,7 @@ def preview_orig():
                 file_in_path.get(),
                 int(co_preview_selector_orig.get()),
                 PILLOW,
+                OS,
                 crop_rectangle,
             )
 
@@ -1551,7 +1559,7 @@ def preview_logo():
     if os.path.isfile(file_logo_path.get()):
         l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
         preview_picture = convert_common.preview(
-            file_logo_path.get(), PREVIEW_LOGO, PILLOW
+            file_logo_path.get(), PREVIEW_LOGO, PILLOW, OS
         )
 
         try:
@@ -1578,7 +1586,7 @@ def preview_compose():
     if os.path.isfile(img_compose_file.get()):
         # l_compose_preview.configure(text=os.path.basename(img_compose_file.get()))
         preview_picture = convert_common.preview(
-            img_compose_file.get(), int(co_compose_preview_selector.get()), PILLOW
+            img_compose_file.get(), int(co_compose_preview_selector.get()), PILLOW, OS
         )
 
         try:
@@ -1982,7 +1990,7 @@ b_file_select = ttk.Button(
 b_file_select_screenshot = ttk.Button(
     frame_file_select, text=_("Screenshot"), command=open_screenshot, bootstyle="info"
 )
-if mswindows.windows() or mswindows.macos():
+if OS != "UNIX":
     b_file_select_screenshot.configure(text=_("Clipboard"))
 
 b_file_select_first = ttk.Button(
@@ -3131,7 +3139,7 @@ co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_compose_preview_selector.bind("<<ComboboxSelected>>", preview_compose_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 c_preview_orig_pi.bind("<Button-1>", mouse_crop_nw)
-if mswindows.macos():
+if OS == "MACOS":
     c_preview_orig_pi.bind("<Button-2>", mouse_crop_se)
 else:
     c_preview_orig_pi.bind("<Button-3>", mouse_crop_se)

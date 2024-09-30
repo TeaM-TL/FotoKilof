@@ -43,7 +43,6 @@ import configparser
 
 import entries
 import common
-import mswindows
 
 
 def main(file_ini, preview_size_list):
@@ -157,7 +156,7 @@ def resize(file_ini):
     return dict_return
 
 
-def text(file_ini, fonts_dict):
+def text(file_ini, fonts_dict, operating_system):
     """Text configuration"""
 
     # output dictionary
@@ -200,9 +199,9 @@ def text(file_ini, fonts_dict):
         text_gravity_onoff, (0, 1), 1
     )
 
-    if mswindows.windows:
+    if operating_system == 'Windows':
         default_font = "Arial"
-    elif mswindows.macos:
+    elif operating_system == 'MACOS':
         default_font = "Helvetica"
     else:
         default_font = "DejaVu-Sans"

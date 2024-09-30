@@ -2,6 +2,8 @@
 
 ## 2024
 
+5.0.5 remove redundand ask about platform - use constant, fix default font
+
 5.0.4 fix load default font
 
 5.0.3 compose and text conversion works with Pillow

@@ -61,11 +61,11 @@ module_logger = logging.getLogger(__name__)
 module_logger.info(WAND_TEXT)
 
 
-def fonts_list(set_pillow):
+def fonts_list(set_pillow, operating_system):
     """list of available fonts"""
     start_time = time.time()
     if set_pillow:
-        result = convert_pillow.fonts_list()
+        result = convert_pillow.fonts_list(operating_system)
     else:
         result = convert_wand.fonts_list()
     module_logger.info("Get fonts list: %ss", str(time.time() - start_time))
@@ -109,13 +109,13 @@ def get_image_size(file_in, set_pillow):
     return size
 
 
-def preview(file_logo, size, set_pillow, coord=""):
+def preview(file_logo, size, set_pillow, operating_system, coord=""):
     """preview"""
     start_time = time.time()
     if set_pillow:
-        result = convert_pillow.preview(file_logo, size, coord)
+        result = convert_pillow.preview(file_logo, size, operating_system, coord)
     else:
-        result = convert_wand.preview(file_logo, size, coord)
+        result = convert_wand.preview(file_logo, size, operating_system, coord)
     module_logger.info("preview: %s s", str(time.time() - start_time))
     return result
 

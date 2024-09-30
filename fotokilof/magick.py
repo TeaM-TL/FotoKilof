@@ -30,12 +30,11 @@ import logging
 import os
 
 import common
-import mswindows
 
 module_logger = logging.getLogger(__name__)
 
 
-def magick(cmd, file_in, file_out, command):
+def magick(cmd, file_in, file_out, command, operating_system):
     """
     run imagemagick command.
     cmd - command for imagemagick
@@ -47,9 +46,9 @@ def magick(cmd, file_in, file_out, command):
     result = None
     if cmd != "":
         if file_in is not None:
-            file_in = common.spacja(file_in)
-            file_out = common.spacja(file_out)
-            if mswindows.windows() == 1:
+            file_in = common.spacja(file_in, operating_system)
+            file_out = common.spacja(file_out, operating_system)
+            if operating_system == 'Windows':
                 prefix_cmd = "magick.exe "
             else:
                 prefix_cmd = ""

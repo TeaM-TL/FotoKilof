@@ -28,21 +28,19 @@ function for GUI:
 
 from io import BytesIO
 import logging
+import platform
 import re
 from PIL import Image
 
-import mswindows
-
-if mswindows.windows():
+if platform.system() == 'Windows':
     import win32clipboard
-
-if mswindows.macos():
+elif platform.system() == 'Darwin':
     import subprocess
 
 module_logger = logging.getLogger(__name__)
 
 
-def copy_to_clipboard(file_in):
+def copy_to_clipboard(file_in, operating_system):
     """
     Copy results into clipboard for Windows
     https://stackoverflow.com/questions/34322132/copy-image-to-clipboard
@@ -53,7 +51,7 @@ def copy_to_clipboard(file_in):
     image = Image.open(file_in)
     # Create an in-memory file-like object
     image_buffer = BytesIO()
-    if mswindows.windows():
+    if operating_system == 'Windows':
         image.convert("RGB").save(image_buffer, "BMP")
         data = image_buffer.getvalue()[14:]
 
@@ -62,7 +60,7 @@ def copy_to_clipboard(file_in):
         win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
         win32clipboard.CloseClipboard()
         image_buffer.close()
-    elif mswindows.macos():
+    elif operating_system == 'MACOS':
         try:
             subprocess.run(
                 [

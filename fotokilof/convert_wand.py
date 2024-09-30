@@ -487,11 +487,12 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
 
 
 # ------------------------------------ Preview
-def preview(file_in, size, coord=""):
+def preview(file_in, size, operating_system, coord=""):
     """
     preview generation by Wand
     file_in - fullname image file
     size - required size of image
+    os - operating system: Windows, MACOS, UNIX
     coord - coordinates for crop
     --
     return:
@@ -534,7 +535,7 @@ def preview(file_in, size, coord=""):
             file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
             save_close_clone(clone, file_preview)
             result = {
-                "filename": common.spacja(file_preview),
+                "filename": common.spacja(file_preview, operating_system),
                 "size": filesize,
                 "width": str(width),
                 "height": str(height),

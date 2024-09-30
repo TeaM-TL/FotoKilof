@@ -47,13 +47,13 @@ import logging
 import tempfile
 import os
 import os.path
+import platform
 from PIL import Image, ImageDraw, ImageOps, ImageFont
 
 # my modules
 import common
-import mswindows
 
-if not mswindows.windows():
+if platform.system() != "Windows":
     from fclist import fclist
 
 module_logger = logging.getLogger(__name__)
@@ -65,10 +65,10 @@ def version():
     return Image.__version__
 
 
-def fonts_list():
+def fonts_list(operating_system):
     """list of available fonts"""
     result = []
-    if mswindows.windows():
+    if operating_system == 'Windows':
         paths = [
             os.path.join(os.environ["WINDIR"], "fonts"),
             os.path.join(os.path.expanduser("~"))
@@ -588,11 +588,12 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
 
 
 # ------------------------------------ Preview
-def preview(file_in, max_size, coord=""):
+def preview(file_in, max_size, operating_system, coord=""):
     """
     preview generation by Pillow
     file_in - fullname image file
     max_size - required size of image
+    operating_system - operating system: Windows, MACOS, UNIX
     coord - coordinates for crop
     --
     return:
@@ -642,7 +643,7 @@ def preview(file_in, max_size, coord=""):
             file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
             save_close_clone(clone, file_preview)
             result = {
-                "filename": common.spacja(file_preview),
+                "filename": common.spacja(file_preview, operating_system),
                 "size": filesize,
                 "width": str(width),
                 "height": str(height),

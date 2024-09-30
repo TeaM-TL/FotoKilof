@@ -36,8 +36,6 @@ import fnmatch
 import os
 import re
 
-import mswindows
-
 
 def resize_subdir(resize_vatiant, pixel_x, pixel_y, percent):
     """prepare name for subdir and command for resize"""
@@ -113,13 +111,13 @@ def mouse_crop_calculation(x_orig, y_orig, size):
     return dict_return
 
 
-def spacja(file_path):
+def spacja(file_path, operating_system):
     """escaping space and special char in pathname"""
     if len(file_path) == 0:
         result = file_path
     else:
         file_path = os.path.normpath(file_path)
-        if mswindows.windows():
+        if operating_system == 'Windows':
             czy_spacja = re.search(" ", file_path)
             if czy_spacja is not None:
                 file_path = '"' + file_path + '"'
@@ -198,7 +196,7 @@ def crop_gravity(coordinates, x_max, y_max):
     return (x0, y0, x1, y1)
 
 
-def list_of_images(cwd):
+def list_of_images(cwd, operating_system):
     """
     jpg, png and tiff images in cwd
     return sorted list
@@ -207,7 +205,7 @@ def list_of_images(cwd):
     list_of_files = os.listdir(cwd)
     file_list = []
     patterns = ("*.JPG", "*.JPEG", "*.PNG", "*.TIF", "*.TIFF")
-    if not mswindows.windows():
+    if operating_system != 'Windows':
         patterns = patterns + ("*.jpg", "*.jpeg", "*.png", "*.tif", "*.tiff")
 
     for pattern in patterns:
