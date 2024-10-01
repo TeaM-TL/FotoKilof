@@ -33,7 +33,9 @@ module contains common functions:
 """
 
 import fnmatch
+from pathlib import PurePosixPath, PureWindowsPath
 import os
+import os.path
 import re
 
 
@@ -113,22 +115,13 @@ def mouse_crop_calculation(x_orig, y_orig, size):
 
 def spacja(file_path, operating_system):
     """escaping space and special char in pathname"""
-    if len(file_path) == 0:
-        result = file_path
-    else:
-        file_path = os.path.normpath(file_path)
+    if len(file_path):
         if operating_system == 'Windows':
-            czy_spacja = re.search(" ", file_path)
-            if czy_spacja is not None:
-                file_path = '"' + file_path + '"'
+            result = PureWindowsPath(os.path.normpath(file_path))
         else:
-            path = os.path.splitext(file_path)
-            path_splitted = path[0].split("/")
-            path_escaped = []
-            for i in path_splitted:
-                path_escaped.append(re.escape(i))
-                file_path = "/".join(path_escaped) + path[1]
-        result = file_path
+            result = PurePosixPath(os.path.normpath(file_path))
+    else:
+        result = None
     return result
 
 

@@ -32,10 +32,13 @@ import platform
 import re
 from PIL import Image
 
+import common
+
 if platform.system() == 'Windows':
     import win32clipboard
 elif platform.system() == 'Darwin':
     import subprocess
+
 
 module_logger = logging.getLogger(__name__)
 
@@ -48,7 +51,7 @@ def copy_to_clipboard(file_in, operating_system):
     https://stackoverflow.com/questions/54008175/copy-an-image-to-macos-clipboard-using-python?rq=4
     debug needed!
     """
-    image = Image.open(file_in)
+    image = Image.open(common.spacja(file_in, operating_system))
     # Create an in-memory file-like object
     image_buffer = BytesIO()
     if operating_system == 'Windows':
@@ -67,7 +70,7 @@ def copy_to_clipboard(file_in, operating_system):
                     "osascript",
                     "-e",
                     'set the clipboard to (read (POSIX file "'
-                    + file_in
+                    + common.spacja(file_in, operating_system)
                     + '") as JPEG picture)',
                 ]
             )
