@@ -2,6 +2,8 @@
 
 ## 2024
 
+5.0.6 fix problem with path
+
 5.0.5 remove redundand ask about platform - use constant, fix default font
 
 5.0.4 fix load default font
