@@ -36,7 +36,6 @@ import fnmatch
 from pathlib import PurePosixPath, PureWindowsPath
 import os
 import os.path
-import re
 
 
 def resize_subdir(resize_vatiant, pixel_x, pixel_y, percent):
@@ -116,7 +115,7 @@ def mouse_crop_calculation(x_orig, y_orig, size):
 def spacja(file_path, operating_system):
     """escaping space and special char in pathname"""
     if len(file_path):
-        if operating_system == 'Windows':
+        if operating_system == "Windows":
             result = PureWindowsPath(os.path.normpath(file_path))
         else:
             result = PurePosixPath(os.path.normpath(file_path))
@@ -198,7 +197,7 @@ def list_of_images(cwd, operating_system):
     list_of_files = os.listdir(cwd)
     file_list = []
     patterns = ("*.JPG", "*.JPEG", "*.PNG", "*.TIF", "*.TIFF")
-    if operating_system != 'Windows':
+    if operating_system != "Windows":
         patterns = patterns + ("*.jpg", "*.jpeg", "*.png", "*.tif", "*.tiff")
 
     for pattern in patterns:
