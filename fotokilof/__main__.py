@@ -854,7 +854,7 @@ def open_file_common(cwd, filename):
     """common function for: open, first, last, next, prev"""
     if filename is not None:
         try:
-            file_in_path.set(os.path.normpath(os.path.join(cwd, filename)))
+            file_in_path.set(common.spacja(os.path.join(cwd, filename), OS))
             root.title(window_title + file_in_path.get())
             image_size = convert_common.get_image_size(file_in_path.get(), PILLOW)
             if image_size != (0, 0):
