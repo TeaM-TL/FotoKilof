@@ -51,10 +51,10 @@ def copy_to_clipboard(file_in, operating_system):
     https://stackoverflow.com/questions/54008175/copy-an-image-to-macos-clipboard-using-python?rq=4
     debug needed!
     """
-    image = Image.open(common.spacja(file_in, operating_system))
-    # Create an in-memory file-like object
-    image_buffer = BytesIO()
     if operating_system == 'Windows':
+        # Create an in-memory file-like object
+        image_buffer = BytesIO()
+        image = Image.open(common.spacja(file_in, operating_system))
         image.convert("RGB").save(image_buffer, "BMP")
         data = image_buffer.getvalue()[14:]
 
@@ -70,7 +70,7 @@ def copy_to_clipboard(file_in, operating_system):
                     "osascript",
                     "-e",
                     'set the clipboard to (read (POSIX file "'
-                    + common.spacja(file_in, operating_system)
+                    + file_in
                     + '") as JPEG picture)',
                 ]
             )
