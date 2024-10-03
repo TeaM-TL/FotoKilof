@@ -42,7 +42,7 @@ Converters
 - crop - crop picture
 - vignete - add vignete into picture
 - compose - join two pictures
-- preview_wand - preview done by Wand
+- preview - preview done by Wand
 """
 
 import logging
@@ -76,12 +76,12 @@ def fonts_list():
 # ------------------------------------ Common
 def make_clone(file_to_clone, color=None):
     """open picture and make clone for processing"""
-    if len(file_to_clone) > 0:
+    if len(file_to_clone):
         with Image(filename=file_to_clone, background=color) as image:
-            clone = image.clone()
+            result = image.clone()
     else:
-        clone = None
-    return clone
+        result = None
+    return result
 
 
 def save_close_clone(clone, file_out, exif=0):
@@ -91,8 +91,9 @@ def save_close_clone(clone, file_out, exif=0):
     else:
         if not exif:
             clone.strip()
-        module_logger.debug(" Save file: %s", file_out)
-        clone.save(filename=file_out)
+        with open(file_out, "wb") as file_handler:
+            clone.save(file=file_handler)
+            module_logger.debug(" Save file: %s", file_out)
         clone.close()
 
 
@@ -513,10 +514,8 @@ def preview(file_in, size, operating_system, coord=""):
     if file_in is not None:
         if os.path.isfile(file_in):
             filesize = common.humansize(os.path.getsize(file_in))
-
             clone = make_clone(file_in)
             width, height = clone.size
-            clone.convert("ppm")
             resize(clone, str(size) + "x" + str(size))
             # write crop if coordinates are given
             if len(coord) == 4:
@@ -533,7 +532,8 @@ def preview(file_in, size, operating_system, coord=""):
                     draw(clone)
             preview_width, preview_height = clone.size
             file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
-            save_close_clone(clone, file_preview)
+            with clone.convert("ppm") as converted:
+                save_close_clone(converted, file_preview)
             result = {
                 "filename": common.spacja(file_preview, operating_system),
                 "size": filesize,
