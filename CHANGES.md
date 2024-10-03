@@ -2,6 +2,8 @@
 
 ## 2024
 
+5.0.7 real fix problem with path with colon, dot etc.
+
 5.0.6 fix problem with path
 
 5.0.5 remove redundand ask about platform - use constant, fix default font
