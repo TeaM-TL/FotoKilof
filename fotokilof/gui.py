@@ -34,9 +34,9 @@ from PIL import Image
 
 import common
 
-if platform.system() == 'Windows':
+if platform.system() == "Windows":
     import win32clipboard
-elif platform.system() == 'Darwin':
+elif platform.system() == "Darwin":
     import subprocess
 
 
@@ -51,7 +51,7 @@ def copy_to_clipboard(file_in, operating_system):
     https://stackoverflow.com/questions/54008175/copy-an-image-to-macos-clipboard-using-python?rq=4
     debug needed!
     """
-    if operating_system == 'Windows':
+    if operating_system == "Windows":
         # Create an in-memory file-like object
         image_buffer = BytesIO()
         image = Image.open(common.spacja(file_in, operating_system))
@@ -63,7 +63,7 @@ def copy_to_clipboard(file_in, operating_system):
         win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
         win32clipboard.CloseClipboard()
         image_buffer.close()
-    elif operating_system == 'MACOS':
+    elif operating_system == "MACOS":
         try:
             subprocess.run(
                 [
