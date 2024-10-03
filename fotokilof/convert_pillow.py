@@ -41,6 +41,7 @@ Converters
 - crop - crop picture
 - vignete - add vignete into picture
 - compose - join two pictures
+- preview - preview done by Pillow
 """
 
 import logging
@@ -95,10 +96,10 @@ def make_clone(file_to_clone, color=None):
     """open picture and make clone for processing"""
     if len(file_to_clone) > 0:
         with Image.open(file_to_clone) as image:
-            clone = image.copy()
+            result = image.copy()
     else:
-        clone = None
-    return clone
+        result = None
+    return result
 
 
 def save_close_clone(clone, file_out, ppm=0, exif=0):
