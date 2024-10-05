@@ -48,10 +48,12 @@ import logging
 import tempfile
 import os
 import os.path
-import platform
 from PIL import Image, ImageDraw, ImageOps, ImageFont
 
-from find_system_fonts_filename import get_system_fonts_filename, FindSystemFontsFilenameException
+from find_system_fonts_filename import (
+    get_system_fonts_filename,
+    FindSystemFontsFilenameException,
+)
 
 # my modules
 import common
@@ -80,7 +82,7 @@ def fonts_list():
             result.append(item)
         result.sort()
     else:
-        result = 'Arial'
+        result = "Arial"
     return result
 
 
