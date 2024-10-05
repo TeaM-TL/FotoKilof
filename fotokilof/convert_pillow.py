@@ -51,11 +51,10 @@ import os.path
 import platform
 from PIL import Image, ImageDraw, ImageOps, ImageFont
 
+from find_system_fonts_filename import get_system_fonts_filename, FindSystemFontsFilenameException
+
 # my modules
 import common
-
-if platform.system() != "Windows":
-    from fclist import fclist
 
 module_logger = logging.getLogger(__name__)
 
@@ -66,29 +65,23 @@ def version():
     return Image.__version__
 
 
-def fonts_list(operating_system):
+def fonts_list():
     """list of available fonts"""
-    result = []
-    if operating_system == 'Windows':
-        paths = [
-            os.path.join(os.environ["WINDIR"], "fonts"),
-            os.path.join(os.path.expanduser("~"))
-            + "\\AppData\\Local\\Microsoft\\Windows\\Fonts",
-        ]
-        for path in paths:
-            result.append(os.path.listdir(path))
+    try:
+        fonts_filename = get_system_fonts_filename()
+        module_logger.debug("Get fonts list from system")
+    except FindSystemFontsFilenameException:
+        # Deal with the exception
+        module_logger.error("Errort to get fonts list from system")
+        fonts_filename = None
+    if fonts_filename is not None:
+        result = []
+        for item in fonts_filename:
+            result.append(item)
+        result.sort()
     else:
-        for font in fclist(fontformat="TrueType"):
-            result.append(font.file)
-    result.sort()
-    result_uniq = []
-    for font in result:
-        if not result_uniq:
-            result_uniq.append(font)
-        else:
-            if font != result_uniq[-1]:
-                result_uniq.append(font)
-    return result_uniq
+        result = 'Arial'
+    return result
 
 
 # ------------------------------------ Common

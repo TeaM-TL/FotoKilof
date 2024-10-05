@@ -61,11 +61,11 @@ module_logger = logging.getLogger(__name__)
 module_logger.info(WAND_TEXT)
 
 
-def fonts_list(set_pillow, operating_system):
+def fonts_list(set_pillow):
     """list of available fonts"""
     start_time = time.time()
     if set_pillow:
-        result = convert_pillow.fonts_list(operating_system)
+        result = convert_pillow.fonts_list()
     else:
         result = convert_wand.fonts_list()
     module_logger.info("Get fonts list: %ss", str(time.time() - start_time))

@@ -760,7 +760,7 @@ def convert_text_button():
 
 def fonts():
     """preparing font names for ImageMagick or Pillow and load into listbox"""
-    result = convert_common.fonts_list(PILLOW, OS)
+    result = convert_common.fonts_list(PILLOW)
     co_text_font["values"] = result
     return result
 
