@@ -79,13 +79,15 @@ try:
 except:
     IMAGEMAGICK_WAND_VERSION = "Wand - missing"
     PILLOW = 1
-else:
+
+if PILLOW == 0:
     try:
         from wand.version import MAGICK_VERSION
 
         IMAGEMAGICK_WAND_VERSION += ", IM " + MAGICK_VERSION.split(" ")[1]
     except:
         IMAGEMAGICK_WAND_VERSION += ", IM - missing"
+        PILLOW = 1
 
 # my modules
 import check_new_version
