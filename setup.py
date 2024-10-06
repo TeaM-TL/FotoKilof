@@ -28,7 +28,7 @@ setup(
     python_requires='>=3.9',
     include_package_data=True,
     packages=find_packages(),
-    install_requires=['fclist-cffi','pillow','requests','ttkbootstrap','wand'],
+    install_requires=['FindSystemFontsFilename','pillow','requests','ttkbootstrap','wand'],
     entry_points = {
         "gui_scripts": [
             "fotokilof = fotokilof:__main__",

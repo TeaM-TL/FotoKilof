@@ -2,6 +2,8 @@
 
 ## 2024
 
+5.1.0 use FindSystemFontsFilename for Pillow instead own ideas like cflist
+
 5.0.7 real fix problem with path with colon, dot etc.
 
 5.0.6 fix problem with path

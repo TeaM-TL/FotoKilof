@@ -79,13 +79,15 @@ try:
 except:
     IMAGEMAGICK_WAND_VERSION = "Wand - missing"
     PILLOW = 1
-else:
+
+if PILLOW == 0:
     try:
         from wand.version import MAGICK_VERSION
 
         IMAGEMAGICK_WAND_VERSION += ", IM " + MAGICK_VERSION.split(" ")[1]
     except:
         IMAGEMAGICK_WAND_VERSION += ", IM - missing"
+        PILLOW = 1
 
 # my modules
 import check_new_version
@@ -760,7 +762,7 @@ def convert_text_button():
 
 def fonts():
     """preparing font names for ImageMagick or Pillow and load into listbox"""
-    result = convert_common.fonts_list(PILLOW, OS)
+    result = convert_common.fonts_list(PILLOW)
     co_text_font["values"] = result
     return result
 
