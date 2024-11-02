@@ -525,6 +525,7 @@ def preview(file_in, size, operating_system, coord=""):
                     right_top = (coord[2], coord[1])
                     right_bottom = (coord[2], coord[3])
                     draw.fill_color = "#FFFF00"
+                    # draw.rectangle(left=coord[0], top=coord[1], right=coord[2], bottom=coord[3])
                     draw.line(left_top, right_top)
                     draw.line(left_top, left_bottom)
                     draw.line(left_bottom, right_bottom)

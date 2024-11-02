@@ -30,6 +30,7 @@ module contains common functions:
 - crop_gravity - convert coordinates for crop3 and logo position
 - list_of_images - sorted list images in cwd
 - file_from_list_of_images - return filename from file_list depends of request
+- arrow_gravity - calculate coordinates if draw arrow
 """
 
 import fnmatch
@@ -246,5 +247,69 @@ def file_from_list_of_images(file_list, current_file, request):
         file = None
     return file
 
+
+def arrow_gravity(position, length, dx, dy):
+    """calculate coordinated to draw arrow"""
+    width = int(length/3/2)
+    length_1_3 = int(length/3)
+    length_1_2 = int(length/2)
+    length_2_3 = int(2*length/3)
+
+    if position == "N":
+        x0 = dx + length_1_2
+        y0 = dy
+        a = (x0, y0 + length)
+        c = (x0, y0)
+        d = (x0 - width, y0 + length_1_3)
+        e = (x0 + width, y0 + length_1_3)
+    elif position == "S":
+        x0 = dx + length_1_2
+        y0 = dy
+        a = (x0, y0)
+        c = (x0, y0 + length)
+        d = (x0 - width, y0 + length_2_3)
+        e = (x0 + width, y0 + length_2_3)
+    elif position == "W":
+        x0 = dx
+        y0 = dy + length_1_2
+        a = (x0 + length, y0)
+        c = (x0, y0)
+        d = (x0 + length_1_3, y0 - width)
+        e = (x0 + length_1_3, y0 + width)
+    elif position == "E":
+        x0 = dx
+        y0 = dy + length_1_2
+        a = (x0, y0)
+        c = (x0 + length, y0)
+        d = (x0 + length_2_3, y0 - width)
+        e = (x0 + length_2_3, y0 + width)
+    elif position == "NW":
+        x0 = dx
+        y0 = dy
+        a = (x0 + length, y0 + length)
+        c = (x0, y0)
+        d = (x0 + int(length / 4), y0 + length_1_2)
+        e = (x0 + length_1_2, y0 + int(length / 4))
+    elif position == "NE":
+        x0 = dx
+        y0 = dy
+        c = (x0 + length, y0)
+        a = (x0, y0 + length)
+        d = (x0 + int(3 * length / 4), y0 + length_1_2)
+        e = (x0 + length_1_2, y0 + int( length / 4))
+    elif position == "SE":
+        x0 = dx
+        y0 = dy
+        c = (x0 + length, y0 + length)
+        a = (x0, y0)
+        d = (x0 + int(3 * length / 4), y0 + length_1_2)
+        e = (x0 + length_1_2, y0 + int(3 * length / 4))
+    elif position == "SW":
+        x0 = dx
+        y0 = dy
+        a = (x0 + length, y0)
+        c = (x0, y0 + length)
+        d = (x0 + int(length / 4), y0 + length_1_2)
+        e = (x0 + length_1_2, y0 + int( 3* length / 4))
 
 # EOF

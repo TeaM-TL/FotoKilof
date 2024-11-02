@@ -6,4 +6,4 @@ tests/*
 fotokilof/__pycache__/*
 .DS_Store
 FotoKilof.egg-info/*
-
+.coverage
