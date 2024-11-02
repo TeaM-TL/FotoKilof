@@ -4,6 +4,7 @@ build/*
 tests/*
 .directory
 fotokilof/__pycache__/*
+fotokilof/.coverage
 .DS_Store
 FotoKilof.egg-info/*
 .coverage

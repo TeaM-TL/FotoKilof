@@ -80,7 +80,7 @@ def humansize(nbytes):
     convert size in Byte into human readable: kB, MB, GB
     https://stackoverflow.com/questions/14996453/python-libraries-to-calculate-human-readable-filesize-from-bytes
     """
-    suffixes = ["B", "KB", "MB", "GB", "TB", "PB"]
+    suffixes = ["B", "kB", "MB", "GB", "TB", "PB"]
     i = 0
     while nbytes >= 1024 and i < len(suffixes) - 1:
         nbytes /= 1024.0
