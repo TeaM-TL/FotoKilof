@@ -180,9 +180,11 @@ def text(convert_data):
     text_string = convert_data[13]
     arrow = convert_data[14]
 
+    image_width, image_height = clone.size
+
     if len(text_string):
         gravity_common, new_x, new_y = common.gravitation(
-            gravity, int(text_x), int(text_y), clone.width, clone.height
+            gravity, int(text_x), int(text_y), image_width, image_height
         )
         draw_gravity = gravity_common[1]
         if in_out == 0:
@@ -203,38 +205,24 @@ def text(convert_data):
         if arrow:
             if gravity_onoff == 0:
                 gravity = "NW"
-            else:
-                arrow_coord = common.crop_gravity(
-                    (
-                        int(text_x),
-                        int(text_y),
-                        0,
-                        0,
-                        gravity,
-                    ),
-                    clone.width,
-                    clone.height,
-                )
+
+            arrow_coord_all = common.gravitation(
+                gravity,
+                int(text_x),
+                int(text_y),
+                image_width,
+                image_height,
+            )
+            arrow_coord = (arrow_coord_all[1], arrow_coord_all[2])
             a, c, d, e, offset_x, offset_y = common.arrow_gravity(
                 gravity, text_size, arrow_coord[0], arrow_coord[1]
-            )
-            print(
-                gravity,
-                a,
-                c,
-                d,
-                e,
-                "offset ",
-                (offset_x, offset_y),
-                "text",
-                (text_x, text_y),
             )
         else:
             offset_x = 0
             offset_y = 0
         text_x = str(int(text_x) + abs(offset_x))
         text_y = str(int(text_y) + abs(offset_y))
-        print('text', text_x, text_y, 'offset', offset_x, offset_y)
+        print("text", text_x, text_y, "offset", offset_x, offset_y)
         draw = Drawing()
         if box and not in_out:
             draw.text_under_color = box_color
@@ -254,18 +242,17 @@ def text(convert_data):
             if arrow:
                 if gravity_onoff == 0:
                     gravity = "NW"
-                if gravity != "C":
-                    with Drawing() as draw_arrow:
-                        draw_arrow.fill_color = text_color
-                        draw_arrow.line(a, c)
-                        draw_arrow.line(d, c)
-                        draw_arrow.line(e, c)
-                        draw_arrow(clone)
+                with Drawing() as draw_arrow:
+                    draw_arrow.fill_color = text_color
+                    draw_arrow.line(a, c)
+                    draw_arrow.line(d, c)
+                    draw_arrow.line(e, c)
+                    draw_arrow(clone)
         else:
             # outside
             metrics = draw.get_font_metrics(clone, text_string, multiline=False)
             with Image(
-                width=clone.width,
+                width=image_width,
                 height=int(metrics.text_height),
                 background=backgroud_color,
             ) as canvas:
