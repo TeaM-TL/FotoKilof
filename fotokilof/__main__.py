@@ -1266,7 +1266,7 @@ def ini_save_wraper():
         "y": e_text_y.get(),
         "text_rotate": img_text_rotate.get(),
         "text_rotate_own": e_text_angle.get(),
-        'text_arrow': img_text_arrow.get(),
+        "text_arrow": img_text_arrow.get(),
     }
     # rotate
     rotate = {

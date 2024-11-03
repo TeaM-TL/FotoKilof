@@ -27,7 +27,6 @@ Info
 Common
 - make_clone - open origal picture and make clone for processing
 - save_close_clone - save clone into file and close clone
-- gravitation - translate eg. NS to Northsouth as Wand-py expect
 Converters
 - pip - picture in picture, for inserting logo
 - rotate - rotate picture
@@ -127,33 +126,6 @@ def get_image_size(filename):
     return size
 
 
-def gravitation(gravity):
-    """translate gravitation name from Tk to Pillow specification"""
-
-    if gravity == "N":
-        result = "ma"
-    if gravity == "NW":
-        result = "la"
-    if gravity == "NE":
-        result = "ra"
-    if gravity == "W":
-        result = "lm"
-    if gravity == "C":
-        result = "mm"
-    if gravity == "E":
-        result = "rm"
-    if gravity == "SW":
-        result = "ld"
-    if gravity == "S":
-        result = "ld"
-    if gravity == "SE":
-        result = "rd"
-    if gravity == "0":
-        result = "0"
-
-    return result
-
-
 # ------------------------------------ Converters
 def pip(clone, logo, logo_data, image_height, image_width):
     """put picture on picture
@@ -234,47 +206,24 @@ def text(convert_data):
     image_width, image_height = clone.size
     font = ImageFont.truetype(font, text_size)
 
+    result = clone
     if len(text_string):
         if in_out == 0:
             # inside
             if gravity_onoff == 0:
                 draw_gravity = "lt"
             else:
-                if gravity == "NW":
-                    draw_gravity = "lt"
-                elif gravity == "N":
-                    draw_gravity = "mt"
-                    text_x += image_width / 2
-                elif gravity == "NE":
-                    draw_gravity = "rt"
-                    text_x = image_width - text_x
-                elif gravity == "W":
-                    draw_gravity = "lm"
-                    text_y += image_height / 2
-                elif gravity == "C":
-                    draw_gravity = "mm"
-                    text_x += image_width / 2
-                    text_y += image_height / 2
-                elif gravity == "E":
-                    draw_gravity = "rm"
-                    text_x = image_width - text_x
-                    text_y += image_height / 2
-                elif gravity == "SW":
-                    draw_gravity = "lb"
-                    text_y = image_height - text_y
-                elif gravity == "S":
-                    draw_gravity = "mb"
-                    text_x += image_width / 2
-                    text_y = image_height - text_y
-                elif gravity == "SE":
-                    draw_gravity = "rb"
-                    text_x = image_width - text_x
-                    text_y = image_height - text_y
+                gravity_common, text_x, text_y = common.gravitation(
+                    gravity, text_x, text_y, image_width, image_height
+                )
+                draw_gravity = gravity_common[0]
             draw_text = ImageDraw.Draw(clone)
             if arrow:
                 if gravity_onoff == 0:
                     gravity = "NW"
-                a, c, d, e, offset_x, offset_y = common.arrow_gravity(gravity, text_size, text_x, text_y)
+                a, c, d, e, offset_x, offset_y = common.arrow_gravity(
+                    gravity, text_size, text_x, text_y
+                )
                 if gravity != "C":
                     draw_text.line([a, c], fill=text_color, width=2)
                     draw_text.line([d, c], fill=text_color, width=2)
@@ -336,6 +285,7 @@ def bw(clone, bw_variant, sepia):
         )
         # sepia
         # clone.sepia_tone(threshold=common.empty(sepia) / 100)
+        result = None
     module_logger.debug(" Conversion: black-white/sepia %s", str(bw_variant))
     return result
 

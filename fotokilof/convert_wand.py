@@ -28,7 +28,6 @@ Common
 - make_clone - open origal picture and make clone for processing
 - save_close_clone - save clone into file and close clone
 - get_image_size - get size from image
-- gravitation - translate eg. NS to Northsouth as Wand-py expect
 Converters
 - pip - picture in picture, for inserting logo
 - rotate - rotate picture
@@ -114,33 +113,6 @@ def get_image_size(filename):
     return size
 
 
-def gravitation(gravity):
-    """translate gravitation name from Tk to Wand-py specification"""
-
-    if gravity == "N":
-        result = "north"
-    if gravity == "NW":
-        result = "north_west"
-    if gravity == "NE":
-        result = "north_east"
-    if gravity == "W":
-        result = "west"
-    if gravity == "C":
-        result = "center"
-    if gravity == "E":
-        result = "east"
-    if gravity == "SW":
-        result = "south_west"
-    if gravity == "S":
-        result = "south"
-    if gravity == "SE":
-        result = "south_east"
-    if gravity == "0":
-        result = "0"
-
-    return result
-
-
 # ------------------------------------ Converters
 def pip(clone, logo, logo_data, image_height, image_width):
     """put picture on picture
@@ -207,10 +179,12 @@ def text(convert_data):
     text_y = convert_data[12]
     text_string = convert_data[13]
     arrow = convert_data[14]
-    arrow = 0
 
     if len(text_string):
-        draw_gravity = gravitation(gravity)
+        gravity_common, new_x, new_y = common.gravitation(
+            gravity, int(text_x), int(text_y), clone.width, clone.height
+        )
+        draw_gravity = gravity_common[1]
         if in_out == 0:
             # inside
             if gravity_onoff == 0:
@@ -229,12 +203,38 @@ def text(convert_data):
         if arrow:
             if gravity_onoff == 0:
                 gravity = "NW"
-            a, c, d, e, offset_x, offset_y = common.arrow_gravity(gravity, text_size, text_x, text_y)
+            else:
+                arrow_coord = common.crop_gravity(
+                    (
+                        int(text_x),
+                        int(text_y),
+                        0,
+                        0,
+                        gravity,
+                    ),
+                    clone.width,
+                    clone.height,
+                )
+            a, c, d, e, offset_x, offset_y = common.arrow_gravity(
+                gravity, text_size, arrow_coord[0], arrow_coord[1]
+            )
+            print(
+                gravity,
+                a,
+                c,
+                d,
+                e,
+                "offset ",
+                (offset_x, offset_y),
+                "text",
+                (text_x, text_y),
+            )
         else:
             offset_x = 0
             offset_y = 0
-        text_x = str(int(text_x) + offset_x)
-        text_y = str(int(text_y) + offset_y)
+        text_x = str(int(text_x) + abs(offset_x))
+        text_y = str(int(text_y) + abs(offset_y))
+        print('text', text_x, text_y, 'offset', offset_x, offset_y)
         draw = Drawing()
         if box and not in_out:
             draw.text_under_color = box_color
@@ -254,9 +254,7 @@ def text(convert_data):
             if arrow:
                 if gravity_onoff == 0:
                     gravity = "NW"
-                # a, c, d, e, offset_x, offset_y = common.arrow_gravity(gravity, text_size, text_x, text_y)
                 if gravity != "C":
-                    print(a, c, d, e)
                     with Drawing() as draw_arrow:
                         draw_arrow.fill_color = text_color
                         draw_arrow.line(a, c)
@@ -360,12 +358,13 @@ def crop(file_in, clone, crop_variant, gravity, entries):
             )
     if crop_variant == 3:
         if (entries["three_width"] > 0) and (entries["three_height"] > 0):
+            gravity_common, text_x, text_y = common.gravitation(gravity, 0, 0, 0, 0)
             clone.crop(
                 left=entries["three_dx"],
                 top=entries["three_dy"],
                 width=entries["three_width"],
                 height=entries["three_height"],
-                gravity=gravitation(gravity),
+                gravity=gravity_common[1],
             )
     module_logger.debug(" Conversion: crop %s", str(crop_variant))
 
