@@ -441,6 +441,7 @@ def apply_all_button():
                         e_text_x.get(),
                         e_text_y.get(),
                         e_text.get(),
+                        img_text_arrow.get(),
                     )
                     clone = convert_common.text(convert_text_data, PILLOW)
                 if img_logo_on.get():
@@ -751,6 +752,7 @@ def convert_text_button():
             e_text_x.get(),
             e_text_y.get(),
             e_text.get(),
+            img_text_arrow.get(),
         )
         clone = convert_common.text(convert_text_data, PILLOW)
         convert_common.save_close_clone(
@@ -1100,6 +1102,7 @@ def ini_read_wraper():
     img_text_gravity_onoff.set(ini_entries["img_text_gravity_onoff"])
     img_text_box.set(ini_entries["text_box"])
     img_text_box_color.set(ini_entries["text_box_color"])
+    img_text_arrow.set(ini_entries["text_arrow"])
     l_text_color.configure(fg=img_text_color.get(), bg=img_text_box_color.get())
     img_text_rotate.set(ini_entries["text_rotate"])
     e_text.delete(0, "end")
@@ -1263,6 +1266,7 @@ def ini_save_wraper():
         "y": e_text_y.get(),
         "text_rotate": img_text_rotate.get(),
         "text_rotate_own": e_text_angle.get(),
+        'text_arrow': img_text_arrow.get(),
     }
     # rotate
     rotate = {
@@ -1804,6 +1808,7 @@ def text_tool_hide_show():
         rb_text_S.grid_remove()
         rb_text_SE.grid_remove()
         cb_text_gravity.grid_remove()
+        cb_text_arrow.grid_remove()
         frame_text_rotate.grid_remove()
     else:
         # Inside
@@ -1812,6 +1817,7 @@ def text_tool_hide_show():
         e_text_x.grid()
         e_text_y.grid()
         cb_text_gravity.grid()
+        cb_text_arrow.grid()
         if img_text_gravity_onoff.get():
             # Gravity on
             rb_text_NW.grid()
@@ -1897,6 +1903,7 @@ img_text_box = IntVar()
 img_text_box_color = StringVar()
 img_text_inout = IntVar()  # Text inside or outside picture
 img_text_rotate = IntVar()
+img_text_arrow = IntVar()
 img_rotate_on = IntVar()  # Rotate
 img_rotate = IntVar()
 img_rotate_own = IntVar()
@@ -2497,6 +2504,9 @@ rb_text_out = ttk.Radiobutton(
 cb_text_box = ttk.Checkbutton(
     frame_text, text=_("Background"), variable=img_text_box, onvalue="1", offvalue="0"
 )
+cb_text_arrow = ttk.Checkbutton(
+    frame_text, text=_("Arrow"), variable=img_text_arrow, onvalue="1", offvalue="0"
+)
 cb_text_gravity = ttk.Checkbutton(
     frame_text,
     text=_("Gravity"),
@@ -2519,6 +2529,7 @@ rb_text_out.grid(row=2, column=1, sticky=W, padx=5, pady=1)
 rb_text_in.grid(row=3, column=1, sticky=W, padx=5, pady=1)
 if not PILLOW:
     cb_text_box.grid(row=4, column=1, sticky=W, padx=5, pady=1)
+cb_text_arrow.grid(row=4, column=2, sticky=W, padx=5, pady=1)
 cb_text_gravity.grid(row=2, column=3, columnspan=2, sticky=W, pady=1)
 
 l_text_xy_x.grid(row=3, column=3, sticky=W, padx=5, pady=1)
@@ -3320,6 +3331,7 @@ ToolTip(rb_text_out, text=_("Put text below picture"))
 ToolTip(cb_text_gravity, text=_("Use gravity for putting text or Absolute position"))
 ToolTip(frame_text_gravity, text=_("Use gravity direction for text placement"))
 ToolTip(cb_text_box, text=_("Use background for text"))
+ToolTip(cb_text_arrow, text=_("Add arrow between text and origin point"))
 ToolTip(e_text_x, text=_("Offset from gravity or absolute position"))
 ToolTip(e_text_y, text=_("Offset from gravity or absolute position"))
 ToolTip(l_text_color, text=_("Selected color of text and background"))

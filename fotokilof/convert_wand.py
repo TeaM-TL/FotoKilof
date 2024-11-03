@@ -206,8 +206,8 @@ def text(convert_data):
     text_x = convert_data[11]
     text_y = convert_data[12]
     text_string = convert_data[13]
-    # arrow = convert_data[14]
-    arrow = 1
+    arrow = convert_data[14]
+    arrow = 0
 
     if len(text_string):
         draw_gravity = gravitation(gravity)

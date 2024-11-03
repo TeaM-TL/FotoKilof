@@ -261,6 +261,14 @@ def text(file_ini, fonts_dict, operating_system):
         rotate_own = "0"
     dict_return["text_rotate_own"] = str(common.empty(rotate_own))
 
+    try:
+        text_arrow = config.getint("Text", "text_arrow")
+    except:
+        text_arrow = "0"
+    dict_return["text_arrow"] = entries.parse_list(
+        text_arrow, (0, 1), 0
+    )
+
     return dict_return
 
 

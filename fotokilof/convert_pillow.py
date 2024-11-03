@@ -229,8 +229,7 @@ def text(convert_data):
     text_x = int(common.empty(convert_data[11]))
     text_y = int(common.empty(convert_data[12]))
     text_string = convert_data[13]
-    # arrow = convert_data[14]
-    arrow = 1
+    arrow = convert_data[14]
 
     image_width, image_height = clone.size
     font = ImageFont.truetype(font, text_size)
