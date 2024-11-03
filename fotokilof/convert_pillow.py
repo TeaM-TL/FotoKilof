@@ -229,6 +229,8 @@ def text(convert_data):
     text_x = int(common.empty(convert_data[11]))
     text_y = int(common.empty(convert_data[12]))
     text_string = convert_data[13]
+    # arrow = convert_data[14]
+    arrow = 1
 
     image_width, image_height = clone.size
     font = ImageFont.truetype(font, text_size)
@@ -269,14 +271,22 @@ def text(convert_data):
                     draw_gravity = "rb"
                     text_x = image_width - text_x
                     text_y = image_height - text_y
+            if arrow:
+                if gravity_onoff == 0:
+                    gravity = "NW"
+                a, c, d, e, offset_x, offset_y = common.arrow_gravity(gravity, text_size, text_x, text_y)
             draw_text = ImageDraw.Draw(clone)
             draw_text.text(
-                (text_x, text_y),
+                (text_x + offset_x, text_y + offset_y),
                 text_string,
                 fill=text_color,
                 font=font,
                 anchor=draw_gravity,
             )
+            if arrow and gravity != "C":
+                draw_text.line([a, c], fill=text_color, width=2)
+                draw_text.line([d, c], fill=text_color, width=2)
+                draw_text.line([e, c], fill=text_color, width=2)
             result = clone
             module_logger.debug(" Conversion: text inside")
         else:

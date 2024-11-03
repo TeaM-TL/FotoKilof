@@ -34,9 +34,12 @@ module contains common functions:
 """
 
 import fnmatch
+import logging
 from pathlib import PurePosixPath, PureWindowsPath
 import os
 import os.path
+
+module_logger = logging.getLogger(__name__)
 
 
 def resize_subdir(resize_vatiant, pixel_x, pixel_y, percent):
@@ -248,68 +251,68 @@ def file_from_list_of_images(file_list, current_file, request):
     return file
 
 
-def arrow_gravity(position, length, dx, dy):
+def arrow_gravity(position, length, x0, y0):
     """calculate coordinated to draw arrow"""
-    width = int(length/3/2)
-    length_1_3 = int(length/3)
-    length_1_2 = int(length/2)
-    length_2_3 = int(2*length/3)
+    width = int(length / 3 / 2)
+    length_1_2 = int(length / 2)
+    length_1_3 = int(length / 3)
+    length_1_4 = int(length / 4)
 
+    offset_x = 0
+    offset_y = 0
+    c = (x0, y0)
     if position == "N":
-        x0 = dx + length_1_2
-        y0 = dy
         a = (x0, y0 + length)
-        c = (x0, y0)
         d = (x0 - width, y0 + length_1_3)
         e = (x0 + width, y0 + length_1_3)
+        offset_y = length
     elif position == "S":
-        x0 = dx + length_1_2
-        y0 = dy
-        a = (x0, y0)
-        c = (x0, y0 + length)
-        d = (x0 - width, y0 + length_2_3)
-        e = (x0 + width, y0 + length_2_3)
+        a = (x0, y0 - length)
+        d = (x0 - width, y0 - length_1_3)
+        e = (x0 + width, y0 - length_1_3)
+        offset_y = -length
     elif position == "W":
-        x0 = dx
-        y0 = dy + length_1_2
         a = (x0 + length, y0)
-        c = (x0, y0)
         d = (x0 + length_1_3, y0 - width)
         e = (x0 + length_1_3, y0 + width)
+        offset_x = length
     elif position == "E":
-        x0 = dx
-        y0 = dy + length_1_2
-        a = (x0, y0)
-        c = (x0 + length, y0)
-        d = (x0 + length_2_3, y0 - width)
-        e = (x0 + length_2_3, y0 + width)
+        a = (x0 - length, y0)
+        d = (x0 - length_1_3, y0 - width)
+        e = (x0 - length_1_3, y0 + width)
+        offset_x = -length
     elif position == "NW":
-        x0 = dx
-        y0 = dy
         a = (x0 + length, y0 + length)
-        c = (x0, y0)
-        d = (x0 + int(length / 4), y0 + length_1_2)
-        e = (x0 + length_1_2, y0 + int(length / 4))
+        d = (x0 + length_1_4, y0 + length_1_2)
+        e = (x0 + length_1_2, y0 + length_1_4)
+        offset_x = length
+        offset_y = length
     elif position == "NE":
-        x0 = dx
-        y0 = dy
-        c = (x0 + length, y0)
-        a = (x0, y0 + length)
-        d = (x0 + int(3 * length / 4), y0 + length_1_2)
-        e = (x0 + length_1_2, y0 + int( length / 4))
+        a = (x0 - length, y0 + length)
+        d = (x0 - length_1_4, y0 + length_1_2)
+        e = (x0 - length_1_2, y0 + length_1_4)
+        offset_x = -length
+        offset_y = length
     elif position == "SE":
-        x0 = dx
-        y0 = dy
-        c = (x0 + length, y0 + length)
-        a = (x0, y0)
-        d = (x0 + int(3 * length / 4), y0 + length_1_2)
-        e = (x0 + length_1_2, y0 + int(3 * length / 4))
+        a = (x0 - length, y0 - length)
+        d = (x0 - length_1_4, y0 - length_1_2)
+        e = (x0 - length_1_2, y0 - length_1_4)
+        offset_x = -length
+        offset_y = -length
     elif position == "SW":
-        x0 = dx
-        y0 = dy
-        a = (x0 + length, y0)
-        c = (x0, y0 + length)
-        d = (x0 + int(length / 4), y0 + length_1_2)
-        e = (x0 + length_1_2, y0 + int( 3* length / 4))
+        a = (x0 + length, y0 - length)
+        d = (x0 + length_1_4, y0 - length_1_2)
+        e = (x0 + length_1_2, y0 - length_1_4)
+        offset_x = length
+        offset_y = -length
+    else:
+        a = (0, 0)
+        d = (0, 0)
+        e = (0, 0)
+
+    msg = (position, a, c, d, e, offset_x, offset_y)
+    module_logger.debug("arrow_gravity: %s", msg)
+    return (a, c, d, e, offset_x, offset_y)
+
 
 # EOF
