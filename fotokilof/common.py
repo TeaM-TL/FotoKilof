@@ -253,6 +253,9 @@ def file_from_list_of_images(file_list, current_file, request):
 
 def arrow_gravity(position, length, x0, y0):
     """calculate coordinated to draw arrow"""
+    length = int(length)
+    x0 = int(x0)
+    y0 = int(y0)
     width = int(length / 3 / 2)
     length_1_2 = int(length / 2)
     length_1_3 = int(length / 3)
