@@ -206,7 +206,10 @@ def text(convert_data):
     text_x = convert_data[11]
     text_y = convert_data[12]
     text_string = convert_data[13]
-    if len(text_string) > 0:
+    arrow = convert_data[14]
+    arrow = 0
+
+    if len(text_string):
         draw_gravity = gravitation(gravity)
         if in_out == 0:
             # inside
@@ -223,7 +226,15 @@ def text(convert_data):
             angle = 0
             text_x = 0
             text_y = 0
-
+        if arrow:
+            if gravity_onoff == 0:
+                gravity = "NW"
+            a, c, d, e, offset_x, offset_y = common.arrow_gravity(gravity, text_size, text_x, text_y)
+        else:
+            offset_x = 0
+            offset_y = 0
+        text_x = str(int(text_x) + offset_x)
+        text_y = str(int(text_y) + offset_y)
         draw = Drawing()
         if box and not in_out:
             draw.text_under_color = box_color
@@ -231,7 +242,6 @@ def text(convert_data):
         draw.font = font
         draw.font_size = common.empty(text_size)
         draw.gravity = draw_gravity
-
         if in_out == 0:
             # inside
             clone.annotate(
@@ -241,6 +251,18 @@ def text(convert_data):
                 left=common.empty(text_x),
                 baseline=common.empty(text_y),
             )
+            if arrow:
+                if gravity_onoff == 0:
+                    gravity = "NW"
+                # a, c, d, e, offset_x, offset_y = common.arrow_gravity(gravity, text_size, text_x, text_y)
+                if gravity != "C":
+                    print(a, c, d, e)
+                    with Drawing() as draw_arrow:
+                        draw_arrow.fill_color = text_color
+                        draw_arrow.line(a, c)
+                        draw_arrow.line(d, c)
+                        draw_arrow.line(e, c)
+                        draw_arrow(clone)
         else:
             # outside
             metrics = draw.get_font_metrics(clone, text_string, multiline=False)
@@ -525,6 +547,7 @@ def preview(file_in, size, operating_system, coord=""):
                     right_top = (coord[2], coord[1])
                     right_bottom = (coord[2], coord[3])
                     draw.fill_color = "#FFFF00"
+                    # draw.rectangle(left=coord[0], top=coord[1], right=coord[2], bottom=coord[3])
                     draw.line(left_top, right_top)
                     draw.line(left_top, left_bottom)
                     draw.line(left_bottom, right_bottom)

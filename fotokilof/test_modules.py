@@ -62,3 +62,43 @@ def test_common_crop_gravity():
     """
     coordinates = (0, 0, 100, 100, "SE")
     assert common.crop_gravity(coordinates, 1000, 500) == (900, 400, 1000, 500)
+
+
+def test_common_arrow_gravity():
+    """test arrow gravity"""
+    position = "C"
+    length = 40
+    dx = 200
+    dy = 200
+
+    for position in ("N", "S", "E", "W", "NW", "NE", "SW", "SE"):
+        if position == "C":
+            a, c, d, e = ((0, 0), (0, 0), (0, 0), (0, 0))
+            x = 0
+            y = 0
+        elif position == "N":
+            a, c, d, e, x, y = ((200, 240), (200, 200), (194, 213), (206, 213), 0, 40)
+        elif position == "S":
+            a, c, d, e, x, y = ((200, 160), (200, 200), (194, 187), (206, 187), 0, -40)
+        elif position == "E":
+            a, c, d, e, x, y = ((160, 200), (200, 200), (187, 194), (187, 206), -40 , 0)
+        elif position == "W":
+            a, c, d, e, x, y = ((240, 200), (200, 200), (213, 194), (213, 206), 40, 0)
+        elif position == "NW":
+            a, c, d, e, x, y = ((240, 240), (200, 200), (210, 220), (220, 210), 40, 40)
+        elif position == "NE":
+            a, c, d, e, x, y = ((160, 240), (200, 200), (190, 220), (180, 210), -40, 40)
+        elif position == "SW":
+            a, c, d, e, x, y = ((240, 160), (200, 200), (210, 180), (220, 190), 40, -40)
+        elif position == "SE":
+            a, c, d, e, x, y = ((160, 160), (200, 200), (190, 180), (180, 190), -40 , -40)
+
+        print(position, a, c, d, e, x, y)
+        assert common.arrow_gravity(position, length, dx, dy) == (
+            a,
+            c,
+            d,
+            e,
+            x,
+            y,
+        )

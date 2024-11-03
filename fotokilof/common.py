@@ -30,12 +30,16 @@ module contains common functions:
 - crop_gravity - convert coordinates for crop3 and logo position
 - list_of_images - sorted list images in cwd
 - file_from_list_of_images - return filename from file_list depends of request
+- arrow_gravity - calculate coordinates if draw arrow
 """
 
 import fnmatch
+import logging
 from pathlib import PurePosixPath, PureWindowsPath
 import os
 import os.path
+
+module_logger = logging.getLogger(__name__)
 
 
 def resize_subdir(resize_vatiant, pixel_x, pixel_y, percent):
@@ -245,6 +249,73 @@ def file_from_list_of_images(file_list, current_file, request):
     if file == current_file:
         file = None
     return file
+
+
+def arrow_gravity(position, length, x0, y0):
+    """calculate coordinated to draw arrow"""
+    length = int(length)
+    x0 = int(x0)
+    y0 = int(y0)
+    width = int(length / 3 / 2)
+    length_1_2 = int(length / 2)
+    length_1_3 = int(length / 3)
+    length_1_4 = int(length / 4)
+
+    offset_x = 0
+    offset_y = 0
+    c = (x0, y0)
+    if position == "N":
+        a = (x0, y0 + length)
+        d = (x0 - width, y0 + length_1_3)
+        e = (x0 + width, y0 + length_1_3)
+        offset_y = length
+    elif position == "S":
+        a = (x0, y0 - length)
+        d = (x0 - width, y0 - length_1_3)
+        e = (x0 + width, y0 - length_1_3)
+        offset_y = -length
+    elif position == "W":
+        a = (x0 + length, y0)
+        d = (x0 + length_1_3, y0 - width)
+        e = (x0 + length_1_3, y0 + width)
+        offset_x = length
+    elif position == "E":
+        a = (x0 - length, y0)
+        d = (x0 - length_1_3, y0 - width)
+        e = (x0 - length_1_3, y0 + width)
+        offset_x = -length
+    elif position == "NW":
+        a = (x0 + length, y0 + length)
+        d = (x0 + length_1_4, y0 + length_1_2)
+        e = (x0 + length_1_2, y0 + length_1_4)
+        offset_x = length
+        offset_y = length
+    elif position == "NE":
+        a = (x0 - length, y0 + length)
+        d = (x0 - length_1_4, y0 + length_1_2)
+        e = (x0 - length_1_2, y0 + length_1_4)
+        offset_x = -length
+        offset_y = length
+    elif position == "SE":
+        a = (x0 - length, y0 - length)
+        d = (x0 - length_1_4, y0 - length_1_2)
+        e = (x0 - length_1_2, y0 - length_1_4)
+        offset_x = -length
+        offset_y = -length
+    elif position == "SW":
+        a = (x0 + length, y0 - length)
+        d = (x0 + length_1_4, y0 - length_1_2)
+        e = (x0 + length_1_2, y0 - length_1_4)
+        offset_x = length
+        offset_y = -length
+    else:
+        a = (0, 0)
+        d = (0, 0)
+        e = (0, 0)
+
+    msg = (position, a, c, d, e, offset_x, offset_y)
+    module_logger.debug("arrow_gravity: %s", msg)
+    return (a, c, d, e, offset_x, offset_y)
 
 
 # EOF

@@ -100,6 +100,7 @@ def save(ini_data):
     config.set(text["section"], "y", text["y"])
     config.set(text["section"], "text_rotate", str(text["text_rotate"]))
     config.set(text["section"], "text_rotate_own", text["text_rotate_own"])
+    config.set(text["section"], "text_arrow", str(text["text_arrow"]))
     # rotate
     config.add_section(rotate["section"])
     config.set(rotate["section"], "on", str(rotate["on"]))
