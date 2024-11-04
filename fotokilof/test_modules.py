@@ -103,11 +103,9 @@ def test_common_arrow_gravity():
     dx = 200
     dy = 200
 
-    for position in ("N", "S", "E", "W", "NW", "NE", "SW", "SE"):
+    for position in ("N", "S", "E", "W", "NW", "NE", "SW", "SE", "C"):
         if position == "C":
-            a, c, d, e = ((0, 0), (0, 0), (0, 0), (0, 0))
-            x = 0
-            y = 0
+            a, c, d, e, x, y = ((240, 240), (200, 200), (210, 220), (220, 210), 40, 60)
         elif position == "N":
             a, c, d, e, x, y = ((200, 240), (200, 200), (194, 213), (206, 213), 0, 40)
         elif position == "S":
@@ -126,12 +124,5 @@ def test_common_arrow_gravity():
             a, c, d, e, x, y = ((160, 160), (200, 200), (190, 180), (180, 190), -40 , -40)
 
         print(position, a, c, d, e, x, y)
-        assert common.arrow_gravity(position, length, dx, dy) == (
-            a,
-            c,
-            d,
-            e,
-            x,
-            y,
-        )
+        assert common.arrow_gravity(position, length, dx, dy) == (a, c, d, e, x, y)
 

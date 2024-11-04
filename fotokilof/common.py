@@ -317,7 +317,7 @@ def arrow_gravity(position, length, x0, y0):
         d = (x0 + length_1_4, y0 + length_1_2)
         e = (x0 + length_1_2, y0 + length_1_4)
         offset_x = length
-        offset_y = length
+        offset_y = 1.5 * length
 
     msg = (position, a, c, d, e, offset_x, offset_y)
     module_logger.debug("arrow_gravity: %s", msg)

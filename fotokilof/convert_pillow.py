@@ -224,10 +224,9 @@ def text(convert_data):
                 a, c, d, e, offset_x, offset_y = common.arrow_gravity(
                     gravity, text_size, text_x, text_y
                 )
-                if gravity != "C":
-                    draw_text.line([a, c], fill=text_color, width=2)
-                    draw_text.line([d, c], fill=text_color, width=2)
-                    draw_text.line([e, c], fill=text_color, width=2)
+                draw_text.line([a, c], fill=text_color, width=2)
+                draw_text.line([d, c], fill=text_color, width=2)
+                draw_text.line([e, c], fill=text_color, width=2)
             else:
                 offset_x = 0
                 offset_y = 0
@@ -393,14 +392,14 @@ def crop(file_in, clone, crop_variant, gravity, entries):
             right = entries["one_x2"]
             bottom = entries["one_y2"]
             result = clone.crop((left, top, right, bottom))
-    if crop_variant == 2:
+    elif crop_variant == 2:
         if (entries["two_width"] > 0) and (entries["two_height"] > 0):
             left = entries["two_x1"]
             top = entries["two_y1"]
             right = left + entries["two_width"]
             bottom = top + entries["two_height"]
             result = clone.crop((left, top, right, bottom))
-    if crop_variant == 3:
+    elif crop_variant == 3:
         if (entries["three_width"] > 0) and (entries["three_height"] > 0):
             clone = clone.crop(
                 common.crop_gravity(
@@ -415,6 +414,8 @@ def crop(file_in, clone, crop_variant, gravity, entries):
                     image_size[1],
                 )
             )
+        result = clone
+    else:
         result = clone
     module_logger.debug(" Conversion: crop %s", str(crop_variant))
     return result

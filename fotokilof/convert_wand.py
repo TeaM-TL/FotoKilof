@@ -220,9 +220,8 @@ def text(convert_data):
         else:
             offset_x = 0
             offset_y = 0
-        text_x = str(int(text_x) + abs(offset_x))
-        text_y = str(int(text_y) + abs(offset_y))
-        print("text", text_x, text_y, "offset", offset_x, offset_y)
+        text_x = int(int(text_x) + abs(offset_x))
+        text_y = int(int(text_y) + abs(offset_y))
         draw = Drawing()
         if box and not in_out:
             draw.text_under_color = box_color

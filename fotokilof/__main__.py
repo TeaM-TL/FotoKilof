@@ -241,22 +241,22 @@ def preview_new(file_out):
         )
         try:
             pi_preview_new.configure(file=preview_picture["filename"])
-            c_preview_new_pi.delete("all")
-            c_preview_new_pi.configure(
-                width=preview_picture["preview_width"],
-                height=preview_picture["preview_height"],
-            )
-            c_preview_new_pi.create_image(0, 0, image=pi_preview_new, anchor="nw")
+        except TclError as error_detail:
+            logging.error("preview_new: %s", error_detail)
 
-            l_preview_new.configure(
-                text=preview_picture["width"]
-                + "x"
-                + preview_picture["height"]
-                + " - "
-                + preview_picture["size"]
-            )
-        except:
-            logging.error("preview_new: Cannot read preview")
+        c_preview_new_pi.delete("all")
+        c_preview_new_pi.configure(
+            width=preview_picture["preview_width"],
+            height=preview_picture["preview_height"],
+        )
+        c_preview_new_pi.create_image(0, 0, image=pi_preview_new, anchor="nw")
+        l_preview_new.configure(
+            text=preview_picture["width"]
+            + "x"
+            + preview_picture["height"]
+            + " - "
+            + preview_picture["size"]
+        )
 
         gui.copy_to_clipboard(file_out, OS)
 
@@ -857,20 +857,17 @@ def open_file():
 def open_file_common(cwd, filename):
     """common function for: open, first, last, next, prev"""
     if filename is not None:
-        try:
-            file_in_path.set(common.spacja(os.path.join(cwd, filename), OS))
-            root.title(window_title + file_in_path.get())
-            image_size = convert_common.get_image_size(file_in_path.get(), PILLOW)
-            if image_size != (0, 0):
-                file_in_width.set(image_size[0])
-                file_in_height.set(image_size[1])
-                preview_orig()
-                extension_from_file()
-                preview_new_refresh("none")
-            else:
-                preview_orig_clear()
-        except:
-            logging.error("Error in open_file_common")
+        file_in_path.set(common.spacja(os.path.join(cwd, filename), OS))
+        root.title(window_title + file_in_path.get())
+        image_size = convert_common.get_image_size(file_in_path.get(), PILLOW)
+        if image_size != (0, 0):
+            file_in_width.set(image_size[0])
+            file_in_height.set(image_size[1])
+            preview_orig()
+            extension_from_file()
+            preview_new_refresh("none")
+        else:
+            preview_orig_clear()
 
 
 def open_file_dialog(dir_initial, title):
@@ -1536,14 +1533,15 @@ def preview_orig():
 
             try:
                 pi_preview_orig.configure(file=preview_picture["filename"])
-                c_preview_orig_pi.delete("all")
-                c_preview_orig_pi.configure(
-                    width=preview_picture["preview_width"],
-                    height=preview_picture["preview_height"],
-                )
-                c_preview_orig_pi.create_image(0, 0, image=pi_preview_orig, anchor="nw")
-            except:
-                logging.error("preview_orig: Cannot load preview")
+            except TclError as error_detail:
+                logging.error("preview_orig: %s", error_detail)
+
+            c_preview_orig_pi.delete("all")
+            c_preview_orig_pi.configure(
+                width=preview_picture["preview_width"],
+                height=preview_picture["preview_height"],
+            )
+            c_preview_orig_pi.create_image(0, 0, image=pi_preview_orig, anchor="nw")
 
             try:
                 l_preview_orig.configure(
@@ -1570,8 +1568,8 @@ def preview_logo():
 
         try:
             pi_logo_preview.configure(file=preview_picture["filename"])
-        except:
-            logging.error("Preview_logo: Cannot display file")
+        except TclError as error_detail:
+            logging.error("preview_logo: %s", error_detail)
 
         l_logo_preview.configure(
             text=preview_picture["width"] + "x" + preview_picture["height"]
@@ -1597,17 +1595,15 @@ def preview_compose():
 
         try:
             pi_compose_preview.configure(file=preview_picture["filename"])
-            c_compose_preview_pi.delete("all")
-            c_compose_preview_pi.configure(
-                width=preview_picture["preview_width"],
-                height=preview_picture["preview_height"],
-            )
-            c_compose_preview_pi.create_image(
-                0, 0, image=pi_compose_preview, anchor="nw"
-            )
-        except:
-            logging.error("Preview_compose: Cannot display file")
+        except TclError as error_detail:
+            logging.error("preview_compose: %s", error_detail)
 
+        c_compose_preview_pi.delete("all")
+        c_compose_preview_pi.configure(
+            width=preview_picture["preview_width"],
+            height=preview_picture["preview_height"],
+        )
+        c_compose_preview_pi.create_image(0, 0, image=pi_compose_preview, anchor="nw")
         l_compose_preview.configure(
             text=preview_picture["width"] + "x" + preview_picture["height"]
         )
