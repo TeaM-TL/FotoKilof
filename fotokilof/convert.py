@@ -71,7 +71,9 @@ def out_full_filename(file_in, destination, extension):
                         try:
                             os.mkdir(out_dir)
                         except FileExistsError:
-                            module_logger.error("pre_imagick: FileExistsError %s", out_dir)
+                            module_logger.error(
+                                "pre_imagick: FileExistsError %s", out_dir
+                            )
                         except FileNotFoundError:
                             module_logger.error(
                                 "pre_imagick: FileExistsError %s",
@@ -84,7 +86,9 @@ def out_full_filename(file_in, destination, extension):
                             )
                             result = None
                 except:
-                    module_logger.error("pre_imagick: other problem to create %s", out_dir)
+                    module_logger.error(
+                        "pre_imagick: other problem to create %s", out_dir
+                    )
                     result = None
 
         else:

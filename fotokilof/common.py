@@ -31,6 +31,7 @@ module contains common functions:
 - list_of_images - sorted list images in cwd
 - file_from_list_of_images - return filename from file_list depends of request
 - arrow_gravity - calculate coordinates if draw arrow
+- gravitation - translate eg. NS to Northsouth or lt as Wand-py or Pillow expect
 """
 
 import fnmatch
@@ -264,6 +265,9 @@ def arrow_gravity(position, length, x0, y0):
     offset_x = 0
     offset_y = 0
     c = (x0, y0)
+    a = (x0, y0)
+    d = (x0, y0)
+    e = (x0, y0)
     if position == "N":
         a = (x0, y0 + length)
         d = (x0 - width, y0 + length_1_3)
@@ -308,14 +312,65 @@ def arrow_gravity(position, length, x0, y0):
         e = (x0 + length_1_2, y0 - length_1_4)
         offset_x = length
         offset_y = -length
-    else:
-        a = (0, 0)
-        d = (0, 0)
-        e = (0, 0)
+    elif position == "C":
+        a = (x0 + length, y0 + length)
+        d = (x0 + length_1_4, y0 + length_1_2)
+        e = (x0 + length_1_2, y0 + length_1_4)
+        offset_x = length
+        offset_y = 1.5 * length
 
     msg = (position, a, c, d, e, offset_x, offset_y)
     module_logger.debug("arrow_gravity: %s", msg)
     return (a, c, d, e, offset_x, offset_y)
+
+
+def gravitation(gravity, text_x, text_y, image_width, image_height):
+    """translate gravitation name from Tk to Pillow specification"""
+
+    if gravity == "NW":
+        result0 = "lt"
+        result1 = "north_west"
+    elif gravity == "N":
+        result0 = "mt"
+        result1 = "north"
+        text_x += image_width / 2
+    elif gravity == "NE":
+        result0 = "rt"
+        result1 = "north_east"
+        text_x = image_width - text_x
+    elif gravity == "W":
+        result0 = "lm"
+        result1 = "west"
+        text_y += image_height / 2
+    elif gravity == "C":
+        result0 = "mm"
+        result1 = "center"
+        text_x += image_width / 2
+        text_y += image_height / 2
+    elif gravity == "E":
+        result0 = "rm"
+        result1 = "east"
+        text_x = image_width - text_x
+        text_y += image_height / 2
+    elif gravity == "SW":
+        result0 = "lb"
+        result1 = "south_west"
+        text_y = image_height - text_y
+    elif gravity == "S":
+        result0 = "mb"
+        result1 = "south"
+        text_x += image_width / 2
+        text_y = image_height - text_y
+    elif gravity == "SE":
+        result0 = "rb"
+        result1 = "south_east"
+        text_x = image_width - text_x
+        text_y = image_height - text_y
+    elif gravity == "0":
+        result0 = "0"
+        result1 = "0"
+
+    return (result0, result1), text_x, text_y
 
 
 # EOF

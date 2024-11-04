@@ -24,6 +24,7 @@ THE SOFTWARE.
 
 import check_new_version
 import common
+import convert_pillow
 import gui
 import version
 
@@ -64,6 +65,37 @@ def test_common_crop_gravity():
     assert common.crop_gravity(coordinates, 1000, 500) == (900, 400, 1000, 500)
 
 
+def test_common_gravitation():
+    """test pillow gravitation"""
+    pos_x, pos_y = (50, 50)
+    width, height = (1000, 1000)
+
+    for position in ("N", "S", "E", "W", "NW", "NE", "SW", "SE", "C"):
+        if position == "C":
+            pos, new_x, new_y = (("mm", "center"), 550, 550)
+        elif position == "N":
+            pos, new_x, new_y = (("mt", "north"), 550, 50)
+        elif position == "S":
+            pos, new_x, new_y = (("mb", "south"), 550, 950)
+        elif position == "E":
+            pos, new_x, new_y = (("rm", "east"), 950, 550)
+        elif position == "W":
+            pos, new_x, new_y = (("lm", "west"), 50, 550)
+        elif position == "NW":
+            pos, new_x, new_y = (("lt", "north_west"), 50, 50)
+        elif position == "NE":
+            pos, new_x, new_y = (("rt", "north_east"), 950, 50)
+        elif position == "SW":
+            pos, new_x, new_y = (("lb", "south_west"), 50, 950)
+        elif position == "SE":
+            pos, new_x, new_y = (("rb", "south_east"), 950, 950)
+
+        print(position, pos, new_x, new_y)
+        assert common.gravitation(position, pos_x, pos_y, width, height) == (
+            pos, new_x, new_y
+        )
+
+
 def test_common_arrow_gravity():
     """test arrow gravity"""
     position = "C"
@@ -71,11 +103,9 @@ def test_common_arrow_gravity():
     dx = 200
     dy = 200
 
-    for position in ("N", "S", "E", "W", "NW", "NE", "SW", "SE"):
+    for position in ("N", "S", "E", "W", "NW", "NE", "SW", "SE", "C"):
         if position == "C":
-            a, c, d, e = ((0, 0), (0, 0), (0, 0), (0, 0))
-            x = 0
-            y = 0
+            a, c, d, e, x, y = ((240, 240), (200, 200), (210, 220), (220, 210), 40, 60)
         elif position == "N":
             a, c, d, e, x, y = ((200, 240), (200, 200), (194, 213), (206, 213), 0, 40)
         elif position == "S":
@@ -94,11 +124,5 @@ def test_common_arrow_gravity():
             a, c, d, e, x, y = ((160, 160), (200, 200), (190, 180), (180, 190), -40 , -40)
 
         print(position, a, c, d, e, x, y)
-        assert common.arrow_gravity(position, length, dx, dy) == (
-            a,
-            c,
-            d,
-            e,
-            x,
-            y,
-        )
+        assert common.arrow_gravity(position, length, dx, dy) == (a, c, d, e, x, y)
+
