@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2024-11-03 15:31+0100\n"
-"PO-Revision-Date: 2024-11-03 15:42+0100\n"
+"PO-Revision-Date: 2024-11-25 19:54+0100\n"
 "Last-Translator: Giancarlo Dessì <slack@giand.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -35,10 +35,8 @@ msgid "done"
 msgstr "fatto"
 
 #: __main__.py:826
-#, fuzzy
-#| msgid "Select picture for processing"
 msgid "Select picture for composing"
-msgstr "Seleziona l'immagine da elaborare"
+msgstr "Seleziona l'immagine da comporre"
 
 #: __main__.py:838
 msgid "Select logo picture for inserting"
@@ -210,7 +208,7 @@ msgstr "EXIF"
 
 #: __main__.py:2210 __main__.py:2953
 msgid "Compose"
-msgstr ""
+msgstr "Componi"
 
 #: __main__.py:2245
 msgid ""
@@ -307,7 +305,7 @@ msgstr "Sfondo"
 
 #: __main__.py:2508
 msgid "Arrow"
-msgstr ""
+msgstr "Freccia"
 
 #: __main__.py:2512
 msgid "Gravity"
@@ -401,27 +399,23 @@ msgstr "Pulisci"
 
 #: __main__.py:2965 __main__.py:3021
 msgid "Bottom"
-msgstr ""
+msgstr "Sotto"
 
 #: __main__.py:2972 __main__.py:3018
-#, fuzzy
-#| msgid "Height"
 msgid "Right"
-msgstr "Altezza"
+msgstr "Destra"
 
 #: __main__.py:2979
-#, fuzzy
-#| msgid "AutoLevel"
 msgid "Autoresize"
-msgstr "AutoLevel"
+msgstr "Autoridimensiona"
 
 #: __main__.py:3009
 msgid "Top"
-msgstr ""
+msgstr "Sopra"
 
 #: __main__.py:3012
 msgid "Left"
-msgstr ""
+msgstr "Sinistra"
 
 #: __main__.py:3084
 msgid "Original"
@@ -760,7 +754,7 @@ msgstr "Usa lo sfondo per il testo"
 
 #: __main__.py:3334
 msgid "Add arrow between text and origin point"
-msgstr ""
+msgstr "Aggiungi una freccia tra il testo e il punto di origine"
 
 #: __main__.py:3335 __main__.py:3336
 msgid "Offset from gravity or absolute position"
@@ -975,64 +969,54 @@ msgid "Execute only add logo on current picture"
 msgstr "Esegui solo l'aggiunta di un logo sull'immagine corrente"
 
 #: __main__.py:3422
-#, fuzzy
-#| msgid "Select picture to put on picture"
 msgid "Select picture to compose with main picture"
-msgstr "Seleziona l'oggetto grafico da mettere sull'immagine"
+msgstr "Seleziona un'immagine da comporre con l'immagine principale"
 
 #: __main__.py:3423
 msgid "Join picture at bottom"
-msgstr ""
+msgstr "Unisci l'immagine sotto"
 
 #: __main__.py:3424
 msgid "Join picture at right"
-msgstr ""
+msgstr "Unisci l'immagine a destra"
 
 #: __main__.py:3425
 msgid "Autoresize picture if dimensions are not equal"
-msgstr ""
+msgstr "Scala l'immagine se le dimensioni non sono uguali"
 
 #: __main__.py:3426
-#, fuzzy
-#| msgid "Selected color to fill a gap"
 msgid "Selected color to fill gap"
-msgstr "Colore selezionato per riempire un vuoto"
+msgstr "Colore selezionato per riempire lo spazio"
 
 #: __main__.py:3427
-#, fuzzy
-#| msgid "Select color of text"
 msgid "Select color of gap"
-msgstr "Seleziona colore del testo"
+msgstr "Seleziona colore dello spazio"
 
 #: __main__.py:3428
 msgid "Join picture on right and move to top"
-msgstr ""
+msgstr "Unisci l'immagine a destra e sposta in alto"
 
 #: __main__.py:3429
 msgid "Join picture at bottom and move to left"
-msgstr ""
+msgstr "Unisci l'immagine in basso e sposta a destra"
 
 #: __main__.py:3430
 msgid "Join picture and move to center"
-msgstr ""
+msgstr "Unisci l'immagine e sposta al centro"
 
 #: __main__.py:3431
 msgid "Join picture at bottom and move to right"
-msgstr ""
+msgstr "Unisci l'immagine in basso e sposta a destra"
 
 #: __main__.py:3432
 msgid "Join picture on right and move to bottom"
-msgstr ""
+msgstr "Unisci l'immagine a destra e sposta in basso"
 
 #: __main__.py:3433
-#, fuzzy
-#| msgid "Execute only adding text on current picture"
 msgid "Execute compose picture with current main picture"
-msgstr "Esegue solo l'aggiunta di testo sull'immagine corrente"
+msgstr "Esegue composizione immagine con l'immagine principale corrente"
 
 #: __main__.py:3436
-#, fuzzy
-#| msgid "Display result image by IMdisplay or default image viewer of OS"
 msgid "Display image to join by IMdisplay or default image viewer of OS"
 msgstr ""
 "Mostra il risultato dell'immagine su IMdisplay o nel visualizzatore di "
@@ -1040,7 +1024,7 @@ msgstr ""
 
 #: __main__.py:3488
 msgid "New version of FotoKilof is available"
-msgstr ""
+msgstr "Disponibile una nuova versione di FotoKilof"
 
 #~ msgid "SVG files"
 #~ msgstr "File SVG"
