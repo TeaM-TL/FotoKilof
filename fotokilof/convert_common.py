@@ -104,7 +104,7 @@ def display_image(file_to_display, set_pillow):
     return result
 
 
-def get_image_size(file_in, set_pillow):
+def get_image_size(file_in, is_pillow):
     """
     identify width and height of picture
     input: file name
@@ -115,7 +115,7 @@ def get_image_size(file_in, set_pillow):
     if file_in:
         if os.path.isfile(file_in):
             try:
-                if set_pillow:
+                if is_pillow:
                     with PIL.Image.open(file_in) as image:
                         size = image.size
                 else:
@@ -256,8 +256,8 @@ def contrast(clone, contrast_variant, selection, black, white, set_pillow):
 
 def crop(file_in, clone, crop_variant, gravity, entries, set_pillow):
     """black and white or sepia"""
-    image_size = get_image_size(file_in)
-
+    image_size = get_image_size(file_in, set_pillow)
+    result = None
     match crop_variant:
         case 1:
             if (entries["one_x1"] < entries["one_x2"]) and (
@@ -297,19 +297,23 @@ def crop(file_in, clone, crop_variant, gravity, entries, set_pillow):
                     gravity_common, text_x, text_y = common.gravitation(
                         gravity, 0, 0, 0, 0
                     )
-                    left = (entries["three_dx"],)
-                    top = (entries["three_dy"],)
-                    width = (entries["three_width"],)
-                    height = (entries["three_height"],)
-                    gravity = (gravity_common[1],)
+                    left = entries["three_dx"]
+                    top = entries["three_dy"]
+                    width = entries["three_width"]
+                    height = entries["three_height"]
+                    gravity = gravity_common[1]
                     result = (left, top, width, height, gravity)
-    start_time = time.time()
-    if set_pillow:
-        result = convert_pillow.crop(clone, crop_variant, result)
+    print(result)
+    if result:
+        start_time = time.time()
+        if set_pillow:
+            result = convert_pillow.crop(clone, result)
+        else:
+            convert_wand.crop(clone, crop_variant, result)
+            result = clone
+        module_logger.info("Crop %ss", str(time.time() - start_time))
     else:
-        convert_wand.crop(clone, crop_variant, result)
         result = clone
-    module_logger.info("Crop %ss", str(time.time() - start_time))
     return result
 
 

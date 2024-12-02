@@ -290,7 +290,7 @@ def crop(clone, crop_variant, coordinates):
     crop picture
     entries are as dictionary
     """
-
+    print(coordinates)
     match crop_variant:
         case 1:
             clone.crop(
