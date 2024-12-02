@@ -303,7 +303,6 @@ def crop(file_in, clone, crop_variant, gravity, entries, set_pillow):
                     height = entries["three_height"]
                     gravity = gravity_common[1]
                     result = (left, top, width, height, gravity)
-    print(result)
     if result:
         start_time = time.time()
         if set_pillow:
