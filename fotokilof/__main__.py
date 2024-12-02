@@ -1069,14 +1069,15 @@ def ini_read_wraper():
     )
     co_preview_selector_new.current(preview_size_list.index(ini_entries["preview_new"]))
     log_level.set(ini_entries["log_level"])
-    if log_level.get() == "E":
-        logging.getLogger().setLevel(logging.ERROR)
-    elif log_level.get() == "W":
-        logging.getLogger().setLevel(logging.WARNING)
-    elif log_level.get() == "I":
-        logging.getLogger().setLevel(logging.INFO)
-    else:
-        logging.getLogger().setLevel(logging.DEBUG)
+    match log_level.get():
+        case "E":
+            logging.getLogger().setLevel(logging.ERROR)
+        case "W":
+            logging.getLogger().setLevel(logging.WARNING)
+        case "I":
+            logging.getLogger().setLevel(logging.INFO)
+        case _:
+            logging.getLogger().setLevel(logging.DEBUG)
     img_custom_on.set(ini_entries["img_custom_on"])
     check_version.set(ini_entries["check_version"])
     # resize
@@ -1483,31 +1484,32 @@ def preview_orig():
                     file_in_height.get(),
                     int(co_preview_selector_orig.get()),
                 )
-                if img_crop.get() == 1:
-                    x0 = common.empty(e1_crop_1.get())
-                    y0 = common.empty(e2_crop_1.get())
-                    x1 = common.empty(e3_crop_1.get())
-                    y1 = common.empty(e4_crop_1.get())
-                elif img_crop.get() == 2:
-                    x0 = common.empty(e1_crop_2.get())
-                    y0 = common.empty(e2_crop_2.get())
-                    x1 = x0 + common.empty(e3_crop_2.get())
-                    y1 = y0 + common.empty(e4_crop_2.get())
-                elif img_crop.get() == 3:
-                    coord_for_crop = (
-                        common.empty(e1_crop_3.get()),
-                        common.empty(e2_crop_3.get()),
-                        common.empty(e3_crop_3.get()),
-                        common.empty(e4_crop_3.get()),
-                        img_crop_gravity.get(),
-                    )
-                    coord = common.crop_gravity(
-                        coord_for_crop, xy_max["x_orig"], xy_max["y_orig"]
-                    )
-                    x0 = coord[0]
-                    y0 = coord[1]
-                    x1 = coord[2]
-                    y1 = coord[3]
+                match img_crop.get():
+                    case 1:
+                        x0 = common.empty(e1_crop_1.get())
+                        y0 = common.empty(e2_crop_1.get())
+                        x1 = common.empty(e3_crop_1.get())
+                        y1 = common.empty(e4_crop_1.get())
+                    case 2:
+                        x0 = common.empty(e1_crop_2.get())
+                        y0 = common.empty(e2_crop_2.get())
+                        x1 = x0 + common.empty(e3_crop_2.get())
+                        y1 = y0 + common.empty(e4_crop_2.get())
+                    case 3:
+                        coord_for_crop = (
+                            common.empty(e1_crop_3.get()),
+                            common.empty(e2_crop_3.get()),
+                            common.empty(e3_crop_3.get()),
+                            common.empty(e4_crop_3.get()),
+                            img_crop_gravity.get(),
+                        )
+                        coord = common.crop_gravity(
+                            coord_for_crop, xy_max["x_orig"], xy_max["y_orig"]
+                        )
+                        x0 = coord[0]
+                        y0 = coord[1]
+                        x1 = coord[2]
+                        y1 = coord[3]
                 if (xy_max["x_orig"] > 0) and (xy_max["y_orig"] > 0):
                     ratio_x = xy_max["x_max"] / xy_max["x_orig"]
                     ratio_y = xy_max["y_max"] / xy_max["y_orig"]
@@ -1747,42 +1749,43 @@ def tools_set(preview_on):
 
 def crop_tool_hide_show():
     """hide not necessary things, or show if the are needed"""
-    if img_crop.get() == 1:
-        f_clickL_crop.grid()
-        f_clickR_crop.grid()
-        e1_crop_2.grid_remove()
-        e2_crop_2.grid_remove()
-        e3_crop_2.grid_remove()
-        e4_crop_2.grid_remove()
-        e1_crop_3.grid_remove()
-        e2_crop_3.grid_remove()
-        e3_crop_3.grid_remove()
-        e4_crop_3.grid_remove()
-        frame_crop_gravity.grid_remove()
-    elif img_crop.get() == 2:
-        f_clickL_crop.grid_remove()
-        f_clickR_crop.grid_remove()
-        e1_crop_2.grid()
-        e2_crop_2.grid()
-        e3_crop_2.grid()
-        e4_crop_2.grid()
-        e1_crop_3.grid_remove()
-        e2_crop_3.grid_remove()
-        e3_crop_3.grid_remove()
-        e4_crop_3.grid_remove()
-        frame_crop_gravity.grid_remove()
-    elif img_crop.get() == 3:
-        f_clickL_crop.grid_remove()
-        f_clickR_crop.grid_remove()
-        e1_crop_2.grid_remove()
-        e2_crop_2.grid_remove()
-        e3_crop_2.grid_remove()
-        e4_crop_2.grid_remove()
-        e1_crop_3.grid()
-        e2_crop_3.grid()
-        e3_crop_3.grid()
-        e4_crop_3.grid()
-        frame_crop_gravity.grid()
+    match img_crop.get():
+        case 1:
+            f_clickL_crop.grid()
+            f_clickR_crop.grid()
+            e1_crop_2.grid_remove()
+            e2_crop_2.grid_remove()
+            e3_crop_2.grid_remove()
+            e4_crop_2.grid_remove()
+            e1_crop_3.grid_remove()
+            e2_crop_3.grid_remove()
+            e3_crop_3.grid_remove()
+            e4_crop_3.grid_remove()
+            frame_crop_gravity.grid_remove()
+        case 2:
+            f_clickL_crop.grid_remove()
+            f_clickR_crop.grid_remove()
+            e1_crop_2.grid()
+            e2_crop_2.grid()
+            e3_crop_2.grid()
+            e4_crop_2.grid()
+            e1_crop_3.grid_remove()
+            e2_crop_3.grid_remove()
+            e3_crop_3.grid_remove()
+            e4_crop_3.grid_remove()
+            frame_crop_gravity.grid_remove()
+        case 3:
+            f_clickL_crop.grid_remove()
+            f_clickR_crop.grid_remove()
+            e1_crop_2.grid_remove()
+            e2_crop_2.grid_remove()
+            e3_crop_2.grid_remove()
+            e4_crop_2.grid_remove()
+            e1_crop_3.grid()
+            e2_crop_3.grid()
+            e3_crop_3.grid()
+            e4_crop_3.grid()
+            frame_crop_gravity.grid()
     preview_orig()
 
 
@@ -2216,14 +2219,16 @@ cb_mirror.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_bw.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_contrast.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_normalize.pack(padx=5, pady=5, anchor=W, side=LEFT)
-cb_vignette.pack(padx=5, pady=5, anchor=W, side=LEFT)
+if not PILLOW:
+    cb_vignette.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_border.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_rotate.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_resize.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_text.pack(padx=5, pady=5, anchor=W, side=LEFT)
-cb_logo.pack(padx=5, pady=5, anchor=W, side=LEFT)
-cb_custom.pack(padx=5, pady=5, anchor=W, side=LEFT)
-cb_exif.pack(padx=5, pady=5, anchor=W, side=LEFT)
+if not PILLOW:
+    cb_logo.pack(padx=5, pady=5, anchor=W, side=LEFT)
+    cb_custom.pack(padx=5, pady=5, anchor=W, side=LEFT)
+    cb_exif.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_compose.pack(padx=5, pady=5, anchor=W, side=LEFT)
 
 ####################################################################

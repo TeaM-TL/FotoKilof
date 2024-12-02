@@ -18,5 +18,6 @@ done
 cd ..
 
 # run FotoKilof
+#python3 –m compileall $MAIN &
 python3 $MAIN &
 

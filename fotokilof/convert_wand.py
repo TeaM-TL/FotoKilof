@@ -27,7 +27,6 @@ Info
 Common
 - make_clone - open origal picture and make clone for processing
 - save_close_clone - save clone into file and close clone
-- get_image_size - get size from image
 Converters
 - pip - picture in picture, for inserting logo
 - rotate - rotate picture
@@ -77,10 +76,9 @@ def make_clone(file_to_clone, color=None):
     """open picture and make clone for processing"""
     if len(file_to_clone):
         with Image(filename=file_to_clone, background=color) as image:
-            result = image.clone()
+            return image.clone()
     else:
-        result = None
-    return result
+        return None
 
 
 def save_close_clone(clone, file_out, exif=0):
@@ -94,23 +92,6 @@ def save_close_clone(clone, file_out, exif=0):
             clone.save(file=file_handler)
             module_logger.debug(" Save file: %s", file_out)
         clone.close()
-
-
-def get_image_size(filename):
-    """
-    identify width and height of picture
-    input: file name
-    output: size (width, height)
-    """
-    size = (0, 0)
-    if filename is not None:
-        if os.path.isfile(filename):
-            try:
-                with Image(filename=filename) as image:
-                    size = image.size
-            except:
-                module_logger.error(" Error read file: %s", filename)
-    return size
 
 
 # ------------------------------------ Converters
@@ -134,17 +115,15 @@ def pip(clone, logo, logo_data, image_height, image_width):
                     image=logo_img,
                 )
                 draw(clone)
-    module_logger.debug(" Conversion: logo")
 
 
 def rotate(clone, angle, color, angle_own):
     """rotate"""
     if angle == 0:
         angle = common.empty(angle_own)
-    if angle == 0:
-        color = None
+        if angle == 0:
+            color = None
     clone.rotate(angle, background=color)
-    module_logger.debug(" Conversion: rotate %s", str(angle))
 
 
 def mirror(clone, flip, flop):
@@ -153,13 +132,11 @@ def mirror(clone, flip, flop):
         clone.flip()
     if flop:
         clone.flop()
-    module_logger.debug(" Conversion: mirror")
 
 
 def border(clone, color, x, y):
     """border: color, x, y"""
     clone.border(color, common.empty(x), common.empty(y))
-    module_logger.debug(" Conversion: border")
 
 
 def text(convert_data):
@@ -258,7 +235,6 @@ def text(convert_data):
                 canvas.annotate(text_string, draw)
                 clone.sequence.append(canvas)
                 clone.concat(stacked=True)
-    module_logger.debug(" Conversion: text %s", str(in_out))
     return clone
 
 
@@ -270,13 +246,11 @@ def bw(clone, bw_variant, sepia):
     else:
         # sepia
         clone.sepia_tone(threshold=common.empty(sepia) / 100)
-    module_logger.debug(" Conversion: black-white/sepia %s", str(bw_variant))
 
 
 def resize(clone, command):
     """resize picture"""
     clone.transform(crop="", resize=command)
-    module_logger.debug(" Conversion: resize")
 
 
 def normalize(clone, normalize_variant, channel):
@@ -289,7 +263,6 @@ def normalize(clone, normalize_variant, channel):
             clone.normalize()
     else:
         clone.auto_level()
-    module_logger.debug(" Conversion: normalize %s", str(normalize_variant))
 
 
 def contrast(clone, contrast_variant, selection, black, white):
@@ -310,49 +283,37 @@ def contrast(clone, contrast_variant, selection, black, white):
             while iteration < abs(int(selection)):
                 iteration += 1
                 clone.contrast(sharpen=sharpen)
-    module_logger.debug(" Conversion: contrast %s", str(contrast_variant))
 
 
-def crop(file_in, clone, crop_variant, gravity, entries):
+def crop(clone, crop_variant, coordinates):
     """
     crop picture
     entries are as dictionary
     """
-    image_size = get_image_size(file_in)
 
-    if crop_variant == 1:
-        if (entries["one_x1"] < entries["one_x2"]) and (
-            entries["one_y1"] < entries["one_y2"]
-        ):
-            if entries["one_x2"] > image_size[0]:
-                entries["one_x2"] = image_size[0]
-            if entries["one_y2"] > image_size[1]:
-                entries["one_y2"] = image_size[1]
+    match crop_variant:
+        case 1:
             clone.crop(
-                left=entries["one_x1"],
-                top=entries["one_y1"],
-                right=entries["one_x2"],
-                bottom=entries["one_y2"],
+                left=coordinates[0],
+                top=coordinates[1],
+                right=coordinates[2],
+                bottom=coordinates[3],
             )
-    if crop_variant == 2:
-        if (entries["two_width"] > 0) and (entries["two_height"] > 0):
+        case 2:
             clone.crop(
-                left=entries["two_x1"],
-                top=entries["two_y1"],
-                width=entries["two_width"],
-                height=entries["two_height"],
+                left=coordinates[0],
+                top=coordinates[1],
+                width=coordinates[2],
+                height=coordinates[3],
             )
-    if crop_variant == 3:
-        if (entries["three_width"] > 0) and (entries["three_height"] > 0):
-            gravity_common, text_x, text_y = common.gravitation(gravity, 0, 0, 0, 0)
+        case 3:
             clone.crop(
-                left=entries["three_dx"],
-                top=entries["three_dy"],
-                width=entries["three_width"],
-                height=entries["three_height"],
-                gravity=gravity_common[1],
+                left=coordinates[0],
+                top=coordinates[1],
+                width=coordinates[2],
+                height=coordinates[3],
+                gravity=coordinates[4],
             )
-    module_logger.debug(" Conversion: crop %s", str(crop_variant))
 
 
 def vignette(clone, dx, dy, radius, sigma):
@@ -369,7 +330,6 @@ def vignette(clone, dx, dy, radius, sigma):
         x=common.empty(dx),
         y=common.empty(dy),
     )
-    module_logger.debug(" Conversion: vigette")
 
 
 def compose(clone, compose_file, right, autoresize, color, gravity):
@@ -490,7 +450,6 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
     else:
         module_logger.warning(" Conversion: compose - missing file to compose")
 
-    module_logger.debug(" Conversion: compose")
     return clone
 
 

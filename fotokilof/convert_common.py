@@ -42,6 +42,7 @@ Info
 """
 
 import logging
+import os.path
 import time
 import PIL
 
@@ -55,6 +56,8 @@ except:
 
 import convert_pillow
 import convert_wand
+
+import common
 
 
 module_logger = logging.getLogger(__name__)
@@ -76,20 +79,27 @@ def display_image(file_to_display, set_pillow):
     """display image"""
     # file_in = common.spacja(file_to_display)
     module_logger.info(" Display file: %s", file_to_display)
-    try:
-        start_time = time.time()
-        if set_pillow:
-            with PIL.Image.open(file_to_display) as image:
-                image.show()
+    start_time = time.time()
+    result = None
+    if file_to_display:
+        if os.path.isfile(file_to_display):
+            try:
+                if set_pillow:
+                    with PIL.Image.open(file_to_display) as image:
+                        image.show()
+                else:
+                    with Image(filename=file_to_display) as image:
+                        display(image)
+                result = "OK"
+            except:
+                module_logger.error(
+                    "Display_image: Error display file: %s", file_to_display
+                )
         else:
-            with Image(filename=file_to_display) as image:
-                display(image)
-            module_logger.info("Display_image: %ss", str(time.time() - start_time))
-    except:
-        module_logger.error(" Error display file: %s", file_to_display)
-        result = None
-
-    result = "OK"
+            module_logger.error("Display_image: file not found: %s", file_to_display)
+    else:
+        module_logger.error("Display_image: file is None")
+    module_logger.info("Display_image: %ss", str(time.time() - start_time))
 
     return result
 
@@ -101,10 +111,23 @@ def get_image_size(file_in, set_pillow):
     output: size (width, height)
     """
     start_time = time.time()
-    if set_pillow:
-        size = convert_pillow.get_image_size(file_in)
+    size = (0, 0)
+    if file_in:
+        if os.path.isfile(file_in):
+            try:
+                if set_pillow:
+                    with PIL.Image.open(file_in) as image:
+                        size = image.size
+                else:
+                    with Image(filename=file_in) as image:
+                        size = image.size
+            except:
+                module_logger.error("get_image_size: error read file: %s", file_in)
+        else:
+            module_logger.error("get_image_size: file not found: %s", file_in)
     else:
-        size = convert_wand.get_image_size(file_in)
+        module_logger.error("get_image_size: file is None")
+
     module_logger.info("get_image_size: %ss", str(time.time() - start_time))
     return size
 
@@ -233,11 +256,58 @@ def contrast(clone, contrast_variant, selection, black, white, set_pillow):
 
 def crop(file_in, clone, crop_variant, gravity, entries, set_pillow):
     """black and white or sepia"""
+    image_size = get_image_size(file_in)
+
+    match crop_variant:
+        case 1:
+            if (entries["one_x1"] < entries["one_x2"]) and (
+                entries["one_y1"] < entries["one_y2"]
+            ):
+                if entries["one_x2"] > image_size[0]:
+                    entries["one_x2"] = image_size[0]
+                if entries["one_y2"] > image_size[1]:
+                    entries["one_y2"] = image_size[1]
+                left = entries["one_x1"]
+                top = entries["one_y1"]
+                right = entries["one_x2"]
+                bottom = entries["one_y2"]
+                result = (left, top, right, bottom)
+        case 2:
+            if (entries["two_width"] > 0) and (entries["two_height"] > 0):
+                left = entries["two_x1"]
+                top = entries["two_y1"]
+                right = left + entries["two_width"]
+                bottom = top + entries["two_height"]
+                result = (left, top, right, bottom)
+        case 3:
+            if (entries["three_width"] > 0) and (entries["three_height"] > 0):
+                if set_pillow:
+                    result = common.crop_gravity(
+                        (
+                            entries["three_dx"],
+                            entries["three_dy"],
+                            entries["three_width"],
+                            entries["three_height"],
+                            gravity,
+                        ),
+                        image_size[0],
+                        image_size[1],
+                    )
+                else:
+                    gravity_common, text_x, text_y = common.gravitation(
+                        gravity, 0, 0, 0, 0
+                    )
+                    left = (entries["three_dx"],)
+                    top = (entries["three_dy"],)
+                    width = (entries["three_width"],)
+                    height = (entries["three_height"],)
+                    gravity = (gravity_common[1],)
+                    result = (left, top, width, height, gravity)
     start_time = time.time()
     if set_pillow:
-        result = convert_pillow.crop(file_in, clone, crop_variant, gravity, entries)
+        result = convert_pillow.crop(clone, crop_variant, result)
     else:
-        convert_wand.crop(file_in, clone, crop_variant, gravity, entries)
+        convert_wand.crop(clone, crop_variant, result)
         result = clone
     module_logger.info("Crop %ss", str(time.time() - start_time))
     return result

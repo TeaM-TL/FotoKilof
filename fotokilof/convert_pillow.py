@@ -108,24 +108,6 @@ def save_close_clone(clone, file_out, ppm=0, exif=0):
         clone.close()
 
 
-def get_image_size(filename):
-    """
-    identify width and height of picture
-    input: file name
-    output: size (width, height)
-    """
-    size = (0, 0)
-    if filename is not None:
-        if os.path.isfile(filename):
-            try:
-                with Image.open(filename) as image:
-                    size = image.size
-            except:
-                module_logger.error(" Error read file: %s", filename)
-    module_logger.debug("get_image_size: %s, %s", filename, str(size))
-    return size
-
-
 # ------------------------------------ Converters
 def pip(clone, logo, logo_data, image_height, image_width):
     """put picture on picture
@@ -242,18 +224,19 @@ def text(convert_data):
         else:
             # outside
             left, top, right, bottom = font.getbbox(text_string)
-            if gravity == "W":
-                text_x = 0
-                draw_gravity = "lt"
-            elif gravity == "C":
-                text_x = image_width / 2
-                draw_gravity = "mt"
-            elif gravity == "E":
-                text_x = image_width
-                draw_gravity = "rt"
-            else:
-                text_x = 0
-                draw_gravity = "lt"
+            match gravity:
+                case "W":
+                    text_x = 0
+                    draw_gravity = "lt"
+                case "C":
+                    text_x = image_width / 2
+                    draw_gravity = "mt"
+                case "E":
+                    text_x = image_width
+                    draw_gravity = "rt"
+                case _:
+                    text_x = 0
+                    draw_gravity = "lt"
             image_text = Image.new("RGB", (image_width, bottom), box_color)
             draw_outside_text = ImageDraw.Draw(image_text)
             draw_outside_text.text(
@@ -356,69 +339,20 @@ def contrast(clone, contrast_variant, selection, black, white):
             black = 100
         if float(white) > 100:
             white = 100
-        # clone.contrast_stretch(black_point=float(black), white_point=float(white))
         result = ImageOps.autocontrast(clone, (float(black), float(white)))
-    # else:
-    #     if int(selection) != 0:
-    #         if int(selection) > 0:
-    #             sharpen = True
-    #         else:
-    #             sharpen = False
-    #         iteration = 0
-    #         while iteration < abs(int(selection)):
-    #             iteration += 1
-    #             clone.contrast(sharpen=sharpen)
-    module_logger.debug(" Conversion: contrast %s", str(contrast_variant))
     return result
 
 
-def crop(file_in, clone, crop_variant, gravity, entries):
+def crop(clone, coordinates):
     """
     crop picture
     entries are as dictionary
     """
-    image_size = get_image_size(file_in)
-
-    if crop_variant == 1:
-        if (entries["one_x1"] < entries["one_x2"]) and (
-            entries["one_y1"] < entries["one_y2"]
-        ):
-            if entries["one_x2"] > image_size[0]:
-                entries["one_x2"] = image_size[0]
-            if entries["one_y2"] > image_size[1]:
-                entries["one_y2"] = image_size[1]
-            left = entries["one_x1"]
-            top = entries["one_y1"]
-            right = entries["one_x2"]
-            bottom = entries["one_y2"]
-            result = clone.crop((left, top, right, bottom))
-    elif crop_variant == 2:
-        if (entries["two_width"] > 0) and (entries["two_height"] > 0):
-            left = entries["two_x1"]
-            top = entries["two_y1"]
-            right = left + entries["two_width"]
-            bottom = top + entries["two_height"]
-            result = clone.crop((left, top, right, bottom))
-    elif crop_variant == 3:
-        if (entries["three_width"] > 0) and (entries["three_height"] > 0):
-            clone = clone.crop(
-                common.crop_gravity(
-                    (
-                        entries["three_dx"],
-                        entries["three_dy"],
-                        entries["three_width"],
-                        entries["three_height"],
-                        gravity,
-                    ),
-                    image_size[0],
-                    image_size[1],
-                )
-            )
-        result = clone
-    else:
-        result = clone
-    module_logger.debug(" Conversion: crop %s", str(crop_variant))
-    return result
+    left = coordinates[0]
+    top = coordinates[1]
+    right = coordinates[2]
+    bottom = coordinates[3]
+    return clone.crop((left, top, right, bottom))
 
 
 def vignette(clone, dx, dy, radius, sigma):
@@ -429,13 +363,7 @@ def vignette(clone, dx, dy, radius, sigma):
     sigma - standard deviation for Gaussian blur
     color - color of corners
     """
-    # clone.vignette(
-    #     radius=common.empty(radius),
-    #     sigma=common.empty(sigma),
-    #     x=common.empty(dx),
-    #     y=common.empty(dy),
-    # )
-    # module_logger.debug(" Conversion: vigette")
+
     module_logger.warning("vigette not available for PILLOW, install ImageMagick")
 
 
@@ -542,7 +470,7 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
             result = image_new
     else:
         module_logger.warning(" Conversion: compose - missing file to compose")
-    module_logger.debug(" Conversion: compose")
+
     return result
 
 

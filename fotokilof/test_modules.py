@@ -71,24 +71,25 @@ def test_common_gravitation():
     width, height = (1000, 1000)
 
     for position in ("N", "S", "E", "W", "NW", "NE", "SW", "SE", "C"):
-        if position == "C":
-            pos, new_x, new_y = (("mm", "center"), 550, 550)
-        elif position == "N":
-            pos, new_x, new_y = (("mt", "north"), 550, 50)
-        elif position == "S":
-            pos, new_x, new_y = (("mb", "south"), 550, 950)
-        elif position == "E":
-            pos, new_x, new_y = (("rm", "east"), 950, 550)
-        elif position == "W":
-            pos, new_x, new_y = (("lm", "west"), 50, 550)
-        elif position == "NW":
-            pos, new_x, new_y = (("lt", "north_west"), 50, 50)
-        elif position == "NE":
-            pos, new_x, new_y = (("rt", "north_east"), 950, 50)
-        elif position == "SW":
-            pos, new_x, new_y = (("lb", "south_west"), 50, 950)
-        elif position == "SE":
-            pos, new_x, new_y = (("rb", "south_east"), 950, 950)
+        match position:
+            case "C":
+                pos, new_x, new_y = (("mm", "center"), 550, 550)
+            case "N":
+                pos, new_x, new_y = (("mt", "north"), 550, 50)
+            case "S":
+                pos, new_x, new_y = (("mb", "south"), 550, 950)
+            case "E":
+                pos, new_x, new_y = (("rm", "east"), 950, 550)
+            case "W":
+                pos, new_x, new_y = (("lm", "west"), 50, 550)
+            case "NW":
+                pos, new_x, new_y = (("lt", "north_west"), 50, 50)
+            case "NE":
+                pos, new_x, new_y = (("rt", "north_east"), 950, 50)
+            case "SW":
+                pos, new_x, new_y = (("lb", "south_west"), 50, 950)
+            case "SE":
+                pos, new_x, new_y = (("rb", "south_east"), 950, 950)
 
         print(position, pos, new_x, new_y)
         assert common.gravitation(position, pos_x, pos_y, width, height) == (
@@ -104,25 +105,25 @@ def test_common_arrow_gravity():
     dy = 200
 
     for position in ("N", "S", "E", "W", "NW", "NE", "SW", "SE", "C"):
-        if position == "C":
-            a, c, d, e, x, y = ((240, 240), (200, 200), (210, 220), (220, 210), 40, 60)
-        elif position == "N":
-            a, c, d, e, x, y = ((200, 240), (200, 200), (194, 213), (206, 213), 0, 40)
-        elif position == "S":
-            a, c, d, e, x, y = ((200, 160), (200, 200), (194, 187), (206, 187), 0, -40)
-        elif position == "E":
-            a, c, d, e, x, y = ((160, 200), (200, 200), (187, 194), (187, 206), -40 , 0)
-        elif position == "W":
-            a, c, d, e, x, y = ((240, 200), (200, 200), (213, 194), (213, 206), 40, 0)
-        elif position == "NW":
-            a, c, d, e, x, y = ((240, 240), (200, 200), (210, 220), (220, 210), 40, 40)
-        elif position == "NE":
-            a, c, d, e, x, y = ((160, 240), (200, 200), (190, 220), (180, 210), -40, 40)
-        elif position == "SW":
-            a, c, d, e, x, y = ((240, 160), (200, 200), (210, 180), (220, 190), 40, -40)
-        elif position == "SE":
-            a, c, d, e, x, y = ((160, 160), (200, 200), (190, 180), (180, 190), -40 , -40)
+        match position:
+            case"C":
+                a, c, d, e, x, y = ((240, 240), (200, 200), (210, 220), (220, 210), 40, 60)
+            case "N":
+                a, c, d, e, x, y = ((200, 240), (200, 200), (194, 213), (206, 213), 0, 40)
+            case "S":
+                a, c, d, e, x, y = ((200, 160), (200, 200), (194, 187), (206, 187), 0, -40)
+            case "E":
+                a, c, d, e, x, y = ((160, 200), (200, 200), (187, 194), (187, 206), -40, 0)
+            case "W":
+                a, c, d, e, x, y = ((240, 200), (200, 200), (213, 194), (213, 206), 40, 0)
+            case "NW":
+                a, c, d, e, x, y = ((240, 240), (200, 200), (210, 220), (220, 210), 40, 40)
+            case "NE":
+                a, c, d, e, x, y = ((160, 240), (200, 200), (190, 220), (180, 210), -40, 40)
+            case "SW":
+                a, c, d, e, x, y = ((240, 160), (200, 200), (210, 180), (220, 190), 40, -40)
+            case "SE":
+                a, c, d, e, x, y = ((160, 160), (200, 200), (190, 180), (180, 190), -40, -40)
 
         print(position, a, c, d, e, x, y)
         assert common.arrow_gravity(position, length, dx, dy) == (a, c, d, e, x, y)
-

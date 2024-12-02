@@ -2,7 +2,7 @@
 
 ## 2024
 
-5.1.2 updated italian translation
+5.1.2 updated italian translation, less duplicates, require Python 3.10+
 
 5.1.1 add arrow into text if needed. Pillow works
 
