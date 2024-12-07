@@ -3153,10 +3153,7 @@ co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_compose_preview_selector.bind("<<ComboboxSelected>>", preview_compose_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 c_preview_orig_pi.bind("<Button-1>", mouse_crop_nw)
-if OS == "MACOS":
-    c_preview_orig_pi.bind("<Button-2>", mouse_crop_se)
-else:
-    c_preview_orig_pi.bind("<Button-3>", mouse_crop_se)
+c_preview_orig_pi.bind("<Button-3>", mouse_crop_se)
 c_preview_new_pi.bind("<Button-1>", preview_new_button)
 root.bind("<F1>", help_info)
 root.bind("<F2>", change_ttk_theme)
