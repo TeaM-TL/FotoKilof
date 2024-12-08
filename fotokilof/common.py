@@ -381,95 +381,119 @@ def gravitation(gravity, text_x, text_y, image_width, image_height):
     return (result0, result1), text_x, text_y
 
 
+def compose_calculate_half(clone, compose, auto_resize, gravity):
+    """
+    calculate compose for one size
+    if right use x1=x1, y1=y1 etc.
+    if top use x1=y1, xy=x1 etc.
+    """
+    clone_x, clone_y = clone
+    compose_x, compose_y = compose
+
+    if auto_resize:
+        resize_x = int(compose_x * clone_y / compose_y)
+        resize_y = clone_y
+        canvas_x = clone_x + resize_x
+        canvas_y = clone_y
+    else:
+        resize_x = 0
+        resize_y = 0
+        canvas_x = clone_x + compose_x
+        if clone_y >= compose_y:
+            canvas_y = clone_y
+        else:
+            canvas_y = compose_y
+    # for no auto_resize
+    pos_x1 = 0
+    pos_x2 = clone_x
+    if clone_y >= compose_y:
+        # orig > compose
+        pos_y1 = 0
+        match gravity:
+            case "N":
+                pos_y2 = 0
+            case "S":
+                pos_y2 = int(canvas_y - compose_y)
+            case _:
+                pos_y2 = int(canvas_y / 2 - compose_y / 2)
+        if auto_resize:
+            pos_y2 = 0
+    else:
+        # orig < compose
+        pos_y2 = 0
+        match gravity:
+            case 1:
+                pos_y1 = 0
+            case 3:
+                pos_y1 = int(canvas_y - clone_y)
+            case 2:
+                pos_y1 = int(canvas_y / 2 - clone_y / 2)
+        if auto_resize:
+            pos_y1 = 0
+
+    return pos_x1, pos_y1, pos_x2, pos_y2, canvas_x, canvas_y, resize_x, resize_y
+
+
 def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
     """calculation position for compose"""
 
     clone_width, clone_height = clone_size
     compose_width, compose_height = compose_size
-    # default, use if noautoresize
-    resize_width = 0
-    resize_height = 0
     if right:
         stacked = False
-        if clone_height >= compose_height:
-            canvas_height = clone_height
-        else:
-            canvas_height = compose_height
-        if autoresize:
-            resize_width = int(compose_width * clone_height / compose_height)
-            resize_height = clone_height
-            canvas_width = clone_width + resize_width
-        else:
-            canvas_width = clone_width + compose_width
-        # for no autoresize
-        position_x1 = 0
-        position_x2 = clone_width
-        if clone_height >= compose_height:
-            # orig > compose
-            position_y1 = 0
-            match gravity:
-                case "N":
-                    position_y2 = 0
-                case "S":
-                    position_y2 = int(canvas_height - compose_height)
-                case _:
-                    position_y2 = int(canvas_height / 2 - compose_height / 2)
-            if autoresize:
-                position_y2 = 0
-        else:
-            # orig < compose
-            position_y2 = 0
-            match gravity:
-                case "N":
-                    position_y1 = 0
-                case "S":
-                    position_y1 = int(canvas_height - clone_height)
-                case _:
-                    position_y1 = int(canvas_height / 2 - clone_height / 2)
-            if autoresize:
-                position_y1 = 0
+        match gravity:
+            case "N":
+                gravity = 1
+            case "C":
+                gravity = 2
+            case "S":
+                gravity = 3
+        (
+            position_x1,
+            position_y1,
+            position_x2,
+            position_y2,
+            canvas_width,
+            canvas_height,
+            resize_width,
+            resize_height,
+        ) = compose_calculate_half(
+            (clone_width, clone_height),
+            (compose_width, compose_height),
+            autoresize,
+            gravity,
+        )
     else:
         stacked = True
-        # for canvas
-        if clone_width >= compose_width:
-            canvas_width = clone_width
-        else:
-            canvas_width = compose_width
-        if autoresize:
-            resize_width = clone_width
-            resize_height = int(compose_height * clone_width / compose_width)
-            canvas_height = int(clone_height + resize_height)
-        else:
-            canvas_height = int(clone_height + compose_height)
-        # for no autoresize
-        position_y1 = 0
-        position_y2 = clone_height
-        if clone_width >= compose_width:
-            # orig > compose
-            position_x1 = 0
-            match gravity:
-                case "W":
-                    position_x2 = 0
-                case "E":
-                    position_x2 = int(canvas_width - compose_width)
-                case _:
-                    position_x2 = int(canvas_width / 2 - compose_width / 2)
-            if autoresize:
-                position_x2 = 0
-        else:
-            # orig < compose
-            position_x2 = 0
-            match gravity:
-                case "W":
-                    position_x1 = 0
-                case "E":
-                    position_x1 = int(canvas_width - clone_width)
-                case _:
-                    position_x1 = int(canvas_width / 2 - clone_width / 2)
-            if autoresize:
-                position_x1 = 0
-
-    return (position_x1, position_y1), (position_x2, position_y2), (canvas_width, canvas_height), (resize_width, resize_height), stacked
+        match gravity:
+            case "W":
+                gravity = 1
+            case "C":
+                gravity = 2
+            case "E":
+                gravity = 3
+        (
+            position_y1,
+            position_x1,
+            position_y2,
+            position_x2,
+            canvas_height,
+            canvas_width,
+            resize_height,
+            resize_width,
+        ) = compose_calculate_half(
+            (clone_height, clone_width),
+            (compose_height, compose_width),
+            autoresize,
+            gravity,
+        )
+    return (
+        (position_x1, position_y1),
+        (position_x2, position_y2),
+        (canvas_width, canvas_height),
+        (resize_width, resize_height),
+        stacked,
+    )
 
 
 # EOF

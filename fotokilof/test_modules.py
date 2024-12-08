@@ -133,10 +133,10 @@ def test_common_compose_calculation():
     gravity = "C"
     compose_size = (1000, 1000)
     gravity = "C"
-    for size in (1000, 2000, 500):
+    for size in (1000, 500, 2000):
         clone_size = (size, size)
-        print("Orig size: " + str(clone_size), "compose size: " + str(compose_size))
-        for test in ("top_auto", "right_auto", "top_noauto", "right_noauto"):
+        print("==== Orig size: " + str(clone_size), "compose size: " + str(compose_size))
+        for test in ("right_auto", "right_noauto", "top_auto", "top_noauto"):
             match test:
                 case "top_auto":
                     autoresize = 1
@@ -154,6 +154,9 @@ def test_common_compose_calculation():
                     autoresize = 0
                     right = 1
                     output_data = ((0, 0), (size, 0), (2*size, size), (0, 0), False)
-            print("- " + test + "\n", clone_size, compose_size, autoresize, right, gravity, '\n - output', output_data)
+            print("--- " + test, clone_size, compose_size, autoresize, right,
+                '\n - columns: position_1, position_2, canvas, resize, stacked'
+                '\n - output',
+                output_data)
             print(" - result", common.compose_calculation(clone_size, compose_size, autoresize, right, gravity))
             assert common.compose_calculation(clone_size, compose_size, autoresize, right, gravity) == output_data
