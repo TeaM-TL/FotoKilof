@@ -386,6 +386,9 @@ def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
 
     clone_width, clone_height = clone_size
     compose_width, compose_height = compose_size
+    # default, use if noauto in Wand
+    resize_width = 0
+    resize_height = 0
     if right:
         stacked = False
         if clone_height >= compose_height:
@@ -398,8 +401,6 @@ def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
             canvas_width = clone_width + resize_width
         else:
             canvas_width = clone_width + compose_width
-            resize_width = 0
-            resize_height = 0
         # for no autoresize
         position_x1 = 0
         position_x2 = clone_width
@@ -440,8 +441,6 @@ def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
             canvas_height = int(clone_height + resize_height)
         else:
             canvas_height = int(clone_height + compose_height)
-            resize_width = 0
-            resize_height = 0
         # for no autoresize
         position_y1 = 0
         position_y2 = clone_height
