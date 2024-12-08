@@ -349,7 +349,7 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                 common.compose_calculation(
                     (clone_width, clone_height),
                     (compose_width, compose_height),
-                    1,
+                    autoresize,
                     right,
                     gravity,
                 )
@@ -358,6 +358,26 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
             position_x2, position_y2 = position_2
             canvas_width, canvas_height = new_size
             resize_width, resize_height = resized
+            # new approach
+            if right:
+                with Image(filename="rose:") as left:
+                    with Image(filename="rose:") as right:
+                        with Image(width=left.width+right.width,
+                                height=max(left.height, right.height)) as output:
+                        output.composite(image=left, left=0, top=0)
+                        output.composite(image=right, left=left.width, top=0)
+                        output.save(filename="hstack.png")
+            else:
+                with Image(filename="rose:") as top:
+                    with Image(filename="rose:") as bottom:
+                        with Image(width=max(top.width, bottom.width),
+                                height=top.height + bottom.height) as output:
+                        output.composite(image=top, left=0, top=0)
+                        output.composite(image=bottom, left=0, top=top.height)
+                        output.save(filename="vstack.png")
+
+            # old approach
+
             if autoresize:
                 # autoresize, no problem
                 resize_value = str(resize_width) + "x" + str(resize_height)

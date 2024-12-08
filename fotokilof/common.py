@@ -32,6 +32,8 @@ module contains common functions:
 - file_from_list_of_images - return filename from file_list depends of request
 - arrow_gravity - calculate coordinates if draw arrow
 - gravitation - translate eg. NS to Northsouth or lt as Wand-py or Pillow expect
+- compose_calculate_half - calculate compose for one domension for compose_calculation
+- compose_calculation - calculation position for compose
 """
 
 import fnmatch
@@ -390,48 +392,42 @@ def compose_calculate_half(clone, compose, auto_resize, gravity):
     clone_x, clone_y = clone
     compose_x, compose_y = compose
 
-    if auto_resize:
-        resize_x = int(compose_x * clone_y / compose_y)
-        resize_y = clone_y
-        canvas_x = clone_x + resize_x
-        canvas_y = clone_y
-    else:
-        resize_x = 0
-        resize_y = 0
-        canvas_x = clone_x + compose_x
-        if clone_y >= compose_y:
-            canvas_y = clone_y
-        else:
-            canvas_y = compose_y
-    # for no auto_resize
     pos_x1 = 0
     pos_x2 = clone_x
-    if clone_y >= compose_y:
-        # orig > compose
-        pos_y1 = 0
-        match gravity:
-            case "N":
-                pos_y2 = 0
-            case "S":
-                pos_y2 = int(canvas_y - compose_y)
-            case _:
-                pos_y2 = int(canvas_y / 2 - compose_y / 2)
-        if auto_resize:
-            pos_y2 = 0
-    else:
-        # orig < compose
-        pos_y2 = 0
-        match gravity:
-            case 1:
-                pos_y1 = 0
-            case 3:
-                pos_y1 = int(canvas_y - clone_y)
-            case 2:
-                pos_y1 = int(canvas_y / 2 - clone_y / 2)
-        if auto_resize:
-            pos_y1 = 0
 
-    return pos_x1, pos_y1, pos_x2, pos_y2, canvas_x, canvas_y, resize_x, resize_y
+    if auto_resize:
+        resize_factor = clone_y / compose_y
+        canvas_x = clone_x + compose_x * resize_factor
+        canvas_y = clone_y
+        pos_y1 = 0
+        pos_y2 = 0
+    else:
+        canvas_x = clone_x + compose_x
+        canvas_y = max(clone_y, compose_y)
+        if clone_y > compose_y:
+            pos_y1 = 0
+            match gravity:
+                case 1:
+                    pos_y2 = 0
+                case 2:
+                    pos_y2 = int((canvas_y - compose_y) / 2)
+                case 3:
+                    pos_y2 = int(canvas_y - compose_y)
+        elif clone_y < compose_y:
+            pos_y2 = 0
+            match gravity:
+                case 1:
+                    pos_y1 = 0
+                case 3:
+                    pos_y1 = int(canvas_y - clone_y)
+                case 2:
+                    pos_y1 = int((canvas_y - clone_y) / 2)
+        else:
+            canvas_y = clone_y
+            pos_y1 = 0
+            pos_y2 = 0
+
+    return pos_x1, pos_y1, pos_x2, pos_y2, canvas_x, canvas_y
 
 
 def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
@@ -440,7 +436,6 @@ def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
     clone_width, clone_height = clone_size
     compose_width, compose_height = compose_size
     if right:
-        stacked = False
         match gravity:
             case "N":
                 gravity = 1
@@ -455,8 +450,6 @@ def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
             position_y2,
             canvas_width,
             canvas_height,
-            resize_width,
-            resize_height,
         ) = compose_calculate_half(
             (clone_width, clone_height),
             (compose_width, compose_height),
@@ -464,7 +457,6 @@ def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
             gravity,
         )
     else:
-        stacked = True
         match gravity:
             case "W":
                 gravity = 1
@@ -479,8 +471,6 @@ def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
             position_x2,
             canvas_height,
             canvas_width,
-            resize_height,
-            resize_width,
         ) = compose_calculate_half(
             (clone_height, clone_width),
             (compose_height, compose_width),
@@ -491,8 +481,6 @@ def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
         (position_x1, position_y1),
         (position_x2, position_y2),
         (canvas_width, canvas_height),
-        (resize_width, resize_height),
-        stacked,
     )
 
 
