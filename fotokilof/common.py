@@ -389,45 +389,45 @@ def compose_calculate_half(clone, compose, auto_resize, gravity):
     if right use x1=x1, y1=y1 etc.
     if top use x1=y1, xy=x1 etc.
     """
-    clone_x, clone_y = clone
+    clone_w, clone_h = clone
     compose_x, compose_y = compose
 
-    pos_x1 = 0
-    pos_x2 = clone_x
+    pos_x2 = clone_w
+
+    # default
+    pos_y1 = 0
+    pos_y2 = 0
 
     if auto_resize:
-        resize_factor = clone_y / compose_y
-        canvas_x = clone_x + compose_x * resize_factor
-        canvas_y = clone_y
-        pos_y1 = 0
-        pos_y2 = 0
+        resize_factor = clone_h / compose_y
+        canvas_x = clone_w + compose_x * resize_factor
+        canvas_y = clone_h
+        print(canvas_x, canvas_y, resize_factor)
+
     else:
-        canvas_x = clone_x + compose_x
-        canvas_y = max(clone_y, compose_y)
-        if clone_y > compose_y:
-            pos_y1 = 0
+        resize_factor = 1
+        canvas_x = clone_w + compose_x
+        canvas_y = max(clone_h, compose_y)
+        if clone_h > compose_y:
             match gravity:
                 case 1:
-                    pos_y2 = 0
-                case 2:
-                    pos_y2 = int((canvas_y - compose_y) / 2)
+                    pass
                 case 3:
                     pos_y2 = int(canvas_y - compose_y)
-        elif clone_y < compose_y:
-            pos_y2 = 0
+                case _:
+                    pos_y2 = int((canvas_y - compose_y) / 2)
+        elif clone_h < compose_y:
             match gravity:
                 case 1:
                     pos_y1 = 0
                 case 3:
-                    pos_y1 = int(canvas_y - clone_y)
-                case 2:
-                    pos_y1 = int((canvas_y - clone_y) / 2)
+                    pos_y1 = int(canvas_y - clone_h)
+                case _:
+                    pos_y1 = int((canvas_y - clone_h) / 2)
         else:
-            canvas_y = clone_y
-            pos_y1 = 0
-            pos_y2 = 0
+            canvas_y = clone_h
 
-    return pos_x1, pos_y1, pos_x2, pos_y2, canvas_x, canvas_y
+    return pos_y1, pos_x2, pos_y2, canvas_x, canvas_y, resize_factor
 
 
 def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
@@ -439,48 +439,39 @@ def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
         match gravity:
             case "N":
                 gravity = 1
-            case "C":
-                gravity = 2
             case "S":
                 gravity = 3
-        (
-            position_x1,
-            position_y1,
-            position_x2,
-            position_y2,
-            canvas_width,
-            canvas_height,
-        ) = compose_calculate_half(
-            (clone_width, clone_height),
-            (compose_width, compose_height),
-            autoresize,
-            gravity,
+            case _:
+                gravity = 2
+        pos_y1, pos_x2, pos_y2, canvas_width, canvas_height, resize_factor = (
+            compose_calculate_half(
+                (clone_width, clone_height),
+                (compose_width, compose_height),
+                autoresize,
+                gravity,
+            )
         )
     else:
         match gravity:
             case "W":
                 gravity = 1
-            case "C":
-                gravity = 2
             case "E":
                 gravity = 3
-        (
-            position_y1,
-            position_x1,
-            position_y2,
-            position_x2,
-            canvas_height,
-            canvas_width,
-        ) = compose_calculate_half(
-            (clone_height, clone_width),
-            (compose_height, compose_width),
-            autoresize,
-            gravity,
+            case _:
+                gravity = 2
+        pos_y1, pos_y2, pos_x2, canvas_height, canvas_width, resize_factor = (
+            compose_calculate_half(
+                (clone_height, clone_width),
+                (compose_height, compose_width),
+                autoresize,
+                gravity,
+            )
         )
     return (
-        (position_x1, position_y1),
-        (position_x2, position_y2),
-        (canvas_width, canvas_height),
+        (0, int(pos_y1)),
+        (int(pos_x2), int(pos_y2)),
+        (int(canvas_width), int(canvas_height)),
+        int(resize_factor),
     )
 
 

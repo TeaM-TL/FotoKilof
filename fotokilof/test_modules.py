@@ -137,7 +137,7 @@ def compose_autoresize_canvas(auto_resize, size, compose_x, compose_y):
             canvas_x = size + compose_x * size / compose_y
             canvas_y = size
     return canvas_x, canvas_y
-        
+     
 
 def test_compose_calculate_half():
     """test half calculation for compose"""
@@ -188,7 +188,7 @@ def test_common_compose_calculation():
                     gravity = gravity_top
                     autoresize = 0
                     right = 0
-                    canvas_y, canvas_x = compose_autoresize_canvas(autoresize, size, compose_x, compose_y)
+                    canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y)
                     output_data = ((0, 0), (0, size), (canvas_x, canvas_y))
                 case "right_noauto":
                     gravity = gravity_right
