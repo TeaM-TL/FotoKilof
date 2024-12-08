@@ -74,7 +74,7 @@ def fonts_list():
 # ------------------------------------ Common
 def make_clone(file_to_clone, color=None):
     """open picture and make clone for processing"""
-    if len(file_to_clone):
+    if file_to_clone:
         with Image(filename=file_to_clone, background=color) as image:
             return image.clone()
     else:
@@ -342,78 +342,22 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
     gravity - position if no autoresize
     """
     if os.path.exists(compose_file):
-        clone_width, clone_height = clone.size
         with Image(filename=compose_file) as compose_image:
-            compose_image_width, compose_image_height = compose_image.size
-            if right:
-                stacked = False
-                # for canvas
-                canvas_width = clone_width + compose_image_width
-                if clone_height >= compose_image_height:
-                    canvas_height = clone_height
-                else:
-                    canvas_height = compose_image_height
-                # for autoresize
-                resize_width = int(
-                    compose_image_width * clone_height / compose_image_height
+            clone_width, clone_height = clone.size
+            compose_width, compose_height = compose_image.size
+            position_1, position_2, new_size, resized, stacked = (
+                common.compose_calculation(
+                    (clone_width, clone_height),
+                    (compose_width, compose_height),
+                    1,
+                    right,
+                    gravity,
                 )
-                resize_height = clone_height
-                # for no autoresize
-                position_x1 = 0
-                position_x2 = clone_width
-                if clone_height >= compose_image_height:
-                    # orig > compose
-                    position_y1 = 0
-                    if gravity == "N":
-                        position_y2 = 0
-                    elif gravity == "S":
-                        position_y2 = int(canvas_height - compose_image_height)
-                    else:
-                        position_y2 = int(canvas_height / 2 - compose_image_height / 2)
-                else:
-                    # orig < compose
-                    position_y2 = 0
-                    if gravity == "N":
-                        position_y1 = 0
-                    elif gravity == "S":
-                        position_y1 = int(canvas_height - clone_height)
-                    else:
-                        position_y1 = int(canvas_height / 2 - clone_height / 2)
-            else:
-                stacked = True
-                # for canvas
-                if clone_width >= compose_image_width:
-                    canvas_width = clone_width
-                else:
-                    canvas_width = compose_image_width
-                canvas_height = int(clone_height + compose_image_height)
-                # for autoresize
-                resize_width = clone_width
-                resize_height = int(
-                    compose_image_height * clone_width / compose_image_width
-                )
-                # for no autoresize
-                position_y1 = 0
-                position_y2 = clone_height
-                if clone_width >= compose_image_width:
-                    # orig > compose
-                    position_x1 = 0
-                    if gravity == "W":
-                        position_x2 = 0
-                    elif gravity == "E":
-                        position_x2 = int(canvas_width - compose_image_width)
-                    else:
-                        position_x2 = int(canvas_width / 2 - compose_image_width / 2)
-                else:
-                    # orig < compose
-                    position_x2 = 0
-                    if gravity == "W":
-                        position_x1 = 0
-                    elif gravity == "E":
-                        position_x1 = int(canvas_width - clone_width)
-                    else:
-                        position_x1 = int(canvas_width / 2 - clone_width / 2)
-
+            )
+            position_x1, position_y1 = position_1
+            position_x2, position_y2 = position_2
+            canvas_width, canvas_height = new_size
+            resize_width, resize_height = resized
             if autoresize:
                 # autoresize, no problem
                 resize_value = str(resize_width) + "x" + str(resize_height)
@@ -441,8 +385,8 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                             operator="over",
                             left=position_x2,
                             top=position_y2,
-                            width=compose_image_width,
-                            height=compose_image_height,
+                            width=compose_width,
+                            height=compose_height,
                             image=compose_image,
                         )
                         draw(canvas)
@@ -477,7 +421,7 @@ def preview(file_in, size, operating_system, coord=""):
         "preview_height": "0",
     }
 
-    if file_in is not None:
+    if file_in:
         if os.path.isfile(file_in):
             filesize = common.humansize(os.path.getsize(file_in))
             clone = make_clone(file_in)

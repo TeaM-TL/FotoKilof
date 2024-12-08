@@ -106,7 +106,7 @@ def test_common_arrow_gravity():
 
     for position in ("N", "S", "E", "W", "NW", "NE", "SW", "SE", "C"):
         match position:
-            case"C":
+            case "C":
                 a, c, d, e, x, y = ((240, 240), (200, 200), (210, 220), (220, 210), 40, 60)
             case "N":
                 a, c, d, e, x, y = ((200, 240), (200, 200), (194, 213), (206, 213), 0, 40)
@@ -127,3 +127,40 @@ def test_common_arrow_gravity():
 
         print(position, a, c, d, e, x, y)
         assert common.arrow_gravity(position, length, dx, dy) == (a, c, d, e, x, y)
+
+
+def test_common_compose_calculation():
+    """test compose_calculation"""
+    clone_size = (1000, 1000)
+    compose_size = (1000, 1000)
+    gravity = "C"
+    for test in ("top_auto", "right_auto", "top_noauto", "right_noauto"):
+        match test:
+            case "top_auto":
+                autoresize = 1
+                right = 0
+                output_data = ((0, 0), (0, 1000), (1000, 2000), (1000, 1000), True)
+                print("top_auto\n", clone_size, compose_size, autoresize, right, gravity, '\n', output_data)
+                print("result", common.compose_calculation(clone_size, compose_size, autoresize, right, gravity))
+                assert common.compose_calculation(clone_size, compose_size, autoresize, right, gravity) == output_data
+            case "right_auto":
+                autoresize = 1
+                right = 1
+                output_data = ((0, 0), (1000, 0), (2000, 1000), (1000, 1000), False)
+                print("right_auto\n", clone_size, compose_size, autoresize, right, gravity, '\n', output_data)
+                print("result", common.compose_calculation(clone_size, compose_size, autoresize, right, gravity))
+                assert common.compose_calculation(clone_size, compose_size, autoresize, right, gravity) == output_data
+            case "top_noauto":
+                autoresize = 0
+                right = 0
+                output_data = ((0, 0), (0, 1000), (1000, 2000), (0, 0), True)
+                print("top_noauto\n", clone_size, compose_size, autoresize, right, gravity, '\n', output_data)
+                print("result", common.compose_calculation(clone_size, compose_size, autoresize, right, gravity))
+                assert common.compose_calculation(clone_size, compose_size, autoresize, right, gravity) == output_data
+            case "right_noauto":
+                autoresize = 0
+                right = 1
+                output_data = ((0, 0), (1000, 0), (2000, 1000), (0, 0), False)
+                print("right_noauto\n", clone_size, compose_size, autoresize, right, gravity, '\n', output_data)
+                print("result", common.compose_calculation(clone_size, compose_size, autoresize, right, gravity))
+                assert common.compose_calculation(clone_size, compose_size, autoresize, right, gravity) == output_data
