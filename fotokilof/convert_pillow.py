@@ -381,26 +381,18 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                     clone.size, compose_image.size, autoresize, right, gravity
                 )
             )
-            print(position_1, position_2, new_size, resize_factor)
             position_x1, position_y1 = position_1
             image_new = Image.new("RGB", new_size, color)
-            if right:
-                pass
-            else:
+            if not right:
                 position_1 = (position_y1, position_x1)
             image_new.paste(clone, position_1)
             if autoresize == 1 and resize_factor != 1:
                 if right:
                     result_height = clone.height
-                    result_width = int(
-                        compose_image.width * result_height / compose_image.height
-                    )
+                    result_width = int(compose_image.width * resize_factor)
                 else:
                     result_width = clone.width
-                    result_height = int(
-                        compose_image.height * result_width / compose_image.width
-                    )
-                print(result_width, result_height)
+                    result_height = int(compose_image.height * resize_factor)
                 compose_image = compose_image.resize((result_width, result_height))
             image_new.paste(compose_image, position_2)
             result = image_new

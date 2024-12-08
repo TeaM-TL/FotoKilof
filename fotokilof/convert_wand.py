@@ -345,50 +345,71 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
         with Image(filename=compose_file) as compose_image:
             clone_width, clone_height = clone.size
             compose_width, compose_height = compose_image.size
-            position_1, position_2, new_size = common.compose_calculation(
-                (clone_width, clone_height),
-                (compose_width, compose_height),
-                autoresize,
-                right,
-                gravity,
+            position_1, position_2, new_size, resize_factor = (
+                common.compose_calculation(
+                    (clone_width, clone_height),
+                    (compose_width, compose_height),
+                    autoresize,
+                    right,
+                    gravity,
+                )
             )
             position_x1, position_y1 = position_1
             position_x2, position_y2 = position_2
             canvas_width, canvas_height = new_size
-            # new approach
+            print("Wand", position_1, position_2, new_size)
             if autoresize:
-                pass
+                if right:
+                    stacked = False
+                else:
+                    stacked = True
+                resize_value = (
+                    str(int(compose_width * resize_factor))
+                    + "x"
+                    + str(int(compose_height * resize_factor))
+                )
+                compose_image.transform(crop="", resize=resize_value)
+                clone.sequence.append(compose_image)
+                clone.concat(stacked=stacked)
             else:
                 if right:
-                    with Image(
-                        # width=clone_width + compose_width,
-                        # height=max(clone_height, clone),
-                        width=canvas_width,
-                        height=canvas_height,
-                    ) as output:
-                        output.composite(image=compose_image, left=0, top=0)
-                        output.composite(image=compose_image, left=clone_width, top=0)
-                        return output
+                    x1 = position_x1
+                    y1 = position_y1
+                    x2 = position_x2
+                    y2 = position_y2
                 else:
-                    with Image(
-                        width=max(clone_width, compose_width),
-                        height=clone_height + compose_height,
-                    ) as output:
-                        output.composite(image=clone, left=0, top=0)
-                        output.composite(image=compose_image, left=0, top=clone_height)
-                        return output
+                    x1 = position_y1
+                    y1 = position_x1
+                    x2 = position_y2
+                    y2 = position_x2
+                with Image(
+                    width=canvas_width, height=canvas_height, background=color
+                ) as canvas:
+                    with Drawing() as draw:
+                        draw.composite(
+                            operator="over",
+                            left=position_x1,
+                            top=position_y1,
+                            width=clone_width,
+                            height=clone_height,
+                            image=clone,
+                        )
+                        draw(canvas)
+                        # picture to join
+                        draw.composite(
+                            operator="over",
+                            left=position_x2,
+                            top=position_y2,
+                            width=compose_width,
+                            height=compose_height,
+                            image=compose_image,
+                        )
+                        draw(canvas)
+                    # canvas.composite(image=clone, left=x1, top=y1)
+                    # canvas.composite(image=compose_image, left=x2, top=y2)
+                    clone.image_set(canvas)
 
-            # old approach
-            # if right:
-            #     stacked = False
-            # else:
-            #     stacked = True
-            # if autoresize:
-            #     # autoresize, no problem
-            #     resize_value = str(resize_width) + "x" + str(resize_height)
-            #     compose_image.transform(crop="", resize=resize_value)
-            #     clone.sequence.append(compose_image)
-            #     clone.concat(stacked=stacked)
+            # # old approach
             # else:
             #     # no autoresize
             #     with Image(
@@ -405,16 +426,16 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
             #                 image=clone,
             #             )
             #             draw(canvas)
-            #             # picture to join
-            #             draw.composite(
-            #                 operator="over",
-            #                 left=position_x2,
-            #                 top=position_y2,
-            #                 width=compose_width,
-            #                 height=compose_height,
-            #                 image=compose_image,
-            #             )
-            #             draw(canvas)
+                        # # picture to join
+                        # draw.composite(
+                        #     operator="over",
+                        #     left=position_x2,
+                        #     top=position_y2,
+                        #     width=compose_width,
+                        #     height=compose_height,
+                        #     image=compose_image,
+                        # )
+                        # draw(canvas)
             #         clone.image_set(canvas)
     else:
         module_logger.warning(" Conversion: compose - missing file to compose")

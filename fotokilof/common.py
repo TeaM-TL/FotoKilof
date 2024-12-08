@@ -471,7 +471,7 @@ def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
         (0, int(pos_y1)),
         (int(pos_x2), int(pos_y2)),
         (int(canvas_width), int(canvas_height)),
-        int(resize_factor),
+        resize_factor,
     )
 
 
