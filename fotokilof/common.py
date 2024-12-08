@@ -386,7 +386,7 @@ def compose_calculation(clone_size, compose_size, autoresize, right, gravity):
 
     clone_width, clone_height = clone_size
     compose_width, compose_height = compose_size
-    # default, use if noauto in Wand
+    # default, use if noautoresize
     resize_width = 0
     resize_height = 0
     if right:

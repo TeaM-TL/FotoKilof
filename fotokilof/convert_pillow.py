@@ -379,7 +379,7 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
     result = None
     if os.path.exists(compose_file):
         with Image.open(compose_file) as compose_image:
-            position_1, position_2, new_size, resize, stacked = common.compose_calculation(
+            position_1, position_2, new_size, resized, stacked = common.compose_calculation(
                 clone.size, compose_image.size, autoresize, right, gravity
             )
             image_new = Image.new("RGB", new_size, color)
