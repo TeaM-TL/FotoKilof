@@ -127,22 +127,31 @@ def test_common_arrow_gravity():
         print(position, a, c, d, e, x, y)
         assert common.arrow_gravity(position, length, dx, dy) == (a, c, d, e, x, y)
 
-def compose_autoresize_canvas(auto_resize, size, compose_x, compose_y):
+
+def compose_autoresize_canvas(auto_resize, size, compose_x, compose_y, right):
     """calculate canvas for tests"""
     match auto_resize:
         case 0:
-            canvas_x = size + compose_x
-            canvas_y = max(size, compose_y)
+            if right:
+                canvas_x = size + compose_x
+                canvas_y = max(size, compose_y)
+            else:
+                canvas_x = max(size, compose_x)
+                canvas_y = size + compose_y
         case 1:
-            canvas_x = size + compose_x * size / compose_y
-            canvas_y = size
+            if right:
+                canvas_x = size + compose_x * size / compose_y
+                canvas_y = size
+            else:
+                canvas_x = size
+                canvas_y = size + compose_y * size / compose_x
     return canvas_x, canvas_y
      
 
 def test_compose_calculate_half():
     """test half calculation for compose"""
     compose_x = 1000
-    compose_y = 2000
+    compose_y = 1000
     compose_size = (compose_x, compose_y)
     print("=========== HALF: Compose size: " + str(compose_size))
     gravity = 1
@@ -151,14 +160,19 @@ def test_compose_calculate_half():
         clone = (size, size)
         print("==== Orig size: " + str(clone))
         for autoresize in (1, 0):
-            canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y)
-            output_data = (0, 0, size, 0, canvas_x, canvas_y)
+            if autoresize:
+                resize_factor = size / compose_x
+            else:
+                resize_factor = 1.0
+            canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, 1)
+            output_data = (0, size, 0, canvas_x, canvas_y, resize_factor)
             print("--- Autoresize: ", autoresize,
                 '\n - columns: pos_x1, pos_y1, pos_x2, pos_y2, canvas_x, canvas_y'
                 '\n - output',
                 output_data)
             print(" - result", common.compose_calculate_half(clone, compose_size, autoresize, gravity))
             assert common.compose_calculate_half(clone, compose_size, autoresize, gravity) == output_data
+
 
 def test_common_compose_calculation():
     """test compose_calculation"""
@@ -176,29 +190,33 @@ def test_common_compose_calculation():
                     gravity = gravity_top
                     autoresize = 1
                     right = 0
-                    canvas_y, canvas_x = compose_autoresize_canvas(autoresize, size, compose_x, compose_y)
-                    output_data = ((0, 0), (0, size), (canvas_x, canvas_y))
+                    resize_factor = size / compose_x
+                    canvas_y, canvas_x = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, right)
+                    output_data = ((0, 0), (0, size), (int(canvas_y), int(canvas_x)), resize_factor)
                 case "right_auto":
                     gravity = gravity_right
                     autoresize = 1
                     right = 1
-                    canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y)
-                    output_data = ((0, 0), (size, 0), (canvas_x, canvas_y))
+                    resize_factor = size / compose_y
+                    canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, right)
+                    output_data = ((0, 0), (size, 0), (int(canvas_x), int(canvas_y)), resize_factor)
                 case "top_noauto":
                     gravity = gravity_top
                     autoresize = 0
                     right = 0
-                    canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y)
-                    output_data = ((0, 0), (0, size), (canvas_x, canvas_y))
+                    resize_factor = 1.0
+                    canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, right)
+                    output_data = ((0, 0), (0, size), (int(canvas_x), int(canvas_y)), resize_factor)
                 case "right_noauto":
                     gravity = gravity_right
                     autoresize = 0
                     right = 1
-                    canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y)
-                    output_data = ((0, 0), (size, 0), (canvas_x, canvas_y))
+                    resize_factor = 1.0
+                    canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, right)
+                    output_data = ((0, 0), (size, 0), (int(canvas_x), int(canvas_y)), resize_factor)
             print("--- " + test, clone_size, compose_size, right, autoresize,
-                '\n - columns: position_1, position_2, canvas'
-                '\n - output',
-                output_data)
+                        '\n - columns: position_1, position_2, canvas'
+                        '\n - output',
+                        output_data)
             print(" - result", common.compose_calculation(clone_size, compose_size, autoresize, right, gravity))
             assert common.compose_calculation(clone_size, compose_size, autoresize, right, gravity) == output_data

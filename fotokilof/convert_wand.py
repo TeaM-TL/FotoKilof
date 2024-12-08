@@ -408,35 +408,6 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                     # canvas.composite(image=clone, left=x1, top=y1)
                     # canvas.composite(image=compose_image, left=x2, top=y2)
                     clone.image_set(canvas)
-
-            # # old approach
-            # else:
-            #     # no autoresize
-            #     with Image(
-            #         width=canvas_width, height=canvas_height, background=color
-            #     ) as canvas:
-            #         with Drawing() as draw:
-            #             # original picture
-            #             draw.composite(
-            #                 operator="over",
-            #                 left=position_x1,
-            #                 top=position_y1,
-            #                 width=clone_width,
-            #                 height=clone_height,
-            #                 image=clone,
-            #             )
-            #             draw(canvas)
-                        # # picture to join
-                        # draw.composite(
-                        #     operator="over",
-                        #     left=position_x2,
-                        #     top=position_y2,
-                        #     width=compose_width,
-                        #     height=compose_height,
-                        #     image=compose_image,
-                        # )
-                        # draw(canvas)
-            #         clone.image_set(canvas)
     else:
         module_logger.warning(" Conversion: compose - missing file to compose")
 

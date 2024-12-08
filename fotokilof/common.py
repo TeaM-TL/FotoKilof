@@ -402,8 +402,6 @@ def compose_calculate_half(clone, compose, auto_resize, gravity):
         resize_factor = clone_h / compose_y
         canvas_x = clone_w + compose_x * resize_factor
         canvas_y = clone_h
-        print(canvas_x, canvas_y, resize_factor)
-
     else:
         resize_factor = 1
         canvas_x = clone_w + compose_x
