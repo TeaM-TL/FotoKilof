@@ -128,14 +128,33 @@ def test_common_arrow_gravity():
         assert common.arrow_gravity(position, length, dx, dy) == (a, c, d, e, x, y)
 
 
+def test_compose_calculate_half():
+    """test half calculation for compose"""
+    gravity = 2
+    compose = (1000, 1000)
+    for size in (1000, 500, 2000):
+        clone = (size, size)
+        print("==== HALF: Orig size: " + str(clone), "compose size: " + str(compose))
+        for autoresize in (1, 0):
+            match autoresize:
+                case 0:
+                    output_data = (0, 0, 0, size, size, 2*size, size, size)
+                case 1:
+                    output_data = (0, 0, size, 0, 2*size, size, size, size)
+            print("--- ", autoresize, clone, compose, autoresize,
+                '\n - columns: pos_x1, pos_y1, pos_x2, pos_y2, canvas_x, canvas_y, resize_x, resize_y'
+                '\n - output',
+                output_data)
+            print(" - result", common.compose_calculate_half(clone, compose, autoresize, gravity))
+            assert common.compose_calculate_half(clone, compose, autoresize, gravity) == output_data
+
 def test_common_compose_calculation():
     """test compose_calculation"""
     gravity = "C"
     compose_size = (1000, 1000)
-    gravity = "C"
     for size in (1000, 500, 2000):
         clone_size = (size, size)
-        print("==== Orig size: " + str(clone_size), "compose size: " + str(compose_size))
+        print("==== FULL: Orig size: " + str(clone_size), "compose size: " + str(compose_size))
         for test in ("right_auto", "right_noauto", "top_auto", "top_noauto"):
             match test:
                 case "top_auto":
