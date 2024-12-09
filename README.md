@@ -118,7 +118,7 @@ Available: Bulgarian, English, German, Indonesian, Polish and Turkish.
 - Windows, Linux, MacOS X, BSD,
 - FullHD screen for comfort work,
 - [ImageMagick](https://imagemagick.org/), remember to add path into `%PATH%` environment variable, enable install libraries!
-- [Python3.9+](https://www.python.org/), remember to add path into `%PATH%` environment variable.
+- [Python3.10+](https://www.python.org/), remember to add path into `%PATH%` environment variable.
 
 ### Install
 
@@ -136,7 +136,7 @@ python3 -m pip install fotokilof
 
 #### Windows
 Download and install requirements:
-- [Python3.9+](https://www.python.org/) - add path into `%PATH%` environment variable,
+- [Python3.10+](https://www.python.org/) - add path into `%PATH%` environment variable,
 - [ImageMagick](https://imagemagick.org/script/download.php#windows) - add path into `%PATH%` environment variable, enable install libraries!
 
 ```bash
