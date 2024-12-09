@@ -86,6 +86,7 @@ def save_close_clone(clone, file_out, exif=0):
     if clone is None:
         module_logger.error(" Clone for %s is None", file_out)
     else:
+        # file_form = os.path.splitext(file_out)[1].split('.')[1]
         if not exif:
             clone.strip()
         with open(file_out, "wb") as file_handler:
@@ -159,7 +160,7 @@ def text(convert_data):
 
     image_width, image_height = clone.size
 
-    if len(text_string):
+    if text_string:
         gravity_common, new_x, new_y = common.gravitation(
             gravity, int(text_x), int(text_y), image_width, image_height
         )
@@ -343,71 +344,26 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
     """
     if os.path.exists(compose_file):
         with Image(filename=compose_file) as compose_image:
-            clone_width, clone_height = clone.size
-            compose_width, compose_height = compose_image.size
-            position_1, position_2, new_size, resize_factor = (
-                common.compose_calculation(
-                    (clone_width, clone_height),
-                    (compose_width, compose_height),
-                    autoresize,
-                    right,
-                    gravity,
-                )
-            )
-            position_x1, position_y1 = position_1
-            position_x2, position_y2 = position_2
-            canvas_width, canvas_height = new_size
-            print("Wand", position_1, position_2, new_size)
+            compose_width = compose_image.width
+            compose_height = compose_image.height
+            if right:
+                stacked = False
+                resize_factor = clone.height / compose_height
+            else:
+                stacked = True
+                resize_factor = clone.width / compose_width
             if autoresize:
-                if right:
-                    stacked = False
-                else:
-                    stacked = True
+                # it works
                 resize_value = (
                     str(int(compose_width * resize_factor))
                     + "x"
                     + str(int(compose_height * resize_factor))
                 )
                 compose_image.transform(crop="", resize=resize_value)
-                clone.sequence.append(compose_image)
-                clone.concat(stacked=stacked)
             else:
-                if right:
-                    x1 = position_x1
-                    y1 = position_y1
-                    x2 = position_x2
-                    y2 = position_y2
-                else:
-                    x1 = position_y1
-                    y1 = position_x1
-                    x2 = position_y2
-                    y2 = position_x2
-                with Image(
-                    width=canvas_width, height=canvas_height, background=color
-                ) as canvas:
-                    with Drawing() as draw:
-                        draw.composite(
-                            operator="over",
-                            left=position_x1,
-                            top=position_y1,
-                            width=clone_width,
-                            height=clone_height,
-                            image=clone,
-                        )
-                        draw(canvas)
-                        # picture to join
-                        draw.composite(
-                            operator="over",
-                            left=position_x2,
-                            top=position_y2,
-                            width=compose_width,
-                            height=compose_height,
-                            image=compose_image,
-                        )
-                        draw(canvas)
-                    # canvas.composite(image=clone, left=x1, top=y1)
-                    # canvas.composite(image=compose_image, left=x2, top=y2)
-                    clone.image_set(canvas)
+                pass
+            clone.sequence.append(compose_image)
+            clone.concat(stacked=stacked)
     else:
         module_logger.warning(" Conversion: compose - missing file to compose")
 

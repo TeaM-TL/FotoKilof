@@ -288,8 +288,7 @@ def compose_preview_button():
 
 def extension_from_file():
     """set extension in ComboBox same as opened file"""
-    path = os.path.splitext(file_in_path.get())
-    extension = path[1].lower()
+    extension = os.path.splitext(file_in_path.get())[1].lower()
     try:
         co_apply_type.current(file_extension.index(extension))
     except:

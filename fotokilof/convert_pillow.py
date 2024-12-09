@@ -88,7 +88,7 @@ def fonts_list():
 # ------------------------------------ Common
 def make_clone(file_to_clone, color=None):
     """open picture and make clone for processing"""
-    if len(file_to_clone) > 0:
+    if file_to_clone:
         with Image.open(file_to_clone) as image:
             result = image.copy()
     else:

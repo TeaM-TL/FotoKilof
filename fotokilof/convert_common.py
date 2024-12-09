@@ -156,12 +156,13 @@ def make_clone(file_to_clone, set_pillow, color=None):
 
 def save_close_clone(clone, file_out, exif_on, set_pillow):
     """save_close_clone"""
-    start_time = time.time()
-    if set_pillow:
-        convert_pillow.save_close_clone(clone, file_out, exif_on)
-    else:
-        convert_wand.save_close_clone(clone, file_out, exif_on)
-    module_logger.info("Save clone: %ss", str(time.time() - start_time))
+    if clone:
+        start_time = time.time()
+        if set_pillow:
+            convert_pillow.save_close_clone(clone, file_out, exif_on)
+        else:
+            convert_wand.save_close_clone(clone, file_out, exif_on)
+        module_logger.info("Save clone: %ss", str(time.time() - start_time))
 
 
 def rotate(clone, angle, color, angle_own, set_pillow):
@@ -273,14 +274,14 @@ def crop(file_in, clone, crop_variant, gravity, entries, set_pillow):
                 bottom = entries["one_y2"]
                 result = (left, top, right, bottom)
         case 2:
-            if (entries["two_width"] > 0) and (entries["two_height"] > 0):
+            if entries["two_width"] and entries["two_height"]:
                 left = entries["two_x1"]
                 top = entries["two_y1"]
                 right = left + entries["two_width"]
                 bottom = top + entries["two_height"]
                 result = (left, top, right, bottom)
         case 3:
-            if (entries["three_width"] > 0) and (entries["three_height"] > 0):
+            if entries["three_width"] and entries["three_height"]:
                 if set_pillow:
                     result = common.crop_gravity(
                         (
@@ -329,14 +330,18 @@ def text(convert_data, set_pillow):
 
 def compose(clone, compose_file, right, autoresize, color, gravity, set_pillow):
     """join two pictures"""
-    start_time = time.time()
-    if set_pillow:
-        result = convert_pillow.compose(
-            clone, compose_file, right, autoresize, color, gravity
-        )
+    if clone:
+        start_time = time.time()
+        if set_pillow:
+            result = convert_pillow.compose(
+                clone, compose_file, right, autoresize, color, gravity
+            )
+        else:
+            result = convert_wand.compose(
+                clone, compose_file, right, autoresize, color, gravity
+            )
+        module_logger.info("Compose %ss", str(time.time() - start_time))
+        
     else:
-        result = convert_wand.compose(
-            clone, compose_file, right, autoresize, color, gravity
-        )
-    module_logger.info("Compose %ss", str(time.time() - start_time))
+        result = None
     return result
