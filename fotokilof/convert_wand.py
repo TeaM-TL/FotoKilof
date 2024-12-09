@@ -344,26 +344,31 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
     """
     if os.path.exists(compose_file):
         with Image(filename=compose_file) as compose_image:
-            compose_width = compose_image.width
-            compose_height = compose_image.height
-            if right:
-                stacked = False
-                resize_factor = clone.height / compose_height
-            else:
-                stacked = True
-                resize_factor = clone.width / compose_width
             if autoresize:
-                # it works
+                compose_width = compose_image.width
+                compose_height = compose_image.height
+                if right:
+                    stacked = False
+                    resize_factor = clone.height / compose_height
+                else:
+                    stacked = True
+                resize_factor = clone.width / compose_width
                 resize_value = (
                     str(int(compose_width * resize_factor))
                     + "x"
                     + str(int(compose_height * resize_factor))
                 )
                 compose_image.transform(crop="", resize=resize_value)
+                clone.sequence.append(compose_image)
+                clone.concat(stacked=stacked)
             else:
-                pass
-            clone.sequence.append(compose_image)
-            clone.concat(stacked=stacked)
+                position_1, position_2, new_size, resize_factor = (
+                    common.compose_calculation(
+                        clone.size, compose_image.size, autoresize, right, gravity
+                    )
+                )
+                clone.extent(width=new_size[0], height=new_size[1])
+                clone.composite(compose_image, left=position_2[0], top=position_2[1])
     else:
         module_logger.warning(" Conversion: compose - missing file to compose")
 
