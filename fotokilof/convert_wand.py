@@ -86,7 +86,6 @@ def save_close_clone(clone, file_out, exif=0):
     if clone is None:
         module_logger.error(" Clone for %s is None", file_out)
     else:
-        # file_form = os.path.splitext(file_out)[1].split('.')[1]
         if not exif:
             clone.strip()
         with open(file_out, "wb") as file_handler:
@@ -344,15 +343,22 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
     """
     if os.path.exists(compose_file):
         with Image(filename=compose_file) as compose_image:
+            compose_width = compose_image.width
+            compose_height = compose_image.height
+            position_1, position_2, new_size, resize_factor = (
+                common.compose_calculation(
+                    clone.size,
+                    (compose_width, compose_height),
+                    autoresize,
+                    right,
+                    gravity,
+                )
+            )
             if autoresize:
-                compose_width = compose_image.width
-                compose_height = compose_image.height
                 if right:
                     stacked = False
-                    resize_factor = clone.height / compose_height
                 else:
                     stacked = True
-                resize_factor = clone.width / compose_width
                 resize_value = (
                     str(int(compose_width * resize_factor))
                     + "x"
@@ -362,13 +368,21 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
                 clone.sequence.append(compose_image)
                 clone.concat(stacked=stacked)
             else:
-                position_1, position_2, new_size, resize_factor = (
-                    common.compose_calculation(
-                        clone.size, compose_image.size, autoresize, right, gravity
+                if right:
+                    left = position_1[0]
+                    top = position_1[1]
+                else:
+                    left = position_1[1]
+                    top = position_1[0]
+                with Image(
+                    width=new_size[0], height=new_size[1], background=color
+                ) as image_new:
+                    image_new.format = os.path.splitext(compose_file)[1].split(".")[1]
+                    image_new.composite(clone, left=left, top=top)
+                    image_new.composite(
+                        compose_image, left=position_2[0], top=position_2[1]
                     )
-                )
-                clone.extent(width=new_size[0], height=new_size[1])
-                clone.composite(compose_image, left=position_2[0], top=position_2[1])
+                    clone.image_set(image_new)
     else:
         module_logger.warning(" Conversion: compose - missing file to compose")
 
