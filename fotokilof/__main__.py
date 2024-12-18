@@ -3160,7 +3160,7 @@ ToolTip(b_file_select, text=_("Select image file for processing"))
 ToolTip(
     b_file_select_screenshot,
     text=_(
-        "Get image from clipboard.\nGrabbed image is saved into %TEMP%/today directory ad load for processing.\nLinux or BSD - install xclip"
+        "Get image from clipboard.\nGrabbed image is saved into %TEMP%/today or $TMP/today directory and load for processing.\nLinux or BSD - install xclip"
     ),
 )
 ToolTip(
