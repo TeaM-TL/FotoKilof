@@ -49,6 +49,8 @@ from tkinter import (
     TkVersion,
 )
 
+from PIL import ImageGrab
+
 import ttkbootstrap as ttk
 from ttkbootstrap.scrolled import ScrolledText, ScrolledFrame
 from ttkbootstrap.tooltip import ToolTip
@@ -71,6 +73,19 @@ from ttkbootstrap.constants import (
     HORIZONTAL,
 )
 
+# my modules
+import check_new_version
+import convert
+import convert_wand
+import convert_pillow
+import convert_common
+import common
+import gui
+import ini_read
+import ini_save
+import magick
+import version
+
 try:
     from wand.version import VERSION
 
@@ -88,19 +103,6 @@ if PILLOW == 0:
     except:
         IMAGEMAGICK_WAND_VERSION += ", IM - missing"
         PILLOW = 1
-
-# my modules
-import check_new_version
-import convert
-import convert_wand
-import convert_pillow
-import convert_common
-import common
-import gui
-import ini_read
-import ini_save
-import magick
-import version
 
 # logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -123,10 +125,7 @@ elif platform.system() == "Darwin":
 else:
     OS = "UNIX"
 
-
-if OS != "UNIX":
-    from PIL import ImageGrab
-# set locale and clipboard for Windows
+# set locale for Windows
 if OS == "Windows":
     import locale
 
@@ -978,19 +977,12 @@ def open_screenshot():
     filename = now.strftime("%F_%H-%M-%S_%f") + ".png"
     out_file = os.path.normpath(os.path.join(today_dir, filename))
     do_it = 1
-    if OS == "UNIX":
-        try:
-            magick.magick(" ", "-quiet", out_file, "import", OS)
-        except:
-            logging.error("open_screenshot(), error in make screeshot ")
-            do_it = 0
-    else:
-        screenshot = ImageGrab.grabclipboard()
-        try:
-            screenshot.save(out_file, "PNG")
-        except:
-            logging.error("open_screenshot(), error save from clipboards")
-            do_it = 0
+    screenshot = ImageGrab.grabclipboard()
+    try:
+        screenshot.save(out_file, "PNG")
+    except:
+        logging.error("open_screenshot(), error save from clipboards")
+        do_it = 0
     if do_it:
         open_file_common(today_dir, filename)
 
@@ -1995,10 +1987,8 @@ b_file_select = ttk.Button(
 )
 
 b_file_select_screenshot = ttk.Button(
-    frame_file_select, text=_("Screenshot"), command=open_screenshot, bootstyle="info"
+    frame_file_select, text=_("Clipboard"), command=open_screenshot, bootstyle="info"
 )
-if OS != "UNIX":
-    b_file_select_screenshot.configure(text=_("Clipboard"))
 
 b_file_select_first = ttk.Button(
     frame_file_select,
@@ -3170,7 +3160,7 @@ ToolTip(b_file_select, text=_("Select image file for processing"))
 ToolTip(
     b_file_select_screenshot,
     text=_(
-        "MacOS and Windows: take image from clipboard.\nLinux: make screenshot, click window or select area.\nGrabbed image is saved into %TEMP%/today directory ad load for processing."
+        "Get image from clipboard.\nGrabbed image is saved into %TEMP%/today directory ad load for processing.\nLinux or BSD - install xclip"
     ),
 )
 ToolTip(

@@ -2,6 +2,8 @@
 
 ## 2024
 
+5.1.3 get screenshost from clopboard on Linux, MacOS and Windows. Linux and BSD users - please install xclip
+
 5.1.2 fixed: compose and crop, updated italian translation, less duplicates, require Python 3.10+
 
 5.1.1 add arrow into text if needed. Pillow works
