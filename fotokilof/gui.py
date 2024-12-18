@@ -96,7 +96,7 @@ def copy_to_clipboard(file_in, operating_system):
                     output.stdin.close()
                 except:
                     module_logger.debug(
-                        "Failed copied result into clipboard under MacOS: %s", file_in
+                        "Failed copied result into clipboard under Unix: %s. Did you install xclip?", file_in
                     )
 
 
