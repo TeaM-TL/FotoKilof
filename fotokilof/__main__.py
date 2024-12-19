@@ -977,7 +977,14 @@ def open_screenshot():
     filename = now.strftime("%F_%H-%M-%S_%f") + ".png"
     out_file = os.path.normpath(os.path.join(today_dir, filename))
     do_it = 1
-    screenshot = ImageGrab.grabclipboard()
+    try:
+        screenshot = ImageGrab.grabclipboard()
+    except:
+        if OS == "UNIX":
+            message = _(
+                "Sorry, xclip (X11) or wl-clipboard (Wayland) is not installed\n Install xclip or wl-clipboard and try again!"
+            )
+            Messagebox.show_error(message, title=_("Missing package"))
     try:
         screenshot.save(out_file, "PNG")
     except:
