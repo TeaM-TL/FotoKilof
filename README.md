@@ -44,8 +44,8 @@ If ImageMagick or Wand are unavailable, Pillow is in use. There some limitation,
  - processing JPG, PNG, SVG and TIFF images,
  - processing picture in the fly, originals are safe,
  - processing single file or whole directory,
- - take screenshot (Linux) or get picture from clipboard (Windows and MacOS) and use it as source picture,
- - after processing results is copied into clipboard (Windows and MacOS),
+ - get picture from clipboard and use it as source picture,
+ - after processing results is copied into clipboard,
  - display selected tools,
  - tools selection,
  - preview orignal and result,
@@ -140,13 +140,13 @@ Download and install requirements:
 - [ImageMagick](https://imagemagick.org/script/download.php#windows) - add path into `%PATH%` environment variable, enable install libraries!
 
 ```bash
-python -m pip install pywin32 fotokilof
+python -m pip install fotokilof
 ```
 
 #### MacOS
 Install requirements:
 ```bash
-brew install imagemagick python@3.12 python-tk@3.12
+brew install imagemagick python@3.13 python-tk@3.13
 ```
 
 For Apple Silicon (M1, M2, M3) based Macs, the default Homebrew install directory differs from that on Homebrew Intel installs. The following environment variable allows FotoKilof to correctly locate the Homebrew-installed ImageMagick on Apple Silicon Macs:
@@ -215,5 +215,6 @@ Press F2 to toggle from Light to Dark or opposite.
 ![Python powered](python-powered.png) 
 [Imagemagick](https://github.com/ImageMagick/ImageMagick) 
 [Wand](https://github.com/emcconville/wand) 
-[ttkbootstrap](https://github.com/israel-dryer/ttkbootstrap) 
-
+[ttkbootstrap](https://github.com/israel-dryer/ttkbootstrap)
+[FindSystemFontsFilename](https://github.com/moi15moi/FindSystemFontsFilename)
+[Pillow](https://github.com/python-pillow/Pillow)

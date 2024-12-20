@@ -43,11 +43,12 @@ Info
 
 import logging
 import os.path
+import os
 import time
-import PIL
+from PIL import Image as PIL_Image
 
 try:
-    from wand.image import Image
+    from wand.image import Image as Wand_Image
     from wand.display import display
 
     WAND_TEXT = "Wand found"
@@ -85,11 +86,12 @@ def display_image(file_to_display, set_pillow):
         if os.path.isfile(file_to_display):
             try:
                 if set_pillow:
-                    with PIL.Image.open(file_to_display) as image:
+                    with PIL_Image.open(file_to_display) as image:
                         image.show()
                 else:
-                    with Image(filename=file_to_display) as image:
-                        display(image)
+                    x11 = os.getenv("DISPLAY")
+                    with Wand_Image(filename=file_to_display) as image:
+                        display(image, server_name=x11)
                 result = "OK"
             except:
                 module_logger.error(
@@ -116,10 +118,10 @@ def get_image_size(file_in, is_pillow):
         if os.path.isfile(file_in):
             try:
                 if is_pillow:
-                    with PIL.Image.open(file_in) as image:
+                    with PIL_Image.open(file_in) as image:
                         size = image.size
                 else:
-                    with Image(filename=file_in) as image:
+                    with Wand_Image(filename=file_in) as image:
                         size = image.size
             except:
                 module_logger.error("get_image_size: error read file: %s", file_in)
@@ -341,7 +343,6 @@ def compose(clone, compose_file, right, autoresize, color, gravity, set_pillow):
                 clone, compose_file, right, autoresize, color, gravity
             )
         module_logger.info("Compose %ss", str(time.time() - start_time))
-        
     else:
         result = None
     return result
