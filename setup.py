@@ -9,13 +9,13 @@ pkg_vars = {}
 with open("fotokilof/version.py") as fp:
     exec(fp.read(), pkg_vars)
 setup(
-    name=pkg_vars['__appname__'],
-    version=pkg_vars['__version__'],
-    author=pkg_vars['__author__'],
-    author_email=pkg_vars['__email__'],
-    description=pkg_vars['__description__'],
-    keywords=pkg_vars['__keywords__'],
-    url=pkg_vars['__url__'],
+    name=pkg_vars["__appname__"],
+    version=pkg_vars["__version__"],
+    author=pkg_vars["__author__"],
+    author_email=pkg_vars["__email__"],
+    description=pkg_vars["__description__"],
+    keywords=pkg_vars["__keywords__"],
+    url=pkg_vars["__url__"],
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",
@@ -25,11 +25,18 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.10',
+    python_requires=">=3.10",
     include_package_data=True,
     packages=find_packages(),
-    install_requires=['FindSystemFontsFilename','pillow','requests','ttkbootstrap','wand'],
-    entry_points = {
+    install_requires=[
+        "FindSystemFontsFilename",
+        "pillow",
+        "requests",
+        "ttkbootstrap",
+        "wand",
+        'pywin32;platform_system=="Windows"',
+    ],
+    entry_points={
         "gui_scripts": [
             "fotokilof = fotokilof:__main__",
         ]
