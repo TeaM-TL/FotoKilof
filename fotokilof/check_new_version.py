@@ -26,8 +26,8 @@ From https://stackoverflow.com/questions/28774852/pypi-api-how-to-get-stable-pac
 
 import json
 import logging
-import requests
 import time
+import requests
 
 try:
     from packaging.version import parse

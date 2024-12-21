@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
-
+""" setup """
 from setuptools import setup, find_packages
+from fotokilof import version
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-pkg_vars = {}
-with open("fotokilof/version.py") as fp:
-    exec(fp.read(), pkg_vars)
 setup(
-    name=pkg_vars["__appname__"],
-    version=pkg_vars["__version__"],
-    author=pkg_vars["__author__"],
-    author_email=pkg_vars["__email__"],
-    description=pkg_vars["__description__"],
-    keywords=pkg_vars["__keywords__"],
-    url=pkg_vars["__url__"],
+    name=version.__appname__,
+    version=version.__version__,
+    author=version.__author__,
+    author_email=version.__email__,
+    description=version.__description__,
+    keywords=version.__keywords__,
+    url=version.__url__,
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",
@@ -35,6 +33,7 @@ setup(
         "ttkbootstrap",
         "wand",
         'pywin32;platform_system=="Windows"',
+        "pyperclipimg",
     ],
     entry_points={
         "gui_scripts": [

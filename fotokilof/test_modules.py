@@ -146,7 +146,7 @@ def compose_autoresize_canvas(auto_resize, size, compose_x, compose_y, right):
                 canvas_x = size
                 canvas_y = size + compose_y * size / compose_x
     return canvas_x, canvas_y
-     
+
 
 def test_compose_calculate_half():
     """test half calculation for compose"""
@@ -166,10 +166,11 @@ def test_compose_calculate_half():
                 resize_factor = 1.0
             canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, 1)
             output_data = (0, size, 0, canvas_x, canvas_y, resize_factor)
-            print("--- Autoresize: ", autoresize,
-                '\n - columns: pos_x1, pos_y1, pos_x2, pos_y2, canvas_x, canvas_y'
-                '\n - output',
-                output_data)
+            print("--- Autoresize: ",
+                  autoresize,
+                  '\n - columns: pos_x1, pos_y1, pos_x2, pos_y2, canvas_x, canvas_y',
+                  '\n - output',
+                  output_data)
             print(" - result", common.compose_calculate_half(clone, compose_size, autoresize, gravity))
             assert common.compose_calculate_half(clone, compose_size, autoresize, gravity) == output_data
 
@@ -215,8 +216,8 @@ def test_common_compose_calculation():
                     canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, right)
                     output_data = ((0, 0), (size, 0), (int(canvas_x), int(canvas_y)), resize_factor)
             print("--- " + test, clone_size, compose_size, right, autoresize,
-                        '\n - columns: position_1, position_2, canvas'
-                        '\n - output',
-                        output_data)
+                  '\n - columns: position_1, position_2, canvas'
+                  '\n - output',
+                  output_data)
             print(" - result", common.compose_calculation(clone_size, compose_size, autoresize, right, gravity))
             assert common.compose_calculation(clone_size, compose_size, autoresize, right, gravity) == output_data
