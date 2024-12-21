@@ -32,7 +32,7 @@ setup(
         "requests",
         "ttkbootstrap",
         "wand",
-        'pywin32;platform_system=="Windows"',
+        "pywin32; platform_system=='Windows'",
         "pyperclipimg",
     ],
     entry_points={
