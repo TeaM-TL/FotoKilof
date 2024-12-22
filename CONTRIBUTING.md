@@ -24,7 +24,7 @@ msgfmt -o fotokilof.mo fotokilof
 
 ```
 cd ../../../
-python3 fotokilof.py
+python3 __main__.py
 ```
 
 ---
