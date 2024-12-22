@@ -126,7 +126,7 @@ Available: Bulgarian, English, German, Indonesian, Polish and Turkish.
 
 Install requirements:
 ```bash
-apt-get install python3-pip python3-tk python3-wand imagemagick
+apt-get install python3-pip python3-tk python3-wand imagemagick xclip
 ```
 
 Install as PyPi package by PIP:
@@ -162,6 +162,10 @@ python3 -m pip install fotokilof
 #### FreeBSD
 
 FotoKilof is available via [ports](https://www.freshports.org/graphics/py-fotokilof/)
+
+```bash
+pkg install py311-fotokilof
+```
 
 ### Upgrade
 
