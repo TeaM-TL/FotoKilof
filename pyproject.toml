@@ -14,7 +14,7 @@ dependencies = [
     "ttkbootstrap",
     "wand",
     "pywin32; platform_system=='Windows'",
-    "pyperclipimg",
+    "pyperclipimg; platform_system=='Linux' or platform_system=='Darwin' or platform_system=='Windows'",
 ]
 classifiers=[
         "Development Status :: 5 - Production/Stable",

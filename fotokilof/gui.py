@@ -31,10 +31,12 @@ import logging
 import platform
 import re
 from PIL import Image
-import pyperclipimg
 
 if platform.system() != "Windows":
     import subprocess
+
+if platform.system() in ("Linux", "Darwin", "Windows"):
+    import pyperclipimg
 
 module_logger = logging.getLogger(__name__)
 
