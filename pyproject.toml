@@ -1,0 +1,45 @@
+[project]
+name = "FotoKilof"
+description = "Nice gui for ImageMagick and Pillow"
+authors = [
+    { name = "Tomasz Łuczak", email = "tlu@team-tl.pl" },
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "FindSystemFontsFilename",
+    "pillow",
+    "requests",
+    "ttkbootstrap",
+    "wand",
+    "pywin32; platform_system=='Windows'",
+    "pyperclipimg",
+]
+classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Operating System :: MacOS",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: Unix",
+        "License :: OSI Approved :: MIT License",
+]
+dynamic = ["version"]
+
+[project.urls]
+Source = "https://github.com/TeaM-TL/FotoKilof/"
+Tracker = "https://github.com/TeaM-TL/FotoKilof/issues/"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = { attr = "fotokilof.version.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["fotokilof*"]

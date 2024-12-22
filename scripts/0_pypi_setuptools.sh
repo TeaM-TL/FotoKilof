@@ -8,11 +8,10 @@ echo "- PyPI ---"
 
 cd ..
 
-# Python 3.8
-#python3 setup.py sdist bdist
-# Python 3.7
-python3 setup.py sdist bdist_wheel
-
+# deprecated
+# python3 setup.py sdist bdist_wheel
+# current, require package build
+python -m build --wheel
 cd $CWD
 
 # EOF
