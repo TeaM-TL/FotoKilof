@@ -43,3 +43,9 @@ version = { attr = "fotokilof.version.__version__" }
 
 [tool.setuptools.packages.find]
 include = ["fotokilof*"]
+
+[project.gui-scripts]
+fotokilof = "fotokilof:__main__"
+
+[project.entry-points]
+gui_scripts = {fotokilof = "fotokilof:__main__"}
