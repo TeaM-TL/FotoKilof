@@ -3,7 +3,8 @@
 # pylint: disable=too-many-branches
 # pylint: disable=too-many-lines
 # pylint: disable=too-many-statements
-# pylint disable=invalid-name
+# pylint: disable=invalid-name
+# pylint: disable=line-too-long
 
 """
 Copyright (c) 2019-2024 Tomasz Łuczak, TeaM-TL
