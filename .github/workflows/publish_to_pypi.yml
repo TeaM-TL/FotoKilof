@@ -1,4 +1,4 @@
-name: Upload FotoKilof Package to PyPI when a Release is Created
+name: Build and upload to PyPI when a Release is Created
 
 on:
   release:
@@ -22,6 +22,14 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.12'
+
+    - name: Compile *po files for localisation
+      run: |
+          for L in fotokilof/locale/??; do
+              if [ -e fotokilof/$L/LC_MESSAGES/fotokilof.po ]; then
+                  msgfmt fotokilof/$L/LC_MESSAGES/fotokilof.po -o fotokilof/$L/LC_MESSAGES/fotokilof.mo
+              fi
+          done
 
     - name: "Install build"
       run: pip install build
