@@ -2,7 +2,7 @@
 # pylint: disable=bare-except
 
 """
-Copyright (c) 2019-2024 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2025 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -46,8 +46,8 @@ def magick(cmd, file_in, file_out, command, operating_system):
     result = None
     if cmd != "":
         if file_in is not None:
-            file_in = common.spacja(file_in, operating_system)
-            file_out = common.spacja(file_out, operating_system)
+            file_in = common.spacja(file_in)
+            file_out = common.spacja(file_out)
             if operating_system == 'Windows':
                 prefix_cmd = "magick.exe "
             else:

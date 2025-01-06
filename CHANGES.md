@@ -1,5 +1,9 @@
 # Changelog
 
+## 2025
+
+5.1.5 fixed right mouse button for crop, small code polishing
+
 ## 2024
 
 5.1.4 updated locale and pot file, added missing entry poinyt into toml

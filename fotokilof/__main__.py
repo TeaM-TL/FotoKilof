@@ -7,7 +7,7 @@
 # pylint: disable=line-too-long
 
 """
-Copyright (c) 2019-2024 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2025 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -237,7 +237,7 @@ def preview_new(file_out):
         preview_new_clear()
     else:
         preview_picture = convert_common.preview(
-            file_out, int(co_preview_selector_new.get()), PILLOW, OS
+            file_out, int(co_preview_selector_new.get()), PILLOW
         )
         try:
             pi_preview_new.configure(file=preview_picture["filename"])
@@ -856,7 +856,7 @@ def open_file():
 def open_file_common(cwd, filename):
     """common function for: open, first, last, next, prev"""
     if filename is not None:
-        file_in_path.set(common.spacja(os.path.join(cwd, filename), OS))
+        file_in_path.set(common.spacja(os.path.join(cwd, filename)))
         root.title(window_title + file_in_path.get())
         image_size = convert_common.get_image_size(file_in_path.get(), PILLOW)
         if image_size != (0, 0):
@@ -983,7 +983,7 @@ def open_screenshot():
     except:
         if OS == "UNIX":
             message = _(
-                "Sorry, xclip (X11) or wl-clipboard (Wayland) is not installed\n Install xclip or wl-clipboard and try again!"
+                "Sorry, nothing in clipboard\nOr xclip (X11) or wl-clipboard (Wayland) is not installed\n Install xclip or wl-clipboard and try again!"
             )
             Messagebox.show_error(message, title=_("Missing package"))
     try:
@@ -1528,7 +1528,6 @@ def preview_orig():
                 file_in_path.get(),
                 int(co_preview_selector_orig.get()),
                 PILLOW,
-                OS,
                 crop_rectangle,
             )
 
@@ -1564,7 +1563,7 @@ def preview_logo():
     if os.path.isfile(file_logo_path.get()):
         l_logo_filename.configure(text=os.path.basename(file_logo_path.get()))
         preview_picture = convert_common.preview(
-            file_logo_path.get(), PREVIEW_LOGO, PILLOW, OS
+            file_logo_path.get(), PREVIEW_LOGO, PILLOW
         )
 
         try:
@@ -1591,7 +1590,7 @@ def preview_compose():
     if os.path.isfile(img_compose_file.get()):
         # l_compose_preview.configure(text=os.path.basename(img_compose_file.get()))
         preview_picture = convert_common.preview(
-            img_compose_file.get(), int(co_compose_preview_selector.get()), PILLOW, OS
+            img_compose_file.get(), int(co_compose_preview_selector.get()), PILLOW
         )
 
         try:
@@ -3150,7 +3149,10 @@ co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
 co_compose_preview_selector.bind("<<ComboboxSelected>>", preview_compose_refresh)
 co_text_font.bind("<<ComboboxSelected>>", font_selected)
 c_preview_orig_pi.bind("<Button-1>", mouse_crop_nw)
-c_preview_orig_pi.bind("<Button-2>", mouse_crop_se)
+if OS == "MACOS":
+    c_preview_orig_pi.bind("<Button-2>", mouse_crop_se)
+else:
+    c_preview_orig_pi.bind("<Button-3>", mouse_crop_se)
 c_preview_new_pi.bind("<Button-1>", preview_new_button)
 root.bind("<F1>", help_info)
 root.bind("<F2>", change_ttk_theme)

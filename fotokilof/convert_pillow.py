@@ -2,7 +2,7 @@
 # pylint: disable=bare-except
 
 """
-Copyright (c) 2024 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2024-2025 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -117,32 +117,26 @@ def pip(clone, logo, logo_data, image_height, image_width):
     original image size: image_height, image_width
     """
     if len(logo):
-        with Image(filename=logo) as logo_img:
-            with Drawing() as draw:
-                position = common.crop_gravity(logo_data, image_height, image_width)
-                draw.composite(
-                    operator="over",
-                    left=common.empty(position[0]),
-                    top=common.empty(position[1]),
-                    width=common.empty(logo_data[2]),
-                    height=common.empty(logo_data[3]),
-                    image=logo_img,
-                )
-                draw(clone)
-    module_logger.debug(" Conversion: logo")
+        if os.path.isfile(logo):
+            pass
+            # with Image(logo) as logo_img:
+            #     with Drawing() as draw:
+            #         position = common.crop_gravity(logo_data, image_height, image_width)
+            #         draw.composite(
+            #             operator="over",
+            #             left=common.empty(position[0]),
+            #             top=common.empty(position[1]),
+            #             width=common.empty(logo_data[2]),
+            #             height=common.empty(logo_data[3]),
+            #             image=logo_img,
+            #         )
+            #         draw(clone)
+    module_logger.warning("PIP is not available for PILLOW yet, install ImageMagick")
 
 
-def rotate(clone, angle, color, own):
+def rotate(clone, angle, color):
     """rotate"""
-    if angle == 0:
-        angle = common.empty(own)
-        if angle == 0:
-            color = None
-    else:
-        color = None
-    result = clone.rotate(angle=angle, fillcolor=color, expand=True)
-    module_logger.debug(" Conversion: rotate %s", str(angle))
-    return result
+    return clone.rotate(angle=angle, fillcolor=color, expand=True)
 
 
 def mirror(clone, flip, flop):
@@ -189,7 +183,7 @@ def text(convert_data):
     font = ImageFont.truetype(font, text_size)
 
     result = clone
-    if len(text_string):
+    if text_string:
         if in_out == 0:
             # inside
             if gravity_onoff == 0:
@@ -403,12 +397,11 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
 
 
 # ------------------------------------ Preview
-def preview(file_in, max_size, operating_system, coord=""):
+def preview(file_in, max_size, coord=""):
     """
     preview generation by Pillow
     file_in - fullname image file
     max_size - required size of image
-    operating_system - operating system: Windows, MACOS, UNIX
     coord - coordinates for crop
     --
     return:
@@ -416,15 +409,6 @@ def preview(file_in, max_size, operating_system, coord=""):
     - file size
     - width and height
     """
-
-    result = {
-        "filename": None,
-        "size": "0",
-        "width": "0",
-        "height": "0",
-        "preview_width": "0",
-        "preview_height": "0",
-    }
 
     if file_in is not None:
         if os.path.isfile(file_in):
@@ -458,14 +442,15 @@ def preview(file_in, max_size, operating_system, coord=""):
             file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
             save_close_clone(clone, file_preview)
             result = {
-                "filename": common.spacja(file_preview, operating_system),
+                "filename": common.spacja(file_preview),
                 "size": filesize,
                 "width": str(width),
                 "height": str(height),
                 "preview_width": str(preview_width),
                 "preview_height": str(preview_height),
             }
-            module_logger.debug("preview: %s", str(result))
+    else:
+        result = None
     return result
 
 

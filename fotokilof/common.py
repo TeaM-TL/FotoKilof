@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (c) 2019-2024 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2025 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,7 @@ module contains common functions:
 import fnmatch
 import logging
 from pathlib import PurePosixPath, PureWindowsPath
+import platform
 import os
 import os.path
 
@@ -52,8 +53,7 @@ def resize_subdir(resize_vatiant, pixel_x, pixel_y, percent):
             command = str(pixel_x) + "x" + str(pixel_y)
             sub_dir = str(pixel_x) + "x" + str(pixel_y)
         case 2:
-            if percent > 100:
-                percent = 100
+            percent = min(percent, 100)
             if percent == 0:
                 percent = 1
             command = str(percent) + "%"
@@ -120,10 +120,10 @@ def mouse_crop_calculation(x_orig, y_orig, size):
     return dict_return
 
 
-def spacja(file_path, operating_system):
+def spacja(file_path):
     """escaping space and special char in pathname"""
     if len(file_path):
-        if operating_system == "Windows":
+        if platform.system() == "Windows":
             result = PureWindowsPath(os.path.normpath(file_path))
         else:
             result = PurePosixPath(os.path.normpath(file_path))
@@ -259,9 +259,7 @@ def file_from_list_of_images(file_list, current_file, request):
 
 def arrow_gravity(position, length, x0, y0):
     """calculate coordinated to draw arrow"""
-    length = int(length)
-    x0 = int(x0)
-    y0 = int(y0)
+
     width = int(length / 3 / 2)
     length_1_2 = int(length / 2)
     length_1_3 = int(length / 3)
@@ -270,9 +268,6 @@ def arrow_gravity(position, length, x0, y0):
     offset_x = 0
     offset_y = 0
     c = (x0, y0)
-    a = (x0, y0)
-    d = (x0, y0)
-    e = (x0, y0)
     match position:
         case "N":
             a = (x0, y0 + length)
@@ -380,7 +375,7 @@ def gravitation(gravity, text_x, text_y, image_width, image_height):
             result0 = "0"
             result1 = "0"
 
-    return (result0, result1), text_x, text_y
+    return (result0, result1), int(text_x), int(text_y)
 
 
 def compose_calculate_half(clone, compose, auto_resize, gravity):
