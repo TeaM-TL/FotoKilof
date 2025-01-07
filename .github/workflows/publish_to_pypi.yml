@@ -25,14 +25,11 @@ jobs:
 
       - name: Compile *po files for localisation
         run: |
-            apt-get install -y gettext tree
-            ls
-            tree
-            L_PRE=fotokilof/locale
-            L_LAST=LC_MESSAGES/fotokilof
-            for L in $L_PRE/??; do
-                if [ -e $L_PRE/$L/$L_LAST.po ]; then
-                    msgfmt $L_PRE/$L/$L_LAST.po -o fotokilof/$L/$L_LAST.mo
+            apt-get install -y gettext
+            for L in fotokilof/locale/??; do
+                if [ -e $L/LC_MESSAGES/fotokilof.po ]; then
+                    msgfmt $L/LC_MESSAGES/fotokilof.po -o $L/LC_MESSAGES/fotokilof.mo
+                    ls $L/LC_MESSAGES/
                 fi
             done
 
