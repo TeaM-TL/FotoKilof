@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Copyright (c) 2019-2024 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2025 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,9 @@ if platform.system() != "Windows":
 
 if platform.system() in ("Linux", "Darwin", "Windows"):
     import pyperclipimg
+    USE_PYPERCLIP = 1
+else:
+    USE_PYPERCLIP = 0
 
 module_logger = logging.getLogger(__name__)
 
@@ -49,7 +52,7 @@ def copy_to_clipboard(file_in):
     https://stackoverflow.com/questions/54008175/copy-an-image-to-macos-clipboard-using-python?rq=4
     debug needed!
     """
-    if platform.system() in ("Darwin", "Linux", "Windows"):
+    if USE_PYPERCLIP:
         pyperclipimg.copy(file_in)
     else:
         # e.g. FreeBSD

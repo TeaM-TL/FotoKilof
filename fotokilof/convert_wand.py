@@ -2,7 +2,7 @@
 # pylint: disable=bare-except
 
 """
-Copyright (c) 2022-2024 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2022-2025 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -103,26 +103,23 @@ def pip(clone, logo, logo_data, image_height, image_width):
     original image size: image_height, image_width
     """
     if len(logo):
-        with Image(filename=logo) as logo_img:
-            with Drawing() as draw:
-                position = common.crop_gravity(logo_data, image_height, image_width)
-                draw.composite(
-                    operator="over",
-                    left=common.empty(position[0]),
-                    top=common.empty(position[1]),
-                    width=common.empty(logo_data[2]),
-                    height=common.empty(logo_data[3]),
-                    image=logo_img,
-                )
-                draw(clone)
+        if os.path.isfile(logo):
+            with Image(filename=logo) as logo_img:
+                with Drawing() as draw:
+                    position = common.crop_gravity(logo_data, image_height, image_width)
+                    draw.composite(
+                        operator="over",
+                        left=common.empty(position[0]),
+                        top=common.empty(position[1]),
+                        width=common.empty(logo_data[2]),
+                        height=common.empty(logo_data[3]),
+                        image=logo_img,
+                    )
+                    draw(clone)
 
 
-def rotate(clone, angle, color, angle_own):
+def rotate(clone, angle, color):
     """rotate"""
-    if angle == 0:
-        angle = common.empty(angle_own)
-        if angle == 0:
-            color = None
     clone.rotate(angle, background=color)
 
 
@@ -147,13 +144,13 @@ def text(convert_data):
     angle = convert_data[3]
     text_color = convert_data[4]
     font = convert_data[5]
-    text_size = convert_data[6]
+    text_size = int(convert_data[6])
     gravity_onoff = convert_data[7]
     gravity = convert_data[8]
     box = convert_data[9]
     box_color = convert_data[10]
-    text_x = convert_data[11]
-    text_y = convert_data[12]
+    text_x = int(common.empty(convert_data[11]))
+    text_y = int(common.empty(convert_data[12]))
     text_string = convert_data[13]
     arrow = convert_data[14]
 
@@ -161,7 +158,7 @@ def text(convert_data):
 
     if text_string:
         gravity_common, new_x, new_y = common.gravitation(
-            gravity, int(text_x), int(text_y), image_width, image_height
+            gravity, text_x, text_y, image_width, image_height
         )
         draw_gravity = gravity_common[1]
         if in_out == 0:
@@ -185,8 +182,8 @@ def text(convert_data):
 
             arrow_coord_all = common.gravitation(
                 gravity,
-                int(text_x),
-                int(text_y),
+                text_x,
+                text_y,
                 image_width,
                 image_height,
             )
@@ -390,12 +387,11 @@ def compose(clone, compose_file, right, autoresize, color, gravity):
 
 
 # ------------------------------------ Preview
-def preview(file_in, size, operating_system, coord=""):
+def preview(file_in, size, coord=""):
     """
     preview generation by Wand
     file_in - fullname image file
     size - required size of image
-    os - operating system: Windows, MACOS, UNIX
     coord - coordinates for crop
     --
     return:
@@ -404,15 +400,7 @@ def preview(file_in, size, operating_system, coord=""):
     - width and height
     """
 
-    result = {
-        "filename": None,
-        "size": "0",
-        "width": "0",
-        "height": "0",
-        "preview_width": "0",
-        "preview_height": "0",
-    }
-
+    result = None
     if file_in:
         if os.path.isfile(file_in):
             filesize = common.humansize(os.path.getsize(file_in))
@@ -438,14 +426,13 @@ def preview(file_in, size, operating_system, coord=""):
             with clone.convert("ppm") as converted:
                 save_close_clone(converted, file_preview)
             result = {
-                "filename": common.spacja(file_preview, operating_system),
+                "filename": common.spacja(file_preview),
                 "size": filesize,
                 "width": str(width),
                 "height": str(height),
                 "preview_width": str(preview_width),
                 "preview_height": str(preview_height),
             }
-
     return result
 
 

@@ -2,7 +2,7 @@
 # pylint: disable=bare-except
 
 """
-Copyright (c) 2024 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2024-2025 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -78,7 +78,6 @@ def fonts_list(set_pillow):
 
 def display_image(file_to_display, set_pillow):
     """display image"""
-    # file_in = common.spacja(file_to_display)
     module_logger.info(" Display file: %s", file_to_display)
     start_time = time.time()
     result = None
@@ -134,13 +133,23 @@ def get_image_size(file_in, is_pillow):
     return size
 
 
-def preview(file_logo, size, set_pillow, operating_system, coord=""):
+def preview(file_logo, size, set_pillow, coord=""):
     """preview"""
     start_time = time.time()
+
     if set_pillow:
-        result = convert_pillow.preview(file_logo, size, operating_system, coord)
+        result = convert_pillow.preview(file_logo, size, coord)
     else:
-        result = convert_wand.preview(file_logo, size, operating_system, coord)
+        result = convert_wand.preview(file_logo, size, coord)
+    if result is None:
+        result = {
+            "filename": None,
+            "size": "0",
+            "width": "0",
+            "height": "0",
+            "preview_width": "0",
+            "preview_height": "0",
+        }
     module_logger.info("preview: %s s", str(time.time() - start_time))
     return result
 
@@ -170,10 +179,16 @@ def save_close_clone(clone, file_out, exif_on, set_pillow):
 def rotate(clone, angle, color, angle_own, set_pillow):
     """rotate"""
     start_time = time.time()
-    if set_pillow:
-        result = convert_pillow.rotate(clone, angle, color, angle_own)
+    if angle == 0:
+        angle = common.empty(angle_own)
+        if angle == 0:
+            color = None
     else:
-        convert_wand.rotate(clone, angle, color, angle_own)
+        color = None
+    if set_pillow:
+        result = convert_pillow.rotate(clone, angle, color)
+    else:
+        convert_wand.rotate(clone, angle, color)
         result = clone
     module_logger.info("Rotate: %ss", str(time.time() - start_time))
     return result
