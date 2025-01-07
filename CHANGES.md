@@ -2,6 +2,8 @@
 
 ## 2025
 
+5.1.6 I hope, that locale will be added
+
 5.1.5 fixed right mouse button for crop, small code polishing
 
 ## 2024
