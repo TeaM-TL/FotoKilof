@@ -42,7 +42,7 @@ jobs:
       - name: Publish distribution to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
 
-      # - name: Upload artifact signatures to GitHub Release
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token }}
-      #   run: gh release upload '${{ github.pypi }}' dist/** --repo '${{ github.repository }}'
+      - name: Upload artifact signatures to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: gh release upload '${{ github.ref_name }}' dist/** --repo '${{ github.repository }}'

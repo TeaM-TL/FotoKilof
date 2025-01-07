@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-22 21:26+0100\n"
-"PO-Revision-Date: 2024-12-22 21:40+0100\n"
+"POT-Creation-Date: 2025-01-07 23:14+0100\n"
+"PO-Revision-Date: 2025-01-07 23:18+0100\n"
 "Last-Translator: Giancarlo Dessì <slack@giand.it>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -69,7 +69,8 @@ msgstr "TUTTI i tipi"
 
 #: __main__.py:986
 msgid ""
-"Sorry, xclip (X11) or wl-clipboard (Wayland) is not installed\n"
+"Sorry, nothing in clipboard\n"
+"Or xclip (X11) or wl-clipboard (Wayland) is not installed\n"
 " Install xclip or wl-clipboard and try again!"
 msgstr ""
 
@@ -81,143 +82,143 @@ msgstr ""
 msgid "License"
 msgstr "Licenza"
 
-#: __main__.py:1559 __main__.py:3465
+#: __main__.py:1558 __main__.py:3467
 msgid "Ready"
 msgstr "Pronto"
 
-#: __main__.py:1584
+#: __main__.py:1583
 msgid "No file selected"
 msgstr "Nessun file selezionato"
 
-#: __main__.py:1830 __main__.py:2517 __main__.py:2810
+#: __main__.py:1829 __main__.py:2516 __main__.py:2809
 msgid "dx"
 msgstr "dx"
 
-#: __main__.py:1831 __main__.py:2518 __main__.py:2814
+#: __main__.py:1830 __main__.py:2517 __main__.py:2813
 msgid "dy"
 msgstr "dy"
 
-#: __main__.py:1843
+#: __main__.py:1842
 msgid "x"
 msgstr "x"
 
-#: __main__.py:1844
+#: __main__.py:1843
 msgid "y"
 msgstr "y"
 
-#: __main__.py:1989
+#: __main__.py:1988
 msgid "Image"
 msgstr "Immagine"
 
-#: __main__.py:1994 __main__.py:2843 __main__.py:2957
+#: __main__.py:1993 __main__.py:2842 __main__.py:2956
 msgid "File selection"
 msgstr "Selezione file"
 
-#: __main__.py:1998
+#: __main__.py:1997
 msgid "Clipboard"
 msgstr "Appunti"
 
-#: __main__.py:2003
+#: __main__.py:2002
 msgid "First"
 msgstr "Primo"
 
-#: __main__.py:2009
+#: __main__.py:2008
 msgid "Previous"
 msgstr "Precedente"
 
-#: __main__.py:2014
+#: __main__.py:2013
 msgid "Next"
 msgstr "Successivo"
 
-#: __main__.py:2017
+#: __main__.py:2016
 msgid "Last"
 msgstr "Ultimo"
 
-#: __main__.py:2032 __main__.py:2049
+#: __main__.py:2031 __main__.py:2048
 msgid "Execute all"
 msgstr "Esegui tutto"
 
-#: __main__.py:2037
+#: __main__.py:2036
 msgid "Folder"
 msgstr "Cartella"
 
-#: __main__.py:2043
+#: __main__.py:2042
 msgid "File"
 msgstr "File"
 
-#: __main__.py:2064
+#: __main__.py:2063
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: __main__.py:2068
+#: __main__.py:2067
 msgid "Save"
 msgstr "Salva"
 
-#: __main__.py:2071
+#: __main__.py:2070
 msgid "Load"
 msgstr "Carica"
 
-#: __main__.py:2085
+#: __main__.py:2084
 msgid "Tools"
 msgstr "Strumenti"
 
-#: __main__.py:2090
+#: __main__.py:2089
 msgid "Scaling/Resize"
 msgstr "Ridimensiona"
 
-#: __main__.py:2099 __main__.py:2303
+#: __main__.py:2098 __main__.py:2302
 msgid "Crop"
 msgstr "Ritaglia"
 
-#: __main__.py:2108
+#: __main__.py:2107
 msgid "Text"
 msgstr "Testo"
 
-#: __main__.py:2117 __main__.py:2633
+#: __main__.py:2116 __main__.py:2632
 msgid "Rotate"
 msgstr "Ruota"
 
-#: __main__.py:2126 __main__.py:2675
+#: __main__.py:2125 __main__.py:2674
 msgid "Border"
 msgstr "Bordo"
 
-#: __main__.py:2135
+#: __main__.py:2134
 msgid "Black&white"
 msgstr "Bianco e nero"
 
-#: __main__.py:2143
+#: __main__.py:2142
 msgid "Colors normalize"
 msgstr "Normalizza colori"
 
-#: __main__.py:2152 __main__.py:2724 __main__.py:2730
+#: __main__.py:2151 __main__.py:2723 __main__.py:2729
 msgid "Contrast"
 msgstr "Contrasto"
 
-#: __main__.py:2161 __main__.py:2781
+#: __main__.py:2160 __main__.py:2780
 msgid "Mirror"
 msgstr "Rifletti"
 
-#: __main__.py:2170 __main__.py:2840
+#: __main__.py:2169 __main__.py:2839
 msgid "Logo"
 msgstr "Logo"
 
-#: __main__.py:2179 __main__.py:2616 __main__.py:2643
+#: __main__.py:2178 __main__.py:2615 __main__.py:2642
 msgid "Custom"
 msgstr "Personalizza"
 
-#: __main__.py:2188 __main__.py:2800
+#: __main__.py:2187 __main__.py:2799
 msgid "Vignette"
 msgstr "Vignettatura"
 
-#: __main__.py:2197
+#: __main__.py:2196
 msgid "EXIF"
 msgstr "EXIF"
 
-#: __main__.py:2206 __main__.py:2951
+#: __main__.py:2205 __main__.py:2950
 msgid "Compose"
 msgstr "Componi"
 
-#: __main__.py:2244
+#: __main__.py:2243
 msgid ""
 "Open file for processing\n"
 "Select tools for conversion\n"
@@ -227,30 +228,30 @@ msgstr ""
 "Seleziona strumenti per conversione\n"
 "Esegui conversione o esegui tutta la conversione in un passaggio"
 
-#: __main__.py:2251
+#: __main__.py:2250
 msgid "Scale/Resize"
 msgstr "Ridimensiona"
 
-#: __main__.py:2265
+#: __main__.py:2264
 msgid "Max"
 msgstr "Max"
 
-#: __main__.py:2276
+#: __main__.py:2275
 msgid "Percent"
 msgstr "Percento"
 
-#: __main__.py:2282 __main__.py:2442 __main__.py:2592 __main__.py:2653
-#: __main__.py:2690 __main__.py:2712 __main__.py:2740 __main__.py:2768
-#: __main__.py:2790 __main__.py:2823 __main__.py:2846 __main__.py:2937
-#: __main__.py:2985
+#: __main__.py:2281 __main__.py:2441 __main__.py:2591 __main__.py:2652
+#: __main__.py:2689 __main__.py:2711 __main__.py:2739 __main__.py:2767
+#: __main__.py:2789 __main__.py:2822 __main__.py:2845 __main__.py:2936
+#: __main__.py:2984
 msgid "Execute"
 msgstr "Esegui"
 
-#: __main__.py:2310
+#: __main__.py:2309
 msgid "Coordinates (x1, y1) and (x2, y2)"
 msgstr "Coordinate (x1, y1) e (x2, y2)"
 
-#: __main__.py:2314
+#: __main__.py:2313
 msgid ""
 "Left Upper\n"
 "corner\n"
@@ -260,7 +261,7 @@ msgstr ""
 "angolo\n"
 "Click a sinistra"
 
-#: __main__.py:2322
+#: __main__.py:2321
 msgid ""
 "Right Lower\n"
 "corner\n"
@@ -270,11 +271,11 @@ msgstr ""
 "angolo\n"
 "Click a destra"
 
-#: __main__.py:2334
+#: __main__.py:2333
 msgid "Origin (x1,y1) and dimensions (X, Y)"
 msgstr "Origine (x1,y1) e dimensioni (X, Y)"
 
-#: __main__.py:2354
+#: __main__.py:2353
 msgid ""
 "Offset (dx,dy), dimensions (X, Y)\n"
 "and gravity"
@@ -282,107 +283,107 @@ msgstr ""
 "Offset (dx,dy), dimensioni (X, Y)\n"
 "e gravity"
 
-#: __main__.py:2401 __main__.py:2553 __main__.py:2893 __main__.py:3013
+#: __main__.py:2400 __main__.py:2552 __main__.py:2892 __main__.py:3012
 msgid "Center"
 msgstr "Centro"
 
-#: __main__.py:2437 __main__.py:3039 __main__.py:3087 __main__.py:3119
+#: __main__.py:2436 __main__.py:3038 __main__.py:3086 __main__.py:3118
 msgid "Preview"
 msgstr "Anteprima"
 
-#: __main__.py:2440
+#: __main__.py:2439
 msgid "From image"
 msgstr "Da immagine"
 
-#: __main__.py:2481
+#: __main__.py:2480
 msgid "Add text"
 msgstr "Aggiungi testo"
 
-#: __main__.py:2490
+#: __main__.py:2489
 msgid "Inside"
 msgstr "Dentro"
 
-#: __main__.py:2497
+#: __main__.py:2496
 msgid "Outside"
 msgstr "Fuori"
 
-#: __main__.py:2503 __main__.py:2590
+#: __main__.py:2502 __main__.py:2589
 msgid "Background"
 msgstr "Sfondo"
 
-#: __main__.py:2506
+#: __main__.py:2505
 msgid "Arrow"
 msgstr "Freccia"
 
-#: __main__.py:2510
+#: __main__.py:2509
 msgid "Gravity"
 msgstr "Gravity"
 
-#: __main__.py:2584
+#: __main__.py:2583
 msgid "Color test"
 msgstr "Test colore"
 
-#: __main__.py:2586 __main__.py:3323
+#: __main__.py:2585 __main__.py:3325
 msgid "Font"
 msgstr "Carattere"
 
-#: __main__.py:2588
+#: __main__.py:2587
 msgid "Height"
 msgstr "Altezza"
 
-#: __main__.py:2648 __main__.py:2677 __main__.py:2818 __main__.py:3005
+#: __main__.py:2647 __main__.py:2676 __main__.py:2817 __main__.py:3004
 msgid "  "
 msgstr ""
 
-#: __main__.py:2650 __main__.py:2687 __main__.py:2820 __main__.py:3001
+#: __main__.py:2649 __main__.py:2686 __main__.py:2819 __main__.py:3000
 msgid "Color"
 msgstr "Colore"
 
-#: __main__.py:2704 __main__.py:2706
+#: __main__.py:2703 __main__.py:2705
 msgid "Black-white"
 msgstr "Bianco-nero"
 
-#: __main__.py:2707
+#: __main__.py:2706
 msgid "Sepia"
 msgstr "Seppia"
 
-#: __main__.py:2727
+#: __main__.py:2726
 msgid "Stretch"
 msgstr "Stira"
 
-#: __main__.py:2737
+#: __main__.py:2736
 msgid "Black"
 msgstr "Nero"
 
-#: __main__.py:2738
+#: __main__.py:2737
 msgid "White"
 msgstr "Bianco"
 
-#: __main__.py:2756
+#: __main__.py:2755
 msgid "Color normalize"
 msgstr "Normalizza colore"
 
-#: __main__.py:2759
+#: __main__.py:2758
 msgid "Normalize"
 msgstr "Equalizza"
 
-#: __main__.py:2762
+#: __main__.py:2761
 msgid "AutoLevel"
 msgstr "AutoLevel"
 
-#: __main__.py:2764
+#: __main__.py:2763
 msgid "Channel:"
 msgstr "Canale:"
 
-#: __main__.py:2802
+#: __main__.py:2801
 msgid "Radius"
 msgstr "Radius"
 
-#: __main__.py:2806
+#: __main__.py:2805
 msgid "Sigma"
 msgstr "Sigma"
 
-#: __main__.py:2855
+#: __main__.py:2854
 msgid ""
 "Width\n"
 "Height"
@@ -390,53 +391,53 @@ msgstr ""
 "Larghezza\n"
 "Altezza"
 
-#: __main__.py:2856
+#: __main__.py:2855
 msgid ""
 "Offset\n"
 "(dx,dy)"
 msgstr "Offset (dx,dy)"
 
-#: __main__.py:2931
+#: __main__.py:2930
 msgid "Custom command"
 msgstr "Personalizza il comando"
 
-#: __main__.py:2934
+#: __main__.py:2933
 msgid "Clear"
 msgstr "Pulisci"
 
-#: __main__.py:2963 __main__.py:3019
+#: __main__.py:2962 __main__.py:3018
 msgid "Bottom"
 msgstr "Sotto"
 
-#: __main__.py:2970 __main__.py:3016
+#: __main__.py:2969 __main__.py:3015
 msgid "Right"
 msgstr "Destra"
 
-#: __main__.py:2977
+#: __main__.py:2976
 msgid "Autoresize"
 msgstr "Autoridimensiona"
 
-#: __main__.py:3007
+#: __main__.py:3006
 msgid "Top"
 msgstr "Sopra"
 
-#: __main__.py:3010
+#: __main__.py:3009
 msgid "Left"
 msgstr "Sinistra"
 
-#: __main__.py:3082
+#: __main__.py:3081
 msgid "Original"
 msgstr "Originale"
 
-#: __main__.py:3113
+#: __main__.py:3112
 msgid "Result"
 msgstr "Risultato"
 
-#: __main__.py:3167
+#: __main__.py:3169
 msgid "Select image file for processing"
 msgstr "Seleziona il file immagine da elaborare"
 
-#: __main__.py:3171
+#: __main__.py:3173
 #, fuzzy
 #| msgid ""
 #| "MacOS and Windows: take image from clipboard.\n"
@@ -453,7 +454,7 @@ msgstr ""
 "L'immagine catturata è salva nella cartella %TEMP%/today e caricata per "
 "l'elaborazione."
 
-#: __main__.py:3176
+#: __main__.py:3178
 msgid ""
 "Load first image from current directory.\n"
 "Use Home key instead"
@@ -461,7 +462,7 @@ msgstr ""
 "Carica la prima immagine dalla cartella corrente.\n"
 "Usa il tasto Home invece"
 
-#: __main__.py:3180
+#: __main__.py:3182
 msgid ""
 "Load previous image from current directory.\n"
 "Use PgUp key instead"
@@ -469,7 +470,7 @@ msgstr ""
 "Carica la precedente immagine dalla cartella corrente.\n"
 "Usa il tasto Pagina Su invece"
 
-#: __main__.py:3184
+#: __main__.py:3186
 msgid ""
 "Load next image from current directory.\n"
 "Use PgDn key instead"
@@ -477,7 +478,7 @@ msgstr ""
 "Carica l'immagine successiva dalla cartella corrente\n"
 "Usa il tasto Pagina Giù invece"
 
-#: __main__.py:3188
+#: __main__.py:3190
 msgid ""
 "Load last image from current directory.\n"
 "Use End key instead"
@@ -485,19 +486,19 @@ msgstr ""
 "Carica l'ultima immagine dalla cartella corrente.\n"
 "Usa il tasto Fine invece"
 
-#: __main__.py:3190
+#: __main__.py:3192
 msgid "Processing all files in current directory"
 msgstr "Elaborazione di tutti i file nella cartella corrente"
 
-#: __main__.py:3191
+#: __main__.py:3193
 msgid "Processing only current file"
 msgstr "Elaborazione del solo file corrente"
 
-#: __main__.py:3192
+#: __main__.py:3194
 msgid "Selection of format output file; JPG, PNG or TIF"
 msgstr "Selezione di un formato di file output; JPEG, PNG o TIFF"
 
-#: __main__.py:3196
+#: __main__.py:3198
 msgid ""
 "Perform all selected conversion for current file or all files in current "
 "directory"
@@ -505,7 +506,7 @@ msgstr ""
 "Esegui tutta le conversioni selezionate per il file corrente o tutti i file "
 "nella cartella corrente"
 
-#: __main__.py:3202
+#: __main__.py:3204
 msgid ""
 "Save all values into configuration file (~/.fotokilof.ini).\n"
 "FotoKilof will load it during starting"
@@ -513,11 +514,11 @@ msgstr ""
 "Salva tutti i valori nel file di configurazione (~/.fotokilof.ini).\n"
 "FotoKilof li caricherà all'avvio"
 
-#: __main__.py:3205
+#: __main__.py:3207
 msgid "Load saved values of conversion"
 msgstr "Carica tutti i valori di conversione salvati"
 
-#: __main__.py:3210
+#: __main__.py:3212
 msgid ""
 "Scale image, proportions are saved.\n"
 "Specify maximum dimensions of image or percent"
@@ -525,7 +526,7 @@ msgstr ""
 "Ridimensiona l'immagine, le proporzioni sono conservate.\n"
 "Specifica le dimensioni massime dell'immagine o in percentuale"
 
-#: __main__.py:3216
+#: __main__.py:3218
 msgid ""
 "Take part of image. Select crop by:\n"
 "- absolute coordinate\n"
@@ -540,7 +541,7 @@ msgstr ""
 "Ricorda che il punto (0,0) è posizionato nell'angolo superiore-sinistro "
 "dell'immagine."
 
-#: __main__.py:3222
+#: __main__.py:3224
 msgid ""
 "Insert text on picture or add text at bottom.\n"
 "Text can be rotated, colored and with background.\n"
@@ -550,13 +551,13 @@ msgstr ""
 "Il testo può essere ruotato, colorato e dotato di sfondo.\n"
 "Sono disponibili tutti i caratteri del sistema"
 
-#: __main__.py:3227
+#: __main__.py:3229
 msgid "Rotate picture by 90, 180, 270 degree or specify own angle of rotation"
 msgstr ""
 "Ruota l'immagine di 90, 180, 279 gradi o specifica un particolare angolo di "
 "rotazione"
 
-#: __main__.py:3232
+#: __main__.py:3234
 msgid ""
 "Add border around picture.\n"
 "Specify width of horizontal and vertical border separately"
@@ -564,32 +565,32 @@ msgstr ""
 "Aggiunge un bordo intorno all'immagine.\n"
 "Specifica separatamente la larghezza dei bordi orizzontale e verticale"
 
-#: __main__.py:3235
+#: __main__.py:3237
 msgid "Convert into black-white or sepia"
 msgstr "Converte in bianco e nero o seppia"
 
-#: __main__.py:3236
+#: __main__.py:3238
 msgid "Change contrast or change range of contrast"
 msgstr "Cambia il contrasto o l'intervallo di contrasto"
 
-#: __main__.py:3237
+#: __main__.py:3239
 msgid "Normalize of color level"
 msgstr "Equalizza il livello di colore"
 
-#: __main__.py:3240
+#: __main__.py:3242
 msgid "Make mirror of picture in vertical or horizotal or both direction"
 msgstr "Riflette l'immagine in verticale o orizzontale o entrambe le direzioni"
 
-#: __main__.py:3242
+#: __main__.py:3244
 msgid "Add vignette as on old photography or not the best lens"
 msgstr ""
 "Aggiunge una vignettatura come su una vecchia foto o non migliore obiettivo"
 
-#: __main__.py:3243
+#: __main__.py:3245
 msgid "Insert picture, eg. own logo, into picture"
 msgstr "Inserisce un oggetto grafico, es. un logo, dentro l'immagine"
 
-#: __main__.py:3244
+#: __main__.py:3246
 msgid ""
 "Processing ImageMagick command.\n"
 "Works only on Linux OS"
@@ -597,7 +598,7 @@ msgstr ""
 "Elaborazione del comando ImageMagick\n"
 "Funziona solo su Linux"
 
-#: __main__.py:3245
+#: __main__.py:3247
 msgid ""
 "If ON keep EXIF data\n"
 "if OFF EXIF data will be removed"
@@ -605,27 +606,27 @@ msgstr ""
 "Se OM i dati EXIF saranno mantenuti\n"
 "Se OFF i dati EXIF saranno rimossi"
 
-#: __main__.py:3249
+#: __main__.py:3251
 msgid "Display original image by IMdisplay or default image viewer of OS"
 msgstr ""
 "Mostra l'immagine originale su IMdisplay o nel visualizzazione di immagini "
 "predefinito del sistema operativo"
 
-#: __main__.py:3251 __main__.py:3256
+#: __main__.py:3253 __main__.py:3258
 msgid "Select size of preview"
 msgstr "Seleziona la dimensione dell'anteprima"
 
-#: __main__.py:3254
+#: __main__.py:3256
 msgid "Display result image by IMdisplay or default image viewer of OS"
 msgstr ""
 "Mostra il risultato dell'immagine su IMdisplay o nel visualizzatore di "
 "immagini predefinito del sistema operativo"
 
-#: __main__.py:3258 __main__.py:3349
+#: __main__.py:3260 __main__.py:3351
 msgid "Execute only resize conversion on current picture"
 msgstr "Esegue solo il ridimensionamento sull'immagine corrente"
 
-#: __main__.py:3263
+#: __main__.py:3265
 msgid ""
 "Select crop by absolute coordinate.\n"
 "Remember point (0,0) is located in left-top corner of image."
@@ -634,7 +635,7 @@ msgstr ""
 "Ricorda che il punto (0,0) è localizzato nell'angolo superiore sinistro "
 "dell'immagine."
 
-#: __main__.py:3269
+#: __main__.py:3271
 msgid ""
 "Select crop by absolute coorinate left-top corner plus width and height.\n"
 "Remember point (0,0) is located in left-top corner of image."
@@ -644,7 +645,7 @@ msgstr ""
 "Ricorda che il punto (0,0) è localizzato nell'angolo superiore sinistro "
 "dell'immagine."
 
-#: __main__.py:3275
+#: __main__.py:3277
 msgid ""
 "Select crop by gravity plus width and height plus offset.\n"
 "Remember point (0,0) is located in left-top corner of image."
@@ -653,7 +654,7 @@ msgstr ""
 "Ricorda che il punto (0,0) è localizzato nell'angolo superiore sinistro "
 "dell'immagine."
 
-#: __main__.py:3281
+#: __main__.py:3283
 msgid ""
 "x1 - horizontal position of left-top corner of crop\n"
 "Click left mouse button on preview in place of left-top corner"
@@ -662,7 +663,7 @@ msgstr ""
 "Click sul pulsante sinistro del mouse sull'anteprima al posto dell'angolo "
 "superiore sinistro"
 
-#: __main__.py:3287
+#: __main__.py:3289
 msgid ""
 "y1 - vertical position of left-top corner of crop\n"
 "Click left mouse button on preview in place of left-top corner"
@@ -671,7 +672,7 @@ msgstr ""
 "Click sul pulsante sinistro del mouse sull'anteprima al posto dell'angolo "
 "superiore sinistro"
 
-#: __main__.py:3293
+#: __main__.py:3295
 msgid ""
 "x2 - horizontal position of right-bottom corner of crop\n"
 "Click right mouse button on preview in place of left-top corner"
@@ -680,7 +681,7 @@ msgstr ""
 "Click sul pulsante sinistro del mouse sull'anteprima al posto dell'angolo "
 "inferiore destro"
 
-#: __main__.py:3299
+#: __main__.py:3301
 msgid ""
 "y2 - vertical position of right-bottom corner of crop\n"
 "Click right mouse button on preview in place of left-top corner"
@@ -689,31 +690,31 @@ msgstr ""
 "Click sul pulsante sinistro del mouse sull'anteprima al posto dell'angolo "
 "inferiore destro"
 
-#: __main__.py:3302
+#: __main__.py:3304
 msgid "x1 - horizontal position of left-top corner of crop"
 msgstr "x1 - posizione orizzontale dell'angolo superiore sinistro del ritaglio"
 
-#: __main__.py:3303
+#: __main__.py:3305
 msgid "y1 - vertical position of left-top corner of crop"
 msgstr "y1 - posizione verticale dell'angolo superiore sinistro del ritaglio"
 
-#: __main__.py:3304 __main__.py:3308
+#: __main__.py:3306 __main__.py:3310
 msgid "X - width of crop"
 msgstr "X - larghezza del ritaglio"
 
-#: __main__.py:3305 __main__.py:3309
+#: __main__.py:3307 __main__.py:3311
 msgid "Y - height of crop"
 msgstr "Y - altezza del ritaglio"
 
-#: __main__.py:3306
+#: __main__.py:3308
 msgid "dx - horizontal offset from gravity point"
 msgstr "dx - offset orizzontale dal punto gravity"
 
-#: __main__.py:3307
+#: __main__.py:3309
 msgid "dy - vertical offsef from gravity point"
 msgstr "dy - offset verticale dal punto gravity"
 
-#: __main__.py:3313
+#: __main__.py:3315
 #, python-format
 msgid ""
 "Take size of crop from current picture.\n"
@@ -722,79 +723,79 @@ msgstr ""
 "Prende l'ampiezza del ritaglio dall'immagine corrente.\n"
 "Il ritaglio sarà il 100% dell'immagine originale"
 
-#: __main__.py:3316
+#: __main__.py:3318
 msgid "Refresh preview to see crop on picture"
 msgstr "Aggiorna l'anteprima per vedere il ritaglio sull'immagine"
 
-#: __main__.py:3317
+#: __main__.py:3319
 msgid "Use gravity direction for select crop"
 msgstr "Usa la direzione gravity per selezionare il ritaglio"
 
-#: __main__.py:3318
+#: __main__.py:3320
 msgid "Execute only crop conversion on current picture"
 msgstr "Esegue solo il ritaglio sull'immagine corrente"
 
-#: __main__.py:3320
+#: __main__.py:3322
 msgid "Click here and type text"
 msgstr "Click qui e digita il testo"
 
-#: __main__.py:3321
+#: __main__.py:3323
 msgid "Text size"
 msgstr "Dimensione del testo"
 
-#: __main__.py:3322
+#: __main__.py:3324
 msgid "Angle of text"
 msgstr "Angolo del testo"
 
-#: __main__.py:3324
+#: __main__.py:3326
 msgid "Put text on picture"
 msgstr "Inserisce testo sull'immagine"
 
-#: __main__.py:3325
+#: __main__.py:3327
 msgid "Put text below picture"
 msgstr "Inserisce testo sotto l'immagine"
 
-#: __main__.py:3326
+#: __main__.py:3328
 msgid "Use gravity for putting text or Absolute position"
 msgstr "Usa gravity per inserire il testo o la posizione Absolute"
 
-#: __main__.py:3327
+#: __main__.py:3329
 msgid "Use gravity direction for text placement"
 msgstr "Usa la direzione gravity per il posizionamento del testo"
 
-#: __main__.py:3328
+#: __main__.py:3330
 msgid "Use background for text"
 msgstr "Usa lo sfondo per il testo"
 
-#: __main__.py:3329
+#: __main__.py:3331
 msgid "Add arrow between text and origin point"
 msgstr "Aggiungi una freccia tra il testo e il punto di origine"
 
-#: __main__.py:3330 __main__.py:3331
+#: __main__.py:3332 __main__.py:3333
 msgid "Offset from gravity or absolute position"
 msgstr "Offset da gravity o posizione assoluta"
 
-#: __main__.py:3332
+#: __main__.py:3334
 msgid "Selected color of text and background"
 msgstr "Colore selezionato del testo e dello sfondo"
 
-#: __main__.py:3333
+#: __main__.py:3335
 msgid "Select color of text"
 msgstr "Seleziona colore del testo"
 
-#: __main__.py:3334
+#: __main__.py:3336
 msgid "Select color of background"
 msgstr "Seleziona colore dello sfondo"
 
-#: __main__.py:3335
+#: __main__.py:3337
 msgid "Execute only adding text on current picture"
 msgstr "Esegue solo l'aggiunta di testo sull'immagine corrente"
 
-#: __main__.py:3337
+#: __main__.py:3339
 msgid "Select if want to use own angle of rotation"
 msgstr "Seleziona se si vuole usare uno specifico angolo di rotazione"
 
-#: __main__.py:3341
+#: __main__.py:3343
 msgid ""
 "Put angle of rotation. Rotation is in right direction.\n"
 "Background color is as choosed by Color button"
@@ -802,62 +803,62 @@ msgstr ""
 "Inserisce l'angolo di rotazione. La rotazione è in senso orario.\n"
 "Il colore dello sfondo è quello scelto con il pulsante Color"
 
-#: __main__.py:3344
+#: __main__.py:3346
 msgid "Selected color to fill a gap"
 msgstr "Colore selezionato per riempire un vuoto"
 
-#: __main__.py:3345
+#: __main__.py:3347
 msgid "If OWN is choosed, select color to fill a gap."
 msgstr "Se è scelto OWN, seleziona il colore per riempire un vuoto."
 
-#: __main__.py:3346
+#: __main__.py:3348
 msgid "Execute only rotate conversion on current picture"
 msgstr "Esegue solo la rotazione sull'immagine corrente"
 
-#: __main__.py:3348
+#: __main__.py:3350
 msgid "Put percent for rescale of picture"
 msgstr "Inserisci la percentuale per il ridimensionamento dell'immagine"
 
-#: __main__.py:3351
+#: __main__.py:3353
 msgid "Put width of vertical part of border"
 msgstr "Inserisci la larghezza della parte verticale del bordo"
 
-#: __main__.py:3352
+#: __main__.py:3354
 msgid "Put width of horizontal part of border"
 msgstr "Inserisci la larghezza della parte orizzontale del bordo"
 
-#: __main__.py:3353
+#: __main__.py:3355
 msgid "Selected color of border"
 msgstr "Colore del bordo selezionato"
 
-#: __main__.py:3354
+#: __main__.py:3356
 msgid "Select color of border"
 msgstr "Seleziona il colore del bordo"
 
-#: __main__.py:3355
+#: __main__.py:3357
 msgid "Execute only add border conversion on current picture"
 msgstr "Esegue solo l'aggiunta di un bordo sull'immagine corrente"
 
-#: __main__.py:3357
+#: __main__.py:3359
 msgid "Convert picture into gray scale - black-white"
 msgstr "Converti l'immagina in scala di grigo"
 
-#: __main__.py:3359
+#: __main__.py:3361
 msgid "Convert picture into sepia - old style silver based photography"
 msgstr ""
 "Converti l'immagine in seppia - vecchio stile della fotografia basata "
 "sull'argento"
 
-#: __main__.py:3361
+#: __main__.py:3363
 msgid "Put threshold of sepia, try values in range 80-95"
 msgstr ""
 "Metti la soglia dell'effetto seppia, prova i valori dell'intervallo 80-95"
 
-#: __main__.py:3363
+#: __main__.py:3365
 msgid "Execute only black-white/sepia conversion on current picture"
 msgstr "Esegue solo i filtri bianco e nero / seppia sull'immagine corrente"
 
-#: __main__.py:3366
+#: __main__.py:3368
 msgid ""
 "Black point.\n"
 "Try values in range 0-0.2"
@@ -865,7 +866,7 @@ msgstr ""
 "Punto nero.\n"
 "Prova valori nell'intervallo 0-0,2"
 
-#: __main__.py:3367
+#: __main__.py:3369
 msgid ""
 "White point.\n"
 "Try values in range 0-0.2"
@@ -873,18 +874,18 @@ msgstr ""
 "Punto bianco.\n"
 "Prova valori nell'intervallo 0-0,2\\"
 
-#: __main__.py:3370
+#: __main__.py:3372
 msgid "Enhance contrast of image by adjusting the span of the available colors"
 msgstr ""
 "Migliora il contrasto dell'immagine regolando la gamma dei colori disponibili"
 
-#: __main__.py:3374
+#: __main__.py:3376
 msgid "Enhances the difference between lighter & darker values of the image"
 msgstr ""
 "Migliora la differenza tra il valore più chiaro e quello più scuro "
 "dell'immagine"
 
-#: __main__.py:3379
+#: __main__.py:3381
 msgid ""
 "Select power of reduce (negative values) or increase (positive values) "
 "contrast"
@@ -892,151 +893,151 @@ msgstr ""
 "Seleziona l'intensità di riduzione (valori negativi) o di aumento (valori "
 "positivi) del contrasto"
 
-#: __main__.py:3383
+#: __main__.py:3385
 msgid "Execute only change contrast conversion on current picture"
 msgstr "Esegue solo modifiche del contrasto sull'immagine corrente"
 
-#: __main__.py:3386
+#: __main__.py:3388
 msgid "Normalize color channels"
 msgstr "Normalizza i canali di colore"
 
-#: __main__.py:3387
+#: __main__.py:3389
 msgid "Select channel for normalize"
 msgstr "Seleziona il canale da normalizzare"
 
-#: __main__.py:3390
+#: __main__.py:3392
 msgid "Scale the minimum and maximum values to a full quantum range"
 msgstr ""
 "Ridimensiona i valori minimo e massimo a un intervallo quantico completo"
 
-#: __main__.py:3394
+#: __main__.py:3396
 msgid "Execute only color normalize conversion on current picture"
 msgstr "Esegui solo normalizzazione del colore sull'immagine corrente"
 
-#: __main__.py:3397
+#: __main__.py:3399
 msgid "Mirror top-bottom"
 msgstr "Riflessione verticale"
 
-#: __main__.py:3398
+#: __main__.py:3400
 msgid "Mirror left-right"
 msgstr "Riflessione orizzontale"
 
-#: __main__.py:3399
+#: __main__.py:3401
 msgid "Execute only mirror conversion on current picture"
 msgstr ""
 "Esegue solo la riflessione verticale/orizzontale sull'immagine corrente"
 
-#: __main__.py:3401
+#: __main__.py:3403
 msgid "Radius of the Gaussian blur effect"
 msgstr "Raggio dell'effetto di sfocatura gaussiana"
 
-#: __main__.py:3402
+#: __main__.py:3404
 msgid "Standard deviation of the Gaussian effect"
 msgstr "Deviazione standard dell'effetto gaussiano"
 
-#: __main__.py:3403
+#: __main__.py:3405
 msgid "Horizontal offset of vignette"
 msgstr "Offset orizzontale della vignettatura"
 
-#: __main__.py:3404
+#: __main__.py:3406
 msgid "Vertical offset of vignette"
 msgstr "Offset verticale della vignettatura"
 
-#: __main__.py:3405
+#: __main__.py:3407
 msgid "Selected color of corners"
 msgstr "Colore selezionato degli angoli"
 
-#: __main__.py:3406
+#: __main__.py:3408
 msgid "Select color of corners"
 msgstr "Seleziona colore degli angoli"
 
-#: __main__.py:3407
+#: __main__.py:3409
 msgid "Execute only vignette conversion on current picture"
 msgstr "Esegue solo la vignettatura sull'immagine corrente"
 
-#: __main__.py:3409
+#: __main__.py:3411
 msgid "Select picture to put on picture"
 msgstr "Seleziona l'oggetto grafico da mettere sull'immagine"
 
-#: __main__.py:3410
+#: __main__.py:3412
 msgid "Width picture"
 msgstr "Larghezza dell'immagine"
 
-#: __main__.py:3411
+#: __main__.py:3413
 msgid "Height picture"
 msgstr "Altezza dell'immagine"
 
-#: __main__.py:3412
+#: __main__.py:3414
 msgid "Horizontal offset from gravity point"
 msgstr "Offset orizzontale da punto gravity"
 
-#: __main__.py:3413
+#: __main__.py:3415
 msgid "Vertical offset from gravity point"
 msgstr "Offset verticale dal punto gravity"
 
-#: __main__.py:3414
+#: __main__.py:3416
 msgid "Use gravity for putting picture"
 msgstr "Usa gravity per mettere l'immagine"
 
-#: __main__.py:3415
+#: __main__.py:3417
 msgid "Execute only add logo on current picture"
 msgstr "Esegui solo l'aggiunta di un logo sull'immagine corrente"
 
-#: __main__.py:3417
+#: __main__.py:3419
 msgid "Select picture to compose with main picture"
 msgstr "Seleziona un'immagine da comporre con l'immagine principale"
 
-#: __main__.py:3418
+#: __main__.py:3420
 msgid "Join picture at bottom"
 msgstr "Unisci l'immagine sotto"
 
-#: __main__.py:3419
+#: __main__.py:3421
 msgid "Join picture at right"
 msgstr "Unisci l'immagine a destra"
 
-#: __main__.py:3420
+#: __main__.py:3422
 msgid "Autoresize picture if dimensions are not equal"
 msgstr "Scala l'immagine se le dimensioni non sono uguali"
 
-#: __main__.py:3421
+#: __main__.py:3423
 msgid "Selected color to fill gap"
 msgstr "Colore selezionato per riempire lo spazio"
 
-#: __main__.py:3422
+#: __main__.py:3424
 msgid "Select color of gap"
 msgstr "Seleziona colore dello spazio"
 
-#: __main__.py:3423
+#: __main__.py:3425
 msgid "Join picture on right and move to top"
 msgstr "Unisci l'immagine a destra e sposta in alto"
 
-#: __main__.py:3424
+#: __main__.py:3426
 msgid "Join picture at bottom and move to left"
 msgstr "Unisci l'immagine in basso e sposta a destra"
 
-#: __main__.py:3425
+#: __main__.py:3427
 msgid "Join picture and move to center"
 msgstr "Unisci l'immagine e sposta al centro"
 
-#: __main__.py:3426
+#: __main__.py:3428
 msgid "Join picture at bottom and move to right"
 msgstr "Unisci l'immagine in basso e sposta a destra"
 
-#: __main__.py:3427
+#: __main__.py:3429
 msgid "Join picture on right and move to bottom"
 msgstr "Unisci l'immagine a destra e sposta in basso"
 
-#: __main__.py:3428
+#: __main__.py:3430
 msgid "Execute compose picture with current main picture"
 msgstr "Esegue composizione immagine con l'immagine principale corrente"
 
-#: __main__.py:3431
+#: __main__.py:3433
 msgid "Display image to join by IMdisplay or default image viewer of OS"
 msgstr ""
 "Mostra il risultato dell'immagine su IMdisplay o nel visualizzatore di "
 "immagini predefinito del sistema operativo"
 
-#: __main__.py:3483
+#: __main__.py:3485
 msgid "New version of FotoKilof is available"
 msgstr "Disponibile una nuova versione di FotoKilof"
 
