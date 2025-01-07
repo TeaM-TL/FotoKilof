@@ -3,8 +3,6 @@
 GUI for the most used (by me) ImageMagick functionality for processing pictures.
 If ImageMagick or Wand are unavailable, Pillow is in use. There some limitation, but works in general.
 
-![Happy new Year](https://raw.githubusercontent.com/TeaM-TL/FotoKilof/master/screenshots/january_happy_new_year.jpg)
-
 ## Screenshots
 
 ### Linux

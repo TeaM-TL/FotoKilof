@@ -15,32 +15,37 @@ jobs:
       contents: write
       id-token: write
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-    - name: Compile *po files for localisation
-      run: |
-          for L in fotokilof/locale/??; do
-              if [ -e fotokilof/$L/LC_MESSAGES/fotokilof.po ]; then
-                  msgfmt fotokilof/$L/LC_MESSAGES/fotokilof.po -o fotokilof/$L/LC_MESSAGES/fotokilof.mo
-              fi
-          done
+      - name: Compile *po files for localisation
+        run: |
+            apt-get install -y gettext tree
+            ls
+            tree
+            L_PRE=fotokilof/locale
+            L_LAST=LC_MESSAGES/fotokilof
+            for L in $L_PRE/??; do
+                if [ -e $L_PRE/$L/$L_LAST.po ]; then
+                    msgfmt $L_PRE/$L/$L_LAST.po -o fotokilof/$L/$L_LAST.mo
+                fi
+            done
 
-    - name: "Install build"
-      run: pip install build
+      - name: "Install build"
+        run: pip install build
 
-    - name: Build package
-      run: python -m build
-  
-    - name: Publish distribution to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Build package
+        run: python -m build
+    
+      - name: Publish distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
 
-    - name: Upload artifact signatures to GitHub Release
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      run: gh release upload '${{ github.pypi }}' dist/** --repo '${{ github.repository }}'
+      # - name: Upload artifact signatures to GitHub Release
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token }}
+      #   run: gh release upload '${{ github.pypi }}' dist/** --repo '${{ github.repository }}'
