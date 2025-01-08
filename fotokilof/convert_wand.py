@@ -65,13 +65,12 @@ module_logger = logging.getLogger(__name__)
 module_logger.info(WAND_TEXT)
 
 
-# ------------------------------------ Info
+# ------------------------------------ Common
 def fonts_list():
     """list of available fonts"""
     return fontsList()
 
 
-# ------------------------------------ Common
 def make_clone(file_to_clone, color=None):
     """open picture and make clone for processing"""
     if file_to_clone:

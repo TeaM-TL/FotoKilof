@@ -77,7 +77,6 @@ from ttkbootstrap.constants import (
 # my modules
 import check_new_version
 import convert
-import convert_wand
 import convert_pillow
 import convert_common
 import common
@@ -386,12 +385,13 @@ def apply_all_button():
                         clone, img_normalize.get(), co_normalize_channel.get(), PILLOW
                     )
                 if img_vignette_on.get():
-                    convert_wand.vignette(
+                    convert_common.vignette(
                         clone,
                         e_vignette_dx.get(),
                         e_vignette_dy.get(),
                         e_vignette_radius.get(),
                         e_vignette_radius.get(),
+                        PILLOW,
                     )
                 if img_rotate_on.get():
                     clone = convert_common.rotate(
@@ -453,8 +453,8 @@ def apply_all_button():
                     )
                     height = clone.height
                     width = clone.width
-                    convert_wand.pip(
-                        clone, file_logo_path.get(), coordinates, width, height
+                    convert_common.pip(
+                        clone, file_logo_path.get(), coordinates, width, height, PILLOW
                     )
 
             file_out = convert.out_full_filename(file_in, subdir, co_apply_type.get())
@@ -620,12 +620,13 @@ def convert_vignette_button():
         file_in_path.get(), PILLOW, img_vignette_color.get()
     )
     if clone is not None:
-        convert_wand.vignette(
+        convert_common.vignette(
             clone,
             e_vignette_dx.get(),
             e_vignette_dy.get(),
             e_vignette_radius.get(),
             e_vignette_radius.get(),
+            PILLOW,
         )
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW
@@ -809,8 +810,8 @@ def convert_logo_button():
     )
     clone = convert_common.make_clone(file_in_path.get(), PILLOW)
     if clone is not None:
-        convert_wand.pip(
-            clone, file_logo_path.get(), coordinates, clone.width, clone.height
+        convert_common.pip(
+            clone, file_logo_path.get(), coordinates, clone.width, clone.height, PILLOW
         )
         convert_common.save_close_clone(
             clone, path_to_file_out(0), img_exif_on.get(), PILLOW
@@ -2221,8 +2222,8 @@ cb_border.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_rotate.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_resize.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_text.pack(padx=5, pady=5, anchor=W, side=LEFT)
+cb_logo.pack(padx=5, pady=5, anchor=W, side=LEFT)
 if not PILLOW:
-    cb_logo.pack(padx=5, pady=5, anchor=W, side=LEFT)
     cb_custom.pack(padx=5, pady=5, anchor=W, side=LEFT)
     cb_exif.pack(padx=5, pady=5, anchor=W, side=LEFT)
 cb_compose.pack(padx=5, pady=5, anchor=W, side=LEFT)
@@ -3454,7 +3455,6 @@ l_compose_color.configure(bg=img_compose_color.get())
 if PILLOW:
     # disable processing buttons
     img_logo_on.set(0)
-    cb_logo.configure(state=DISABLED)
     img_custom_on.set(0)
     cb_custom.configure(state=DISABLED)
     img_vignette_on.set(0)

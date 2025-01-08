@@ -2,7 +2,9 @@
 
 ## 2025
 
-5.1.6 I hope, that locale will be added
+5.1.7 inserting picture into picture works
+
+5.1.6 locale has been added, fixed github/actions
 
 5.1.5 fixed right mouse button for crop, small code polishing
 
