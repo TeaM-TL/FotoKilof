@@ -101,7 +101,7 @@ def pip(clone, logo, logo_data, image_height, image_width):
     logo_data = offset_x, offset_y, width, height, gravitation
     original image size: image_height, image_width
     """
-    if len(logo):
+    if logo:
         if os.path.isfile(logo):
             with Image(filename=logo) as logo_img:
                 with Drawing() as draw:
