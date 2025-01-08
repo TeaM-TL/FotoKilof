@@ -65,13 +65,12 @@ module_logger = logging.getLogger(__name__)
 module_logger.info(WAND_TEXT)
 
 
-# ------------------------------------ Info
+# ------------------------------------ Common
 def fonts_list():
     """list of available fonts"""
     return fontsList()
 
 
-# ------------------------------------ Common
 def make_clone(file_to_clone, color=None):
     """open picture and make clone for processing"""
     if file_to_clone:
@@ -102,7 +101,7 @@ def pip(clone, logo, logo_data, image_height, image_width):
     logo_data = offset_x, offset_y, width, height, gravitation
     original image size: image_height, image_width
     """
-    if len(logo):
+    if logo:
         if os.path.isfile(logo):
             with Image(filename=logo) as logo_img:
                 with Drawing() as draw:

@@ -65,17 +65,7 @@ module_logger = logging.getLogger(__name__)
 module_logger.info(WAND_TEXT)
 
 
-def fonts_list(set_pillow):
-    """list of available fonts"""
-    start_time = time.time()
-    if set_pillow:
-        result = convert_pillow.fonts_list()
-    else:
-        result = convert_wand.fonts_list()
-    module_logger.info("Get fonts list: %ss", str(time.time() - start_time))
-    return result
-
-
+# ------------------------------------ Common
 def display_image(file_to_display, set_pillow):
     """display image"""
     module_logger.info(" Display file: %s", file_to_display)
@@ -133,24 +123,15 @@ def get_image_size(file_in, is_pillow):
     return size
 
 
-def preview(file_logo, size, set_pillow, coord=""):
-    """preview"""
+# ------------------------------------ Common
+def fonts_list(set_pillow):
+    """list of available fonts"""
     start_time = time.time()
-
     if set_pillow:
-        result = convert_pillow.preview(file_logo, size, coord)
+        result = convert_pillow.fonts_list()
     else:
-        result = convert_wand.preview(file_logo, size, coord)
-    if result is None:
-        result = {
-            "filename": None,
-            "size": "0",
-            "width": "0",
-            "height": "0",
-            "preview_width": "0",
-            "preview_height": "0",
-        }
-    module_logger.info("preview: %s s", str(time.time() - start_time))
+        result = convert_wand.fonts_list()
+    module_logger.info("Get fonts list: %ss", str(time.time() - start_time))
     return result
 
 
@@ -174,6 +155,28 @@ def save_close_clone(clone, file_out, exif_on, set_pillow):
         else:
             convert_wand.save_close_clone(clone, file_out, exif_on)
         module_logger.info("Save clone: %ss", str(time.time() - start_time))
+
+
+# ------------------------------------ Converters
+def pip(clone, logo, logo_data, image_height, image_width, set_pillow):
+    """put picture on picture
+    clone - clone of image for processing
+    logo - filename of logo
+    logo_data = offset_x, offset_y, width, height, gravitation
+    original image size: image_height, image_width
+    """
+    if clone:
+        start_time = time.time()
+        if set_pillow:
+            result = convert_pillow.pip(
+                clone, logo, logo_data, image_height, image_width
+            )
+        else:
+            result = convert_wand.pip(clone, logo, logo_data, image_height, image_width)
+        module_logger.info("PIP %ss", str(time.time() - start_time))
+    else:
+        result = None
+    return result
 
 
 def rotate(clone, angle, color, angle_own, set_pillow):
@@ -206,18 +209,6 @@ def mirror(clone, flip, flop, set_pillow):
     return result
 
 
-def resize(clone, command, set_pillow):
-    """resize picture"""
-    start_time = time.time()
-    if set_pillow:
-        result = convert_pillow.resize(clone, command)
-    else:
-        convert_wand.resize(clone, command)
-        result = clone
-    module_logger.info("Resize: %ss", str(time.time() - start_time))
-    return result
-
-
 def border(clone, color, x, y, set_pillow):
     """mirror: flip and flop"""
     start_time = time.time()
@@ -225,6 +216,41 @@ def border(clone, color, x, y, set_pillow):
         result = convert_pillow.border(clone, color, x, y)
     else:
         convert_wand.border(clone, color, x, y)
+        result = clone
+    module_logger.info("Resize: %ss", str(time.time() - start_time))
+    return result
+
+
+def text(convert_data, set_pillow):
+    """black and white or sepia"""
+    start_time = time.time()
+    if set_pillow:
+        result = convert_pillow.text(convert_data)
+    else:
+        result = convert_wand.text(convert_data)
+    module_logger.info("Text %ss", str(time.time() - start_time))
+    return result
+
+
+def bw(clone, bw_variant, sepia, set_pillow):
+    """black and white or sepia"""
+    start_time = time.time()
+    if set_pillow:
+        result = convert_pillow.bw(clone, bw_variant, sepia)
+    else:
+        convert_wand.bw(clone, bw_variant, sepia)
+        result = clone
+    module_logger.info("Black-white/sepia %ss", str(time.time() - start_time))
+    return result
+
+
+def resize(clone, command, set_pillow):
+    """resize picture"""
+    start_time = time.time()
+    if set_pillow:
+        result = convert_pillow.resize(clone, command)
+    else:
+        convert_wand.resize(clone, command)
         result = clone
     module_logger.info("Resize: %ss", str(time.time() - start_time))
     return result
@@ -239,18 +265,6 @@ def normalize(clone, normalize_variant, channel, set_pillow):
         convert_wand.normalize(clone, normalize_variant, channel)
         result = clone
     module_logger.info("Normalize %ss", str(time.time() - start_time))
-    return result
-
-
-def bw(clone, bw_variant, sepia, set_pillow):
-    """black and white or sepia"""
-    start_time = time.time()
-    if set_pillow:
-        result = convert_pillow.bw(clone, bw_variant, sepia)
-    else:
-        convert_wand.bw(clone, bw_variant, sepia)
-        result = clone
-    module_logger.info("Black-white/sepia %ss", str(time.time() - start_time))
     return result
 
 
@@ -334,14 +348,24 @@ def crop(file_in, clone, crop_variant, gravity, entries, set_pillow):
     return result
 
 
-def text(convert_data, set_pillow):
-    """black and white or sepia"""
-    start_time = time.time()
-    if set_pillow:
-        result = convert_pillow.text(convert_data)
+def vignette(clone, dx, dy, radius, sigma, set_pillow):
+    """add vignette into picture
+    clone - clone of image for processing
+    dx, dy - offset from border
+    radius - radius of Gaussian blur
+    sigma - standard deviation for Gaussian blur
+    color - color of corners
+    """
+    if clone:
+        start_time = time.time()
+        if set_pillow:
+            module_logger.info("Vignette doesn't work with Pillow yet")
+            # result = convert_pillow.vignette(clone, dx, dy, radius, sigma)
+        else:
+            result = convert_wand.vignette(clone, dx, dy, radius, sigma)
+        module_logger.info("Vignette %ss", str(time.time() - start_time))
     else:
-        result = convert_wand.text(convert_data)
-    module_logger.info("Text %ss", str(time.time() - start_time))
+        result = None
     return result
 
 
@@ -361,3 +385,28 @@ def compose(clone, compose_file, right, autoresize, color, gravity, set_pillow):
     else:
         result = None
     return result
+
+
+# ------------------------------------ Preview
+def preview(file_logo, size, set_pillow, coord=""):
+    """preview"""
+    start_time = time.time()
+
+    if set_pillow:
+        result = convert_pillow.preview(file_logo, size, coord)
+    else:
+        result = convert_wand.preview(file_logo, size, coord)
+    if result is None:
+        result = {
+            "filename": None,
+            "size": "0",
+            "width": "0",
+            "height": "0",
+            "preview_width": "0",
+            "preview_height": "0",
+        }
+    module_logger.info("preview: %s s", str(time.time() - start_time))
+    return result
+
+
+# EOF

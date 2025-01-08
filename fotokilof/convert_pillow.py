@@ -60,7 +60,7 @@ import common
 module_logger = logging.getLogger(__name__)
 
 
-# ------------------------------------ Info
+# ------------------------------------ Common
 def version():
     """version of PIL"""
     return Image.__version__
@@ -85,7 +85,6 @@ def fonts_list():
     return result
 
 
-# ------------------------------------ Common
 def make_clone(file_to_clone, color=None):
     """open picture and make clone for processing"""
     if file_to_clone:
@@ -116,22 +115,21 @@ def pip(clone, logo, logo_data, image_height, image_width):
     logo_data = offset_x, offset_y, width, height, gravitation
     original image size: image_height, image_width
     """
-    if len(logo):
+    result = None
+    if clone:
         if os.path.isfile(logo):
-            pass
-            # with Image(logo) as logo_img:
-            #     with Drawing() as draw:
-            #         position = common.crop_gravity(logo_data, image_height, image_width)
-            #         draw.composite(
-            #             operator="over",
-            #             left=common.empty(position[0]),
-            #             top=common.empty(position[1]),
-            #             width=common.empty(logo_data[2]),
-            #             height=common.empty(logo_data[3]),
-            #             image=logo_img,
-            #         )
-            #         draw(clone)
-    module_logger.warning("PIP is not available for PILLOW yet, install ImageMagick")
+            position = common.crop_gravity(logo_data, image_height, image_width)
+            logo_left = common.empty(position[0])
+            logo_top = common.empty(position[1])
+            logo_width = common.empty(logo_data[2])
+            logo_height = common.empty(logo_data[3])
+
+            with Image.open(logo) as logo_image:
+                logo_size = str(logo_width) + "x" + str(logo_height)
+                logo_image = resize(logo_image, logo_size)
+                clone.paste(logo_image, (logo_left, logo_top))
+                result = clone
+    return result
 
 
 def rotate(clone, angle, color):
@@ -410,7 +408,8 @@ def preview(file_in, max_size, coord=""):
     - width and height
     """
 
-    if file_in is not None:
+    result = None
+    if file_in:
         if os.path.isfile(file_in):
             filesize = common.humansize(os.path.getsize(file_in))
             clone = make_clone(file_in)
@@ -449,8 +448,6 @@ def preview(file_in, max_size, coord=""):
                 "preview_width": str(preview_width),
                 "preview_height": str(preview_height),
             }
-    else:
-        result = None
     return result
 
 
