@@ -8,3 +8,4 @@ fotokilof/.coverage
 .DS_Store
 FotoKilof.egg-info/*
 .coverage
+screenshots/FotoKilof/*

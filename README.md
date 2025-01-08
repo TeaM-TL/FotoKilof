@@ -1,7 +1,7 @@
 # FotoKilof - GUI for ImageMagick
 
 GUI for the most used (by me) ImageMagick functionality for processing pictures.
-If ImageMagick or Wand are unavailable, Pillow is in use. There some limitation, but works in general.
+If ImageMagick or Wand are unavailable, Pillow is in use. There are small limitation, but works in general.
 
 ## Screenshots
 
@@ -96,7 +96,7 @@ Processing order for all selected conversion:
 - resize,
 - text,
 - compose two image in one picture,
-- logo - only with Wand and ImageMagick.
+- logo.
 
 Processed is always on clone of picture in memory. Originals are not touched.
 
