@@ -349,6 +349,9 @@ def apply_all_button():
                         PILLOW,
                     )
                     subdir = work_dir.get()
+            elif img_custom_on.get() and not PILLOW:
+                cmd = t_custom.get("1.0", "end-1c")
+                subdir = work_dir.get()
             else:
                 # other conversions
                 clone = convert_common.make_clone(
@@ -456,9 +459,13 @@ def apply_all_button():
                     convert_common.pip(
                         clone, file_logo_path.get(), coordinates, width, height, PILLOW
                     )
-
             file_out = convert.out_full_filename(file_in, subdir, co_apply_type.get())
-            convert_common.save_close_clone(clone, file_out, img_exif_on.get(), PILLOW)
+            if img_custom_on.get() and not PILLOW:
+                magick.magick(cmd, file_in, file_out, OS)
+            else:
+                convert_common.save_close_clone(
+                    clone, file_out, img_exif_on.get(), PILLOW
+                )
             preview_new(file_out)
             # progressbar
             i = i + 1
@@ -487,7 +494,7 @@ def convert_custom_button():
         file_in_path.get(), work_dir.get(), co_apply_type.get()
     )
     cmd = t_custom.get("1.0", "end-1c")
-    result = magick.magick(cmd, file_in_path.get(), out_file, "convert", OS)
+    result = magick.magick(cmd, file_in_path.get(), out_file, OS)
     if result == "OK":
         preview_new(out_file)
     progress_files.set(_("done"))

@@ -2,6 +2,8 @@
 
 ## 2025
 
+5.1.8 fix with custom command
+
 5.1.7 inserting picture into picture works
 
 5.1.6 locale has been added, fixed github/actions

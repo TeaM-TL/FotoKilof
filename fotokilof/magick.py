@@ -34,27 +34,23 @@ import common
 module_logger = logging.getLogger(__name__)
 
 
-def magick(cmd, file_in, file_out, command, operating_system):
+def magick(cmd, file_in, file_out, operating_system):
     """
     run imagemagick command.
     cmd - command for imagemagick
     file_in - fullname picture for processing
     file_out - fullname output picture
-    command:
-      convert, mogrify, composite, import - ImageMagick
     """
     result = None
     if cmd != "":
         if file_in is not None:
-            file_in = common.spacja(file_in)
-            file_out = common.spacja(file_out)
+            file_in = str(common.spacja(file_in)) + " "
+            file_out = " " + str(common.spacja(file_out))
             if operating_system == 'Windows':
-                prefix_cmd = "magick.exe "
+                command = "magick.exe "
             else:
-                prefix_cmd = ""
-            command_exec = (
-                prefix_cmd + command + " " + file_in + " " + cmd + " " + file_out
-            )
+                command = "magick "
+            command_exec = command + file_in + cmd + file_out
             module_logger.info("Execute: %s", command_exec)
             try:
                 os.system(command_exec)
