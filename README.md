@@ -1,3 +1,7 @@
+[![PyPI](https://img.shields.io/pypi/v/fotokilof.svg)](https://pypi.org/project/FotoKilof/)
+[![Python versions](https://img.shields.io/pypi/pyversions/fotokilof.svg)](https://pypi.org/project/FotoKilof/)
+[![Test & publish](https://github.com/TeaM-TL/FotoKilof/workflows/Build%20and%20upload%20to%20PyPI%20when%20a%20Release%20is%20Created/badge.svg)](https://github.com/TeaM-TL/FotoKilof/actions/workflows/publish_to_pypi.yml?query=workflow%3A%22Build+and+upload+to+PyPI+when+a+Release+is+Created%22)
+
 # FotoKilof - GUI for ImageMagick
 
 GUI for the most used (by me) ImageMagick functionality for processing pictures.
