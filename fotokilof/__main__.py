@@ -52,6 +52,8 @@ from tkinter import (
 
 from PIL import ImageGrab
 
+import darkdetect
+
 import ttkbootstrap as ttk
 from ttkbootstrap.scrolled import ScrolledText, ScrolledFrame
 from ttkbootstrap.tooltip import ToolTip
@@ -3459,6 +3461,12 @@ img_text_font_dict = fonts()  # Reading available fonts
 ini_read_wraper()  # Loading settings from config file
 l_border_color.configure(bg=img_border_color.get())
 l_compose_color.configure(bg=img_compose_color.get())
+
+if darkdetect.isDark():
+    style.theme_use("darkly")
+elif darkdetect.isLight():
+    style.theme_use("litera")
+
 if PILLOW:
     # disable processing buttons
     img_logo_on.set(0)
