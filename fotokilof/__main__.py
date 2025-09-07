@@ -862,21 +862,24 @@ def open_file_dialog(dir_initial, title):
     )
     return filename
 
+def open_file_with_action(action):
+    """
+    Open file according action: 'first', 'last', 'next', 'previous'.
+    common for function open_file_(first| last| next| previous)
+    """
+    current_path = file_in_path.get()
+    if not current_path or not os.path.isfile(current_path):
+        return
+    dir_name = os.path.dirname(current_path)
+    file_list = common.list_of_images(dir_name, OS)
+    current_file = os.path.basename(current_path)
+    filename = common.file_from_list_of_images(file_list, current_file, action)
+    open_file_common(dir_name, filename)
+
 
 def open_file_last_key(event):
     """call open_file_last from bind"""
     open_file_last()
-
-
-def open_file_last():
-    """Open last file"""
-    if file_in_path.get():
-        if os.path.isfile(file_in_path.get()):
-            dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name, OS)
-            current_file = os.path.basename(file_in_path.get())
-            filename = common.file_from_list_of_images(file_list, current_file, "last")
-            open_file_common(dir_name, filename)
 
 
 def open_file_next_key(event):
@@ -884,31 +887,9 @@ def open_file_next_key(event):
     open_file_next()
 
 
-def open_file_next():
-    """Open next file"""
-    if file_in_path.get():
-        if os.path.isfile(file_in_path.get()):
-            dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name, OS)
-            current_file = os.path.basename(file_in_path.get())
-            filename = common.file_from_list_of_images(file_list, current_file, "next")
-            open_file_common(dir_name, filename)
-
-
 def open_file_first_key(event):
     """call open_file_first from bind"""
     open_file_first()
-
-
-def open_file_first():
-    """Open first file"""
-    if file_in_path.get():
-        if os.path.isfile(file_in_path.get()):
-            dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name, OS)
-            current_file = os.path.basename(file_in_path.get())
-            filename = common.file_from_list_of_images(file_list, current_file, "first")
-            open_file_common(dir_name, filename)
 
 
 def open_file_prev_key(event):
@@ -916,17 +897,24 @@ def open_file_prev_key(event):
     open_file_prev()
 
 
+def open_file_last():
+    """Open last file"""
+    open_file_with_action("last")
+
+
+def open_file_next():
+    """Open next file"""
+    open_file_with_action("next")
+
+
+def open_file_first():
+    """Open first file"""
+    open_file_with_action("first")
+
+
 def open_file_prev():
     """Open previous file"""
-    if file_in_path.get():
-        if os.path.isfile(file_in_path.get()):
-            dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name, OS)
-            current_file = os.path.basename(file_in_path.get())
-            filename = common.file_from_list_of_images(
-                file_list, current_file, "previous"
-            )
-            open_file_common(dir_name, filename)
+    open_file_with_action("previous")
 
 
 def open_screenshot():
