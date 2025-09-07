@@ -221,13 +221,13 @@ def border(clone, color, x, y, set_pillow):
     return result
 
 
-def text(convert_data, set_pillow):
+def text(clone, convert_data, set_pillow):
     """black and white or sepia"""
     start_time = time.time()
     if set_pillow:
-        result = convert_pillow.text(convert_data)
+        result = convert_pillow.text(clone, convert_data)
     else:
-        result = convert_wand.text(convert_data)
+        result = convert_wand.text(clone,convert_data)
     module_logger.info("Text %ss", str(time.time() - start_time))
     return result
 

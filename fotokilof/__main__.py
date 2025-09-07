@@ -395,7 +395,7 @@ def apply_all_button():
                         e_vignette_dx.get(),
                         e_vignette_dy.get(),
                         e_vignette_radius.get(),
-                        e_vignette_radius.get(),
+                        e_vignette_sigma.get(),
                         PILLOW,
                     )
                 if img_rotate_on.get():
@@ -430,24 +430,7 @@ def apply_all_button():
                     # standard subdir for result picture
                     subdir = work_dir.get()
                 if img_text_on.get():
-                    convert_text_data = (
-                        clone,
-                        img_text_inout.get(),
-                        e_text_angle.get(),
-                        img_text_rotate.get(),
-                        img_text_color.get(),
-                        img_text_font.get(),
-                        e_text_size.get(),
-                        img_text_gravity_onoff.get(),
-                        img_text_gravity.get(),
-                        img_text_box.get(),
-                        img_text_box_color.get(),
-                        e_text_x.get(),
-                        e_text_y.get(),
-                        e_text.get(),
-                        img_text_arrow.get(),
-                    )
-                    clone = convert_common.text(convert_text_data, PILLOW)
+                    clone = convert_common.text(convert_text_collection_data(), PILLOW)
                 if img_logo_on.get():
                     coordinates = (
                         common.empty(e_logo_dx.get()),
@@ -488,6 +471,26 @@ def apply_all_button():
         logging.debug("No file selected")
 
 
+def convert_button_common(operation_func):
+    """common part for other convert_*_button functions"""
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
+    if clone is None:
+        progress_files.set(_("No image to process"))
+        return
+
+    clone = operation_func(clone)
+
+    file_out = path_to_file_out(0)
+    convert_common.save_close_clone(clone, file_out, img_exif_on.get(), PILLOW)
+    preview_new(file_out)
+
+    progress_files.set(_("done"))
+    progressbar_var.set(0)
+    root.update_idletasks()
+
+
 def convert_custom_button():
     """execute custom command"""
     progress_files.set(_("Processing"))
@@ -504,11 +507,9 @@ def convert_custom_button():
 
 def convert_contrast_button():
     """contrast button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.contrast(
+
+    def contrast_operation(clone):
+        return convert_common.contrast(
             clone,
             img_contrast.get(),
             co_contrast_selection.get(),
@@ -516,73 +517,50 @@ def convert_contrast_button():
             e2_contrast.get(),
             PILLOW,
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(contrast_operation)
 
 
 def convert_bw_button():
     """black-white or sepia button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.bw(clone, img_bw.get(), e_bw_sepia.get(), PILLOW)
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    def bw_operation(clone):
+        return convert_common.bw(clone, img_bw.get(), e_bw_sepia.get(), PILLOW)
+
+    convert_button_common(bw_operation)
 
 
 def convert_normalize_button():
     """normalize button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.normalize(
+
+    def normalize_operation(clone):
+        return convert_common.normalize(
             clone, img_normalize.get(), co_normalize_channel.get(), PILLOW
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(normalize_operation)
 
 
 def convert_rotate_button():
     """Rotate button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.rotate(
+
+    def rotate_operation(clone):
+        return convert_common.rotate(
             clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get(), PILLOW
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(rotate_operation)
 
 
 def convert_mirror_button():
     """Mirror button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.mirror(
+
+    def mirror_operation(clone):
+        return convert_common.mirror(
             clone, img_mirror_flip.get(), img_mirror_flop.get(), PILLOW
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(mirror_operation)
 
 
 def convert_resize_button():
@@ -607,50 +585,36 @@ def convert_resize_button():
 
 def convert_border_button():
     """Border button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.border(
+
+    def border_operation(clone):
+        return convert_common.border(
             clone, img_border_color.get(), e_border_we.get(), e_border_ns.get(), PILLOW
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(border_operation)
 
 
 def convert_vignette_button():
     """Vignette button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(
-        file_in_path.get(), PILLOW, img_vignette_color.get()
-    )
-    if clone is not None:
-        convert_common.vignette(
+
+    def vignette_operation(clone):
+        return convert_common.vignette(
             clone,
             e_vignette_dx.get(),
             e_vignette_dy.get(),
             e_vignette_radius.get(),
-            e_vignette_radius.get(),
+            e_vignette_sigma.get(),
             PILLOW,
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(vignette_operation)
 
 
 def convert_compose_button():
     """Compose button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.compose(
+
+    def compose_operation(clone):
+        return convert_common.compose(
             clone,
             img_compose_file.get(),
             img_compose_right.get(),
@@ -659,11 +623,8 @@ def convert_compose_button():
             img_compose_gravity.get(),
             PILLOW,
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(compose_operation)
 
 
 def crop_read():
@@ -721,11 +682,9 @@ def convert_crop_entries():
 
 def convert_crop_button():
     """Crop button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.crop(
+
+    def crop_operation(clone):
+        return convert_common.crop(
             file_in_path.get(),
             clone,
             img_crop.get(),
@@ -733,42 +692,38 @@ def convert_crop_button():
             convert_crop_entries(),
             PILLOW,
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(crop_operation)
+
+
+def convert_text_collection_data():
+    """collect text data for conversion"""
+    return (
+        "dummy",
+        img_text_inout.get(),
+        e_text_angle.get(),
+        img_text_rotate.get(),
+        img_text_color.get(),
+        img_text_font.get(),
+        e_text_size.get(),
+        img_text_gravity_onoff.get(),
+        img_text_gravity.get(),
+        img_text_box.get(),
+        img_text_box_color.get(),
+        e_text_x.get(),
+        e_text_y.get(),
+        e_text.get(),
+        img_text_arrow.get(),
+    )
 
 
 def convert_text_button():
     """add text"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        convert_text_data = (
-            clone,
-            img_text_inout.get(),
-            e_text_angle.get(),
-            img_text_rotate.get(),
-            img_text_color.get(),
-            img_text_font.get(),
-            e_text_size.get(),
-            img_text_gravity_onoff.get(),
-            img_text_gravity.get(),
-            img_text_box.get(),
-            img_text_box_color.get(),
-            e_text_x.get(),
-            e_text_y.get(),
-            e_text.get(),
-            img_text_arrow.get(),
-        )
-        clone = convert_common.text(convert_text_data, PILLOW)
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    def text_operation(clone):
+        return convert_common.text(clone, convert_text_collection_data(), PILLOW)
+
+    convert_button_common(text_operation)
 
 
 def fonts():

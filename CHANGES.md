@@ -2,6 +2,8 @@
 
 ## 2025
 
+5.1.10 fix sepia, refactor button functions
+
 5.1.9 autodetect dark/light mode
 
 5.1.8 fix with custom command
