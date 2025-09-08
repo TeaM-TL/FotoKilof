@@ -87,7 +87,8 @@ import ini_read
 import ini_save
 import magick
 import version
-import tooltips
+import gui_bindings
+import gui_tooltips
 
 try:
     from wand.version import VERSION
@@ -431,7 +432,7 @@ def apply_all_button():
                     # standard subdir for result picture
                     subdir = work_dir.get()
                 if img_text_on.get():
-                    clone = convert_common.text(convert_text_collection_data(), PILLOW)
+                    clone = convert_common.text(clone, convert_text_collection_data(), PILLOW)
                 if img_logo_on.get():
                     coordinates = (
                         common.empty(e_logo_dx.get()),
@@ -3098,23 +3099,37 @@ main_paned.add(frame_third_col)
 # bind
 ###############################################################################
 # binding commands to widgets
-co_preview_selector_orig.bind("<<ComboboxSelected>>", preview_orig_refresh)
-co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
-co_compose_preview_selector.bind("<<ComboboxSelected>>", preview_compose_refresh)
-co_text_font.bind("<<ComboboxSelected>>", font_selected)
-c_preview_orig_pi.bind("<Button-1>", mouse_crop_nw)
-if OS == "MACOS":
-    c_preview_orig_pi.bind("<Button-2>", mouse_crop_se)
-else:
-    c_preview_orig_pi.bind("<Button-3>", mouse_crop_se)
-c_preview_new_pi.bind("<Button-1>", preview_new_button)
-root.bind("<F1>", help_info)
-root.bind("<F2>", change_ttk_theme)
-root.protocol("WM_DELETE_WINDOW", close_program)
-root.bind("<Prior>", open_file_prev_key)
-root.bind("<Next>", open_file_next_key)
-root.bind("<Home>", open_file_first_key)
-root.bind("<End>", open_file_last_key)
+root_actions = {
+    'help_info': help_info,
+    'change_theme': change_ttk_theme,
+    'open_file_prev_key': open_file_prev_key,
+    'open_file_next_key': open_file_next_key,
+    'open_file_first_key': open_file_first_key,
+    'open_file_last_key': open_file_last_key,
+    'close_program': close_program,
+}
+panel_widgets = {
+    'c_preview_orig_pi': c_preview_orig_pi,
+    'c_preview_new_pi': c_preview_new_pi,
+    'co_preview_selector_orig': co_preview_selector_orig,
+    'co_preview_selector_new': co_preview_selector_new,
+    'co_compose_preview_selector': co_compose_preview_selector,
+    'co_text_font': co_text_font,
+    # ... inne widgety jeśli potrzeba
+}
+widget_actions = {
+    'mouse_crop_nw': mouse_crop_nw,
+    'mouse_crop_se': mouse_crop_se,
+    'preview_new_button': preview_new_button,
+    'preview_orig_refresh': preview_orig_refresh,
+    'preview_new_refresh': preview_new_refresh,
+    'preview_compose_refresh': preview_compose_refresh,
+    'font_selected': font_selected,
+    # ... inne funkcje
+}
+
+gui_bindings.setup_root_bindings(root, root_actions)
+gui_bindings.setup_widget_bindings(panel_widgets, widget_actions, OS)
 
 ###############################################################################
 # toolTips
@@ -3241,7 +3256,7 @@ widgets = {
     'b_compose_run': b_compose_run,
     'b_preview_new_run': b_preview_new_run,
 }
-tooltips.init_tooltips(widgets)
+gui_tooltips.init_tooltips(widgets)
 
 logging.debug("End GUI: %ss", str(time.time() - start_time))
 ##########################################
