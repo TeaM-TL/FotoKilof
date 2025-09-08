@@ -2,7 +2,7 @@
 
 ## 2025
 
-5.1.10 fix sepia, refactor button functions
+5.2.0 fix sepia, refactor button and file_open functions, separate modules: tooltips, bindings
 
 5.1.9 autodetect dark/light mode
 
