@@ -32,8 +32,6 @@ nice GUI for ImageMagick command common used (by me)
 
 from ttkbootstrap.tooltip import ToolTip
 
-_ = lambda s: s  # Assuming gettext _ function is imported or use real one
-
 
 def init_tooltips(widgets):
     """tooltips inicjalization"""

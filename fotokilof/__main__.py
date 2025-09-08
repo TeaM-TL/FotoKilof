@@ -81,11 +81,11 @@ import convert
 import convert_pillow
 import convert_common
 import common
-import gui
 import ini_read
 import ini_save
 import magick
 import version
+import gui
 import gui_bindings
 import gui_tooltips
 
