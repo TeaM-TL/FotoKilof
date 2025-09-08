@@ -121,6 +121,8 @@ def rotate(clone, angle, color):
     """rotate"""
     clone.rotate(angle, background=color)
 
+    return clone
+
 
 def mirror(clone, flip, flop):
     """mirror: flip and flop"""
@@ -129,10 +131,14 @@ def mirror(clone, flip, flop):
     if flop:
         clone.flop()
 
+    return clone
+
 
 def border(clone, color, x, y):
     """border: color, x, y"""
     clone.border(color, common.empty(x), common.empty(y))
+
+    return clone
 
 
 def text(clone, convert_data):
@@ -242,10 +248,14 @@ def bw(clone, bw_variant, sepia):
         # sepia
         clone.sepia_tone(threshold=common.empty(sepia) / 100)
 
+    return clone
+
 
 def resize(clone, command):
     """resize picture"""
     clone.transform(crop="", resize=command)
+
+    return clone
 
 
 def normalize(clone, normalize_variant, channel):
@@ -258,6 +268,8 @@ def normalize(clone, normalize_variant, channel):
             clone.normalize()
     else:
         clone.auto_level()
+
+    return clone
 
 
 def contrast(clone, contrast_variant, selection, black, white):
@@ -278,6 +290,8 @@ def contrast(clone, contrast_variant, selection, black, white):
             while iteration < abs(int(selection)):
                 iteration += 1
                 clone.contrast(sharpen=sharpen)
+
+    return clone
 
 
 def crop(clone, crop_variant, coordinates):
@@ -310,6 +324,8 @@ def crop(clone, crop_variant, coordinates):
                 gravity=coordinates[4],
             )
 
+    return clone
+
 
 def vignette(clone, dx, dy, radius, sigma):
     """add vignette into picture
@@ -325,6 +341,8 @@ def vignette(clone, dx, dy, radius, sigma):
         x=common.empty(dx),
         y=common.empty(dy),
     )
+
+    return clone
 
 
 def compose(clone, compose_file, right, autoresize, color, gravity):

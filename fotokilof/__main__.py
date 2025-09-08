@@ -474,11 +474,11 @@ def apply_all_button():
         logging.debug("No file selected")
 
 
-def convert_button_common(operation_func):
+def convert_button_common(operation_func, color=None):
     """common part for other convert_*_button functions"""
     progress_files.set(_("Processing"))
     root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW, color)
     if clone is None:
         progress_files.set(_("No image to process"))
         return
@@ -607,10 +607,10 @@ def convert_vignette_button():
             e_vignette_dy.get(),
             e_vignette_radius.get(),
             e_vignette_sigma.get(),
-            PILLOW,
+            PILLOW
         )
 
-    convert_button_common(vignette_operation)
+    convert_button_common(vignette_operation, img_vignette_color.get())
 
 
 def convert_compose_button():
