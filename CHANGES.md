@@ -2,6 +2,8 @@
 
 ## 2025
 
+5.2.1 nothing new, only version incerement, because 5.2.0 has problem with correct version number
+
 5.2.0 fix sepia, refactor button and file_open functions, separate modules: tooltips, bindings
 
 5.1.9 autodetect dark/light mode
