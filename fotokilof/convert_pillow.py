@@ -157,9 +157,8 @@ def border(clone, color, x, y):
     return result
 
 
-def text(convert_data):
+def text(clone, convert_data):
     """add text into picture"""
-    clone = convert_data[0]
     in_out = convert_data[1]
     own = convert_data[2]
     angle = convert_data[3]

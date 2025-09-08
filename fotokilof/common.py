@@ -46,9 +46,9 @@ import os.path
 module_logger = logging.getLogger(__name__)
 
 
-def resize_subdir(resize_vatiant, pixel_x, pixel_y, percent):
+def resize_subdir(resize_variant, pixel_x, pixel_y, percent):
     """prepare name for subdir and command for resize"""
-    match resize_vatiant:
+    match resize_variant:
         case 1:
             command = str(pixel_x) + "x" + str(pixel_y)
             sub_dir = str(pixel_x) + "x" + str(pixel_y)

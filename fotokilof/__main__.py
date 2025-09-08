@@ -56,7 +56,6 @@ import darkdetect
 
 import ttkbootstrap as ttk
 from ttkbootstrap.scrolled import ScrolledText, ScrolledFrame
-from ttkbootstrap.tooltip import ToolTip
 from ttkbootstrap.dialogs.colorchooser import ColorChooserDialog
 from ttkbootstrap.dialogs.dialogs import Messagebox
 from ttkbootstrap.constants import (
@@ -82,11 +81,13 @@ import convert
 import convert_pillow
 import convert_common
 import common
-import gui
 import ini_read
 import ini_save
 import magick
 import version
+import gui
+import gui_bindings
+import gui_tooltips
 
 try:
     from wand.version import VERSION
@@ -395,7 +396,7 @@ def apply_all_button():
                         e_vignette_dx.get(),
                         e_vignette_dy.get(),
                         e_vignette_radius.get(),
-                        e_vignette_radius.get(),
+                        e_vignette_sigma.get(),
                         PILLOW,
                     )
                 if img_rotate_on.get():
@@ -430,24 +431,9 @@ def apply_all_button():
                     # standard subdir for result picture
                     subdir = work_dir.get()
                 if img_text_on.get():
-                    convert_text_data = (
-                        clone,
-                        img_text_inout.get(),
-                        e_text_angle.get(),
-                        img_text_rotate.get(),
-                        img_text_color.get(),
-                        img_text_font.get(),
-                        e_text_size.get(),
-                        img_text_gravity_onoff.get(),
-                        img_text_gravity.get(),
-                        img_text_box.get(),
-                        img_text_box_color.get(),
-                        e_text_x.get(),
-                        e_text_y.get(),
-                        e_text.get(),
-                        img_text_arrow.get(),
+                    clone = convert_common.text(
+                        clone, convert_text_collection_data(), PILLOW
                     )
-                    clone = convert_common.text(convert_text_data, PILLOW)
                 if img_logo_on.get():
                     coordinates = (
                         common.empty(e_logo_dx.get()),
@@ -488,6 +474,26 @@ def apply_all_button():
         logging.debug("No file selected")
 
 
+def convert_button_common(operation_func, color=None):
+    """common part for other convert_*_button functions"""
+    progress_files.set(_("Processing"))
+    root.update_idletasks()
+    clone = convert_common.make_clone(file_in_path.get(), PILLOW, color)
+    if clone is None:
+        progress_files.set(_("No image to process"))
+        return
+
+    clone = operation_func(clone)
+
+    file_out = path_to_file_out(0)
+    convert_common.save_close_clone(clone, file_out, img_exif_on.get(), PILLOW)
+    preview_new(file_out)
+
+    progress_files.set(_("done"))
+    progressbar_var.set(0)
+    root.update_idletasks()
+
+
 def convert_custom_button():
     """execute custom command"""
     progress_files.set(_("Processing"))
@@ -504,11 +510,9 @@ def convert_custom_button():
 
 def convert_contrast_button():
     """contrast button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.contrast(
+
+    def contrast_operation(clone):
+        return convert_common.contrast(
             clone,
             img_contrast.get(),
             co_contrast_selection.get(),
@@ -516,73 +520,50 @@ def convert_contrast_button():
             e2_contrast.get(),
             PILLOW,
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(contrast_operation)
 
 
 def convert_bw_button():
     """black-white or sepia button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.bw(clone, img_bw.get(), e_bw_sepia.get(), PILLOW)
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    def bw_operation(clone):
+        return convert_common.bw(clone, img_bw.get(), e_bw_sepia.get(), PILLOW)
+
+    convert_button_common(bw_operation)
 
 
 def convert_normalize_button():
     """normalize button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.normalize(
+
+    def normalize_operation(clone):
+        return convert_common.normalize(
             clone, img_normalize.get(), co_normalize_channel.get(), PILLOW
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(normalize_operation)
 
 
 def convert_rotate_button():
     """Rotate button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.rotate(
+
+    def rotate_operation(clone):
+        return convert_common.rotate(
             clone, img_rotate.get(), img_rotate_color.get(), e_rotate_own.get(), PILLOW
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(rotate_operation)
 
 
 def convert_mirror_button():
     """Mirror button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.mirror(
+
+    def mirror_operation(clone):
+        return convert_common.mirror(
             clone, img_mirror_flip.get(), img_mirror_flop.get(), PILLOW
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(mirror_operation)
 
 
 def convert_resize_button():
@@ -607,50 +588,36 @@ def convert_resize_button():
 
 def convert_border_button():
     """Border button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.border(
+
+    def border_operation(clone):
+        return convert_common.border(
             clone, img_border_color.get(), e_border_we.get(), e_border_ns.get(), PILLOW
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(border_operation)
 
 
 def convert_vignette_button():
     """Vignette button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(
-        file_in_path.get(), PILLOW, img_vignette_color.get()
-    )
-    if clone is not None:
-        convert_common.vignette(
+
+    def vignette_operation(clone):
+        return convert_common.vignette(
             clone,
             e_vignette_dx.get(),
             e_vignette_dy.get(),
             e_vignette_radius.get(),
-            e_vignette_radius.get(),
-            PILLOW,
+            e_vignette_sigma.get(),
+            PILLOW
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(vignette_operation, img_vignette_color.get())
 
 
 def convert_compose_button():
     """Compose button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.compose(
+
+    def compose_operation(clone):
+        return convert_common.compose(
             clone,
             img_compose_file.get(),
             img_compose_right.get(),
@@ -659,11 +626,8 @@ def convert_compose_button():
             img_compose_gravity.get(),
             PILLOW,
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(compose_operation)
 
 
 def crop_read():
@@ -721,11 +685,9 @@ def convert_crop_entries():
 
 def convert_crop_button():
     """Crop button"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        clone = convert_common.crop(
+
+    def crop_operation(clone):
+        return convert_common.crop(
             file_in_path.get(),
             clone,
             img_crop.get(),
@@ -733,42 +695,38 @@ def convert_crop_button():
             convert_crop_entries(),
             PILLOW,
         )
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    convert_button_common(crop_operation)
+
+
+def convert_text_collection_data():
+    """collect text data for conversion"""
+    return (
+        "dummy",
+        img_text_inout.get(),
+        e_text_angle.get(),
+        img_text_rotate.get(),
+        img_text_color.get(),
+        img_text_font.get(),
+        e_text_size.get(),
+        img_text_gravity_onoff.get(),
+        img_text_gravity.get(),
+        img_text_box.get(),
+        img_text_box_color.get(),
+        e_text_x.get(),
+        e_text_y.get(),
+        e_text.get(),
+        img_text_arrow.get(),
+    )
 
 
 def convert_text_button():
     """add text"""
-    progress_files.set(_("Processing"))
-    root.update_idletasks()
-    clone = convert_common.make_clone(file_in_path.get(), PILLOW)
-    if clone is not None:
-        convert_text_data = (
-            clone,
-            img_text_inout.get(),
-            e_text_angle.get(),
-            img_text_rotate.get(),
-            img_text_color.get(),
-            img_text_font.get(),
-            e_text_size.get(),
-            img_text_gravity_onoff.get(),
-            img_text_gravity.get(),
-            img_text_box.get(),
-            img_text_box_color.get(),
-            e_text_x.get(),
-            e_text_y.get(),
-            e_text.get(),
-            img_text_arrow.get(),
-        )
-        clone = convert_common.text(convert_text_data, PILLOW)
-        convert_common.save_close_clone(
-            clone, path_to_file_out(0), img_exif_on.get(), PILLOW
-        )
-        preview_new(path_to_file_out(0))
-    progress_files.set(_("done"))
+
+    def text_operation(clone):
+        return convert_common.text(clone, convert_text_collection_data(), PILLOW)
+
+    convert_button_common(text_operation)
 
 
 def fonts():
@@ -908,20 +866,24 @@ def open_file_dialog(dir_initial, title):
     return filename
 
 
+def open_file_with_action(action):
+    """
+    Open file according action: 'first', 'last', 'next', 'previous'.
+    common for function open_file_(first| last| next| previous)
+    """
+    current_path = file_in_path.get()
+    if not current_path or not os.path.isfile(current_path):
+        return
+    dir_name = os.path.dirname(current_path)
+    file_list = common.list_of_images(dir_name, OS)
+    current_file = os.path.basename(current_path)
+    filename = common.file_from_list_of_images(file_list, current_file, action)
+    open_file_common(dir_name, filename)
+
+
 def open_file_last_key(event):
     """call open_file_last from bind"""
     open_file_last()
-
-
-def open_file_last():
-    """Open last file"""
-    if file_in_path.get():
-        if os.path.isfile(file_in_path.get()):
-            dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name, OS)
-            current_file = os.path.basename(file_in_path.get())
-            filename = common.file_from_list_of_images(file_list, current_file, "last")
-            open_file_common(dir_name, filename)
 
 
 def open_file_next_key(event):
@@ -929,31 +891,9 @@ def open_file_next_key(event):
     open_file_next()
 
 
-def open_file_next():
-    """Open next file"""
-    if file_in_path.get():
-        if os.path.isfile(file_in_path.get()):
-            dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name, OS)
-            current_file = os.path.basename(file_in_path.get())
-            filename = common.file_from_list_of_images(file_list, current_file, "next")
-            open_file_common(dir_name, filename)
-
-
 def open_file_first_key(event):
     """call open_file_first from bind"""
     open_file_first()
-
-
-def open_file_first():
-    """Open first file"""
-    if file_in_path.get():
-        if os.path.isfile(file_in_path.get()):
-            dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name, OS)
-            current_file = os.path.basename(file_in_path.get())
-            filename = common.file_from_list_of_images(file_list, current_file, "first")
-            open_file_common(dir_name, filename)
 
 
 def open_file_prev_key(event):
@@ -961,17 +901,24 @@ def open_file_prev_key(event):
     open_file_prev()
 
 
+def open_file_last():
+    """Open last file"""
+    open_file_with_action("last")
+
+
+def open_file_next():
+    """Open next file"""
+    open_file_with_action("next")
+
+
+def open_file_first():
+    """Open first file"""
+    open_file_with_action("first")
+
+
 def open_file_prev():
     """Open previous file"""
-    if file_in_path.get():
-        if os.path.isfile(file_in_path.get()):
-            dir_name = os.path.dirname(file_in_path.get())
-            file_list = common.list_of_images(dir_name, OS)
-            current_file = os.path.basename(file_in_path.get())
-            filename = common.file_from_list_of_images(
-                file_list, current_file, "previous"
-            )
-            open_file_common(dir_name, filename)
+    open_file_with_action("previous")
 
 
 def open_screenshot():
@@ -3154,294 +3101,161 @@ main_paned.add(frame_third_col)
 # bind
 ###############################################################################
 # binding commands to widgets
-co_preview_selector_orig.bind("<<ComboboxSelected>>", preview_orig_refresh)
-co_preview_selector_new.bind("<<ComboboxSelected>>", preview_new_refresh)
-co_compose_preview_selector.bind("<<ComboboxSelected>>", preview_compose_refresh)
-co_text_font.bind("<<ComboboxSelected>>", font_selected)
-c_preview_orig_pi.bind("<Button-1>", mouse_crop_nw)
-if OS == "MACOS":
-    c_preview_orig_pi.bind("<Button-2>", mouse_crop_se)
-else:
-    c_preview_orig_pi.bind("<Button-3>", mouse_crop_se)
-c_preview_new_pi.bind("<Button-1>", preview_new_button)
-root.bind("<F1>", help_info)
-root.bind("<F2>", change_ttk_theme)
-root.protocol("WM_DELETE_WINDOW", close_program)
-root.bind("<Prior>", open_file_prev_key)
-root.bind("<Next>", open_file_next_key)
-root.bind("<Home>", open_file_first_key)
-root.bind("<End>", open_file_last_key)
+root_actions = {
+    "help_info": help_info,
+    "change_theme": change_ttk_theme,
+    "open_file_prev_key": open_file_prev_key,
+    "open_file_next_key": open_file_next_key,
+    "open_file_first_key": open_file_first_key,
+    "open_file_last_key": open_file_last_key,
+    "close_program": close_program,
+}
+panel_widgets = {
+    "c_preview_orig_pi": c_preview_orig_pi,
+    "c_preview_new_pi": c_preview_new_pi,
+    "co_preview_selector_orig": co_preview_selector_orig,
+    "co_preview_selector_new": co_preview_selector_new,
+    "co_compose_preview_selector": co_compose_preview_selector,
+    "co_text_font": co_text_font,
+}
+widget_actions = {
+    "mouse_crop_nw": mouse_crop_nw,
+    "mouse_crop_se": mouse_crop_se,
+    "preview_new_button": preview_new_button,
+    "preview_orig_refresh": preview_orig_refresh,
+    "preview_new_refresh": preview_new_refresh,
+    "preview_compose_refresh": preview_compose_refresh,
+    "font_selected": font_selected,
+}
+
+gui_bindings.setup_root_bindings(root, root_actions)
+gui_bindings.setup_widget_bindings(panel_widgets, widget_actions, OS)
 
 ###############################################################################
 # toolTips
 ###############################################################################
-# main first
-ToolTip(b_file_select, text=_("Select image file for processing"))
-ToolTip(
-    b_file_select_screenshot,
-    text=_(
-        "Get image from clipboard.\nGrabbed image is saved into %TEMP%/today or $TMP/today directory and load for processing.\nLinux or BSD - install xclip"
-    ),
-)
-ToolTip(
-    b_file_select_first,
-    text=_("Load first image from current directory.\nUse Home key instead"),
-)
-ToolTip(
-    b_file_select_prev,
-    text=_("Load previous image from current directory.\nUse PgUp key instead"),
-)
-ToolTip(
-    b_file_select_next,
-    text=_("Load next image from current directory.\nUse PgDn key instead"),
-)
-ToolTip(
-    b_file_select_last,
-    text=_("Load last image from current directory.\nUse End key instead"),
-)
-ToolTip(rb_apply_dir, text=_("Processing all files in current directory"))
-ToolTip(rb_apply_file, text=_("Processing only current file"))
-ToolTip(co_apply_type, text=_("Selection of format output file; JPG, PNG or TIF"))
-ToolTip(
-    b_apply_run,
-    text=_(
-        "Perform all selected conversion for current file or all files in current directory"
-    ),
-)
-ToolTip(
-    b_last_save,
-    text=_(
-        "Save all values into configuration file (~/.fotokilof.ini).\nFotoKilof will load it during starting"
-    ),
-)
-ToolTip(b_last_read, text=_("Load saved values of conversion"))
-# main second
-ToolTip(
-    cb_resize,
-    text=_(
-        "Scale image, proportions are saved.\nSpecify maximum dimensions of image or percent"
-    ),
-)
-ToolTip(
-    cb_crop,
-    text=_(
-        "Take part of image. Select crop by:\n- absolute coordinate\n- absolute coorinate left-top corner plus width and height\n- gravity plus width and height plus offset.\nRemember point (0,0) is located in left-top corner of image."
-    ),
-)
-ToolTip(
-    cb_text,
-    text=_(
-        "Insert text on picture or add text at bottom.\nText can be rotated, colored and with background.\nAll font from OS are available"
-    ),
-)
-ToolTip(
-    cb_rotate,
-    text=_("Rotate picture by 90, 180, 270 degree or specify own angle of rotation"),
-)
-ToolTip(
-    cb_border,
-    text=_(
-        "Add border around picture.\nSpecify width of horizontal and vertical border separately"
-    ),
-)
-ToolTip(cb_bw, text=_("Convert into black-white or sepia"))
-ToolTip(cb_contrast, text=_("Change contrast or change range of contrast"))
-ToolTip(cb_normalize, text=_("Normalize of color level"))
-ToolTip(
-    cb_mirror,
-    text=_("Make mirror of picture in vertical or horizotal or both direction"),
-)
-ToolTip(cb_vignette, text=_("Add vignette as on old photography or not the best lens"))
-ToolTip(cb_logo, text=_("Insert picture, eg. own logo, into picture"))
-ToolTip(cb_custom, text=_("Processing ImageMagick command.\nWorks only on Linux OS"))
-ToolTip(cb_exif, text=_("If ON keep EXIF data\nif OFF EXIF data will be removed"))
-# preview
-ToolTip(
-    b_preview_orig_run,
-    text=_("Display original image by IMdisplay or default image viewer of OS"),
-)
-ToolTip(co_preview_selector_orig, text=_("Select size of preview"))
-ToolTip(
-    b_preview_new_run,
-    text=_("Display result image by IMdisplay or default image viewer of OS"),
-)
-ToolTip(co_preview_selector_new, text=_("Select size of preview"))
-# Scaling
-ToolTip(b_resize_run, text=_("Execute only resize conversion on current picture"))
-# Crop
-ToolTip(
-    rb1_crop,
-    text=_(
-        "Select crop by absolute coordinate.\nRemember point (0,0) is located in left-top corner of image."
-    ),
-)
-ToolTip(
-    rb2_crop,
-    text=_(
-        "Select crop by absolute coorinate left-top corner plus width and height.\nRemember point (0,0) is located in left-top corner of image."
-    ),
-)
-ToolTip(
-    rb3_crop,
-    text=_(
-        "Select crop by gravity plus width and height plus offset.\nRemember point (0,0) is located in left-top corner of image."
-    ),
-)
-ToolTip(
-    e1_crop_1,
-    text=_(
-        "x1 - horizontal position of left-top corner of crop\nClick left mouse button on preview in place of left-top corner"
-    ),
-)
-ToolTip(
-    e2_crop_1,
-    text=_(
-        "y1 - vertical position of left-top corner of crop\nClick left mouse button on preview in place of left-top corner"
-    ),
-)
-ToolTip(
-    e3_crop_1,
-    text=_(
-        "x2 - horizontal position of right-bottom corner of crop\nClick right mouse button on preview in place of left-top corner"
-    ),
-)
-ToolTip(
-    e4_crop_1,
-    text=_(
-        "y2 - vertical position of right-bottom corner of crop\nClick right mouse button on preview in place of left-top corner"
-    ),
-)
-ToolTip(e1_crop_2, text=_("x1 - horizontal position of left-top corner of crop"))
-ToolTip(e2_crop_2, text=_("y1 - vertical position of left-top corner of crop"))
-ToolTip(e3_crop_2, text=_("X - width of crop"))
-ToolTip(e4_crop_2, text=_("Y - height of crop"))
-ToolTip(e1_crop_3, text=_("dx - horizontal offset from gravity point"))
-ToolTip(e2_crop_3, text=_("dy - vertical offsef from gravity point"))
-ToolTip(e3_crop_3, text=_("X - width of crop"))
-ToolTip(e4_crop_3, text=_("Y - height of crop"))
-ToolTip(
-    b_crop_read,
-    text=_(
-        "Take size of crop from current picture.\nCrop will be 100% of original picture"
-    ),
-)
-ToolTip(b_crop_show, text=_("Refresh preview to see crop on picture"))
-ToolTip(frame_crop_gravity, text=_("Use gravity direction for select crop"))
-ToolTip(b_crop_run, text=_("Execute only crop conversion on current picture"))
-# Text
-ToolTip(e_text, text=_("Click here and type text"))
-ToolTip(e_text_size, text=_("Text size"))
-ToolTip(e_text_angle, text=_("Angle of text"))
-ToolTip(co_text_font, text=_("Font"))
-ToolTip(rb_text_in, text=_("Put text on picture"))
-ToolTip(rb_text_out, text=_("Put text below picture"))
-ToolTip(cb_text_gravity, text=_("Use gravity for putting text or Absolute position"))
-ToolTip(frame_text_gravity, text=_("Use gravity direction for text placement"))
-ToolTip(cb_text_box, text=_("Use background for text"))
-ToolTip(cb_text_arrow, text=_("Add arrow between text and origin point"))
-ToolTip(e_text_x, text=_("Offset from gravity or absolute position"))
-ToolTip(e_text_y, text=_("Offset from gravity or absolute position"))
-ToolTip(l_text_color, text=_("Selected color of text and background"))
-ToolTip(b_text_color, text=_("Select color of text"))
-ToolTip(b_text_box_color, text=_("Select color of background"))
-ToolTip(b_text_run, text=_("Execute only adding text on current picture"))
-# Rotate
-ToolTip(rb_rotate_own, text=_("Select if want to use own angle of rotation"))
-ToolTip(
-    e_rotate_own,
-    text=_(
-        "Put angle of rotation. Rotation is in right direction.\nBackground color is as choosed by Color button"
-    ),
-)
-ToolTip(l_rotate_color, text=_("Selected color to fill a gap"))
-ToolTip(b_rotate_color, text=_("If OWN is choosed, select color to fill a gap."))
-ToolTip(b_rotate_run, text=_("Execute only rotate conversion on current picture"))
-# Scaling
-ToolTip(e2_resize, text=_("Put percent for rescale of picture"))
-ToolTip(b_resize_run, text=_("Execute only resize conversion on current picture"))
-# Border
-ToolTip(e_border_ns, text=_("Put width of vertical part of border"))
-ToolTip(e_border_we, text=_("Put width of horizontal part of border"))
-ToolTip(l_border_color, text=_("Selected color of border"))
-ToolTip(b_border_color, text=_("Select color of border"))
-ToolTip(b_border_run, text=_("Execute only add border conversion on current picture"))
-# Black-white
-ToolTip(rb1_bw, text=_("Convert picture into gray scale - black-white"))
-ToolTip(
-    rb2_bw, text=_("Convert picture into sepia - old style silver based photography")
-)
-ToolTip(e_bw_sepia, text=_("Put threshold of sepia, try values in range 80-95"))
-ToolTip(
-    b_bw_run, text=_("Execute only black-white/sepia conversion on current picture")
-)
-# Contrast
-ToolTip(e1_contrast, text=_("Black point.\nTry values in range 0-0.2"))
-ToolTip(e2_contrast, text=_("White point.\nTry values in range 0-0.2"))
-ToolTip(
-    rb1_contrast,
-    text=_("Enhance contrast of image by adjusting the span of the available colors"),
-)
-ToolTip(
-    rb2_contrast,
-    text=_("Enhances the difference between lighter & darker values of the image"),
-)
-ToolTip(
-    co_contrast_selection,
-    text=_(
-        "Select power of reduce (negative values) or increase (positive values) contrast"
-    ),
-)
-ToolTip(
-    b_contrast_run, text=_("Execute only change contrast conversion on current picture")
-)
-# Normalize
-ToolTip(rb1_normalize, text=_("Normalize color channels"))
-ToolTip(co_normalize_channel, text=_("Select channel for normalize"))
-ToolTip(
-    rb2_normalize,
-    text=_("Scale the minimum and maximum values to a full quantum range"),
-)
-ToolTip(
-    b_normalize_run,
-    text=_("Execute only color normalize conversion on current picture"),
-)
-# Mirror
-ToolTip(cb_mirror_flip, text=_("Mirror top-bottom"))
-ToolTip(cb_mirror_flop, text=_("Mirror left-right"))
-ToolTip(b_mirror_run, text=_("Execute only mirror conversion on current picture"))
-# Vignette
-ToolTip(e_vignette_radius, text=_("Radius of the Gaussian blur effect"))
-ToolTip(e_vignette_sigma, text=_("Standard deviation of the Gaussian effect"))
-ToolTip(e_vignette_dx, text=_("Horizontal offset of vignette"))
-ToolTip(e_vignette_dy, text=_("Vertical offset of vignette"))
-ToolTip(l_vignette_color, text=_("Selected color of corners"))
-ToolTip(b_vignette_color, text=_("Select color of corners"))
-ToolTip(b_vignette_run, text=_("Execute only vignette conversion on current picture"))
-# Logo
-ToolTip(b_logo_select, text=_("Select picture to put on picture"))
-ToolTip(e_logo_width, text=_("Width picture"))
-ToolTip(e_logo_height, text=_("Height picture"))
-ToolTip(e_logo_dx, text=_("Horizontal offset from gravity point"))
-ToolTip(e_logo_dy, text=_("Vertical offset from gravity point"))
-ToolTip(frame_logo_gravity, text=_("Use gravity for putting picture"))
-ToolTip(b_logo_run, text=_("Execute only add logo on current picture"))
-# Compose
-ToolTip(b_compose_select, text=_("Select picture to compose with main picture"))
-ToolTip(rb_compose_bottom, text=_("Join picture at bottom"))
-ToolTip(rb_compose_right, text=_("Join picture at right"))
-ToolTip(cb_compose_autoresize, text=_("Autoresize picture if dimensions are not equal"))
-ToolTip(l_compose_color, text=_("Selected color to fill gap"))
-ToolTip(b_compose_color, text=_("Select color of gap"))
-ToolTip(rb_compose_N, text=_("Join picture on right and move to top"))
-ToolTip(rb_compose_W, text=_("Join picture at bottom and move to left"))
-ToolTip(rb_compose_C, text=_("Join picture and move to center"))
-ToolTip(rb_compose_E, text=_("Join picture at bottom and move to right"))
-ToolTip(rb_compose_S, text=_("Join picture on right and move to bottom"))
-ToolTip(b_compose_run, text=_("Execute compose picture with current main picture"))
-ToolTip(
-    b_preview_new_run,
-    text=_("Display image to join by IMdisplay or default image viewer of OS"),
-)
+widgets = {
+    "b_file_select_screenshot": b_file_select_screenshot,
+    "b_file_select_first": b_file_select_first,
+    "b_file_select_prev": b_file_select_prev,
+    "b_file_select_next": b_file_select_next,
+    "b_file_select_last": b_file_select_last,
+    "rb_apply_dir": rb_apply_dir,
+    "rb_apply_file": rb_apply_file,
+    "co_apply_type": co_apply_type,
+    "b_apply_run": b_apply_run,
+    "b_last_save": b_last_save,
+    "b_last_read": b_last_read,
+    "cb_resize": cb_resize,
+    "cb_crop": cb_crop,
+    "cb_text": cb_text,
+    "cb_rotate": cb_rotate,
+    "cb_border": cb_border,
+    "cb_bw": cb_bw,
+    "cb_contrast": cb_contrast,
+    "cb_normalize": cb_normalize,
+    "cb_mirror": cb_mirror,
+    "cb_vignette": cb_vignette,
+    "cb_logo": cb_logo,
+    "cb_custom": cb_custom,
+    "cb_exif": cb_exif,
+    "b_preview_orig_run": b_preview_orig_run,
+    "co_preview_selector_orig": co_preview_selector_orig,
+    "b_preview_new_run": b_preview_new_run,
+    "co_preview_selector_new": co_preview_selector_new,
+    "b_resize_run": b_resize_run,
+    "rb1_crop": rb1_crop,
+    "rb2_crop": rb2_crop,
+    "rb3_crop": rb3_crop,
+    "e1_crop_1": e1_crop_1,
+    "e2_crop_1": e2_crop_1,
+    "e3_crop_1": e3_crop_1,
+    "e4_crop_1": e4_crop_1,
+    "e1_crop_2": e1_crop_2,
+    "e2_crop_2": e2_crop_2,
+    "e3_crop_2": e3_crop_2,
+    "e4_crop_2": e4_crop_2,
+    "e1_crop_3": e1_crop_3,
+    "e2_crop_3": e2_crop_3,
+    "e3_crop_3": e3_crop_3,
+    "e4_crop_3": e4_crop_3,
+    "b_crop_read": b_crop_read,
+    "b_crop_show": b_crop_show,
+    "frame_crop_gravity": frame_crop_gravity,
+    "b_crop_run": b_crop_run,
+    "e_text": e_text,
+    "e_text_size": e_text_size,
+    "e_text_angle": e_text_angle,
+    "co_text_font": co_text_font,
+    "rb_text_in": rb_text_in,
+    "rb_text_out": rb_text_out,
+    "cb_text_gravity": cb_text_gravity,
+    "frame_text_gravity": frame_text_gravity,
+    "cb_text_box": cb_text_box,
+    "cb_text_arrow": cb_text_arrow,
+    "e_text_x": e_text_x,
+    "e_text_y": e_text_y,
+    "l_text_color": l_text_color,
+    "b_text_color": b_text_color,
+    "b_text_box_color": b_text_box_color,
+    "b_text_run": b_text_run,
+    "rb_rotate_own": rb_rotate_own,
+    "e_rotate_own": e_rotate_own,
+    "l_rotate_color": l_rotate_color,
+    "b_rotate_color": b_rotate_color,
+    "b_rotate_run": b_rotate_run,
+    "e2_resize": e2_resize,
+    "e_border_ns": e_border_ns,
+    "e_border_we": e_border_we,
+    "l_border_color": l_border_color,
+    "b_border_color": b_border_color,
+    "b_border_run": b_border_run,
+    "rb1_bw": rb1_bw,
+    "rb2_bw": rb2_bw,
+    "e_bw_sepia": e_bw_sepia,
+    "b_bw_run": b_bw_run,
+    "e1_contrast": e1_contrast,
+    "e2_contrast": e2_contrast,
+    "rb1_contrast": rb1_contrast,
+    "rb2_contrast": rb2_contrast,
+    "co_contrast_selection": co_contrast_selection,
+    "b_contrast_run": b_contrast_run,
+    "rb1_normalize": rb1_normalize,
+    "co_normalize_channel": co_normalize_channel,
+    "rb2_normalize": rb2_normalize,
+    "b_normalize_run": b_normalize_run,
+    "cb_mirror_flip": cb_mirror_flip,
+    "cb_mirror_flop": cb_mirror_flop,
+    "b_mirror_run": b_mirror_run,
+    "e_vignette_radius": e_vignette_radius,
+    "e_vignette_sigma": e_vignette_sigma,
+    "e_vignette_dx": e_vignette_dx,
+    "e_vignette_dy": e_vignette_dy,
+    "l_vignette_color": l_vignette_color,
+    "b_vignette_color": b_vignette_color,
+    "b_vignette_run": b_vignette_run,
+    "b_logo_select": b_logo_select,
+    "e_logo_width": e_logo_width,
+    "e_logo_height": e_logo_height,
+    "e_logo_dx": e_logo_dx,
+    "e_logo_dy": e_logo_dy,
+    "frame_logo_gravity": frame_logo_gravity,
+    "b_logo_run": b_logo_run,
+    "b_compose_select": b_compose_select,
+    "rb_compose_bottom": rb_compose_bottom,
+    "rb_compose_right": rb_compose_right,
+    "cb_compose_autoresize": cb_compose_autoresize,
+    "l_compose_color": l_compose_color,
+    "b_compose_color": b_compose_color,
+    "rb_compose_N": rb_compose_N,
+    "rb_compose_W": rb_compose_W,
+    "rb_compose_C": rb_compose_C,
+    "rb_compose_E": rb_compose_E,
+    "rb_compose_S": rb_compose_S,
+    "b_compose_run": b_compose_run,
+}
+gui_tooltips.init_tooltips(widgets)
+
 logging.debug("End GUI: %ss", str(time.time() - start_time))
 ##########################################
 # Run functions
