@@ -3117,7 +3117,6 @@ panel_widgets = {
     "co_preview_selector_new": co_preview_selector_new,
     "co_compose_preview_selector": co_compose_preview_selector,
     "co_text_font": co_text_font,
-    # ... inne widgety jeśli potrzeba
 }
 widget_actions = {
     "mouse_crop_nw": mouse_crop_nw,
@@ -3127,7 +3126,6 @@ widget_actions = {
     "preview_new_refresh": preview_new_refresh,
     "preview_compose_refresh": preview_compose_refresh,
     "font_selected": font_selected,
-    # ... inne funkcje
 }
 
 gui_bindings.setup_root_bindings(root, root_actions)
