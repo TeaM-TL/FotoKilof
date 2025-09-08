@@ -87,6 +87,7 @@ import ini_read
 import ini_save
 import magick
 import version
+import tooltips
 
 try:
     from wand.version import VERSION
@@ -3118,273 +3119,130 @@ root.bind("<End>", open_file_last_key)
 ###############################################################################
 # toolTips
 ###############################################################################
-# main first
-ToolTip(b_file_select, text=_("Select image file for processing"))
-ToolTip(
-    b_file_select_screenshot,
-    text=_(
-        "Get image from clipboard.\nGrabbed image is saved into %TEMP%/today or $TMP/today directory and load for processing.\nLinux or BSD - install xclip"
-    ),
-)
-ToolTip(
-    b_file_select_first,
-    text=_("Load first image from current directory.\nUse Home key instead"),
-)
-ToolTip(
-    b_file_select_prev,
-    text=_("Load previous image from current directory.\nUse PgUp key instead"),
-)
-ToolTip(
-    b_file_select_next,
-    text=_("Load next image from current directory.\nUse PgDn key instead"),
-)
-ToolTip(
-    b_file_select_last,
-    text=_("Load last image from current directory.\nUse End key instead"),
-)
-ToolTip(rb_apply_dir, text=_("Processing all files in current directory"))
-ToolTip(rb_apply_file, text=_("Processing only current file"))
-ToolTip(co_apply_type, text=_("Selection of format output file; JPG, PNG or TIF"))
-ToolTip(
-    b_apply_run,
-    text=_(
-        "Perform all selected conversion for current file or all files in current directory"
-    ),
-)
-ToolTip(
-    b_last_save,
-    text=_(
-        "Save all values into configuration file (~/.fotokilof.ini).\nFotoKilof will load it during starting"
-    ),
-)
-ToolTip(b_last_read, text=_("Load saved values of conversion"))
-# main second
-ToolTip(
-    cb_resize,
-    text=_(
-        "Scale image, proportions are saved.\nSpecify maximum dimensions of image or percent"
-    ),
-)
-ToolTip(
-    cb_crop,
-    text=_(
-        "Take part of image. Select crop by:\n- absolute coordinate\n- absolute coorinate left-top corner plus width and height\n- gravity plus width and height plus offset.\nRemember point (0,0) is located in left-top corner of image."
-    ),
-)
-ToolTip(
-    cb_text,
-    text=_(
-        "Insert text on picture or add text at bottom.\nText can be rotated, colored and with background.\nAll font from OS are available"
-    ),
-)
-ToolTip(
-    cb_rotate,
-    text=_("Rotate picture by 90, 180, 270 degree or specify own angle of rotation"),
-)
-ToolTip(
-    cb_border,
-    text=_(
-        "Add border around picture.\nSpecify width of horizontal and vertical border separately"
-    ),
-)
-ToolTip(cb_bw, text=_("Convert into black-white or sepia"))
-ToolTip(cb_contrast, text=_("Change contrast or change range of contrast"))
-ToolTip(cb_normalize, text=_("Normalize of color level"))
-ToolTip(
-    cb_mirror,
-    text=_("Make mirror of picture in vertical or horizotal or both direction"),
-)
-ToolTip(cb_vignette, text=_("Add vignette as on old photography or not the best lens"))
-ToolTip(cb_logo, text=_("Insert picture, eg. own logo, into picture"))
-ToolTip(cb_custom, text=_("Processing ImageMagick command.\nWorks only on Linux OS"))
-ToolTip(cb_exif, text=_("If ON keep EXIF data\nif OFF EXIF data will be removed"))
-# preview
-ToolTip(
-    b_preview_orig_run,
-    text=_("Display original image by IMdisplay or default image viewer of OS"),
-)
-ToolTip(co_preview_selector_orig, text=_("Select size of preview"))
-ToolTip(
-    b_preview_new_run,
-    text=_("Display result image by IMdisplay or default image viewer of OS"),
-)
-ToolTip(co_preview_selector_new, text=_("Select size of preview"))
-# Scaling
-ToolTip(b_resize_run, text=_("Execute only resize conversion on current picture"))
-# Crop
-ToolTip(
-    rb1_crop,
-    text=_(
-        "Select crop by absolute coordinate.\nRemember point (0,0) is located in left-top corner of image."
-    ),
-)
-ToolTip(
-    rb2_crop,
-    text=_(
-        "Select crop by absolute coorinate left-top corner plus width and height.\nRemember point (0,0) is located in left-top corner of image."
-    ),
-)
-ToolTip(
-    rb3_crop,
-    text=_(
-        "Select crop by gravity plus width and height plus offset.\nRemember point (0,0) is located in left-top corner of image."
-    ),
-)
-ToolTip(
-    e1_crop_1,
-    text=_(
-        "x1 - horizontal position of left-top corner of crop\nClick left mouse button on preview in place of left-top corner"
-    ),
-)
-ToolTip(
-    e2_crop_1,
-    text=_(
-        "y1 - vertical position of left-top corner of crop\nClick left mouse button on preview in place of left-top corner"
-    ),
-)
-ToolTip(
-    e3_crop_1,
-    text=_(
-        "x2 - horizontal position of right-bottom corner of crop\nClick right mouse button on preview in place of left-top corner"
-    ),
-)
-ToolTip(
-    e4_crop_1,
-    text=_(
-        "y2 - vertical position of right-bottom corner of crop\nClick right mouse button on preview in place of left-top corner"
-    ),
-)
-ToolTip(e1_crop_2, text=_("x1 - horizontal position of left-top corner of crop"))
-ToolTip(e2_crop_2, text=_("y1 - vertical position of left-top corner of crop"))
-ToolTip(e3_crop_2, text=_("X - width of crop"))
-ToolTip(e4_crop_2, text=_("Y - height of crop"))
-ToolTip(e1_crop_3, text=_("dx - horizontal offset from gravity point"))
-ToolTip(e2_crop_3, text=_("dy - vertical offsef from gravity point"))
-ToolTip(e3_crop_3, text=_("X - width of crop"))
-ToolTip(e4_crop_3, text=_("Y - height of crop"))
-ToolTip(
-    b_crop_read,
-    text=_(
-        "Take size of crop from current picture.\nCrop will be 100% of original picture"
-    ),
-)
-ToolTip(b_crop_show, text=_("Refresh preview to see crop on picture"))
-ToolTip(frame_crop_gravity, text=_("Use gravity direction for select crop"))
-ToolTip(b_crop_run, text=_("Execute only crop conversion on current picture"))
-# Text
-ToolTip(e_text, text=_("Click here and type text"))
-ToolTip(e_text_size, text=_("Text size"))
-ToolTip(e_text_angle, text=_("Angle of text"))
-ToolTip(co_text_font, text=_("Font"))
-ToolTip(rb_text_in, text=_("Put text on picture"))
-ToolTip(rb_text_out, text=_("Put text below picture"))
-ToolTip(cb_text_gravity, text=_("Use gravity for putting text or Absolute position"))
-ToolTip(frame_text_gravity, text=_("Use gravity direction for text placement"))
-ToolTip(cb_text_box, text=_("Use background for text"))
-ToolTip(cb_text_arrow, text=_("Add arrow between text and origin point"))
-ToolTip(e_text_x, text=_("Offset from gravity or absolute position"))
-ToolTip(e_text_y, text=_("Offset from gravity or absolute position"))
-ToolTip(l_text_color, text=_("Selected color of text and background"))
-ToolTip(b_text_color, text=_("Select color of text"))
-ToolTip(b_text_box_color, text=_("Select color of background"))
-ToolTip(b_text_run, text=_("Execute only adding text on current picture"))
-# Rotate
-ToolTip(rb_rotate_own, text=_("Select if want to use own angle of rotation"))
-ToolTip(
-    e_rotate_own,
-    text=_(
-        "Put angle of rotation. Rotation is in right direction.\nBackground color is as choosed by Color button"
-    ),
-)
-ToolTip(l_rotate_color, text=_("Selected color to fill a gap"))
-ToolTip(b_rotate_color, text=_("If OWN is choosed, select color to fill a gap."))
-ToolTip(b_rotate_run, text=_("Execute only rotate conversion on current picture"))
-# Scaling
-ToolTip(e2_resize, text=_("Put percent for rescale of picture"))
-ToolTip(b_resize_run, text=_("Execute only resize conversion on current picture"))
-# Border
-ToolTip(e_border_ns, text=_("Put width of vertical part of border"))
-ToolTip(e_border_we, text=_("Put width of horizontal part of border"))
-ToolTip(l_border_color, text=_("Selected color of border"))
-ToolTip(b_border_color, text=_("Select color of border"))
-ToolTip(b_border_run, text=_("Execute only add border conversion on current picture"))
-# Black-white
-ToolTip(rb1_bw, text=_("Convert picture into gray scale - black-white"))
-ToolTip(
-    rb2_bw, text=_("Convert picture into sepia - old style silver based photography")
-)
-ToolTip(e_bw_sepia, text=_("Put threshold of sepia, try values in range 80-95"))
-ToolTip(
-    b_bw_run, text=_("Execute only black-white/sepia conversion on current picture")
-)
-# Contrast
-ToolTip(e1_contrast, text=_("Black point.\nTry values in range 0-0.2"))
-ToolTip(e2_contrast, text=_("White point.\nTry values in range 0-0.2"))
-ToolTip(
-    rb1_contrast,
-    text=_("Enhance contrast of image by adjusting the span of the available colors"),
-)
-ToolTip(
-    rb2_contrast,
-    text=_("Enhances the difference between lighter & darker values of the image"),
-)
-ToolTip(
-    co_contrast_selection,
-    text=_(
-        "Select power of reduce (negative values) or increase (positive values) contrast"
-    ),
-)
-ToolTip(
-    b_contrast_run, text=_("Execute only change contrast conversion on current picture")
-)
-# Normalize
-ToolTip(rb1_normalize, text=_("Normalize color channels"))
-ToolTip(co_normalize_channel, text=_("Select channel for normalize"))
-ToolTip(
-    rb2_normalize,
-    text=_("Scale the minimum and maximum values to a full quantum range"),
-)
-ToolTip(
-    b_normalize_run,
-    text=_("Execute only color normalize conversion on current picture"),
-)
-# Mirror
-ToolTip(cb_mirror_flip, text=_("Mirror top-bottom"))
-ToolTip(cb_mirror_flop, text=_("Mirror left-right"))
-ToolTip(b_mirror_run, text=_("Execute only mirror conversion on current picture"))
-# Vignette
-ToolTip(e_vignette_radius, text=_("Radius of the Gaussian blur effect"))
-ToolTip(e_vignette_sigma, text=_("Standard deviation of the Gaussian effect"))
-ToolTip(e_vignette_dx, text=_("Horizontal offset of vignette"))
-ToolTip(e_vignette_dy, text=_("Vertical offset of vignette"))
-ToolTip(l_vignette_color, text=_("Selected color of corners"))
-ToolTip(b_vignette_color, text=_("Select color of corners"))
-ToolTip(b_vignette_run, text=_("Execute only vignette conversion on current picture"))
-# Logo
-ToolTip(b_logo_select, text=_("Select picture to put on picture"))
-ToolTip(e_logo_width, text=_("Width picture"))
-ToolTip(e_logo_height, text=_("Height picture"))
-ToolTip(e_logo_dx, text=_("Horizontal offset from gravity point"))
-ToolTip(e_logo_dy, text=_("Vertical offset from gravity point"))
-ToolTip(frame_logo_gravity, text=_("Use gravity for putting picture"))
-ToolTip(b_logo_run, text=_("Execute only add logo on current picture"))
-# Compose
-ToolTip(b_compose_select, text=_("Select picture to compose with main picture"))
-ToolTip(rb_compose_bottom, text=_("Join picture at bottom"))
-ToolTip(rb_compose_right, text=_("Join picture at right"))
-ToolTip(cb_compose_autoresize, text=_("Autoresize picture if dimensions are not equal"))
-ToolTip(l_compose_color, text=_("Selected color to fill gap"))
-ToolTip(b_compose_color, text=_("Select color of gap"))
-ToolTip(rb_compose_N, text=_("Join picture on right and move to top"))
-ToolTip(rb_compose_W, text=_("Join picture at bottom and move to left"))
-ToolTip(rb_compose_C, text=_("Join picture and move to center"))
-ToolTip(rb_compose_E, text=_("Join picture at bottom and move to right"))
-ToolTip(rb_compose_S, text=_("Join picture on right and move to bottom"))
-ToolTip(b_compose_run, text=_("Execute compose picture with current main picture"))
-ToolTip(
-    b_preview_new_run,
-    text=_("Display image to join by IMdisplay or default image viewer of OS"),
-)
+widgets = {
+    'b_file_select_screenshot': b_file_select_screenshot,
+    'b_file_select_first': b_file_select_first,
+    'b_file_select_prev': b_file_select_prev,
+    'b_file_select_next': b_file_select_next,
+    'b_file_select_last': b_file_select_last,
+    'rb_apply_dir': rb_apply_dir,
+    'rb_apply_file': rb_apply_file,
+    'co_apply_type': co_apply_type,
+    'b_apply_run': b_apply_run,
+    'b_last_save': b_last_save,
+    'b_last_read': b_last_read,
+    'cb_resize': cb_resize,
+    'cb_crop': cb_crop,
+    'cb_text': cb_text,
+    'cb_rotate': cb_rotate,
+    'cb_border': cb_border,
+    'cb_bw': cb_bw,
+    'cb_contrast': cb_contrast,
+    'cb_normalize': cb_normalize,
+    'cb_mirror': cb_mirror,
+    'cb_vignette': cb_vignette,
+    'cb_logo': cb_logo,
+    'cb_custom': cb_custom,
+    'cb_exif': cb_exif,
+    'b_preview_orig_run': b_preview_orig_run,
+    'co_preview_selector_orig': co_preview_selector_orig,
+    'b_preview_new_run': b_preview_new_run,
+    'co_preview_selector_new': co_preview_selector_new,
+    'b_resize_run': b_resize_run,
+    'rb1_crop': rb1_crop,
+    'rb2_crop': rb2_crop,
+    'rb3_crop': rb3_crop,
+    'e1_crop_1': e1_crop_1,
+    'e2_crop_1': e2_crop_1,
+    'e3_crop_1': e3_crop_1,
+    'e4_crop_1': e4_crop_1,
+    'e1_crop_2': e1_crop_2,
+    'e2_crop_2': e2_crop_2,
+    'e3_crop_2': e3_crop_2,
+    'e4_crop_2': e4_crop_2,
+    'e1_crop_3': e1_crop_3,
+    'e2_crop_3': e2_crop_3,
+    'e3_crop_3': e3_crop_3,
+    'e4_crop_3': e4_crop_3,
+    'b_crop_read': b_crop_read,
+    'b_crop_show': b_crop_show,
+    'frame_crop_gravity': frame_crop_gravity,
+    'b_crop_run': b_crop_run,
+    'e_text': e_text,
+    'e_text_size': e_text_size,
+    'e_text_angle': e_text_angle,
+    'co_text_font': co_text_font,
+    'rb_text_in': rb_text_in,
+    'rb_text_out': rb_text_out,
+    'cb_text_gravity': cb_text_gravity,
+    'frame_text_gravity': frame_text_gravity,
+    'cb_text_box': cb_text_box,
+    'cb_text_arrow': cb_text_arrow,
+    'e_text_x': e_text_x,
+    'e_text_y': e_text_y,
+    'l_text_color': l_text_color,
+    'b_text_color': b_text_color,
+    'b_text_box_color': b_text_box_color,
+    'b_text_run': b_text_run,
+    'rb_rotate_own': rb_rotate_own,
+    'e_rotate_own': e_rotate_own,
+    'l_rotate_color': l_rotate_color,
+    'b_rotate_color': b_rotate_color,
+    'b_rotate_run': b_rotate_run,
+    'e2_resize': e2_resize,
+    'b_resize_run': b_resize_run,
+    'e_border_ns': e_border_ns,
+    'e_border_we': e_border_we,
+    'l_border_color': l_border_color,
+    'b_border_color': b_border_color,
+    'b_border_run': b_border_run,
+    'rb1_bw': rb1_bw,
+    'rb2_bw': rb2_bw,
+    'e_bw_sepia': e_bw_sepia,
+    'b_bw_run': b_bw_run,
+    'e1_contrast': e1_contrast,
+    'e2_contrast': e2_contrast,
+    'rb1_contrast': rb1_contrast,
+    'rb2_contrast': rb2_contrast,
+    'co_contrast_selection': co_contrast_selection,
+    'b_contrast_run': b_contrast_run,
+    'rb1_normalize': rb1_normalize,
+    'co_normalize_channel': co_normalize_channel,
+    'rb2_normalize': rb2_normalize,
+    'b_normalize_run': b_normalize_run,
+    'cb_mirror_flip': cb_mirror_flip,
+    'cb_mirror_flop': cb_mirror_flop,
+    'b_mirror_run': b_mirror_run,
+    'e_vignette_radius': e_vignette_radius,
+    'e_vignette_sigma': e_vignette_sigma,
+    'e_vignette_dx': e_vignette_dx,
+    'e_vignette_dy': e_vignette_dy,
+    'l_vignette_color': l_vignette_color,
+    'b_vignette_color': b_vignette_color,
+    'b_vignette_run': b_vignette_run,
+    'b_logo_select': b_logo_select,
+    'e_logo_width': e_logo_width,
+    'e_logo_height': e_logo_height,
+    'e_logo_dx': e_logo_dx,
+    'e_logo_dy': e_logo_dy,
+    'frame_logo_gravity': frame_logo_gravity,
+    'b_logo_run': b_logo_run,
+    'b_compose_select': b_compose_select,
+    'rb_compose_bottom': rb_compose_bottom,
+    'rb_compose_right': rb_compose_right,
+    'cb_compose_autoresize': cb_compose_autoresize,
+    'l_compose_color': l_compose_color,
+    'b_compose_color': b_compose_color,
+    'rb_compose_N': rb_compose_N,
+    'rb_compose_W': rb_compose_W,
+    'rb_compose_C': rb_compose_C,
+    'rb_compose_E': rb_compose_E,
+    'rb_compose_S': rb_compose_S,
+    'b_compose_run': b_compose_run,
+    'b_preview_new_run': b_preview_new_run,
+}
+tooltips.init_tooltips(widgets)
+
 logging.debug("End GUI: %ss", str(time.time() - start_time))
 ##########################################
 # Run functions
