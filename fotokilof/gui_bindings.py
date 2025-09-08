@@ -58,17 +58,17 @@ def setup_widget_bindings(widgets, actions, os_system):
     widgets -- dictionary { name : widget }
     actions -- dictionary { name : function }
     """
-    # Crop na podglądzie oryginału
+    # Crop: click on preview oryginal
     if "mouse_crop_nw" in actions and "c_preview_orig_pi" in widgets:
         widgets["c_preview_orig_pi"].bind("<Button-1>", actions["mouse_crop_nw"])
     if "mouse_crop_se" in actions and "c_preview_orig_pi" in widgets:
         btn_code = "<Button-2>" if os_system == "MACOS" else "<Button-3>"
         widgets["c_preview_orig_pi"].bind(btn_code, actions["mouse_crop_se"])
-    # Podgląd nowego obrazu
+    # Preview new picture
     if "preview_new_button" in actions and "c_preview_new_pi" in widgets:
         widgets["c_preview_new_pi"].bind("<Button-1>", actions["preview_new_button"])
 
-    # Comboboxy
+    # Combobox
     if "preview_orig_refresh" in actions and "co_preview_selector_orig" in widgets:
         widgets["co_preview_selector_orig"].bind(
             "<<ComboboxSelected>>", actions["preview_orig_refresh"]
