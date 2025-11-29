@@ -55,9 +55,9 @@ from PIL import ImageGrab
 import darkdetect
 
 import ttkbootstrap as ttk
-from ttkbootstrap.scrolled import ScrolledText, ScrolledFrame
+from ttkbootstrap.widgets.scrolled import ScrolledText, ScrolledFrame
 from ttkbootstrap.dialogs.colorchooser import ColorChooserDialog
-from ttkbootstrap.dialogs.dialogs import Messagebox
+from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.constants import (
     N,
     S,
@@ -1915,7 +1915,7 @@ file_extension = (".jpeg", ".jpg", ".png", ".tif")
 ######################################################################
 main_menu = ttk.Frame()
 main_tools = ttk.Frame()
-main_paned = ttk.PanedWindow(orient=HORIZONTAL, bootstyle="default")
+main_paned = ttk.Panedwindow(orient=HORIZONTAL, bootstyle="default")
 main_progress = ttk.Frame()
 
 main_menu.pack(side=TOP, expand=0, fill=BOTH)
@@ -1985,7 +1985,7 @@ b_file_select_last.grid(column=8, row=1, padx=5, pady=5, sticky=W)
 ##########################
 # Execute all
 ##########################
-frame_apply = ttk.LabelFrame(main_menu, text=_("Execute all"))
+frame_apply = ttk.Labelframe(main_menu, text=_("Execute all"))
 frame_apply.grid(row=1, column=2, sticky=(N, W, E, S), padx=5, pady=5)
 
 rb_apply_dir = ttk.Radiobutton(
@@ -2017,7 +2017,7 @@ l_pb.pack(side=LEFT, padx=5, pady=2, anchor=W)
 ###########################
 # Buttons
 ###########################
-frame_save = ttk.LabelFrame(main_menu, text=_("Settings"))
+frame_save = ttk.Labelframe(main_menu, text=_("Settings"))
 frame_save.grid(row=1, column=3, sticky=(N, W, E, S), padx=5, pady=5)
 
 b_last_save = ttk.Button(
@@ -2586,7 +2586,7 @@ if not PILLOW:
 ###########################
 # Rotate
 ###########################
-frame_rotate = ttk.LabelFrame(frame_first_col, text=_("Rotate"))
+frame_rotate = ttk.Labelframe(frame_first_col, text=_("Rotate"))
 ###
 rb_rotate_90 = ttk.Radiobutton(frame_rotate, text="90", variable=img_rotate, value="90")
 rb_rotate_180 = ttk.Radiobutton(
@@ -2657,7 +2657,7 @@ b_border_run.grid(row=2, column=5, padx=5, pady=5, sticky=E)
 ############################
 # Black-white
 ############################
-frame_bw = ttk.LabelFrame(frame_bw_contrast, text=_("Black-white"))
+frame_bw = ttk.Labelframe(frame_bw_contrast, text=_("Black-white"))
 ###
 rb1_bw = ttk.Radiobutton(frame_bw, text=_("Black-white"), variable=img_bw, value="1")
 rb2_bw = ttk.Radiobutton(frame_bw, text=_("Sepia"), variable=img_bw, value="2")
@@ -2709,7 +2709,7 @@ b_contrast_run.grid(row=2, column=3, padx=5, pady=5, columnspan=3, sticky=E)
 ############################
 # Color normalize
 ############################
-frame_normalize = ttk.LabelFrame(frame_border_normalize, text=_("Color normalize"))
+frame_normalize = ttk.Labelframe(frame_border_normalize, text=_("Color normalize"))
 ###
 rb1_normalize = ttk.Radiobutton(
     frame_normalize, text=_("Normalize"), variable=img_normalize, value="1"
@@ -2734,7 +2734,7 @@ b_normalize_run.grid(row=2, column=2, columnspan=2, padx=5, pady=4, sticky=E)
 ###########################
 # Mirror
 ###########################
-frame_mirror = ttk.LabelFrame(frame_mirror_vignette, text=_("Mirror"))
+frame_mirror = ttk.Labelframe(frame_mirror_vignette, text=_("Mirror"))
 
 cb_mirror_flip = ttk.Checkbutton(
     frame_mirror, text="NS", variable=img_mirror_flip, offvalue="0", onvalue="1"
@@ -2793,7 +2793,7 @@ b_vignette_run.grid(row=2, column=6, padx=5, pady=5)
 ###########################
 # Logo
 ###########################
-frame_logo = ttk.LabelFrame(frame_first_col, text=_("Logo"))
+frame_logo = ttk.Labelframe(frame_first_col, text=_("Logo"))
 
 b_logo_select = ttk.Button(
     frame_logo, text=_("File selection"), command=open_file_logo, bootstyle="outline"
@@ -2884,7 +2884,7 @@ l_logo_preview.grid(row=1, column=1, padx=5, pady=1)
 ############################
 # Custom command
 ############################
-frame_custom = ttk.LabelFrame(frame_first_col, text=_("Custom command"))
+frame_custom = ttk.Labelframe(frame_first_col, text=_("Custom command"))
 
 b_custom_clear = ttk.Button(
     frame_custom, text=_("Clear"), bootstyle="warning", command=convert_custom_clear
@@ -2904,7 +2904,7 @@ b_custom_clear.pack(side=RIGHT, padx=5, pady=5)
 ###########################
 # Compose
 ###########################
-frame_compose = ttk.LabelFrame(frame_first_col, text=_("Compose"))
+frame_compose = ttk.Labelframe(frame_first_col, text=_("Compose"))
 
 # ## Main
 frame_compose_main = ttk.Frame(frame_compose)
@@ -3091,7 +3091,7 @@ l_preview_new.pack(side=LEFT, padx=5, pady=5)
 co_preview_selector_new.pack(side=LEFT, padx=5, pady=1)
 
 ###############################################################################
-# Add Frames into PanedWindow
+# Add Frames into Panedwindow
 ###############################################################################
 main_paned.add(frame_first_col.container)
 main_paned.add(frame_second_col)
