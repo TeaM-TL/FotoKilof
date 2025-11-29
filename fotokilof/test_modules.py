@@ -93,7 +93,9 @@ def test_common_gravitation():
 
         print(position, pos, new_x, new_y)
         assert common.gravitation(position, pos_x, pos_y, width, height) == (
-            pos, new_x, new_y
+            pos,
+            new_x,
+            new_y,
         )
 
 
@@ -107,23 +109,86 @@ def test_common_arrow_gravity():
     for position in ("N", "S", "E", "W", "NW", "NE", "SW", "SE", "C"):
         match position:
             case "C":
-                a, c, d, e, x, y = ((240, 240), (200, 200), (210, 220), (220, 210), 40, 60)
+                a, c, d, e, x, y = (
+                    (240, 240),
+                    (200, 200),
+                    (210, 220),
+                    (220, 210),
+                    40,
+                    60,
+                )
             case "N":
-                a, c, d, e, x, y = ((200, 240), (200, 200), (194, 213), (206, 213), 0, 40)
+                a, c, d, e, x, y = (
+                    (200, 240),
+                    (200, 200),
+                    (194, 213),
+                    (206, 213),
+                    0,
+                    40,
+                )
             case "S":
-                a, c, d, e, x, y = ((200, 160), (200, 200), (194, 187), (206, 187), 0, -40)
+                a, c, d, e, x, y = (
+                    (200, 160),
+                    (200, 200),
+                    (194, 187),
+                    (206, 187),
+                    0,
+                    -40,
+                )
             case "E":
-                a, c, d, e, x, y = ((160, 200), (200, 200), (187, 194), (187, 206), -40, 0)
+                a, c, d, e, x, y = (
+                    (160, 200),
+                    (200, 200),
+                    (187, 194),
+                    (187, 206),
+                    -40,
+                    0,
+                )
             case "W":
-                a, c, d, e, x, y = ((240, 200), (200, 200), (213, 194), (213, 206), 40, 0)
+                a, c, d, e, x, y = (
+                    (240, 200),
+                    (200, 200),
+                    (213, 194),
+                    (213, 206),
+                    40,
+                    0,
+                )
             case "NW":
-                a, c, d, e, x, y = ((240, 240), (200, 200), (210, 220), (220, 210), 40, 40)
+                a, c, d, e, x, y = (
+                    (240, 240),
+                    (200, 200),
+                    (210, 220),
+                    (220, 210),
+                    40,
+                    40,
+                )
             case "NE":
-                a, c, d, e, x, y = ((160, 240), (200, 200), (190, 220), (180, 210), -40, 40)
+                a, c, d, e, x, y = (
+                    (160, 240),
+                    (200, 200),
+                    (190, 220),
+                    (180, 210),
+                    -40,
+                    40,
+                )
             case "SW":
-                a, c, d, e, x, y = ((240, 160), (200, 200), (210, 180), (220, 190), 40, -40)
+                a, c, d, e, x, y = (
+                    (240, 160),
+                    (200, 200),
+                    (210, 180),
+                    (220, 190),
+                    40,
+                    -40,
+                )
             case "SE":
-                a, c, d, e, x, y = ((160, 160), (200, 200), (190, 180), (180, 190), -40, -40)
+                a, c, d, e, x, y = (
+                    (160, 160),
+                    (200, 200),
+                    (190, 180),
+                    (180, 190),
+                    -40,
+                    -40,
+                )
 
         print(position, a, c, d, e, x, y)
         assert common.arrow_gravity(position, length, dx, dy) == (a, c, d, e, x, y)
@@ -165,15 +230,25 @@ def test_compose_calculate_half():
                 resize_factor = size / compose_x
             else:
                 resize_factor = 1.0
-            canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, 1)
+            canvas_x, canvas_y = compose_autoresize_canvas(
+                autoresize, size, compose_x, compose_y, 1
+            )
             output_data = (0, size, 0, canvas_x, canvas_y, resize_factor)
-            print("--- Autoresize: ",
-                  autoresize,
-                  '\n - columns: pos_x1, pos_y1, pos_x2, pos_y2, canvas_x, canvas_y',
-                  '\n - output',
-                  output_data)
-            print(" - result", common.compose_calculate_half(clone, compose_size, autoresize, gravity))
-            assert common.compose_calculate_half(clone, compose_size, autoresize, gravity) == output_data
+            print(
+                "--- Autoresize: ",
+                autoresize,
+                "\n - columns: pos_x1, pos_y1, pos_x2, pos_y2, canvas_x, canvas_y",
+                "\n - output",
+                output_data,
+            )
+            print(
+                " - result",
+                common.compose_calculate_half(clone, compose_size, autoresize, gravity),
+            )
+            assert (
+                common.compose_calculate_half(clone, compose_size, autoresize, gravity)
+                == output_data
+            )
 
 
 def test_common_compose_calculation():
@@ -185,7 +260,9 @@ def test_common_compose_calculation():
     compose_size = (compose_x, compose_y)
     for size in (500, 1000, 2000):
         clone_size = (size, size)
-        print("==== FULL: Orig size: " + str(size), "compose size: " + str(compose_size))
+        print(
+            "==== FULL: Orig size: " + str(size), "compose size: " + str(compose_size)
+        )
         for test in ("right_auto", "right_noauto", "top_auto", "top_noauto"):
             match test:
                 case "top_auto":
@@ -193,32 +270,75 @@ def test_common_compose_calculation():
                     autoresize = 1
                     right = 0
                     resize_factor = size / compose_x
-                    canvas_y, canvas_x = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, right)
-                    output_data = ((0, 0), (0, size), (int(canvas_y), int(canvas_x)), resize_factor)
+                    canvas_y, canvas_x = compose_autoresize_canvas(
+                        autoresize, size, compose_x, compose_y, right
+                    )
+                    output_data = (
+                        (0, 0),
+                        (0, size),
+                        (int(canvas_y), int(canvas_x)),
+                        resize_factor,
+                    )
                 case "right_auto":
                     gravity = gravity_right
                     autoresize = 1
                     right = 1
                     resize_factor = size / compose_y
-                    canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, right)
-                    output_data = ((0, 0), (size, 0), (int(canvas_x), int(canvas_y)), resize_factor)
+                    canvas_x, canvas_y = compose_autoresize_canvas(
+                        autoresize, size, compose_x, compose_y, right
+                    )
+                    output_data = (
+                        (0, 0),
+                        (size, 0),
+                        (int(canvas_x), int(canvas_y)),
+                        resize_factor,
+                    )
                 case "top_noauto":
                     gravity = gravity_top
                     autoresize = 0
                     right = 0
                     resize_factor = 1.0
-                    canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, right)
-                    output_data = ((0, 0), (0, size), (int(canvas_x), int(canvas_y)), resize_factor)
+                    canvas_x, canvas_y = compose_autoresize_canvas(
+                        autoresize, size, compose_x, compose_y, right
+                    )
+                    output_data = (
+                        (0, 0),
+                        (0, size),
+                        (int(canvas_x), int(canvas_y)),
+                        resize_factor,
+                    )
                 case "right_noauto":
                     gravity = gravity_right
                     autoresize = 0
                     right = 1
                     resize_factor = 1.0
-                    canvas_x, canvas_y = compose_autoresize_canvas(autoresize, size, compose_x, compose_y, right)
-                    output_data = ((0, 0), (size, 0), (int(canvas_x), int(canvas_y)), resize_factor)
-            print("--- " + test, clone_size, compose_size, right, autoresize,
-                  '\n - columns: position_1, position_2, canvas'
-                  '\n - output',
-                  output_data)
-            print(" - result", common.compose_calculation(clone_size, compose_size, autoresize, right, gravity))
-            assert common.compose_calculation(clone_size, compose_size, autoresize, right, gravity) == output_data
+                    canvas_x, canvas_y = compose_autoresize_canvas(
+                        autoresize, size, compose_x, compose_y, right
+                    )
+                    output_data = (
+                        (0, 0),
+                        (size, 0),
+                        (int(canvas_x), int(canvas_y)),
+                        resize_factor,
+                    )
+            print(
+                "--- " + test,
+                clone_size,
+                compose_size,
+                right,
+                autoresize,
+                "\n - columns: position_1, position_2, canvas" "\n - output",
+                output_data,
+            )
+            print(
+                " - result",
+                common.compose_calculation(
+                    clone_size, compose_size, autoresize, right, gravity
+                ),
+            )
+            assert (
+                common.compose_calculation(
+                    clone_size, compose_size, autoresize, right, gravity
+                )
+                == output_data
+            )

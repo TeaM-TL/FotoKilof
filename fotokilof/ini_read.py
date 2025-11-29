@@ -199,9 +199,9 @@ def text(file_ini, fonts_dict, operating_system):
         text_gravity_onoff, (0, 1), 1
     )
 
-    if operating_system == 'Windows':
+    if operating_system == "Windows":
         default_font = "Arial"
-    elif operating_system == 'MACOS':
+    elif operating_system == "MACOS":
         default_font = "Helvetica"
     else:
         default_font = "DejaVu-Sans"
@@ -265,9 +265,7 @@ def text(file_ini, fonts_dict, operating_system):
         text_arrow = config.getint("Text", "text_arrow")
     except:
         text_arrow = "0"
-    dict_return["text_arrow"] = entries.parse_list(
-        text_arrow, (0, 1), 0
-    )
+    dict_return["text_arrow"] = entries.parse_list(text_arrow, (0, 1), 0)
 
     return dict_return
 

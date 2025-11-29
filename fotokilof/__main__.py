@@ -607,7 +607,7 @@ def convert_vignette_button():
             e_vignette_dy.get(),
             e_vignette_radius.get(),
             e_vignette_sigma.get(),
-            PILLOW
+            PILLOW,
         )
 
     convert_button_common(vignette_operation, img_vignette_color.get())

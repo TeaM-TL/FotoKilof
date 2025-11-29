@@ -37,6 +37,7 @@ if platform.system() != "Windows":
 
 if platform.system() in ("Linux", "Darwin", "Windows"):
     import pyperclipimg
+
     USE_PYPERCLIP = 1
 else:
     USE_PYPERCLIP = 0

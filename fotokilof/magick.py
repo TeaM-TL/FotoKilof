@@ -46,7 +46,7 @@ def magick(cmd, file_in, file_out, operating_system):
         if file_in is not None:
             file_in = str(common.spacja(file_in)) + " "
             file_out = " " + str(common.spacja(file_out))
-            if operating_system == 'Windows':
+            if operating_system == "Windows":
                 command = "magick.exe "
             else:
                 command = "magick "

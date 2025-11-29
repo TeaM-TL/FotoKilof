@@ -227,7 +227,7 @@ def text(clone, convert_data, set_pillow):
     if set_pillow:
         result = convert_pillow.text(clone, convert_data)
     else:
-        result = convert_wand.text(clone,convert_data)
+        result = convert_wand.text(clone, convert_data)
     module_logger.info("Text %ss", str(time.time() - start_time))
     return result
 
