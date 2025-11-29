@@ -9,3 +9,5 @@ fotokilof/.coverage
 FotoKilof.egg-info/*
 .coverage
 screenshots/FotoKilof/*
+pypi-dependencies.json
+flatpak/flatpak-pip-generator.py
