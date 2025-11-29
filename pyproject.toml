@@ -14,7 +14,7 @@ dependencies = [
     "pywin32; platform_system=='Windows'",
     "pyperclipimg; platform_system=='Linux' or platform_system=='Darwin' or platform_system=='Windows'",
     "requests",
-    "ttkbootstrap",
+    "ttkbootstrap>=1.18.0",
     "wand",
 ]
 classifiers=[
