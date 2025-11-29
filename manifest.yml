@@ -1,0 +1,32 @@
+app-id: org.teamtl.fotokilof
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+command: fotokilof
+finish-args:
+  - --share=network
+  - --socket=x11
+  - --socket=wayland
+  - --device=dri
+  - --filesystem=home
+
+modules:
+  - name: fotokilof
+    buildsystem: simple
+    build-commands:
+      - python3 -m pip install --prefix=/app .
+    sources:
+      - type: git
+        url: https://github.com/TeaM-TL/FotoKilof.git
+        branch: master
+        path: fotokilof
+
+  - name: python-deps
+    buildsystem: simple
+    build-commands:
+      - python3 -m pip install --prefix=/app -r requirements.txt
+    sources:
+      - type: git
+        url: https://github.com/TeaM-TL/FotoKilof.git
+        branch: master
+        path: fotokilof

@@ -1,0 +1,7 @@
+darkdetect
+FindSystemFontsFilename
+Pillow
+pyperclipimg
+requests
+ttkbootstrap>=1.18.0
+wand

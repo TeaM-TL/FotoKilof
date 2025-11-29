@@ -10,7 +10,7 @@ requires-python = ">=3.10"
 dependencies = [
     "darkdetect",
     "FindSystemFontsFilename",
-    "pillow",
+    "Pillow",
     "pywin32; platform_system=='Windows'",
     "pyperclipimg; platform_system=='Linux' or platform_system=='Darwin' or platform_system=='Windows'",
     "requests",
