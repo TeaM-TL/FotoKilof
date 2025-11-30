@@ -18,7 +18,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/TeaM-TL/FotoKilof.git
-        branch: master
+        branch: issuse-220-flatpak
         path: fotokilof
 
   - name: python-deps
@@ -28,5 +28,6 @@ modules:
     sources:
       - type: git
         url: https://github.com/TeaM-TL/FotoKilof.git
-        branch: master
+        branch: issuse-220-flatpak
         path: fotokilof
+
