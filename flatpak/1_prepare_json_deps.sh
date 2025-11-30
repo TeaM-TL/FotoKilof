@@ -14,9 +14,7 @@ sudo flatpak update
 sudo flatpak install -y flathub org.freedesktop.Sdk//25.08
 sudo flatpak install -y flathub org.freedesktop.Platform//25.08
 
-# python3 flatpak-pip-generator.py \
-#     --requirements-file=../requirements.txt \
-#     --output=pypi-dependencies.json
-
-sudo flatpak-builder --force-clean build-dir ../manifest.yml
+ python3 flatpak-pip-generator.py \
+     --requirements-file=../requirements.txt \
+     --output=../pypi-dependencies.json
 

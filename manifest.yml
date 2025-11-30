@@ -11,20 +11,17 @@ finish-args:
   - --filesystem=home
 
 modules:
+  - name: python-deps
+    # Import gotowego modułu zależności Python wygenerowanego flatpak-pip-generator
+    # Plik pypi-dependencies.json powinien być w katalogu projektu Flatpak obok manifest.yml
+    include: pypi-dependencies.json
+
   - name: fotokilof
     buildsystem: simple
+    build-args:
+      - --share=network
     build-commands:
       - python3 -m pip install --prefix=/app .
-    sources:
-      - type: git
-        url: https://github.com/TeaM-TL/FotoKilof.git
-        branch: issuse-220-flatpak
-        path: fotokilof
-
-  - name: python-deps
-    buildsystem: simple
-    build-commands:
-      - python3 -m pip install --prefix=/app -r requirements.txt
     sources:
       - type: git
         url: https://github.com/TeaM-TL/FotoKilof.git
