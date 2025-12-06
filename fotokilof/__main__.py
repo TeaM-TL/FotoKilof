@@ -849,6 +849,7 @@ def open_file_dialog(dir_initial, title):
         (_("JPG files"), ".JPG .JPEG"),
         (_("PNG files"), ".PNG"),
         (_("TIFF files"), ".TIF .TIFF"),
+        (_("WEBP files"), ".WEBP"),
         (_("HEIC files"), ".HEIC"),
         (_("ALL types"), "*"),
     )

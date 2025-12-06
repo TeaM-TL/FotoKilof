@@ -228,7 +228,7 @@ def file_extension_patterns(pillow):
 
 def list_of_images(cwd, operating_system, is_pillow):
     """
-    jpg, png and tiff images in cwd
+    list image files in cwd
     return sorted list
     """
 
