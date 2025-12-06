@@ -2,7 +2,7 @@
 
 ## 2025
 
-5.2.3 more formats for input and output
+5.2.3 added HEIC, WEBP and DNG (only input) formats for processing
 
 5.2.2 small fixes according new ttkbootstrap
 
