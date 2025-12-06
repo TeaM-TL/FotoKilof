@@ -1,0 +1,135 @@
+{
+    "name": "pypi-dependencies.json",
+    "buildsystem": "simple",
+    "build-commands": [],
+    "modules": [
+        {
+            "name": "python3-darkdetect",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"darkdetect\" --no-build-isolation"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/f2/f2/728f041460f1b9739b85ee23b45fa5a505962ea11fd85bdbe2a02b021373/darkdetect-0.8.0-py3-none-any.whl",
+                    "sha256": "a7509ccf517eaad92b31c214f593dbcf138ea8a43b2935406bbd565e15527a85"
+                }
+            ]
+        },
+        {
+            "name": "python3-FindSystemFontsFilename",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"FindSystemFontsFilename\" --no-build-isolation"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/92/13/239d470806433c8cfc89fe183fae529cb557cce1b9abed44950e509bf67d/findsystemfontsfilename-0.3.3-py3-none-any.whl",
+                    "sha256": "6e2777084372230e146416443c97e41add331d609e175ad901697930a5914487"
+                }
+            ]
+        },
+        {
+            "name": "python3-Pillow",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"Pillow\" --no-build-isolation"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/5a/b0/cace85a1b0c9775a9f8f5d5423c8261c858760e2466c79b2dd184638b056/pillow-12.0.0.tar.gz",
+                    "sha256": "87d4f8125c9988bfbed67af47dd7a953e2fc7b0cc1e7800ec6d2080d490bb353"
+                }
+            ]
+        },
+        {
+            "name": "python3-pyperclipimg",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"pyperclipimg\" --no-build-isolation"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/5a/b0/cace85a1b0c9775a9f8f5d5423c8261c858760e2466c79b2dd184638b056/pillow-12.0.0.tar.gz",
+                    "sha256": "87d4f8125c9988bfbed67af47dd7a953e2fc7b0cc1e7800ec6d2080d490bb353"
+                },
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/6f/85/5afb0c0007fed16e581ef97d2ff44a4633dba6609b584256a88657ca6f3c/pyperclipimg-0.2.0.tar.gz",
+                    "sha256": "7934402ed7ce898e0a3b659e8cafb7c6a2faf7f9ad00069a0fe15a077aae1239"
+                }
+            ]
+        },
+        {
+            "name": "python3-requests",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"requests\" --no-build-isolation"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/70/7d/9bc192684cea499815ff478dfcdc13835ddf401365057044fb721ec6bddb/certifi-2025.11.12-py3-none-any.whl",
+                    "sha256": "97de8790030bbd5c2d96b7ec782fc2f7820ef8dba6db909ccf95449f2d062d4b"
+                },
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/13/69/33ddede1939fdd074bce5434295f38fae7136463422fe4fd3e0e89b98062/charset_normalizer-3.4.4.tar.gz",
+                    "sha256": "94537985111c35f28720e43603b8e7b43a6ecfb2ce1d3058bbe955b73404e21a"
+                },
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/0e/61/66938bbb5fc52dbdf84594873d5b51fb1f7c7794e9c0f5bd885f30bc507b/idna-3.11-py3-none-any.whl",
+                    "sha256": "771a87f49d9defaf64091e6e6fe9c18d4833f140bd19464795bc32d966ca37ea"
+                },
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/1e/db/4254e3eabe8020b458f1a747140d32277ec7a271daf1d235b70dc0b4e6e3/requests-2.32.5-py3-none-any.whl",
+                    "sha256": "2462f94637a34fd532264295e186976db0f5d453d1cdd31473c85a6a161affb6"
+                },
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/a7/c2/fe1e52489ae3122415c51f387e221dd0773709bad6c6cdaa599e8a2c5185/urllib3-2.5.0-py3-none-any.whl",
+                    "sha256": "e6b01673c0fa6a13e374b50871808eb3bf7046c4b125b216f6bf1cc604cff0dc"
+                }
+            ]
+        },
+        {
+            "name": "python3-ttkbootstrap",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"ttkbootstrap>=1.18.0\" --no-build-isolation"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/5a/b0/cace85a1b0c9775a9f8f5d5423c8261c858760e2466c79b2dd184638b056/pillow-12.0.0.tar.gz",
+                    "sha256": "87d4f8125c9988bfbed67af47dd7a953e2fc7b0cc1e7800ec6d2080d490bb353"
+                },
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/da/a1/f544c90039c50de5b80cd459edfba7c5fffc3b09674519378cb7e84972fd/ttkbootstrap-1.19.1-py3-none-any.whl",
+                    "sha256": "1623b91a1148ae2c4bc8e7ac601b31ee5c58e2c3735e88949828ba7b2128872b"
+                }
+            ]
+        },
+        {
+            "name": "python3-wand",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"wand\" --no-build-isolation"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/59/d5/1bdd7c9662d5e9078e25ba0eb69bdb122859295746d40ab8dfef3a7b4d42/Wand-0.6.13-py2.py3-none-any.whl",
+                    "sha256": "e5dda0ac2204a40c29ef5c4cb310770c95d3d05c37b1379e69c94ea79d7d19c0"
+                }
+            ]
+        }
+    ]
+}
