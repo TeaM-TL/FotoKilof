@@ -292,10 +292,10 @@ def extension_from_file():
     """set extension in ComboBox same as opened file"""
     extension = os.path.splitext(file_in_path.get())[1].lower()
     try:
-        co_apply_type.current(file_extension.index(extension))
+        co_apply_type.current(common.file_extension_patterns(PILLOW).index(extension))
     except:
         logging.warning("extension_from_file: wrong extension")
-        co_apply_type.current(file_extension.index(".jpg"))
+        co_apply_type.current(common.file_extension_patterns(PILLOW).index(".jpg"))
 
 
 def path_to_file_out(resize):
@@ -841,20 +841,22 @@ def open_file_dialog(dir_initial, title):
     """open file dialog function for image and logo"""
     if OS == "Windows":
         filetypes = (
-            (_("All graphics files"), ".JPG .JPEG .PNG .TIF .TIFF"),
+            (_("All graphics files"), ".JPG .JPEG .PNG .TIF .TIFF .HEIC"),
             (_("JPG files"), ".JPG .JPEG"),
             (_("PNG files"), ".PNG"),
             (_("TIFF files"), ".TIF .TIFF"),
+            (_("HEIC files"), ".HEIC"),
             (_("ALL types"), "*"),
         )
     else:
         filetypes = (
             (
                 _("All graphics files"),
-                ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff",
+                ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff .HEIC .heic",
             ),
             (_("JPG files"), ".JPG .jpg .JPEG .jpeg"),
             (_("PNG files"), ".PNG .png"),
+            (_("HEIC files"), ".HEIC .heic"),
             (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
             (_("ALL types"), "*"),
         )
@@ -1908,7 +1910,6 @@ img_compose_gravity = StringVar()
 progress_var = IntVar()  # progressbar
 progressbar_var = IntVar()
 progress_files = StringVar()
-file_extension = (".jpeg", ".jpg", ".png", ".tif")
 
 ######################################################################
 # Tabs
@@ -1998,9 +1999,9 @@ rb_apply_dir = ttk.Radiobutton(
 rb_apply_file = ttk.Radiobutton(
     frame_apply, text=_("File"), bootstyle="info", variable=file_dir_selector, value="0"
 )
-co_apply_type = ttk.Combobox(frame_apply, width=4, values=file_extension)
+co_apply_type = ttk.Combobox(frame_apply, width=4, values=common.file_extension_patterns(PILLOW))
 co_apply_type.configure(state="readonly")
-co_apply_type.current(file_extension.index(".jpg"))
+co_apply_type.current(common.file_extension_patterns(PILLOW).index(".jpg"))
 b_apply_run = ttk.Button(
     frame_apply, text=_("Execute all"), bootstyle="info", command=apply_all_button
 )

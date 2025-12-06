@@ -28,6 +28,7 @@ module contains common functions:
 - mouse_crop_calculation - recalculation pixels from previev original image
 - spacja - escaping space and special char in pathname
 - crop_gravity - convert coordinates for crop3 and logo position
+- file_extension_patterns - prepare list of extensions
 - list_of_images - sorted list images in cwd
 - file_from_list_of_images - return filename from file_list depends of request
 - arrow_gravity - calculate coordinates if draw arrow
@@ -197,7 +198,23 @@ def crop_gravity(coordinates, x_max, y_max):
     return (x0, y0, x1, y1)
 
 
-def list_of_images(cwd, operating_system):
+
+def file_extension_patterns(pillow):
+    """
+    based on list of file types prepare list of extensions
+    to avoid duplicates in code
+    """
+    if pillow:
+        file_extension = ["JPEG", "JPG", "PNG", "TIFF", "TIF"]
+    else:
+        file_extension += ["HEIC", "WEBP"]
+    if platform.system() != "Windows":
+        file_extension += [f"*.{ext.lower()}" for ext in file_extension]
+    print(file_extension)
+    return file_extension
+
+
+def list_of_images(cwd, operating_system, file_extension_list):
     """
     jpg, png and tiff images in cwd
     return sorted list
@@ -205,11 +222,8 @@ def list_of_images(cwd, operating_system):
 
     list_of_files = os.listdir(cwd)
     file_list = []
-    patterns = ("*.JPG", "*.JPEG", "*.PNG", "*.TIF", "*.TIFF")
-    if operating_system != "Windows":
-        patterns = patterns + ("*.jpg", "*.jpeg", "*.png", "*.tif", "*.tiff")
 
-    for pattern in patterns:
+    for pattern in file_extension_patterns():
         for file in list_of_files:
             if fnmatch.fnmatch(file, pattern):
                 file_list.append(file)
