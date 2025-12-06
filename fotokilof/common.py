@@ -204,17 +204,17 @@ def file_extension_patterns(pillow):
     based on list of file types prepare list of extensions
     to avoid duplicates in code
     """
-    if pillow:
-        file_extension = ["JPEG", "JPG", "PNG", "TIFF", "TIF"]
-    else:
-        file_extension += ["HEIC", "WEBP"]
+    
+    file_extension_list = ["JPEG", "JPG", "PNG", "TIFF", "TIF"]
+    if not pillow:
+        file_extension_list += ["HEIC", "WEBP"]
+    file_extension = [f".{ext.upper()}" for ext in file_extension_list]
     if platform.system() != "Windows":
-        file_extension += [f"*.{ext.lower()}" for ext in file_extension]
-    print(file_extension)
+        file_extension += [f".{ext.lower()}" for ext in file_extension_list]
     return file_extension
 
 
-def list_of_images(cwd, operating_system, file_extension_list):
+def list_of_images(cwd, operating_system, is_pillow):
     """
     jpg, png and tiff images in cwd
     return sorted list
@@ -223,7 +223,7 @@ def list_of_images(cwd, operating_system, file_extension_list):
     list_of_files = os.listdir(cwd)
     file_list = []
 
-    for pattern in file_extension_patterns():
+    for pattern in file_extension_patterns(is_pillow):
         for file in list_of_files:
             if fnmatch.fnmatch(file, pattern):
                 file_list.append(file)

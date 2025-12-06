@@ -331,7 +331,7 @@ def apply_all_button():
             files_list = [file_in_path.get()]
         else:
             dirname = os.path.dirname(file_in_path.get())
-            files_list_short = common.list_of_images(dirname, OS)
+            files_list_short = common.list_of_images(dirname, OS, PILLOW)
             files_list = []
             for filename_short in files_list_short:
                 files_list.append(os.path.join(dirname, filename_short))
@@ -462,7 +462,7 @@ def apply_all_button():
             progress_var.set(i)
             root.update_idletasks()
 
-        file_in_path.set(file_in)
+        #file_in_path.set(file_in)
         preview_orig()
 
         progress_var.set(0)
@@ -839,27 +839,17 @@ def open_file_common(cwd, filename):
 
 def open_file_dialog(dir_initial, title):
     """open file dialog function for image and logo"""
-    if OS == "Windows":
-        filetypes = (
-            (_("All graphics files"), ".JPG .JPEG .PNG .TIF .TIFF .HEIC"),
-            (_("JPG files"), ".JPG .JPEG"),
-            (_("PNG files"), ".PNG"),
-            (_("TIFF files"), ".TIF .TIFF"),
-            (_("HEIC files"), ".HEIC"),
-            (_("ALL types"), "*"),
-        )
-    else:
-        filetypes = (
-            (
-                _("All graphics files"),
-                ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff .HEIC .heic",
-            ),
-            (_("JPG files"), ".JPG .jpg .JPEG .jpeg"),
-            (_("PNG files"), ".PNG .png"),
-            (_("HEIC files"), ".HEIC .heic"),
-            (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
-            (_("ALL types"), "*"),
-        )
+    extensions_list = common.file_extension_patterns(PILLOW)
+    extensions_string = " ".join(ext.lstrip("*.").lower() for ext in extensions_list)
+    all_image_types = " ".join(dict.fromkeys(extensions_string.split()))
+    filetypes = (
+        (_("All graphics files"), all_image_types),
+        (_("JPG files"), ".JPG .JPEG"),
+        (_("PNG files"), ".PNG"),
+        (_("TIFF files"), ".TIF .TIFF"),
+        (_("HEIC files"), ".HEIC"),
+        (_("ALL types"), "*"),
+    )
     # Wand doesn't like SVG: (_("SVG files"), ".SVG .svg"),
     filename = None
     filename = filedialog.askopenfilename(
@@ -877,7 +867,7 @@ def open_file_with_action(action):
     if not current_path or not os.path.isfile(current_path):
         return
     dir_name = os.path.dirname(current_path)
-    file_list = common.list_of_images(dir_name, OS)
+    file_list = common.list_of_images(dir_name, OS, PILLOW)
     current_file = os.path.basename(current_path)
     filename = common.file_from_list_of_images(file_list, current_file, action)
     open_file_common(dir_name, filename)
@@ -2001,7 +1991,8 @@ rb_apply_file = ttk.Radiobutton(
 )
 co_apply_type = ttk.Combobox(frame_apply, width=4, values=common.file_extension_patterns(PILLOW))
 co_apply_type.configure(state="readonly")
-co_apply_type.current(common.file_extension_patterns(PILLOW).index(".jpg"))
+file_extensions = [f'*{ext}' for ext in common.file_extension_patterns(PILLOW)]
+co_apply_type.current(file_extensions.index("*.jpg"))
 b_apply_run = ttk.Button(
     frame_apply, text=_("Execute all"), bootstyle="info", command=apply_all_button
 )

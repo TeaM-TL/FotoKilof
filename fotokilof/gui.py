@@ -54,7 +54,12 @@ def copy_to_clipboard(file_in):
     debug needed!
     """
     if USE_PYPERCLIP:
-        pyperclipimg.copy(file_in)
+        try:
+            pyperclipimg.copy(file_in)
+        except:
+            module_logger.debug("Failed copying into clipboard: %s. Probably file type not supported by pillow",
+                    file_in,
+            )
     else:
         # e.g. FreeBSD
         with Image.open(file_in) as image:
