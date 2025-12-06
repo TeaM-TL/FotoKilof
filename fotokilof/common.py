@@ -198,19 +198,31 @@ def crop_gravity(coordinates, x_max, y_max):
     return (x0, y0, x1, y1)
 
 
+def file_extension_patterns_output(pillow):
+    """
+    based on list of file types prepare list of extensions
+    to avoid duplicates in code
+    """
+
+    file_extension_list = ["JPEG", "JPG", "PNG", "TIFF", "TIF"]
+    if not pillow:
+        file_extension_list += ["HEIC", "WEBP"]
+    file_extension = [f".{ext.lower()}" for ext in file_extension_list]
+    return file_extension
+
 
 def file_extension_patterns(pillow):
     """
     based on list of file types prepare list of extensions
     to avoid duplicates in code
     """
-    
-    file_extension_list = ["JPEG", "JPG", "PNG", "TIFF", "TIF"]
+
+    file_extension_list = ["JPEG", "JPG", "PNG", "TIFF", "TIF", "DNG"]
     if not pillow:
         file_extension_list += ["HEIC", "WEBP"]
-    file_extension = [f".{ext.upper()}" for ext in file_extension_list]
+    file_extension = [f"*.{ext.upper()}" for ext in file_extension_list]
     if platform.system() != "Windows":
-        file_extension += [f".{ext.lower()}" for ext in file_extension_list]
+        file_extension += [f"*.{ext.lower()}" for ext in file_extension_list]
     return file_extension
 
 

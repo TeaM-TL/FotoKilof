@@ -292,10 +292,14 @@ def extension_from_file():
     """set extension in ComboBox same as opened file"""
     extension = os.path.splitext(file_in_path.get())[1].lower()
     try:
-        co_apply_type.current(common.file_extension_patterns(PILLOW).index(extension))
+        co_apply_type.current(
+            common.file_extension_patterns_output(PILLOW).index(extension)
+        )
     except:
         logging.warning("extension_from_file: wrong extension")
-        co_apply_type.current(common.file_extension_patterns(PILLOW).index(".jpg"))
+        co_apply_type.current(
+            common.file_extension_patterns_output(PILLOW).index(".jpg")
+        )
 
 
 def path_to_file_out(resize):
@@ -462,7 +466,7 @@ def apply_all_button():
             progress_var.set(i)
             root.update_idletasks()
 
-        #file_in_path.set(file_in)
+        # file_in_path.set(file_in)
         preview_orig()
 
         progress_var.set(0)
@@ -839,9 +843,7 @@ def open_file_common(cwd, filename):
 
 def open_file_dialog(dir_initial, title):
     """open file dialog function for image and logo"""
-    extensions_list = common.file_extension_patterns(PILLOW)
-    extensions_string = " ".join(ext.lstrip("*.").lower() for ext in extensions_list)
-    all_image_types = " ".join(dict.fromkeys(extensions_string.split()))
+    all_image_types = common.file_extension_patterns(PILLOW)
     filetypes = (
         (_("All graphics files"), all_image_types),
         (_("JPG files"), ".JPG .JPEG"),
@@ -1989,10 +1991,11 @@ rb_apply_dir = ttk.Radiobutton(
 rb_apply_file = ttk.Radiobutton(
     frame_apply, text=_("File"), bootstyle="info", variable=file_dir_selector, value="0"
 )
-co_apply_type = ttk.Combobox(frame_apply, width=4, values=common.file_extension_patterns(PILLOW))
+co_apply_type = ttk.Combobox(
+    frame_apply, width=4, values=common.file_extension_patterns_output(PILLOW)
+)
 co_apply_type.configure(state="readonly")
-file_extensions = [f'*{ext}' for ext in common.file_extension_patterns(PILLOW)]
-co_apply_type.current(file_extensions.index("*.jpg"))
+co_apply_type.current(common.file_extension_patterns_output(PILLOW).index(".jpg"))
 b_apply_run = ttk.Button(
     frame_apply, text=_("Execute all"), bootstyle="info", command=apply_all_button
 )

@@ -57,8 +57,9 @@ def copy_to_clipboard(file_in):
         try:
             pyperclipimg.copy(file_in)
         except:
-            module_logger.debug("Failed copying into clipboard: %s. Probably file type not supported by pillow",
-                    file_in,
+            module_logger.debug(
+                "Failed copying result into clipboard: %s. Probably file type not supported by pillow",
+                file_in,
             )
     else:
         # e.g. FreeBSD
@@ -75,7 +76,7 @@ def copy_to_clipboard(file_in):
                 output.stdin.close()
             except:
                 module_logger.debug(
-                    "Failed copied result into clipboard under Unix: %s. Did you install xclip?",
+                    "Failed copying result into clipboard under Unix: %s. Did you install xclip?",
                     file_in,
                 )
 
