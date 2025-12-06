@@ -846,13 +846,16 @@ def open_file_dialog(dir_initial, title):
     all_image_types = common.file_extension_patterns(PILLOW)
     filetypes = (
         (_("All graphics files"), all_image_types),
-        (_("JPG files"), ".JPG .JPEG"),
-        (_("PNG files"), ".PNG"),
-        (_("TIFF files"), ".TIF .TIFF"),
-        (_("WEBP files"), ".WEBP"),
-        (_("HEIC files"), ".HEIC"),
-        (_("ALL types"), "*"),
+        (_("JPG files"), ".JPG .JPEG .jpg jpeg"),
+        (_("PNG files"), ".PNG .png"),
+        (_("TIFF files"), ".TIF .TIFF .tif .tiff"),
     )
+    if not PILLOW:
+        filetypes += (
+            (_("WEBP files"), ".WEBP .webp"),
+            (_("HEIC files"), ".HEIC .heic"),
+        )
+    filetypes += ((_("ALL types"), "*"),)
     # Wand doesn't like SVG: (_("SVG files"), ".SVG .svg"),
     filename = None
     filename = filedialog.askopenfilename(

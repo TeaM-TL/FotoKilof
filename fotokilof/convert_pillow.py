@@ -478,9 +478,13 @@ def preview(file_in, max_size, coord=""):
                     outline_color = "#FFFF00"
                     if coord[0] < coord[2] and coord[1] < coord[3]:
                         draw = ImageDraw.Draw(clone)
-                        draw.rectangle(rectangle, outline=outline_color, fill=None, width=2)
+                        draw.rectangle(
+                            rectangle, outline=outline_color, fill=None, width=2
+                        )
                 preview_width, preview_height = clone.size
-                file_preview = os.path.join(tempfile.gettempdir(), "fotokilof_preview.ppm")
+                file_preview = os.path.join(
+                    tempfile.gettempdir(), "fotokilof_preview.ppm"
+                )
                 save_close_clone(clone, file_preview)
                 result = {
                     "filename": common.spacja(file_preview),
