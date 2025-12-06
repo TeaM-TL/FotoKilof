@@ -1,0 +1,35 @@
+name: Build and Publish Flatpak on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build_and_release:
+    name: Publish Package to Flathub
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
+      options: --privileged
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Build Flatpak bundle
+        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        id: build
+        with:
+          manifest-path: manifest.yml
+          bundle: fotokilof.flatpak
+          arch: x86_64
+
+      - name: Upload Flatpak bundle asset to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./fotokilof.flatpak
+          asset_name: fotokilof.flatpak
+          asset_content_type: application/octet-stream
