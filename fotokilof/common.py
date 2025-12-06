@@ -28,6 +28,7 @@ module contains common functions:
 - mouse_crop_calculation - recalculation pixels from previev original image
 - spacja - escaping space and special char in pathname
 - crop_gravity - convert coordinates for crop3 and logo position
+- file_extension_patterns - prepare list of extensions
 - list_of_images - sorted list images in cwd
 - file_from_list_of_images - return filename from file_list depends of request
 - arrow_gravity - calculate coordinates if draw arrow
@@ -197,19 +198,44 @@ def crop_gravity(coordinates, x_max, y_max):
     return (x0, y0, x1, y1)
 
 
-def list_of_images(cwd, operating_system):
+def file_extension_patterns_output(pillow):
     """
-    jpg, png and tiff images in cwd
+    based on list of file types prepare list of extensions
+    to avoid duplicates in code
+    """
+
+    file_extension_list = ["JPEG", "JPG", "PNG", "TIFF", "TIF"]
+    if not pillow:
+        file_extension_list += ["HEIC", "WEBP"]
+    file_extension = [f".{ext.lower()}" for ext in file_extension_list]
+    return file_extension
+
+
+def file_extension_patterns(pillow):
+    """
+    based on list of file types prepare list of extensions
+    to avoid duplicates in code
+    """
+
+    file_extension_list = ["JPEG", "JPG", "PNG", "TIFF", "TIF", "DNG"]
+    if not pillow:
+        file_extension_list += ["HEIC", "WEBP"]
+    file_extension = [f"*.{ext.upper()}" for ext in file_extension_list]
+    if platform.system() != "Windows":
+        file_extension += [f"*.{ext.lower()}" for ext in file_extension_list]
+    return file_extension
+
+
+def list_of_images(cwd, operating_system, is_pillow):
+    """
+    list image files in cwd
     return sorted list
     """
 
     list_of_files = os.listdir(cwd)
     file_list = []
-    patterns = ("*.JPG", "*.JPEG", "*.PNG", "*.TIF", "*.TIFF")
-    if operating_system != "Windows":
-        patterns = patterns + ("*.jpg", "*.jpeg", "*.png", "*.tif", "*.tiff")
 
-    for pattern in patterns:
+    for pattern in file_extension_patterns(is_pillow):
         for file in list_of_files:
             if fnmatch.fnmatch(file, pattern):
                 file_list.append(file)

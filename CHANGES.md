@@ -2,6 +2,8 @@
 
 ## 2025
 
+5.2.3 added HEIC, WEBP and DNG (only input) formats for processing
+
 5.2.2 small fixes according new ttkbootstrap
 
 5.2.1 nothing new, only version incerement, because 5.2.0 has problem with correct version number

@@ -4,7 +4,8 @@ description = "Nice gui for ImageMagick and Pillow"
 authors = [
     { name = "Tomasz Łuczak", email = "tlu@team-tl.pl" },
 ]
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSE"]
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -27,7 +28,6 @@ classifiers=[
         "Operating System :: MacOS",
         "Operating System :: Microsoft :: Windows",
         "Operating System :: Unix",
-        "License :: OSI Approved :: MIT License",
 ]
 dynamic = ["version"]
 

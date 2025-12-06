@@ -292,10 +292,14 @@ def extension_from_file():
     """set extension in ComboBox same as opened file"""
     extension = os.path.splitext(file_in_path.get())[1].lower()
     try:
-        co_apply_type.current(file_extension.index(extension))
+        co_apply_type.current(
+            common.file_extension_patterns_output(PILLOW).index(extension)
+        )
     except:
         logging.warning("extension_from_file: wrong extension")
-        co_apply_type.current(file_extension.index(".jpg"))
+        co_apply_type.current(
+            common.file_extension_patterns_output(PILLOW).index(".jpg")
+        )
 
 
 def path_to_file_out(resize):
@@ -331,7 +335,7 @@ def apply_all_button():
             files_list = [file_in_path.get()]
         else:
             dirname = os.path.dirname(file_in_path.get())
-            files_list_short = common.list_of_images(dirname, OS)
+            files_list_short = common.list_of_images(dirname, OS, PILLOW)
             files_list = []
             for filename_short in files_list_short:
                 files_list.append(os.path.join(dirname, filename_short))
@@ -462,7 +466,7 @@ def apply_all_button():
             progress_var.set(i)
             root.update_idletasks()
 
-        file_in_path.set(file_in)
+        # file_in_path.set(file_in)
         preview_orig()
 
         progress_var.set(0)
@@ -839,25 +843,19 @@ def open_file_common(cwd, filename):
 
 def open_file_dialog(dir_initial, title):
     """open file dialog function for image and logo"""
-    if OS == "Windows":
-        filetypes = (
-            (_("All graphics files"), ".JPG .JPEG .PNG .TIF .TIFF"),
-            (_("JPG files"), ".JPG .JPEG"),
-            (_("PNG files"), ".PNG"),
-            (_("TIFF files"), ".TIF .TIFF"),
-            (_("ALL types"), "*"),
+    all_image_types = common.file_extension_patterns(PILLOW)
+    filetypes = (
+        (_("All graphics files"), all_image_types),
+        (_("JPG files"), ".JPG .JPEG .jpg jpeg"),
+        (_("PNG files"), ".PNG .png"),
+        (_("TIFF files"), ".TIF .TIFF .tif .tiff"),
+    )
+    if not PILLOW:
+        filetypes += (
+            (_("WEBP files"), ".WEBP .webp"),
+            (_("HEIC files"), ".HEIC .heic"),
         )
-    else:
-        filetypes = (
-            (
-                _("All graphics files"),
-                ".JPG .jpg .JPEG .jpeg .PNG .png .TIF .tif .TIFF .tiff",
-            ),
-            (_("JPG files"), ".JPG .jpg .JPEG .jpeg"),
-            (_("PNG files"), ".PNG .png"),
-            (_("TIFF files"), ".TIF .tif .TIFF .tiff"),
-            (_("ALL types"), "*"),
-        )
+    filetypes += ((_("ALL types"), "*"),)
     # Wand doesn't like SVG: (_("SVG files"), ".SVG .svg"),
     filename = None
     filename = filedialog.askopenfilename(
@@ -875,7 +873,7 @@ def open_file_with_action(action):
     if not current_path or not os.path.isfile(current_path):
         return
     dir_name = os.path.dirname(current_path)
-    file_list = common.list_of_images(dir_name, OS)
+    file_list = common.list_of_images(dir_name, OS, PILLOW)
     current_file = os.path.basename(current_path)
     filename = common.file_from_list_of_images(file_list, current_file, action)
     open_file_common(dir_name, filename)
@@ -1908,7 +1906,6 @@ img_compose_gravity = StringVar()
 progress_var = IntVar()  # progressbar
 progressbar_var = IntVar()
 progress_files = StringVar()
-file_extension = (".jpeg", ".jpg", ".png", ".tif")
 
 ######################################################################
 # Tabs
@@ -1998,9 +1995,11 @@ rb_apply_dir = ttk.Radiobutton(
 rb_apply_file = ttk.Radiobutton(
     frame_apply, text=_("File"), bootstyle="info", variable=file_dir_selector, value="0"
 )
-co_apply_type = ttk.Combobox(frame_apply, width=4, values=file_extension)
+co_apply_type = ttk.Combobox(
+    frame_apply, width=4, values=common.file_extension_patterns_output(PILLOW)
+)
 co_apply_type.configure(state="readonly")
-co_apply_type.current(file_extension.index(".jpg"))
+co_apply_type.current(common.file_extension_patterns_output(PILLOW).index(".jpg"))
 b_apply_run = ttk.Button(
     frame_apply, text=_("Execute all"), bootstyle="info", command=apply_all_button
 )
