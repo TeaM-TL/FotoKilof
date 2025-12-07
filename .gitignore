@@ -11,3 +11,4 @@ FotoKilof.egg-info/*
 screenshots/FotoKilof/*
 pypi-dependencies.json
 flatpak/flatpak-pip-generator.py
+pypi-dependencies.json
