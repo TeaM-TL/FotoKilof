@@ -854,6 +854,12 @@ def open_file_dialog(dir_initial, title):
         filetypes += (
             (_("WEBP files"), ".WEBP .webp"),
             (_("HEIC files"), ".HEIC .heic"),
+            (_("DNG files"), ".DNG .dng"),
+        )
+    elif PILLOW and platform.system() in ("Linux", "Darwin"):
+        filetypes += (
+            (_("WEBP files"), ".WEBP .webp"),
+            (_("HEIC files"), ".HEIC .heic"),
         )
     filetypes += ((_("ALL types"), "*"),)
     # Wand doesn't like SVG: (_("SVG files"), ".SVG .svg"),

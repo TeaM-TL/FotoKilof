@@ -207,6 +207,9 @@ def file_extension_patterns_output(pillow):
     file_extension_list = ["JPEG", "JPG", "PNG", "TIFF", "TIF"]
     if not pillow:
         file_extension_list += ["HEIC", "WEBP"]
+    elif pillow and platform.system() in ("Linux", "Darwin"):
+        file_extension_list += ["HEIC", "WEBP"]
+
     file_extension = [f".{ext.lower()}" for ext in file_extension_list]
     return file_extension
 
@@ -217,8 +220,10 @@ def file_extension_patterns(pillow):
     to avoid duplicates in code
     """
 
-    file_extension_list = ["JPEG", "JPG", "PNG", "TIFF", "TIF", "DNG"]
+    file_extension_list = ["JPEG", "JPG", "PNG", "TIFF", "TIF"]
     if not pillow:
+        file_extension_list += ["HEIC", "WEBP", "DNG"]
+    elif pillow and platform.system() in ("Linux", "Darwin"):
         file_extension_list += ["HEIC", "WEBP"]
     file_extension = [f"*.{ext.upper()}" for ext in file_extension_list]
     if platform.system() != "Windows":

@@ -45,10 +45,13 @@ Converters
 
 import logging
 import tempfile
+import platform
 import os
 import os.path
 from PIL import Image, ImageDraw, ImageOps, ImageFont
 
+if platform.system() in ("Linux", "Darwin"):
+    import HeifImagePlugin
 from find_system_fonts_filename import (
     get_system_fonts_filename,
     FindSystemFontsFilenameException,
@@ -92,6 +95,7 @@ def make_clone(file_to_clone, color=None):
             with Image.open(file_to_clone) as image:
                 result = image.copy()
         except:
+            print("dupa")
             module_logger.debug(" Cannot identify image: %s", file_to_clone)
             result = None
     else:
