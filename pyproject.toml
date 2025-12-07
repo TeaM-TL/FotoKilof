@@ -11,11 +11,34 @@ requires-python = ">=3.10"
 dependencies = [
     "darkdetect",
     "FindSystemFontsFilename",
-    "pillow",
+    "Pillow",
     "pywin32; platform_system=='Windows'",
     "pyperclipimg; platform_system=='Linux' or platform_system=='Darwin' or platform_system=='Windows'",
     "requests",
     "ttkbootstrap>=1.18.0",
+    "wand",
+]
+keywords = [
+    "black&white"
+    "border",
+    "compose"
+    "contrast",
+    "crop",
+    "gui",
+    "imagemagick",
+    "image-manipulation",
+    "image-processing",
+    "mirror",
+    "picture",
+    "pillow",
+    "python-gui",
+    "python3",
+    "resize",
+    "rotate",
+    "scaling",
+    "screenshot",
+    "sepia",
+    "vignette",
     "wand",
 ]
 classifiers=[
