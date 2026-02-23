@@ -220,9 +220,9 @@ Press F2 to toggle from Light to Dark or opposite.
 
 ## Powered by
 
-![Python powered](python-powered.png)
+[![Python powered](python-powered.png)](https://www.python.org/)
 [Imagemagick](https://github.com/ImageMagick/ImageMagick)
-[Wand](https://github.com/emcconville/wand)
+[![Wand](wand-powered.png)](https://github.com/emcconville/wand)
 [ttkbootstrap](https://github.com/israel-dryer/ttkbootstrap)
 [Pillow](https://github.com/python-pillow/Pillow)
 [FindSystemFontsFilename](https://github.com/moi15moi/FindSystemFontsFilename)
