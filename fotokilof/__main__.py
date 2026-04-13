@@ -7,7 +7,7 @@
 # pylint: disable=line-too-long
 
 """
-Copyright (c) 2019-2025 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2026 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -854,6 +854,7 @@ def open_file_dialog(dir_initial, title):
         filetypes += (
             (_("WEBP files"), ".WEBP .webp"),
             (_("HEIC files"), ".HEIC .heic"),
+            (_("HEIF files"), ".HEIC .heif"),
         )
     filetypes += ((_("ALL types"), "*"),)
     # Wand doesn't like SVG: (_("SVG files"), ".SVG .svg"),

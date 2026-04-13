@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (c) 2019-2025 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2026 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-__version__ = "5.2.3"
+__version__ = "5.2.4"
 __author__ = "Tomasz Łuczak"
 __email__ = "tlu@team-tl.pl"
 __appname__ = "FotoKilof"
 __description__ = "Nice gui for ImageMagick and Pillow"
 __keywords__ = "GUI ImageMagick FotoKilof Pillow"
 __url__ = "https://github.com/TeaM-TL/FotoKilof"
-__copyright__ = "2019-2025"
+__copyright__ = "2019-2026"

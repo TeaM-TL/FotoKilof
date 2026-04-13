@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026
+
+5.2.4 added HEIF, improved imagemagick error message output (thanks to CiteClimb)
+
 ## 2025
 
 5.2.3 added HEIC, WEBP and DNG (only input) formats for processing

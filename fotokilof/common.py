@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (c) 2019-2025 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2019-2026 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -206,7 +206,7 @@ def file_extension_patterns_output(pillow):
 
     file_extension_list = ["JPEG", "JPG", "PNG", "TIFF", "TIF"]
     if not pillow:
-        file_extension_list += ["HEIC", "WEBP"]
+        file_extension_list += ["HEIC", "HEIF", "WEBP"]
     file_extension = [f".{ext.lower()}" for ext in file_extension_list]
     return file_extension
 
@@ -219,7 +219,7 @@ def file_extension_patterns(pillow):
 
     file_extension_list = ["JPEG", "JPG", "PNG", "TIFF", "TIF", "DNG"]
     if not pillow:
-        file_extension_list += ["HEIC", "WEBP"]
+        file_extension_list += ["HEIC", "HEIF", "WEBP"]
     file_extension = [f"*.{ext.upper()}" for ext in file_extension_list]
     if platform.system() != "Windows":
         file_extension += [f"*.{ext.lower()}" for ext in file_extension_list]
