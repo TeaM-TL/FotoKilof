@@ -55,9 +55,7 @@ from PIL import ImageGrab
 import darkdetect
 
 import ttkbootstrap as ttk
-from ttkbootstrap.widgets.scrolled import ScrolledText, ScrolledFrame
 from ttkbootstrap.dialogs.colorchooser import ColorChooserDialog
-from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.constants import (
     N,
     S,
@@ -182,12 +180,7 @@ preview_size_list = (
 
 def change_ttk_theme(event):
     """Press F2 to change ttkbootstrap theme"""
-
-    if style.theme.name == "litera":
-        new = "darkly"
-    else:
-        new = "litera"
-    style.theme_use(new)
+    root.toggle_theme()
 
 
 def print_command(cmd):
@@ -941,7 +934,7 @@ def open_screenshot():
             message = _(
                 "Sorry, nothing in clipboard\nOr xclip (X11) or wl-clipboard (Wayland) is not installed\n Install xclip or wl-clipboard and try again!"
             )
-            Messagebox.show_error(message, title=_("Missing package"))
+            ttk.Messagebox.show_error(message, title=_("Missing package"))
     try:
         screenshot.save(out_file, "PNG")
     except:
@@ -1358,7 +1351,7 @@ def help_info(event):
             + version.__author__
             + " under MIT license"
         )
-    Messagebox.show_info(message, title=_("License"))
+    ttk.Messagebox.show_info(message, title=_("License"))
 
 
 def close_program():
@@ -2190,7 +2183,7 @@ cb_compose.pack(padx=5, pady=5, anchor=W, side=LEFT)
 #####################################################
 # First column
 #####################################################
-frame_first_col = ScrolledFrame(autohide=True)
+frame_first_col = ttk.ScrolledFrame(autohide=True)
 
 ###########################
 # Label if no any tool selected
@@ -2893,7 +2886,7 @@ b_custom_run = ttk.Button(
     frame_custom, text=_("Execute"), command=convert_custom_button
 )
 
-t_custom = ScrolledText(
+t_custom = ttk.ScrolledText(
     frame_custom, state=NORMAL, height=5, width=45, wrap="word", undo=True
 )
 
@@ -3277,9 +3270,9 @@ l_border_color.configure(bg=img_border_color.get())
 l_compose_color.configure(bg=img_compose_color.get())
 
 if darkdetect.isDark():
-    style.theme_use("darkly")
+    style.theme_use("bootstrap-dark")
 elif darkdetect.isLight():
-    style.theme_use("litera")
+    style.theme_use("bootstrap-light")
 
 if PILLOW:
     # disable processing buttons
@@ -3305,7 +3298,7 @@ if img_logo_on.get() == 1:
 
 if check_version.get():
     if check_new_version.check_version(version.__version__)[0]:
-        Messagebox.show_warning(
+        ttk.Messagebox.show_warning(
             "New version of FotoKilof is available.\nCurrent: "
             + version.__version__
             + ", New: "
