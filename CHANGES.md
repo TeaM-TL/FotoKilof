@@ -2,6 +2,8 @@
 
 ## 2026
 
+5.3.0 Compatibility with ttkbootstrap 2.0
+
 5.2.4 added HEIF, improved imagemagick error message output (thanks to CiteClimb)
 
 ## 2025

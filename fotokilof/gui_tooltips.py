@@ -7,7 +7,7 @@
 # pylint: disable=line-too-long
 
 """
-Copyright (c) 2025 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2025-2026 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ THE SOFTWARE.
 nice GUI for ImageMagick command common used (by me)
 """
 
-from ttkbootstrap.tooltip import ToolTip
+import ttkbootstrap as ttk
 
 
 def init_tooltips(widgets):
@@ -38,7 +38,7 @@ def init_tooltips(widgets):
 
     def tooltip_if_exists(widget, text):
         if widget is not None:
-            ToolTip(widget, text=text)
+            ttk.ToolTip(widget, text=text)
 
     tooltip_if_exists(
         widgets.get("b_file_select"), text=_("Select image file for processing")

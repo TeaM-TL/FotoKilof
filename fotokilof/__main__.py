@@ -55,9 +55,7 @@ from PIL import ImageGrab
 import darkdetect
 
 import ttkbootstrap as ttk
-from ttkbootstrap.widgets.scrolled import ScrolledText, ScrolledFrame
 from ttkbootstrap.dialogs.colorchooser import ColorChooserDialog
-from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.constants import (
     N,
     S,
@@ -182,12 +180,7 @@ preview_size_list = (
 
 def change_ttk_theme(event):
     """Press F2 to change ttkbootstrap theme"""
-
-    if style.theme.name == "litera":
-        new = "darkly"
-    else:
-        new = "litera"
-    style.theme_use(new)
+    root.toggle_theme()
 
 
 def print_command(cmd):
@@ -941,7 +934,7 @@ def open_screenshot():
             message = _(
                 "Sorry, nothing in clipboard\nOr xclip (X11) or wl-clipboard (Wayland) is not installed\n Install xclip or wl-clipboard and try again!"
             )
-            Messagebox.show_error(message, title=_("Missing package"))
+            ttk.Messagebox.show_error(message, title=_("Missing package"))
     try:
         screenshot.save(out_file, "PNG")
     except:
@@ -1358,7 +1351,7 @@ def help_info(event):
             + version.__author__
             + " under MIT license"
         )
-    Messagebox.show_info(message, title=_("License"))
+    ttk.Messagebox.show_info(message, title=_("License"))
 
 
 def close_program():
@@ -1830,44 +1823,44 @@ except:
 # global variables
 FILE_INI = os.path.join(os.path.expanduser("~"), ".fotokilof.ini")
 PWD = os.getcwd()
-log_level = StringVar()  # E(rror), W(arning), M(essage)
-check_version = IntVar()  # allow to check new version
-work_dir = StringVar()  # default: "FotoKilof"
-work_sub_dir = StringVar()  # subdir for resized pictures
+log_level = ttk.StringVar()  # E(rror), W(arning), M(essage)
+check_version = ttk.IntVar()  # allow to check new version
+work_dir = ttk.StringVar()  # default: "FotoKilof"
+work_sub_dir = ttk.StringVar()  # subdir for resized pictures
 work_sub_dir.set("")  # default none
-file_dir_selector = IntVar()
-file_in_path = StringVar()  # fullpath original picture
-file_in_width = IntVar()  # width original picture
-file_in_height = IntVar()  # height original picture
-file_in_size = IntVar()  # size original picture (bytes)
-img_logo_on = IntVar()  # Logo
-file_logo_path = StringVar()  # fullpath logo file
-img_logo_gravity = StringVar()
-img_resize_on = IntVar()  # Resize
-img_resize = IntVar()  # (1, 2, 3, 4, 5)
-resized = IntVar()  # for proper display
-img_text_on = IntVar()  # Text
-img_text_gravity = StringVar()
-img_text_gravity_onoff = IntVar()
-img_text_font = StringVar()
+file_dir_selector = ttk.IntVar()
+file_in_path = ttk.StringVar()  # fullpath original picture
+file_in_width = ttk.IntVar()  # width original picture
+file_in_height = ttk.IntVar()  # height original picture
+file_in_size = ttk.IntVar()  # size original picture (bytes)
+img_logo_on = ttk.IntVar()  # Logo
+file_logo_path = ttk.StringVar()  # fullpath logo file
+img_logo_gravity = ttk.StringVar()
+img_resize_on = ttk.IntVar()  # Resize
+img_resize = ttk.IntVar()  # (1, 2, 3, 4, 5)
+resized = ttk.IntVar()  # for proper display
+img_text_on = ttk.IntVar()  # Text
+img_text_gravity = ttk.StringVar()
+img_text_gravity_onoff = ttk.IntVar()
+img_text_font = ttk.StringVar()
 img_text_font_dict = {}  # dict with available fonts, from fonts()
-img_text_color = StringVar()
-img_text_box = IntVar()
-img_text_box_color = StringVar()
-img_text_inout = IntVar()  # Text inside or outside picture
-img_text_rotate = IntVar()
-img_text_arrow = IntVar()
-img_rotate_on = IntVar()  # Rotate
-img_rotate = IntVar()
-img_rotate_own = IntVar()
-img_rotate_color = StringVar()
-img_crop_on = IntVar()  # Crop
-img_crop = IntVar()  # (1, 2, 3)
-img_crop_gravity = StringVar()
-img_border_on = IntVar()  # Border
-img_border_color = StringVar()
-img_normalize_on = IntVar()  # Normalize
-img_normalize = IntVar()  # (1,2,3)
+img_text_color = ttk.StringVar()
+img_text_box = ttk.IntVar()
+img_text_box_color = ttk.StringVar()
+img_text_inout = ttk.IntVar()  # Text inside or outside picture
+img_text_rotate = ttk.IntVar()
+img_text_arrow = ttk.IntVar()
+img_rotate_on = ttk.IntVar()  # Rotate
+img_rotate = ttk.IntVar()
+img_rotate_own = ttk.IntVar()
+img_rotate_color = ttk.StringVar()
+img_crop_on = ttk.IntVar()  # Crop
+img_crop = ttk.IntVar()  # (1, 2, 3)
+img_crop_gravity = ttk.StringVar()
+img_border_on = ttk.IntVar()  # Border
+img_border_color = ttk.StringVar()
+img_normalize_on = ttk.IntVar()  # Normalize
+img_normalize = ttk.IntVar()  # (1,2,3)
 normalize_channels = (
     "None",
     "Red",
@@ -1886,27 +1879,27 @@ normalize_channels = (
     "CMYK",
     "CMYKA",
 )
-img_bw_on = IntVar()  # Black-white
-img_bw = IntVar()
-img_contrast_on = IntVar()  # Contrast
-img_contrast = IntVar()  # (1, 2)
-img_mirror_on = IntVar()  # Mirror
-img_mirror_flip = IntVar()  # (0, 1)
-img_mirror_flop = IntVar()  # (0, 1)
+img_bw_on = ttk.IntVar()  # Black-white
+img_bw = ttk.IntVar()
+img_contrast_on = ttk.IntVar()  # Contrast
+img_contrast = ttk.IntVar()  # (1, 2)
+img_mirror_on = ttk.IntVar()  # Mirror
+img_mirror_flip = ttk.IntVar()  # (0, 1)
+img_mirror_flop = ttk.IntVar()  # (0, 1)
 contrast_selection = ("+5", "+4", "+3", "+2", "+1", "-1", "-2", "-3", "-4", "-5")
-img_custom_on = IntVar()  # Custom
-img_exif_on = IntVar()
-img_vignette_on = IntVar()
-img_vignette_color = StringVar()
-img_compose_on = IntVar()  # Compose
-img_compose_file = StringVar()  # fullpath file for compose
-img_compose_right = IntVar()
-img_compose_autoresize = IntVar()
-img_compose_color = StringVar()
-img_compose_gravity = StringVar()
-progress_var = IntVar()  # progressbar
-progressbar_var = IntVar()
-progress_files = StringVar()
+img_custom_on = ttk.IntVar()  # Custom
+img_exif_on = ttk.IntVar()
+img_vignette_on = ttk.IntVar()
+img_vignette_color = ttk.StringVar()
+img_compose_on = ttk.IntVar()  # Compose
+img_compose_file = ttk.StringVar()  # fullpath file for compose
+img_compose_right = ttk.IntVar()
+img_compose_autoresize = ttk.IntVar()
+img_compose_color = ttk.StringVar()
+img_compose_gravity = ttk.StringVar()
+progress_var = ttk.IntVar()  # progressbar
+progressbar_var = ttk.IntVar()
+progress_files = ttk.StringVar()
 
 ######################################################################
 # Tabs
@@ -2190,7 +2183,7 @@ cb_compose.pack(padx=5, pady=5, anchor=W, side=LEFT)
 #####################################################
 # First column
 #####################################################
-frame_first_col = ScrolledFrame(autohide=True)
+frame_first_col = ttk.ScrolledFrame(autohide=True)
 
 ###########################
 # Label if no any tool selected
@@ -2893,7 +2886,7 @@ b_custom_run = ttk.Button(
     frame_custom, text=_("Execute"), command=convert_custom_button
 )
 
-t_custom = ScrolledText(
+t_custom = ttk.ScrolledText(
     frame_custom, state=NORMAL, height=5, width=45, wrap="word", undo=True
 )
 
@@ -3277,9 +3270,9 @@ l_border_color.configure(bg=img_border_color.get())
 l_compose_color.configure(bg=img_compose_color.get())
 
 if darkdetect.isDark():
-    style.theme_use("darkly")
+    style.theme_use("bootstrap-dark")
 elif darkdetect.isLight():
-    style.theme_use("litera")
+    style.theme_use("bootstrap-light")
 
 if PILLOW:
     # disable processing buttons
@@ -3305,7 +3298,7 @@ if img_logo_on.get() == 1:
 
 if check_version.get():
     if check_new_version.check_version(version.__version__)[0]:
-        Messagebox.show_warning(
+        ttk.Messagebox.show_warning(
             "New version of FotoKilof is available.\nCurrent: "
             + version.__version__
             + ", New: "
