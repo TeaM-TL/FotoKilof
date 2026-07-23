@@ -2,7 +2,7 @@
 # pylint: disable=bare-except
 
 """
-Copyright (c) 2024-2025 Tomasz Łuczak, TeaM-TL
+Copyright (c) 2024-2026 Tomasz Łuczak, TeaM-TL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +59,6 @@ import convert_pillow
 import convert_wand
 
 import common
-
 
 module_logger = logging.getLogger(__name__)
 module_logger.info(WAND_TEXT)

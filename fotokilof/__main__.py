@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 nice GUI for ImageMagick command common used (by me)
 """
+
 # standard modules
 import datetime
 import gettext
@@ -44,8 +45,6 @@ from tkinter import (
     Canvas,
     Label,
     filedialog,
-    StringVar,
-    IntVar,
     TclError,
     TkVersion,
 )
