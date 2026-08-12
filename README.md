@@ -215,7 +215,7 @@ Press F2 to toggle from Light to Dark or opposite.
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=TeaM-TL/FotoKilof&type=Date)](https://star-history.com/#TeaM-TL/FotoKilof&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=TeaM-TL/FotoKilof&type=Date)](https://star-history.dera.page/#TeaM-TL/FotoKilof&Date)
 
 ---
 
